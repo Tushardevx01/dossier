@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     title: "Resume - Tushar kanti Dey",
     description:
       "View and download Tushar kanti Dey's professional resume featuring his experience and skills as a student developer.",
-    url: "https://tushar.vercel.app",
+    url: "https://tushardevx01.vercel.app",
     siteName: "Tushar kanti Dey",
     images: [
       {

@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/api", "/private"],
       },
     ],
-    sitemap: "https://Tushar.vercel.app/sitemap.xml",
+    sitemap: "https://tushardevx01.vercel.app/sitemap.xml",
   };
 }
