@@ -126,7 +126,7 @@ export function generateResumeStructuredData() {
       "TypeScript Developer",
       "Student Developer",
       "Computer Science",
-      "KIIT University",
+      "Adamas University",
       "Kolkata",
       "India",
     ],
