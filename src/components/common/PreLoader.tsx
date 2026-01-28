@@ -55,7 +55,7 @@ export const PreLoader = () => {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <H1_Component name={selfData.first_name} y_initialValue={100} />
+              <H1_Component name="TusharDev" y_initialValue={100} />
               <motion.span
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -65,7 +65,7 @@ export const PreLoader = () => {
               >
                 /
               </motion.span>
-              <H1_Component name={selfData.last_name} y_initialValue={-100} />
+              <H1_Component name="X01" y_initialValue={-100} />
             </motion.div>
           </div>
         </motion.div>
