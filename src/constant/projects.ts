@@ -1,41 +1,42 @@
 export const projectsData = [
   {
-    name: "AN",
+    name: "GitHubWrapped",
     description:
-      "A personal portfolio built with a focus on performance, SEO, and analytics. Includes structured metadata, full integration with modern analytics tools, and scores 91+ in real-world performance tests.",
-    github_link: "https://github.com/Tusharii/an",
-    demo: "https://Tushar.vercel.app/",
-    tech: ["Framer Motion", "EmailJS", "Vercel Analytics"],
+      "GitHubWrapped is a interactive year-in-review dashboard that visualizes your GitHub activity. It helps you explore and share your coding journey with insights like contributions, top repositories, languages used, and activity patterns.",
+    github_link: "https://github.com/Tusharxhub/GitHubWrapped",
+    demo: "https://githubwrapped01.vercel.app/",
+    tech: ["Next.js", "Tailwind CSS", " Chart Libraries"],
   },
   {
-    name: "Orphia",
+    name: "Everywhere",
     description:
-      "An AI-powered music generator that turns text prompts into original soundtracks. Designed for musicians and content creators, it features a clean, modern UI and customizable music generation workflows.",
-    github_link: "https://github.com/Tusharii/Orphia-AI-Music-Generator",
-    demo: "https://orphia.vercel.app/",
-    tech: ["Hugging Face", "Clerk", "API Integration"],
+      "Everywhere is an interactive AI assistant with context-aware capabilities, featuring a sleek, modern UI and powerful integrated functionality. Unlike traditional AI tools, Everywhere instantly perceives and understands anything on your screen. No need for screenshots, copying, or switching apps—just press a shortcut key to get the help you need right where you are, delivering seamless AI assistant support.",
+    github_link: "https://github.com/Tusharxhub/Everywhere",
+    demo: "https://everywhere.sylinko.com/en-US",
+    tech: ["C#", "Inno Setup", "API Integration"],
   },
   {
-    name: "Ideascribe",
+    name: "Zenyte",
     description:
       "A collaborative workspace that supports real-time editing, authentication, file uploads, and autosaving — all built to boost creativity and productivity in team environments.",
-    github_link: "https://github.com/Tusharii/ideascribe",
-    demo: "https://ideascribe.vercel.app/",
-    tech: ["Convex", "Clerk", "Edgestore"],
+    github_link: "https://github.com/Tusharxhub/zenyte",
+    demo: "https://zenyte-beige.vercel.app/",
+    tech: ["JavaScript", "Css", "HTML"],
   },
   {
-    name: "CppTestGenAI",
+    name: "Fenix",
     description:
-      "A smart test case generator for C++ projects, powered by LLMs. It analyzes source and header files, creates comprehensive test scenarios, and reduces manual testing time by up to 80%.",
-    github_link: "https://github.com/Tusharii/CppTestGenAI",
-    tech: ["Ollama", "Caching", "Test Pipeline"],
+      "**Fenix** is a modern video communication platform designed for secure, high-performance real-time interactions, built using Next.js for a responsive user experience, LiveKit for low-latency audio and video, and Clerk for reliable user authentication.",
+    github_link: "https://github.com/Tusharxhub/Fenix",
+    demo:"https://fenix-ecru.vercel.app/",
+    tech: ["Next.js", "clerk", "LiveKit"],
   },
   {
-    name: "CraftoGram",
+    name: "PopcornPlay",
     description:
-      "An AI-driven tool for generating Instagram bios and content. Features dynamic prompt handling and real-time streaming output to help creators craft engaging profiles effortlessly.",
-    github_link: "https://github.com/Tusharii/crafto",
-    demo: "https://craftogram.vercel.app/",
-    tech: ["Groq", "Vercel AI SDK", "Zod"],
+      "A sleek and modern movie search app powered by TMDB API. Explore trending titles, discover new favorites, and dive into detailed movie info — all in one place.",
+    github_link: "https://github.com/Tusharxhub/PopcornPlay",
+    demo: "https://popcornplay-gamma.vercel.app",
+    tech: ["JavaScript", "TMDB API", "CSS"],
   },
 ];
