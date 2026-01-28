@@ -122,14 +122,15 @@ export const Footer = () => {
               {isHeartFilled ? <TbHeartFilled /> : <TbHeart />}
             </button>
             by
-            <button
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            <a
+              href={`https://github.com/${selfData.socials_username.github}`}
+              target="_blank"
+              rel="noreferrer"
               className="text-primary/80 hover:text-primary"
             >
-              Tushar kanti Dey
-            </button>
+              Tusharxhub
+            </a>
           </p>
-          <span>Licensed under MIT</span>
         </div>
       </div>
 
