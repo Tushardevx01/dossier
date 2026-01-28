@@ -24,7 +24,7 @@ export const experienceData = [
       "Turned vague design briefs into crisp creative assets—because 'make it pop' is not a real instruction but I delivered anyway.",
       "Blended creativity with speed using Illustrator, Canva, and DaVinci Resolve to bring aesthetic harmony across posters, reels, and everything in between—basically the design department’s Swiss Army knife.",
     ],
-    company: "Team Negative (Team under KIIT-DU Fashion Society)",
+    company: "Team Negative (Team under Adamas-DU Fashion Society)",
     technologies: ["Adobe Illustrator", "Canva", "daVinci Resolve"],
   },
 ];

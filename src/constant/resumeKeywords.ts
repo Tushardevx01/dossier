@@ -13,7 +13,7 @@ export const resumeKeywords = [
   "Entry Level Developer",
   "Computer Science Graduate",
   "B.Tech Computer Science",
-  "KIIT University",
+  "Adamas University",
 
 
   "JavaScript",

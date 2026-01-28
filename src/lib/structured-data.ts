@@ -18,7 +18,7 @@ export function generatePersonStructuredData() {
     },
     alumniOf: {
       "@type": "CollegeOrUniversity",
-      name: "KIIT University",
+      name: "Adamas University",
     },
     email: selfData.email,
     address: {
