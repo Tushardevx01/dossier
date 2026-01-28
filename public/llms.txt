@@ -13,10 +13,10 @@ Tushar kanti Dey is a Student Developer and Creative Coder based in Kolkata, Ind
 - **Various Open Source Experiments**: Available on GitHub.
 
 ## Contact
-- **Email**: Tushar.Dey@gmail.com
-- **GitHub**: https://github.com/Tusharii
-- **LinkedIn**: https://linkedin.com/in/Tushar-Dey
-- **Twitter**: https://twitter.com/Tushar_ii
+- **Email**: thetushardev0@gmail.com
+- **GitHub**: https://github.com/Tusharxhub
+- **LinkedIn**: https://linkedin.com/in/tushar-kanti-dey
+- **Twitter**: https://twitter.com/tushardevx01
 
 ## Content Structure
 - `/`: Main landing page with Hero, About, Skills, Experience, Projects, and Contact sections.
