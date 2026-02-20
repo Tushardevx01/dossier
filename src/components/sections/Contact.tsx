@@ -112,7 +112,7 @@ const ContactItem: React.FC<ContactItemProps> = ({
           <Icon className="w-6 h-6" style={{ color: "hsl(var(--primary))" }} />
         </motion.div>
         <div className="flex-1">
-          <p className={`text-sm mb-1 ${label === "Location" ? "text-white" : "text-muted/80"}`}>{label}</p>
+          <p className="text-sm text-white mb-1">{label}</p>
           <p className="font-medium group-hover:text-primary transition-colors duration-300">
             {value}
           </p>
