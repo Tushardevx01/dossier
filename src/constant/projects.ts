@@ -8,12 +8,12 @@ export const projectsData = [
     tech: ["Next.js", "Tailwind CSS", "Framer Motion"],
   },
   {
-    name: "Everywhere",
+    name: "Signifiya -",
     description:
       "Everywhere is an interactive AI assistant with context-aware capabilities, featuring a sleek, modern UI and powerful integrated functionality. Unlike traditional AI tools, Everywhere instantly perceives and understands anything on your screen. No need for screenshots, copying, or switching apps—just press a shortcut key to get the help you need right where you are, delivering seamless AI assistant support.",
     github_link: "https://github.com/Tusharxhub/Everywhere",
     demo: "https://everywhere.sylinko.com/en-US",
-    tech: ["C#", "Inno Setup", "API Integration"],
+    tech: ["Next.js", "Expo Go", "JavaScript", "Supabase"],
   },
   {
     name: "Zenyte",
