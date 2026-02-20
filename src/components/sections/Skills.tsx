@@ -6,21 +6,6 @@ import { mono, nasalization } from "@/app/fonts";
 import { skillsData } from "@/constant";
 import React from "react";
 
-// "Others" category added inline
-const othersCategory = {
-  title: "Others",
-  data: [
-    { title: "REST APIs", logoComponent: null, color: "#6366F1" },
-    { title: "GraphQL", logoComponent: null, color: "#E10098" },
-    { title: "WebSockets", logoComponent: null, color: "#0A66C2" },
-    { title: "Bash Scripts", logoComponent: null, color: "#4EAA25" },
-    { title: "JWT / OAuth", logoComponent: null, color: "#F59E0B" },
-    { title: "OpenAPI", logoComponent: null, color: "#85EA2D" },
-  ],
-};
-
-const allCategories = [...skillsData, othersCategory];
-
 export const Skills = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-80px", amount: 0.1 });
@@ -49,7 +34,7 @@ export const Skills = () => {
 
         {/* Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {allCategories.map((category, catIdx) => (
+          {skillsData.map((category, catIdx) => (
             <motion.div
               key={category.title}
               className="tech-grid-card"

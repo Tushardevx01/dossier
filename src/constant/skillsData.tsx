@@ -1,4 +1,5 @@
 import React from "react";
+import { MdApi } from "react-icons/md";
 
 import {
   FaCss3,
@@ -51,6 +52,8 @@ import {
   SiSocketdotio,
   SiJavascript,
   SiFedora,
+  SiGraphql,
+  SiOpenai,
 } from "react-icons/si";
 
 import { TbBrandCpp } from "react-icons/tb";
@@ -152,9 +155,20 @@ export const skillsData: SkillsDataProps[] = [
     data: [
       { title: "Figma", logoComponent: SiFigma, color: "#F24E1E" },
       { title: "Canva", logoComponent: SiCanva, color: "#00C4CC" },
-      { title: "Adobe Photoshop", logoComponent: SiAdobephotoshop, color: "#31A8FF" },
-      { title: "Adobe Illustrator", logoComponent: SiAdobeillustrator, color: "#FF9A00" },
-      { title: "Adobe XD", logoComponent: SiAdobexd, color: "#FF61F6" },
+      { title: "Photoshop", logoComponent: SiAdobephotoshop, color: "#31A8FF" },
+      { title: "Illustrator", logoComponent: SiAdobeillustrator, color: "#FF9A00" },
+      { title: "XD", logoComponent: SiAdobexd, color: "#FF61F6" },
+    ],
+  },
+  {
+    title: "Others",
+    data: [
+      { title: "REST APIs", logoComponent: MdApi, color: "#6366F1" },
+      { title: "GraphQL", logoComponent: SiGraphql, color: "#E10098" },
+      { title: "WebSockets", logoComponent: SiSocketdotio, color: "#010101" },
+      { title: "Bash Scripts", logoComponent: SiGnubash, color: "#4EAA25" },
+      { title: "JWT / OAuth", logoComponent: SiJsonwebtokens, color: "#000000" },
+      { title: "OpenAPI", logoComponent: SiOpenai, color: "#FFFFFF" },
     ],
   },
 ];
