@@ -60,6 +60,16 @@ const ContactSocialItem = ({
   link: string;
   initial: number;
 }) => {
+  // Brand colors for each social platform
+  const getBrandColor = () => {
+    if (link.includes('github')) return '#ffffff';
+    if (link.includes('linkedin')) return '#0A66C2';
+    if (link.includes('telegram')) return '#26A5E4';
+    if (link.includes('twitter')) return '#1DA1F2';
+    if (link.includes('leetcode')) return '#FFA116';
+    return '#ffffff';
+  };
+
   return (
     <motion.li
       whileInView={{ opacity: 1, y: 0 }}
@@ -70,18 +80,37 @@ const ContactSocialItem = ({
         stiffness: 400,
         damping: 10,
       }}
-      whileHover={{
-        scale: 1.1,
-      }}
-      className="bg-purple-700 text-slate-300 hover:bg-slate-400 hover:text-purple-700 h-10 w-10 rounded-full flex items-center justify-center shrink-0"
+      className="h-10 w-10 flex items-center justify-center shrink-0"
     >
       <Link
         href={link}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center"
+        className="flex items-center group"
       >
-        <Icon className="text-slate-300 hover:text-purple-700 w-6 h-6" />
+        <motion.div
+          whileHover={{
+            scale: 1.15,
+            y: -3,
+          }}
+          transition={{
+            duration: 0.2,
+            ease: "easeOut",
+          }}
+        >
+          <Icon 
+            className="text-slate-400 group-hover:drop-shadow-[0_0_10px_currentColor] w-6 h-6 transition-colors duration-300" 
+            style={{
+              color: 'inherit',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = getBrandColor();
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'inherit';
+            }}
+          />
+        </motion.div>
       </Link>
     </motion.li>
   );
