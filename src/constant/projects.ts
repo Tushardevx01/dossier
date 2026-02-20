@@ -26,7 +26,7 @@ export const projectsData = [
   {
     name: "Fenix",
     description:
-      "**Fenix** is a modern video communication platform designed for secure, high-performance real-time interactions, built using Next.js for a responsive user experience, LiveKit for low-latency audio and video, and Clerk for reliable user authentication.",
+      "Fenix is a modern video communication platform designed for secure, high-performance real-time interactions, built using Next.js for a responsive user experience, LiveKit for low-latency audio and video, and Clerk for reliable user authentication.",
     github_link: "https://github.com/Tusharxhub/Fenix",
     demo:"https://fenix-ecru.vercel.app/",
     tech: ["Next.js", "clerk", "LiveKit"],
