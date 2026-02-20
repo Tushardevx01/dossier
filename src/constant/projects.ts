@@ -1,11 +1,11 @@
 export const projectsData = [
   {
-    name: "GitHubWrapped",
+    name: "SimpUI",
     description:
-      "GitHubWrapped is a interactive year-in-review dashboard that visualizes your GitHub activity. It helps you explore and share your coding journey with insights like contributions, top repositories, languages used, and activity patterns.",
-    github_link: "https://github.com/Tusharxhub/GitHubWrapped",
-    demo: "https://githubwrapped01.vercel.app/",
-    tech: ["Next.js", "Tailwind CSS", " Chart Libraries"],
+      "SimpyUI is a curated collection of uncommon, highly-polished React components designed to elevate your web applications. Built with React, TypeScript, and Framer Motion, each component is crafted with attention to detail, offering smooth animations, modern aesthetics, and a delightful user experience.",
+    github_link: "https://github.com/AbhishekS04/SimpyUI",
+    demo: "https://simpyui.vercel.app/",
+    tech: ["Next.js", "Tailwind CSS", "Framer Motion"],
   },
   {
     name: "Everywhere",
