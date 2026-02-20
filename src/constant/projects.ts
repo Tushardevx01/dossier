@@ -18,7 +18,7 @@ export const projectsData = [
   {
     name: "Zenyte",
     description:
-      "A collaborative workspace that supports real-time editing, authentication, file uploads, and autosaving — all built to boost creativity and productivity in team environments.",
+      "Zenyte is a sleek, modern, and fully responsive web application built with cutting-edge web technologies.The app offers a clean UI, smooth interactions, and optimized performance for a seamless user experience.",
     github_link: "https://github.com/Tusharxhub/zenyte",
     demo: "https://zenyte-beige.vercel.app/",
     tech: ["JavaScript", "Css", "HTML"],
