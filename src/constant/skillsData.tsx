@@ -7,11 +7,12 @@ import {
   FaHtml5,
   FaJava,
   FaLaptopCode,
-  FaMobile,
   FaPython,
   FaReact,
   FaSquareJs,
   FaBootstrap,
+  FaDocker,
+  FaLinux,
 } from "react-icons/fa6";
 
 import {
@@ -36,12 +37,15 @@ import {
   SiAppwrite,
   SiWeb3Dotjs,
   SiEslint,
+  SiNodedotjs,
+  SiNestjs,
+  SiNpm,
+  SiGnubash,
+  SiC,
 } from "react-icons/si";
 
 import { TbBrandCpp } from "react-icons/tb";
-import { GrOracle } from "react-icons/gr";
 import { MdApi } from "react-icons/md";
-import { FaDocker, FaLinux } from "react-icons/fa";
 
 interface LogoProps {
   title: string;
@@ -58,13 +62,13 @@ export const skillsData: SkillsDataProps[] = [
   {
     title: "Programming Languages",
     data: [
-      { title: "C", logoComponent: TbBrandCpp, color: "#00599C" },
+      { title: "C", logoComponent: SiC, color: "#A8B9CC" },
       { title: "C++", logoComponent: TbBrandCpp, color: "#00599C" },
       { title: "Java", logoComponent: FaJava, color: "#007396" },
       { title: "Python", logoComponent: FaPython, color: "#3776AB" },
       { title: "JavaScript", logoComponent: FaSquareJs, color: "#F7DF1E" },
       { title: "TypeScript", logoComponent: SiTypescript, color: "#3178C6" },
-      { title: "Shell", logoComponent: FaSquareJs, color: "#5391FE" },
+      { title: "Shell (Bash)", logoComponent: SiGnubash, color: "#4EAA25" },
     ],
   },
   {
@@ -85,10 +89,10 @@ export const skillsData: SkillsDataProps[] = [
   {
     title: "Backend Development",
     data: [
-      { title: "Node.js", logoComponent: SiExpress, color: "#339933" },
-      { title: "Nodemon", logoComponent: SiExpress, color: "#76D04B" },
-      { title: "NPM", logoComponent: FaSquareJs, color: "#CB3837" },
-      { title: "NestJS", logoComponent: SiExpress, color: "#E0234E" },
+      { title: "Node.js", logoComponent: SiNodedotjs, color: "#339933" },
+      { title: "Nodemon", logoComponent: SiNodedotjs, color: "#76D04B" },
+      { title: "NPM", logoComponent: SiNpm, color: "#CB3837" },
+      { title: "NestJS", logoComponent: SiNestjs, color: "#E0234E" },
       { title: "JWT", logoComponent: MdApi, color: "#000000" },
       { title: "WebSockets", logoComponent: MdApi, color: "#0A66C2" },
       { title: "Express.js", logoComponent: SiExpress, color: "#ffffff" },

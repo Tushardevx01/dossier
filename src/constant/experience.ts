@@ -1,22 +1,22 @@
-import { url } from "inspector";
-
 export const experienceData = [
   {
-    role: "Software Development Engineer Intern",
-    year: "Sep'24 - Present",
+    role: "Full Stack Developer",
+    year: "Feb'26 - Present",
     description: [
-      "Optimized the platforms code execution engine by analyzing backend bottlenecks in 300+ algorithmic problems; refactored C++/Java logic to reduce average runtime latency by 15%.",
-      "Architected internal automation pipelines to validate problem constraints and test cases, ensuring 99.9% uptime for the problem statement delivery API during high-traffic hackathons.",
-      "Engineered comprehensive test suites for technical assessments, achieving 100% code coverage on edge cases to eliminate false positives in candidate grading."
+      "Building and maintaining web applications using Next.js, React, and Node.js.",
+      "Collaborating with cross-functional teams to design and implement new features.",
+      "Optimizing applications for maximum speed and scalability.",
     ],
 
-    company: "UnStop",
+    company: "0day Tech Community",
     technologies: [
-      "Inhouse CMS",
-      "Artificial Intelligence",
-      "Code Interpretation",
+      "TypeScript",
+      "Node.js",
+      "supabase",
+      "Git",
+      "Vercel",
     ],
-    url: "https://www.unstop.com/",
+    url: "https://0day-iota.vercel.app/",
   },
   {
     role: "Ui/UX Designer",
