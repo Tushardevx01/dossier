@@ -1,3 +1,5 @@
+import { url } from "inspector";
+
 export const experienceData = [
   {
     role: "Software Development Engineer Intern",
@@ -17,14 +19,15 @@ export const experienceData = [
     url: "https://www.unstop.com/",
   },
   {
-    role: "Graphic Designer",
-    year: "Nov'23 - Dec'24",
+    role: "Ui/UX Designer",
+    year: "June'24 - present",
     description: [
-      "Designed scrollstopping visuals for social media and event promotions, making sure even the algorithm couldn’t ignore our team’s drip.",
-      "Turned vague design briefs into crisp creative assets—because 'make it pop' is not a real instruction but I delivered anyway.",
-      "Blended creativity with speed using Illustrator, Canva, and DaVinci Resolve to bring aesthetic harmony across posters, reels, and everything in between—basically the design department’s Swiss Army knife.",
+      "Designed intuitive, user-focused interfaces for web and mobile.",
+    "Created wireframes, prototypes, and scalable design systems.",
+    "Collaborated with developers for clean, consistent implementation."
     ],
-    company: "Team Negative (Team under Adamas-DU Fashion Society)",
-    technologies: ["Adobe Illustrator", "Canva", "daVinci Resolve"],
+    company: "azmth",
+    technologies: ["Adobe Illustrator", "Canva", "Figma", "Illustrator"],
+    url: "https://www.azmth.com/"
   },
 ];

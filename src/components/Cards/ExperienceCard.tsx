@@ -10,6 +10,7 @@ interface ExperienceCardProps {
   description: Array<string>;
   company: string;
   technologies: Array<string>;
+  url?: string;
   index?: number;
 }
 
@@ -19,6 +20,7 @@ export const ExperienceCard: FC<ExperienceCardProps> = ({
   description,
   company,
   technologies,
+  url,
   index = 0,
 }) => {
   const ref = useRef(null);
@@ -103,7 +105,18 @@ export const ExperienceCard: FC<ExperienceCardProps> = ({
                   className="font-medium"
                   style={{ color: "hsl(var(--secondary))" }}
                 >
-                  {company}
+                  {url ? (
+                    <a
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:underline transition-colors duration-200"
+                    >
+                      {company}
+                    </a>
+                  ) : (
+                    company
+                  )}
                 </p>
               </div>
               <span

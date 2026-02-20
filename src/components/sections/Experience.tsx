@@ -68,6 +68,7 @@ export function Experience() {
                 description={exp.description}
                 company={exp.company}
                 technologies={exp.technologies}
+                url={exp.url}
                 index={index}
               />
             ))}
