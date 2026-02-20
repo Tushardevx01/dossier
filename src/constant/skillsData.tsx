@@ -6,13 +6,10 @@ import {
   FaGithub,
   FaHtml5,
   FaJava,
-  FaLaptopCode,
   FaPython,
   FaReact,
-  FaSquareJs,
   FaBootstrap,
   FaDocker,
-  FaLinux,
 } from "react-icons/fa6";
 
 import {
@@ -42,10 +39,21 @@ import {
   SiNpm,
   SiGnubash,
   SiC,
+  SiFigma,
+  SiCanva,
+  SiAdobephotoshop,
+  SiAdobeillustrator,
+  SiAdobexd,
+  SiSass,
+  SiWebpack,
+  SiRadixui,
+  SiJsonwebtokens,
+  SiSocketdotio,
+  SiJavascript,
+  SiFedora,
 } from "react-icons/si";
 
 import { TbBrandCpp } from "react-icons/tb";
-import { MdApi } from "react-icons/md";
 
 interface LogoProps {
   title: string;
@@ -66,7 +74,6 @@ export const skillsData: SkillsDataProps[] = [
       { title: "C++", logoComponent: TbBrandCpp, color: "#00599C" },
       { title: "Java", logoComponent: FaJava, color: "#007396" },
       { title: "Python", logoComponent: FaPython, color: "#3776AB" },
-      { title: "JavaScript", logoComponent: FaSquareJs, color: "#F7DF1E" },
       { title: "TypeScript", logoComponent: SiTypescript, color: "#3178C6" },
       { title: "Shell (Bash)", logoComponent: SiGnubash, color: "#4EAA25" },
     ],
@@ -76,12 +83,14 @@ export const skillsData: SkillsDataProps[] = [
     data: [
       { title: "HTML5", logoComponent: FaHtml5, color: "#E34F26" },
       { title: "CSS3", logoComponent: FaCss3, color: "#1572B6" },
-      { title: "SASS", logoComponent: FaCss3, color: "#CC6699" },
+      { title: "JavaScript", logoComponent: SiJavascript, color: "#F7DF1E" },
+      { title: "React", logoComponent: FaReact, color: "#61DAFB" },
+      { title: "SASS", logoComponent: SiSass, color: "#CC6699" },
       { title: "Tailwind CSS", logoComponent: SiTailwindcss, color: "#06B6D4" },
-      { title: "Next.js", logoComponent: SiNextdotjs, color: "#ffffff" },
+      { title: "Next.js", logoComponent: SiNextdotjs, color: "#000000" },
       { title: "React Native", logoComponent: FaReact, color: "#61DAFB" },
-      { title: "Radix UI", logoComponent: FaReact, color: "#161618" },
-      { title: "Webpack", logoComponent: FaLaptopCode, color: "#8DD6F9" },
+      { title: "Radix UI", logoComponent: SiRadixui, color: "#161618" },
+      { title: "Webpack", logoComponent: SiWebpack, color: "#8DD6F9" },
       { title: "Bootstrap", logoComponent: FaBootstrap, color: "#7952B3" },
       { title: "Framer Motion", logoComponent: SiFramer, color: "#0055FF" },
     ],
@@ -90,12 +99,12 @@ export const skillsData: SkillsDataProps[] = [
     title: "Backend Development",
     data: [
       { title: "Node.js", logoComponent: SiNodedotjs, color: "#339933" },
-      { title: "Nodemon", logoComponent: SiNodedotjs, color: "#76D04B" },
-      { title: "NPM", logoComponent: SiNpm, color: "#CB3837" },
+      { title: "Express.js", logoComponent: SiExpress, color: "#000000" },
       { title: "NestJS", logoComponent: SiNestjs, color: "#E0234E" },
-      { title: "JWT", logoComponent: MdApi, color: "#000000" },
-      { title: "WebSockets", logoComponent: MdApi, color: "#0A66C2" },
-      { title: "Express.js", logoComponent: SiExpress, color: "#ffffff" },
+      { title: "NPM", logoComponent: SiNpm, color: "#CB3837" },
+      { title: "JWT", logoComponent: SiJsonwebtokens, color: "#000000" },
+      { title: "WebSockets", logoComponent: SiSocketdotio, color: "#010101" },
+      { title: "Nodemon", logoComponent: SiNodedotjs, color: "#76D04B" },
     ],
   },
   {
@@ -116,7 +125,7 @@ export const skillsData: SkillsDataProps[] = [
       { title: "Firebase", logoComponent: SiFirebase, color: "#FFCA28" },
       { title: "Cloudflare", logoComponent: SiCloudflare, color: "#F38020" },
       { title: "Netlify", logoComponent: SiNetlify, color: "#00C7B7" },
-      { title: "Vercel", logoComponent: SiVercel, color: "#ffffff" },
+      { title: "Vercel", logoComponent: SiVercel, color: "#000000" },
       { title: "Render", logoComponent: SiRender, color: "#46E3B7" },
       { title: "Appwrite", logoComponent: SiAppwrite, color: "#F02E65" },
     ],
@@ -131,21 +140,21 @@ export const skillsData: SkillsDataProps[] = [
     title: "DevOps & Tools",
     data: [
       { title: "Git", logoComponent: FaGitAlt, color: "#F05032" },
-      { title: "GitHub", logoComponent: FaGithub, color: "#ffffff" },
+      { title: "GitHub", logoComponent: FaGithub, color: "#181717" },
       { title: "Postman", logoComponent: SiPostman, color: "#FF6C37" },
       { title: "ESLint", logoComponent: SiEslint, color: "#4B32C3" },
       { title: "Docker", logoComponent: FaDocker, color: "#2496ED" },
-      { title: "Linux (Fedora)", logoComponent: FaLinux, color: "#294172" },
+      { title: "Linux(Fedora)", logoComponent: SiFedora, color: "#51A2DA" },
     ],
   },
   {
     title: "UI/UX & Design",
     data: [
-      { title: "Figma", logoComponent: FaLaptopCode, color: "#F24E1E" },
-      { title: "Canva", logoComponent: FaLaptopCode, color: "#00C4CC" },
-      { title: "Adobe Photoshop", logoComponent: FaLaptopCode, color: "#31A8FF" },
-      { title: "Adobe Illustrator", logoComponent: FaLaptopCode, color: "#FF9A00" },
-      { title: "Adobe XD", logoComponent: FaLaptopCode, color: "#FF61F6" },
+      { title: "Figma", logoComponent: SiFigma, color: "#F24E1E" },
+      { title: "Canva", logoComponent: SiCanva, color: "#00C4CC" },
+      { title: "Adobe Photoshop", logoComponent: SiAdobephotoshop, color: "#31A8FF" },
+      { title: "Adobe Illustrator", logoComponent: SiAdobeillustrator, color: "#FF9A00" },
+      { title: "Adobe XD", logoComponent: SiAdobexd, color: "#FF61F6" },
     ],
   },
 ];
