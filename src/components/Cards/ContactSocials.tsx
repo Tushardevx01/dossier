@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 
 import { SiLeetcode } from "react-icons/si";
 import { PiTelegramLogo } from "react-icons/pi";
-import { FaGithub, FaLinkedinIn, FaTwitter } from "react-icons/fa6";
+import { FaGithub, FaLinkedinIn, FaTwitter, FaDiscord, FaWhatsapp } from "react-icons/fa6";
 
 import { selfData } from "@/constant";
 
@@ -33,6 +33,16 @@ export const ContactSocials = () => {
     {
       Icon: SiLeetcode,
       link: `https://leetcode.com/${selfData.socials_username.leetcode}`,
+      initial: -10,
+    },
+    {
+      Icon: FaDiscord,
+      link: `https://discord.com/users/${selfData.socials_username.discord}`,
+      initial: 10,
+    },
+    {
+      Icon: FaWhatsapp,
+      link: `https://wa.me/${selfData.socials_username.whatsapp.replace(/[\s+]/g, '')}`,
       initial: -10,
     },
   ];
@@ -67,6 +77,8 @@ const ContactSocialItem = ({
     if (link.includes('telegram')) return '#26A5E4';
     if (link.includes('twitter')) return '#1DA1F2';
     if (link.includes('leetcode')) return '#FFA116';
+    if (link.includes('discord')) return '#5865F2';
+    if (link.includes('whatsapp') || link.includes('wa.me')) return '#25D366';
     return '#ffffff';
   };
 
@@ -90,12 +102,16 @@ const ContactSocialItem = ({
       >
         <motion.div
           whileHover={{
-            scale: 1.15,
-            y: -3,
+            scale: 1.1,
+            y: -2,
+          }}
+          whileTap={{
+            scale: 0.95,
           }}
           transition={{
-            duration: 0.2,
-            ease: "easeOut",
+            type: "spring",
+            stiffness: 400,
+            damping: 17,
           }}
         >
           <Icon 

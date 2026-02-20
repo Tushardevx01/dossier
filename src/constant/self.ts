@@ -41,5 +41,7 @@ export const selfData = {
     linkedin: "tushar-kanti-dey",
     telegram: "Tushardevx",
     twitter: "tushardevX01",
+    discord: "tushardevx01",
+    whatsapp: "+91 629 528 9626",
   },
 };
