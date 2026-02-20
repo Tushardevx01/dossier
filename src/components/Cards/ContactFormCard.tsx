@@ -130,72 +130,13 @@ export const ContactFormCard = () => {
       }}
     >
       <Card
-        className="relative overflow-hidden backdrop-blur-xl border transition-all duration-700 h-full flex flex-col shadow-xl hover:shadow-2xl group-hover:shadow-luxury-hover-glow/40"
+        className="relative overflow-hidden backdrop-blur-xl border transition-all duration-700 h-full flex flex-col shadow-xl hover:shadow-2xl"
         style={{
           background: "hsl(var(--glass-bg))",
           borderColor: "hsl(var(--glass-border))",
           transformStyle: "preserve-3d",
         }}
       >
-        {/* Enhanced Glass shimmer effect */}
-        <motion.div
-          className="absolute inset-0 opacity-0 group-hover:opacity-40 transition-opacity duration-1000"
-          style={{
-            background:
-              "linear-gradient(135deg, transparent 30%, hsl(var(--primary) / 0.2) 50%, transparent 70%)",
-          }}
-          initial={{ x: "-200%", rotate: -45 }}
-          whileHover={{ x: "200%", rotate: 45 }}
-          transition={{ duration: 1.2, ease: "easeInOut" }}
-        />
-
-        {/* Enhanced Glowing border effect */}
-        <motion.div
-          className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-          style={{
-            background:
-              "linear-gradient(45deg, hsl(var(--primary) / 0.3), hsl(var(--secondary) / 0.2), hsl(var(--primary) / 0.3))",
-            filter: "blur(2px)",
-          }}
-          animate={{
-            backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-
-        {/* Floating particles effect */}
-        <motion.div
-          className="absolute top-4 right-4 w-2 h-2 rounded-full bg-primary/30 blur-sm"
-          animate={{
-            y: [0, -10, 0],
-            opacity: [0.3, 0.8, 0.3],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: 2.5,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-        <motion.div
-          className="absolute bottom-6 left-6 w-1 h-1 rounded-full bg-secondary/40 blur-sm"
-          animate={{
-            y: [0, 8, 0],
-            x: [0, 5, 0],
-            opacity: [0.4, 0.9, 0.4],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 0.5,
-          }}
-        />
-
         <div className="relative z-10 p-4 md:p-6 flex flex-col flex-grow">
           <form onSubmit={sendEmail} className="space-y-3">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -219,7 +160,7 @@ export const ContactFormCard = () => {
                   name="senderName"
                   onChange={handleChange}
                   value={formValues.senderName}
-                  className="w-full px-4 py-3 text-sm rounded-xl backdrop-blur-xl border transition-all duration-300 outline-none focus:ring-2 focus:ring-primary/50 hover:border-primary/30"
+                  className="w-full px-4 py-3 text-sm rounded-xl backdrop-blur-xl border transition-all duration-300 outline-none focus:ring-2 focus:ring-white/20 hover:border-white/30"
                   style={{
                     color: "hsl(var(--foreground))",
                     background: "hsl(var(--glass-bg))",
@@ -248,7 +189,7 @@ export const ContactFormCard = () => {
                   name="senderEmail"
                   onChange={handleChange}
                   value={formValues.senderEmail}
-                  className="w-full px-4 py-3 text-sm rounded-xl backdrop-blur-xl border transition-all duration-300 outline-none focus:ring-2 focus:ring-primary/50 hover:border-primary/30"
+                  className="w-full px-4 py-3 text-sm rounded-xl backdrop-blur-xl border transition-all duration-300 outline-none focus:ring-2 focus:ring-white/20 hover:border-white/30"
                   style={{
                     color: "hsl(var(--foreground))",
                     background: "hsl(var(--glass-bg))",
@@ -275,7 +216,7 @@ export const ContactFormCard = () => {
                 name="reasonToContact"
                 onChange={handleChange}
                 value={formValues.reasonToContact}
-                className="w-full px-4 py-3 text-sm rounded-xl backdrop-blur-xl border transition-all duration-300 outline-none focus:ring-2 focus:ring-primary/50 hover:border-primary/30"
+                className="w-full px-4 py-3 text-sm rounded-xl backdrop-blur-xl border transition-all duration-300 outline-none focus:ring-2 focus:ring-white/20 hover:border-white/30"
                 style={{
                   color: "hsl(var(--foreground))",
                   background: "hsl(var(--glass-bg))",
@@ -322,7 +263,7 @@ export const ContactFormCard = () => {
                 onChange={handleChange}
                 value={formValues.senderMsg}
                 required
-                className="w-full px-4 py-3 text-sm rounded-xl backdrop-blur-xl border transition-all duration-300 outline-none focus:ring-2 focus:ring-primary/50 hover:border-primary/30 resize-none"
+                className="w-full px-4 py-3 text-sm rounded-xl backdrop-blur-xl border transition-all duration-300 outline-none focus:ring-2 focus:ring-white/20 hover:border-white/30 resize-none"
                 style={{
                   color: "hsl(var(--foreground))",
                   background: "hsl(var(--glass-bg))",
@@ -362,8 +303,8 @@ export const ContactFormCard = () => {
                 }}
                 animate={{
                   boxShadow: isSending
-                    ? "0 0 30px hsl(var(--primary) / 0.4)"
-                    : "0 0 20px hsl(var(--primary) / 0.2)",
+                    ? "0 0 30px rgba(255, 255, 255, 0.2)"
+                    : "0 0 20px rgba(255, 255, 255, 0.1)",
                 }}
                 className="w-full btn-primary px-6 py-3 rounded-xl font-medium text-base flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
               >
