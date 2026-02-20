@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { MeshGradient } from "@paper-design/shaders-react";
 
 export const Background = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -73,14 +72,8 @@ export const Background = () => {
         </defs>
       </svg>
 
-      {/* Background Shaders */}
-      <MeshGradient
-        className="absolute inset-0 w-full h-full"
-        colors={["#000000", "#8b5cf6", "#ffffff", "#1e1b4b", "#4c1d95"]}
-        speed={0.3}
-      />
-      {/* Optimized: Removed second MeshGradient layer for performance.
-          The first layer provides the core visual. */}
+      {/* Black Background */}
+      <div className="absolute inset-0 w-full h-full bg-black" />
     </div>
   );
 };

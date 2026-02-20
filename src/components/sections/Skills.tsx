@@ -1,114 +1,97 @@
 "use client";
 
-import { motion } from "motion/react";
-import React, { useRef, useEffect, useState, FC } from "react";
-
-import { nasalization } from "@/app/fonts";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
+import { mono, nasalization } from "@/app/fonts";
 import { skillsData } from "@/constant";
-import { SkillCard } from "@/components/Cards";
+import React from "react";
 
-interface LogoProps {
-  title: string;
-  logoComponent: React.FC;
-  color: string;
-}
-
-interface SkillsDataProps {
-  title: string;
-  data: LogoProps[];
-}
-
-interface MarqueeProps {
-  skills: LogoProps[];
-  direction: "left" | "right";
-}
-
-const Marquee: FC<MarqueeProps> = ({ skills, direction }) => {
-  const marqueeRef = useRef<HTMLDivElement>(null);
-  const [marqueeWidth, setMarqueeWidth] = useState(0);
-
-  useEffect(() => {
-    const measureWidth = () => {
-      if (marqueeRef.current) {
-        setMarqueeWidth(marqueeRef.current.scrollWidth / 2);
-      }
-    };
-
-    measureWidth();
-    window.addEventListener("resize", measureWidth);
-
-    return () => window.removeEventListener("resize", measureWidth);
-  }, [skills]);
-
-  const speedFactor = 50;
-  const animationDuration = marqueeWidth > 0 ? marqueeWidth / speedFactor : 0;
-
-  const animateX =
-    direction === "right" ? [0, -marqueeWidth] : [-marqueeWidth, 0];
-
-  return (
-    <div className="my-2">
-      <div className="relative overflow-hidden py-2">
-        <motion.div
-          ref={marqueeRef}
-          className="flex flex-row gap-8 whitespace-nowrap"
-          animate={marqueeWidth > 0 ? { x: animateX } : {}}
-          transition={{
-            repeat: Infinity,
-            duration: animationDuration,
-            ease: "linear",
-          }}
-        >
-          {[...skills, ...skills].map((skill, index) => (
-            <SkillCard
-              key={`${skill.title}-${index}`}
-              title={skill.title}
-              color={skill.color || "#ffffff"}
-              Icon={skill.logoComponent}
-              className="lg:pr-16 md:pr-8 sm:pr-4 pr-2 flex-shrink-0"
-            />
-          ))}
-        </motion.div>
-      </div>
-    </div>
-  );
+// "Others" category added inline
+const othersCategory = {
+  title: "Others",
+  data: [
+    { title: "REST APIs", logoComponent: null, color: "#6366F1" },
+    { title: "GraphQL", logoComponent: null, color: "#E10098" },
+    { title: "WebSockets", logoComponent: null, color: "#0A66C2" },
+    { title: "Bash Scripts", logoComponent: null, color: "#4EAA25" },
+    { title: "JWT / OAuth", logoComponent: null, color: "#F59E0B" },
+    { title: "OpenAPI", logoComponent: null, color: "#85EA2D" },
+  ],
 };
 
+const allCategories = [...skillsData, othersCategory];
+
 export const Skills = () => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px", amount: 0.1 });
+
   return (
-    <section id="skills" className="py-16 overflow-hidden relative">
-
-
-      <div className="container mx-auto relative z-10">
-        <div className="text-center mb-8">
-          <motion.h2
-            className={`${nasalization.className} text-4xl font-bold text-primary`}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            viewport={{ once: true }}
+    <section id="tech" ref={ref} className="py-24 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Heading */}
+        <motion.div
+          className="mb-14 space-y-3"
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6 }}
+        >
+          {/* <p className="section-label">// Tech Stack</p> */}
+          <h2
+            className={`${nasalization.className} text-4xl md:text-5xl font-bold`}
+            style={{ color: "hsl(var(--foreground))" }}
           >
-            My Skills
-          </motion.h2>
-        </div>
+            Built with the{" "}
+            <span style={{ color: "hsl(var(--primary) / 0.85)" }}>
+              right tools.
+            </span>
+          </h2>
+        </motion.div>
 
-        {(skillsData as SkillsDataProps[]).map((category, index) => {
-          let direction: "left" | "right";
-
-          if (index % 2 === 0) {
-            direction = "right";
-          } else {
-            direction = "left";
-          }
-
-          return (
-            <Marquee
+        {/* Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {allCategories.map((category, catIdx) => (
+            <motion.div
               key={category.title}
-              skills={category.data}
-              direction={direction}
-            />
-          );
-        })}
+              className="tech-grid-card"
+              initial={{ opacity: 0, y: 24 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+              transition={{ duration: 0.5, delay: catIdx * 0.07 }}
+            >
+              {/* Card header */}
+              <p
+                className={`${mono.className} text-xs font-medium mb-4`}
+                style={{ color: "hsl(var(--primary) / 0.55)" }}
+              >
+                {category.title}
+              </p>
+
+              {/* Pill tags */}
+              <div className="flex flex-wrap gap-2">
+                {category.data.map((skill) => {
+                  const Icon = skill.logoComponent as React.ElementType | null;
+                  return (
+                    <span
+                      key={skill.title}
+                      className="pill-tag"
+                      title={skill.title}
+                    >
+                      {Icon && (
+                        <Icon
+                          style={{
+                            color: skill.color || "currentColor",
+                            fontSize: "0.8rem",
+                            flexShrink: 0,
+                          }}
+                        />
+                      )}
+                      {skill.title}
+                    </span>
+                  );
+                })}
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   );

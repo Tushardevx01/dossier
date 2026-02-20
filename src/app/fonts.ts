@@ -1,4 +1,4 @@
-import { Inter, Cutive_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import localFont from "next/font/local";
 
 // Inter for all paragraph text and body content
@@ -9,9 +9,9 @@ export const inter = Inter({
   display: "swap",
 });
 
-// Mono for subheadings and smaller descriptive text
-export const mono = Cutive_Mono({
-  weight: "400",
+// JetBrains Mono for subheadings, code, and dashboard aesthetics
+export const mono = JetBrains_Mono({
+  weight: ["300", "400", "500", "600"],
   variable: "--font-mono",
   subsets: ["latin"],
   display: "swap",

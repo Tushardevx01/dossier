@@ -7,8 +7,8 @@ import {
   Hero,
   About,
   Skills,
-  Experience,
-  Projects,
+  GitHub,
+  DevOps,
   Contact,
 } from "@/components/sections";
 import { PreLoader, Background } from "@/components/common";
@@ -26,16 +26,29 @@ export default function Home() {
   return (
     <div className="min-h-screen relative">
       <Background />
-        <Navbar />
+      <Navbar />
+      <main>
+        {/* Hero — id="hero" */}
         <Hero />
+
+        {/* About */}
         <About />
-        <Skills />
-        <Experience />
-        <Projects />
+
+        {/* Tech Stack — id="tech" */}
+        <div id="work">
+          <Skills />
+        </div>
+
+        {/* GitHub */}
+        <GitHub />
+
+        {/* DevOps */}
+        <DevOps />
+
+        {/* Contact — id="contact" */}
         <Contact />
-        <Footer />
-
-
+      </main>
+      <Footer />
     </div>
   );
 }
