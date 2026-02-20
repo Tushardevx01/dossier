@@ -39,4 +39,12 @@ export const projectsData = [
     demo: "https://popcornplay-gamma.vercel.app",
     tech: ["JavaScript", "TMDB API", "CSS"],
   },
+   {
+    name: "Subscription Tracker",
+    description:
+      "A lightweight Node.js + Express API to manage, monitor, and optimize all your subscriptions in one place.Easily track costs, set reminders, and never miss a renewal date again..",
+    github_link: "https://github.com/Tusharxhub/subscription-tracker",
+    demo: "https://subscription-tracker-jet.vercel.app/",
+    tech: ["Node.js", "Express", "MongoDB"],
+  }
 ];
