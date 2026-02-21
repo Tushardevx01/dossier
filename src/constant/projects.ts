@@ -21,7 +21,7 @@ export const projectsData = [
       "CarePulse is a scalable healthcare management platform built for modern clinics and hospitals. Empowering healthcare with Next.js 14, Appwrite, Twilio, and Tailwind CSS.",
     github_link: "https://github.com/Tusharxhub/carepulse",
     demo: "https://carepulse-brown-omega.vercel.app/",
-    tech: ["TypeScript", "Appwrite", "JavaScript", "Tailwind CSS"],
+    tech: ["TypeScript", "Appwrite", "JavaScript"],
   },
   {
     name: "Fenix",

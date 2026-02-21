@@ -20,8 +20,9 @@ import {
   SiPostman,
   SiMysql,
   SiRedis,
+  SiAppwrite,
 } from "react-icons/si";
-import { FaReact, FaCss3, FaHtml5, FaCircleUser } from "react-icons/fa6";
+import { FaReact, FaCss3, FaHtml5, FaCircleUser, FaFilm } from "react-icons/fa6";
 import { MdApi } from "react-icons/md";
 
 interface ProjectCardProps {
@@ -64,9 +65,10 @@ export const ProjectCard: FC<ProjectCardProps> = ({
     "MongoDB": { icon: SiMongodb, color: "#47A248" },
     "clerk": { icon: FaCircleUser, color: "#6C47FF" }, // Clerk brand purple with user icon
     "LiveKit": { icon: MdApi, color: "#00C8FF" },
-    "TMDB API": { icon: MdApi, color: "#01D277" },
+    "TMDB API": { icon: FaFilm, color: "#01D277" }, // Movie database icon
     "TypeScript": { icon: SiTypescript, color: "#3178C6" },
     "React": { icon: FaReact, color: "#61DAFB" },
+    "Appwrite": { icon: SiAppwrite, color: "#F02E65" }, // Appwrite brand pink
   };
 
   // Get first 3 tech icons
