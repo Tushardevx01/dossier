@@ -16,12 +16,12 @@ export const projectsData = [
     tech: ["Next.js", "Expo Go", "JavaScript", "Supabase"],
   },
   {
-    name: "Zenyte",
+    name: "carepulse",
     description:
-      "Zenyte is a sleek, modern, and fully responsive web application built with cutting-edge web technologies.The app offers a clean UI, smooth interactions, and optimized performance for a seamless user experience.",
-    github_link: "https://github.com/Tusharxhub/zenyte",
-    demo: "https://zenyte-beige.vercel.app/",
-    tech: ["JavaScript", "Css", "HTML"],
+      "CarePulse is a scalable healthcare management platform built for modern clinics and hospitals. Empowering healthcare with Next.js 14, Appwrite, Twilio, and Tailwind CSS.",
+    github_link: "https://github.com/Tusharxhub/carepulse",
+    demo: "https://carepulse-brown-omega.vercel.app/",
+    tech: ["TypeScript", "Appwrite", "JavaScript", "Tailwind CSS"],
   },
   {
     name: "Fenix",
