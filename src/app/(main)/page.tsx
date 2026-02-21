@@ -30,30 +30,30 @@ export default function Home() {
       <Background />
       <Navbar />
       <main>
-        {/* Hero — id="hero" */}
+        {/* 1️⃣ Hero — Identity & Positioning */}
         <Hero />
 
-        {/* About */}
+        {/* 7️⃣ Engineering Philosophy — Values & Principles */}
         <About />
 
-        {/* Experience */}
-        <Experience />
+        {/* 2️⃣ Selected Work — Proof of capability */}
+        <Projects />
 
-        {/* Tech Stack — id="tech" */}
+        {/* 3️⃣ Infrastructure / DevOps — Deployment ownership */}
+        <DevOps />
+
+        {/* 4️⃣ Core Stack — Technical depth */}
         <div id="work">
           <Skills />
         </div>
 
-        {/* Projects */}
-        <Projects />
+        {/* 5️⃣ Experience — Credibility & Impact */}
+        <Experience />
 
-        {/* GitHub */}
+        {/* 6️⃣ GitHub — Consistency & Contribution */}
         <GitHub />
-
-        {/* DevOps */}
-        <DevOps />
-
-        {/* Contact — id="contact" */}
+        
+        {/* 8️⃣ Contact — Call-to-Action */}
         <Contact />
       </main>
       <Footer />
