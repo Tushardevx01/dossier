@@ -3,10 +3,26 @@ import { FC, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 
 import { Card } from "../ui/card";
-import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { FaGithub } from "react-icons/fa6";
 import { FiExternalLink } from "react-icons/fi";
+import {
+  SiNextdotjs,
+  SiTailwindcss,
+  SiFramer,
+  SiJavascript,
+  SiSupabase,
+  SiMongodb,
+  SiExpress,
+  SiNodedotjs,
+  SiFirebase,
+  SiTypescript,
+  SiPostman,
+  SiMysql,
+  SiRedis,
+} from "react-icons/si";
+import { FaReact, FaCss3, FaHtml5, FaCircleUser } from "react-icons/fa6";
+import { MdApi } from "react-icons/md";
 
 interface ProjectCardProps {
   index: number;
@@ -31,6 +47,30 @@ export const ProjectCard: FC<ProjectCardProps> = ({
     margin: "-50px",
     amount: 0.2,
   });
+
+  // Tech icon mapping with official brand colors
+  const techIconMap: Record<string, { icon: React.ElementType; color: string }> = {
+    "Next.js": { icon: SiNextdotjs, color: "#FFFFFF" }, // White for dark backgrounds
+    "Tailwind CSS": { icon: SiTailwindcss, color: "#06B6D4" },
+    "Framer Motion": { icon: SiFramer, color: "#0055FF" },
+    "JavaScript": { icon: SiJavascript, color: "#F7DF1E" },
+    "Supabase": { icon: SiSupabase, color: "#3ECF8E" },
+    "Expo Go": { icon: FaReact, color: "#61DAFB" },
+    "CSS": { icon: FaCss3, color: "#1572B6" },
+    "Css": { icon: FaCss3, color: "#1572B6" },
+    "HTML": { icon: FaHtml5, color: "#E34F26" },
+    "Node.js": { icon: SiNodedotjs, color: "#339933" },
+    "Express": { icon: SiExpress, color: "#FFFFFF" }, // White for dark backgrounds
+    "MongoDB": { icon: SiMongodb, color: "#47A248" },
+    "clerk": { icon: FaCircleUser, color: "#6C47FF" }, // Clerk brand purple with user icon
+    "LiveKit": { icon: MdApi, color: "#00C8FF" },
+    "TMDB API": { icon: MdApi, color: "#01D277" },
+    "TypeScript": { icon: SiTypescript, color: "#3178C6" },
+    "React": { icon: FaReact, color: "#61DAFB" },
+  };
+
+  // Get first 3 tech icons
+  const displayTech = tech.slice(0, 3);
 
   return (
     <motion.div
@@ -86,25 +126,32 @@ export const ProjectCard: FC<ProjectCardProps> = ({
           </motion.p>
 
           <motion.div
-            className="flex flex-wrap gap-2 mb-8"
+            className="flex items-center gap-3 mb-8"
             initial={{ opacity: 0, y: 8 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
             transition={{ duration: 0.4, delay: index * 0.08 + 0.3 }}
           >
-            {tech.map((techItem) => (
-              <Badge
-                key={techItem}
-                variant="outline"
-                className="text-[0.7rem] font-medium px-3 py-1 rounded-full"
-                style={{
-                  borderColor: "hsl(275 20% 30% / 0.5)",
-                  color: "hsl(var(--foreground) / 0.8)",
-                  backgroundColor: "hsl(245 25% 8% / 0.8)",
-                }}
-              >
-                {techItem}
-              </Badge>
-            ))}
+            {displayTech.map((techItem) => {
+              const techData = techIconMap[techItem];
+              if (!techData) return null;
+              const IconComponent = techData.icon;
+              return (
+                <div
+                  key={techItem}
+                  className="flex items-center justify-center w-10 h-10 rounded-lg backdrop-blur-sm transition-all duration-300 hover:scale-110"
+                  style={{
+                    backgroundColor: "hsl(245 25% 12% / 0.6)",
+                    border: "1px solid hsl(275 20% 25% / 0.4)",
+                  }}
+                  title={techItem}
+                >
+                  <IconComponent
+                    className="w-5 h-5"
+                    style={{ color: techData.color }}
+                  />
+                </div>
+              );
+            })}
           </motion.div>
 
           <motion.div
