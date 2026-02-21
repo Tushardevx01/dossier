@@ -90,8 +90,7 @@ export const primaryStack: SkillsCategory[] = [
   {
     title: "Data & Infrastructure",
     skills: [
-      { title: "Appwrite", logoComponent: SiAppwrite, color: "#F02E65" },
-      { title: "MongoDB", logoComponent: SiMongodb, color: "#47A248" },
+      { title: "Supabase", logoComponent: SiSupabase, color: "#3ECF8E" },
       { title: "Docker", logoComponent: FaDocker, color: "#2496ED" },
       { title: "Git", logoComponent: FaGitAlt, color: "#F05032" },
     ],
@@ -136,8 +135,9 @@ export const supportingStack: SkillsCategory[] = [
     title: "Databases & Libraries",
     skills: [
       { title: "MySQL", logoComponent: SiMysql, color: "#4479A1" },
+      { title: "MongoDB", logoComponent: SiMongodb, color: "#47A248" },
+      { title: "Appwrite", logoComponent: SiAppwrite, color: "#F02E65" },
       { title: "Redis", logoComponent: SiRedis, color: "#DC382D" },
-      { title: "Supabase", logoComponent: SiSupabase, color: "#3ECF8E" },
       { title: "Prisma", logoComponent: SiPrisma, color: "#2D3748" },
     ],
   },
