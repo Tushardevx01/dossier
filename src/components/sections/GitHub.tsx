@@ -89,7 +89,7 @@ export const GitHub = () => {
                     {/* Contribution graph image */}
                     <div className="w-full overflow-x-auto rounded-lg">
                         <Image
-                            src={process.env.NEXT_PUBLIC_GITHUB_GRAPH_URL || ""}
+                            src={`https://camo.githubusercontent.com/f8b32f9b4dc028f0fee8ce9cbf3edbdf145fd59a7e86fabdad5a310ec2fc190f/68747470733a2f2f6769746875622d726561646d652d61637469766974792d67726170682e76657263656c2e6170702f67726170683f757365726e616d653d54757368617278687562267261646975733d3136267468656d653d726561637426617265613d74727565266f726465723d35`}
                             alt={`${githubUsername} GitHub contribution graph`}
                             width={900}
                             height={130}
