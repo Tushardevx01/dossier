@@ -1,29 +1,8 @@
 import Link from "next/link";
 import { FC, useRef } from "react";
 import { motion, useInView } from "framer-motion";
-
-import { Card } from "../ui/card";
-import { Button } from "../ui/button";
 import { FaGithub } from "react-icons/fa6";
 import { FiExternalLink } from "react-icons/fi";
-import {
-  SiNextdotjs,
-  SiTailwindcss,
-  SiFramer,
-  SiJavascript,
-  SiSupabase,
-  SiMongodb,
-  SiExpress,
-  SiNodedotjs,
-  SiFirebase,
-  SiTypescript,
-  SiPostman,
-  SiMysql,
-  SiRedis,
-  SiAppwrite,
-} from "react-icons/si";
-import { FaReact, FaCss3, FaHtml5, FaCircleUser, FaFilm } from "react-icons/fa6";
-import { MdApi } from "react-icons/md";
 
 interface ProjectCardProps {
   index: number;
@@ -49,31 +28,6 @@ export const ProjectCard: FC<ProjectCardProps> = ({
     amount: 0.2,
   });
 
-  // Tech icon mapping with official brand colors
-  const techIconMap: Record<string, { icon: React.ElementType; color: string }> = {
-    "Next.js": { icon: SiNextdotjs, color: "#FFFFFF" }, // White for dark backgrounds
-    "Tailwind CSS": { icon: SiTailwindcss, color: "#06B6D4" },
-    "Framer Motion": { icon: SiFramer, color: "#0055FF" },
-    "JavaScript": { icon: SiJavascript, color: "#F7DF1E" },
-    "Supabase": { icon: SiSupabase, color: "#3ECF8E" },
-    "Expo Go": { icon: FaReact, color: "#61DAFB" },
-    "CSS": { icon: FaCss3, color: "#1572B6" },
-    "Css": { icon: FaCss3, color: "#1572B6" },
-    "HTML": { icon: FaHtml5, color: "#E34F26" },
-    "Node.js": { icon: SiNodedotjs, color: "#339933" },
-    "Express": { icon: SiExpress, color: "#FFFFFF" }, // White for dark backgrounds
-    "MongoDB": { icon: SiMongodb, color: "#47A248" },
-    "clerk": { icon: FaCircleUser, color: "#6C47FF" }, // Clerk brand purple with user icon
-    "LiveKit": { icon: MdApi, color: "#00C8FF" },
-    "TMDB API": { icon: FaFilm, color: "#01D277" }, // Movie database icon
-    "TypeScript": { icon: SiTypescript, color: "#3178C6" },
-    "React": { icon: FaReact, color: "#61DAFB" },
-    "Appwrite": { icon: SiAppwrite, color: "#F02E65" }, // Appwrite brand pink
-  };
-
-  // Get first 3 tech icons
-  const displayTech = tech.slice(0, 3);
-
   return (
     <motion.div
       ref={ref}
@@ -85,30 +39,19 @@ export const ProjectCard: FC<ProjectCardProps> = ({
         delay: index * 0.08,
         ease: "easeOut",
       }}
-      whileHover={{ y: -4, scale: 1.01 }}
+      whileHover={{ scale: 1.01 }}
       className="group h-full"
     >
-      <Card
-        className="relative overflow-hidden border transition-all duration-300 ease-out h-full flex flex-col rounded-2xl"
-        style={{
-          background:
-            "linear-gradient(180deg, hsl(245 25% 6% / 0.95) 0%, hsl(245 25% 4% / 0.95) 100%)",
-          borderColor: "hsl(275 20% 25% / 0.35)",
-          boxShadow: "0 10px 30px hsl(245 80% 2% / 0.35)",
-        }}
-      >
-        <div
-          className="absolute top-0 left-0 right-0 h-0.5"
-          style={{
-            background:
-              "linear-gradient(90deg, hsl(150 55% 45% / 0.8), hsl(175 55% 45% / 0.8), transparent)",
-          }}
-        />
+      {/* Ultra-clean minimal container */}
+      <div className="relative h-full flex flex-col rounded-2xl bg-black border border-white/10 p-10 transition-all duration-300">
+        {/* Top accent line - very subtle */}
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
 
-        <div className="relative z-10 p-8 flex flex-col flex-grow">
+        {/* Content wrapper with generous spacing */}
+        <div className="flex flex-col flex-grow">
+          {/* Title - Large, strong visual anchor */}
           <motion.h3
-            className="text-2xl md:text-3xl font-semibold tracking-tight"
-            style={{ color: "hsl(var(--foreground))" }}
+            className="text-4xl font-semibold tracking-tight text-white mb-4"
             initial={{ opacity: 0, y: 8 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
             transition={{ duration: 0.4, delay: index * 0.08 + 0.1 }}
@@ -116,10 +59,9 @@ export const ProjectCard: FC<ProjectCardProps> = ({
             {title}
           </motion.h3>
 
-          
+          {/* Description - Calm, muted */}
           <motion.p
-            className="text-sm mt-4 mb-6 leading-relaxed line-clamp-3"
-            style={{ color: "hsl(var(--foreground) / 0.7)" }}
+            className="text-base text-white/60 leading-relaxed mb-8 line-clamp-3"
             initial={{ opacity: 0, y: 8 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
             transition={{ duration: 0.4, delay: index * 0.08 + 0.2 }}
@@ -127,85 +69,60 @@ export const ProjectCard: FC<ProjectCardProps> = ({
             {desc}
           </motion.p>
 
+          {/* Tech Stack - Minimal pill tags */}
           <motion.div
-            className="flex items-center gap-3 mb-8"
+            className="flex flex-wrap gap-2 mb-10"
             initial={{ opacity: 0, y: 8 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
             transition={{ duration: 0.4, delay: index * 0.08 + 0.3 }}
           >
-            {displayTech.map((techItem) => {
-              const techData = techIconMap[techItem];
-              if (!techData) return null;
-              const IconComponent = techData.icon;
-              return (
-                <div
-                  key={techItem}
-                  className="flex items-center justify-center w-10 h-10 rounded-lg backdrop-blur-sm transition-all duration-300 hover:scale-110"
-                  style={{
-                    backgroundColor: "hsl(245 25% 12% / 0.6)",
-                    border: "1px solid hsl(275 20% 25% / 0.4)",
-                  }}
-                  title={techItem}
-                >
-                  <IconComponent
-                    className="w-5 h-5"
-                    style={{ color: techData.color }}
-                  />
-                </div>
-              );
-            })}
+            {tech.map((techItem) => (
+              <span
+                key={techItem}
+                className="px-3 py-1 rounded-full text-xs uppercase tracking-wide text-white/70 border border-white/10 bg-transparent transition-colors duration-200 hover:text-white/100 hover:border-white/20"
+              >
+                {techItem}
+              </span>
+            ))}
           </motion.div>
 
+          {/* Buttons - Minimal, confident action */}
           <motion.div
-            className="flex gap-3 mt-auto"
+            className="flex gap-4 mt-auto"
             initial={{ opacity: 0, y: 12 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
             transition={{ duration: 0.4, delay: index * 0.08 + 0.4 }}
           >
-            <motion.div
-              className="flex-1"
+            {/* View Source - Text + Subtle Border */}
+            <motion.a
+              href={github}
+              target="_blank"
+              rel="noopener noreferrer"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
+              className="flex-1 px-6 py-3 rounded-xl border border-white/20 text-white text-sm font-medium transition-all duration-200 hover:bg-white/5 hover:border-white/30 focus:outline-none focus:ring-2 focus:ring-white/20 focus:ring-offset-2 focus:ring-offset-black flex items-center justify-center gap-2"
             >
-              <Button
-                variant="outline"
-                size="sm"
-                className="group w-full transition-all duration-300 hover:shadow-lg font-mono text-xs"
-                style={{
-                  backgroundColor: "hsl(245 25% 8% / 0.6)",
-                  borderColor: "hsl(150 35% 35% / 0.5)",
-                  color: "hsl(var(--foreground))",
-                }}
-                asChild
-                aria-label="View source code"
-              >
-                <a href={github} target="_blank" rel="noopener noreferrer">
-                  <FaGithub className="w-4 h-4 mr-2" />
-                  View Source
-                </a>
-              </Button>
-            </motion.div>
+              <FaGithub className="w-4 h-4" />
+              Source
+            </motion.a>
+
+            {/* Live Preview - Solid & Confident */}
             {demo && (
-              <motion.div
-                className="flex-1"
+              <motion.a
+                href={demo}
+                target="_blank"
+                rel="noopener noreferrer"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
+                className="flex-1 px-6 py-3 rounded-xl bg-white text-black text-sm font-medium transition-all duration-200 hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-white/40 focus:ring-offset-2 focus:ring-offset-black flex items-center justify-center gap-2"
               >
-                <Button
-                  size="sm"
-                  asChild
-                  aria-label="Open live preview"
-                >
-                  <Link href={demo} target="_blank" rel="noopener noreferrer">
-                    Live Preview
-                    <FiExternalLink className="w-4 h-4 ml-2 transition-transform duration-300 group-hover:translate-x-0.5" />
-                  </Link>
-                </Button>
-              </motion.div>
+                Preview
+                <FiExternalLink className="w-4 h-4" />
+              </motion.a>
             )}
           </motion.div>
         </div>
-      </Card>
+      </div>
     </motion.div>
   );
 };
