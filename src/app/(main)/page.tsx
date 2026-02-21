@@ -7,6 +7,7 @@ import {
   Hero,
   About,
   Skills,
+  Projects,
   GitHub,
   DevOps,
   Contact,
@@ -38,6 +39,9 @@ export default function Home() {
         <div id="work">
           <Skills />
         </div>
+
+        {/* Projects */}
+        <Projects />
 
         {/* GitHub */}
         <GitHub />
