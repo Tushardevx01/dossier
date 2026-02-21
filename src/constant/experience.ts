@@ -28,6 +28,6 @@ export const experienceData = [
     ],
     company: "azmth",
     technologies: ["Adobe Illustrator", "Canva", "Figma", "Illustrator"],
-    url: "https://www.azmth.com/"
+    url: "https://www.linkedin.com/company/azmth/"
   },
 ];
