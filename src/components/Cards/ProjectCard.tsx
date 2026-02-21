@@ -36,114 +36,82 @@ export const ProjectCard: FC<ProjectCardProps> = ({
     <motion.div
       ref={ref}
       key={title}
-      initial={{ opacity: 0, y: 40, scale: 0.95 }}
-      animate={
-        isInView
-          ? { opacity: 1, y: 0, scale: 1 }
-          : { opacity: 0, y: 40, scale: 0.95 }
-      }
+      initial={{ opacity: 0, y: 24 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
       transition={{
-        duration: 0.6,
-        delay: index * 0.1,
-        ease: [0.25, 0.46, 0.45, 0.94],
+        duration: 0.45,
+        delay: index * 0.08,
+        ease: "easeOut",
       }}
-      whileHover={{
-        y: -10,
-        scale: 1.02,
-        transition: {
-          duration: 0.3,
-          type: "spring" as const,
-          stiffness: 400,
-          damping: 25,
-        },
-      }}
+      whileHover={{ y: -4, scale: 1.01 }}
       className="group h-full"
     >
       <Card
-        className="relative overflow-hidden backdrop-blur-xl border transition-all duration-500 h-full flex flex-col shadow-xl hover:shadow-2xl rounded-2xl"
+        className="relative overflow-hidden border transition-all duration-300 ease-out h-full flex flex-col rounded-2xl"
         style={{
-          background: "hsl(var(--glass-bg))",
-          borderColor: "hsl(var(--glass-border))",
-          borderRadius: "1rem",
+          background:
+            "linear-gradient(180deg, hsl(245 25% 6% / 0.95) 0%, hsl(245 25% 4% / 0.95) 100%)",
+          borderColor: "hsl(275 20% 25% / 0.35)",
+          boxShadow: "0 10px 30px hsl(245 80% 2% / 0.35)",
         }}
       >
-        {/* Glass shimmer effect */}
-        <motion.div
-          className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-700"
-          style={{ background: "var(--shimmer)" }}
-          initial={{ x: "-100%" }}
-          whileHover={{ x: "200%" }}
-          transition={{ duration: 1, ease: "easeInOut" }}
+        <div
+          className="absolute top-0 left-0 right-0 h-0.5"
+          style={{
+            background:
+              "linear-gradient(90deg, hsl(150 55% 45% / 0.8), hsl(175 55% 45% / 0.8), transparent)",
+          }}
         />
 
-        <div className="relative z-10 p-4 flex flex-col flex-grow">
-          {/* Card Header Accent */}
+        <div className="relative z-10 p-8 flex flex-col flex-grow">
           <motion.h3
-            className="text-xl font-bold mb-3 mt-2 font-nasalization"
-            style={{ color: "hsl(var(--primary))" }}
-            initial={{ opacity: 0, y: 10 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-            transition={{ duration: 0.5, delay: index * 0.1 + 0.2 }}
+            className="text-2xl md:text-3xl font-semibold tracking-tight"
+            style={{ color: "hsl(var(--foreground))" }}
+            initial={{ opacity: 0, y: 8 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+            transition={{ duration: 0.4, delay: index * 0.08 + 0.1 }}
           >
             {title}
           </motion.h3>
 
+          
           <motion.p
-            className="text-sm mb-6 flex-grow font-inter leading-relaxed"
-            style={{ color: "hsl(var(--foreground) / 0.8)" }}
-            initial={{ opacity: 0, y: 10 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-            transition={{ duration: 0.5, delay: index * 0.1 + 0.3 }}
+            className="text-sm mt-4 mb-6 leading-relaxed line-clamp-3"
+            style={{ color: "hsl(var(--foreground) / 0.7)" }}
+            initial={{ opacity: 0, y: 8 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+            transition={{ duration: 0.4, delay: index * 0.08 + 0.2 }}
           >
             {desc}
           </motion.p>
 
-          {/* Tech Stack */}
           <motion.div
-            className="flex flex-wrap gap-2 mb-6"
-            initial={{ opacity: 0, y: 10 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-            transition={{ duration: 0.5, delay: index * 0.1 + 0.4 }}
+            className="flex flex-wrap gap-2 mb-8"
+            initial={{ opacity: 0, y: 8 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+            transition={{ duration: 0.4, delay: index * 0.08 + 0.3 }}
           >
-            {tech.map((techItem, techIndex) => (
-              <motion.div
+            {tech.map((techItem) => (
+              <Badge
                 key={techItem}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={
-                  isInView
-                    ? { opacity: 1, scale: 1 }
-                    : { opacity: 0, scale: 0.8 }
-                }
-                transition={{
-                  duration: 0.3,
-                  delay: index * 0.1 + 0.5 + techIndex * 0.05,
-                  type: "spring" as const,
-                  stiffness: 300,
+                variant="outline"
+                className="text-[0.7rem] font-medium px-3 py-1 rounded-full"
+                style={{
+                  borderColor: "hsl(275 20% 30% / 0.5)",
+                  color: "hsl(var(--foreground) / 0.8)",
+                  backgroundColor: "hsl(245 25% 8% / 0.8)",
                 }}
-                whileHover={{ scale: 1.05 }}
               >
-                <Badge
-                  variant="outline"
-                  className="text-xs transition-all duration-300 hover:shadow-md font-mono px-3 py-1"
-                  style={{
-                    borderColor: "hsl(var(--primary) / 0.3)",
-                    color: "hsl(var(--foreground) / 0.9)",
-                    backgroundColor: "hsl(var(--primary) / 0.1)",
-                    borderRadius: "0.5rem",
-                  }}
-                >
-                  {techItem}
-                </Badge>
-              </motion.div>
+                {techItem}
+              </Badge>
             ))}
           </motion.div>
 
-          {/* Action Buttons */}
           <motion.div
-            className="flex space-x-3 mt-auto"
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.5, delay: index * 0.1 + 0.6 }}
+            className="flex gap-3 mt-auto"
+            initial={{ opacity: 0, y: 12 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+            transition={{ duration: 0.4, delay: index * 0.08 + 0.4 }}
           >
             <motion.div
               className="flex-1"
@@ -153,18 +121,18 @@ export const ProjectCard: FC<ProjectCardProps> = ({
               <Button
                 variant="outline"
                 size="sm"
-                className="w-full transition-all duration-300 hover:shadow-lg font-mono text-xs"
+                className="group w-full transition-all duration-300 hover:shadow-lg font-mono text-xs"
                 style={{
-                  backgroundColor: "hsl(var(--glass-bg-light))",
-                  borderColor: "hsl(var(--glass-border))",
+                  backgroundColor: "hsl(245 25% 8% / 0.6)",
+                  borderColor: "hsl(150 35% 35% / 0.5)",
                   color: "hsl(var(--foreground))",
-                  backdropFilter: "blur(8px)",
                 }}
                 asChild
+                aria-label="View source code"
               >
                 <a href={github} target="_blank" rel="noopener noreferrer">
                   <FaGithub className="w-4 h-4 mr-2" />
-                  Code
+                  View Source
                 </a>
               </Button>
             </motion.div>
@@ -176,12 +144,12 @@ export const ProjectCard: FC<ProjectCardProps> = ({
               >
                 <Button
                   size="sm"
-                  className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 transition-all duration-300 hover:shadow-lg font-mono text-xs"
                   asChild
+                  aria-label="Open live preview"
                 >
                   <Link href={demo} target="_blank" rel="noopener noreferrer">
-                    <FiExternalLink className="w-4 h-4 mr-2" />
-                    Demo
+                    Live Preview
+                    <FiExternalLink className="w-4 h-4 ml-2 transition-transform duration-300 group-hover:translate-x-0.5" />
                   </Link>
                 </Button>
               </motion.div>
