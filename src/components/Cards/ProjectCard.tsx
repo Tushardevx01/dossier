@@ -60,7 +60,7 @@ export const ProjectCard: FC<ProjectCardProps> = ({
       className="group h-full"
     >
       <Card
-        className="relative overflow-hidden backdrop-blur-xl border transition-all duration-500 h-full flex flex-col shadow-xl hover:shadow-2xl group-hover:shadow-luxury-hover-glow/30 rounded-2xl"
+        className="relative overflow-hidden backdrop-blur-xl border transition-all duration-500 h-full flex flex-col shadow-xl hover:shadow-2xl rounded-2xl"
         style={{
           background: "hsl(var(--glass-bg))",
           borderColor: "hsl(var(--glass-border))",
@@ -74,16 +74,6 @@ export const ProjectCard: FC<ProjectCardProps> = ({
           initial={{ x: "-100%" }}
           whileHover={{ x: "200%" }}
           transition={{ duration: 1, ease: "easeInOut" }}
-        />
-
-        {/* Glowing border effect */}
-        <motion.div
-          className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-          style={{
-            background:
-              "linear-gradient(45deg, hsl(var(--primary) / 0.2), hsl(var(--secondary) / 0.2), hsl(var(--accent) / 0.2))",
-            filter: "blur(1px)",
-          }}
         />
 
         <div className="relative z-10 p-4 flex flex-col flex-grow">
