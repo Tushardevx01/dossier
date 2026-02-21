@@ -6,6 +6,7 @@ import { Navbar, Footer } from "@/components/common";
 import {
   Hero,
   About,
+  Experience,
   Skills,
   Projects,
   GitHub,
@@ -34,6 +35,9 @@ export default function Home() {
 
         {/* About */}
         <About />
+
+        {/* Experience */}
+        <Experience />
 
         {/* Tech Stack — id="tech" */}
         <div id="work">
