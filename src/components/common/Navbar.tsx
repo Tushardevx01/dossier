@@ -82,11 +82,6 @@ export const Navbar = () => {
                 }}
               />
             </div>
-            <span
-              className={`${quentine.className} text-primary-foreground text-xl sm:text-base`}
-            >
-              {selfData.name}
-            </span>
           </Link>
 
           <div className="hidden sm:block">
