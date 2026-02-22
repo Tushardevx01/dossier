@@ -84,24 +84,6 @@ export const Navbar = () => {
             </div>
           </Link>
 
-          <div className="hidden sm:block">
-            <Button
-              variant="outline"
-              asChild
-              className="border-primary/30 hover:border-primary hover:bg-primary/10 transition-all duration-200"
-            >
-              {isResumePage ? (
-                <a href="/docs/Resume.pdf" download="Resume.pdf">
-                  Download Resume
-                </a>
-              ) : (
-                <Link href="/resume">
-                  Resume
-                </Link>
-              )}
-            </Button>
-          </div>
-
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="sm:hidden p-2 rounded-lg hover:bg-muted/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary/50"
@@ -121,41 +103,7 @@ export const Navbar = () => {
           </button>
         </div>
 
-        {/* Mobile Menu */}
-        <div
-          className={`sm:hidden overflow-hidden transition-all duration-300 ease-out ${
-            isMenuOpen ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
-          }`}
-        >
-          <div className="pt-4 pb-2 border-t border-border/50 mt-4">
-            <div className="space-y-3">
-              <Button
-                variant="outline"
-                asChild
-                className="w-full border-primary/30 hover:border-primary hover:bg-primary/10 transition-all duration-200"
-              >
-                {isResumePage ? (
-                  <a
-                    href="/docs/Resume.pdf"
-                    download="Resume.pdf"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center justify-center"
-                  >
-                    Download Resume
-                  </a>
-                ) : (
-                  <Link
-                    href="/resume"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center justify-center"
-                  >
-                    Resume
-                  </Link>
-                )}
-              </Button>
-            </div>
-          </div>
-        </div>
+
       </div>
     </nav>
   );
