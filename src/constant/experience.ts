@@ -19,6 +19,18 @@ export const experienceData = [
     url: "https://0day-iota.vercel.app/",
   },
   {
+    role: "Full Stack Developer",
+    year: "June'25 - Jan'26",
+    description: [
+      "Assisted in developing responsive web applications using React and Tailwind CSS.",
+      "Participated in code reviews and contributed to improving code quality.",
+      "Gained experience with version control systems and agile development practices.",
+    ],
+    company: "Namespace.",
+    technologies: ["React", "Tailwind CSS", "Git", "Docker"],
+    url: "https://www.namespace.world/",
+  },
+  {
     role: "Ui/UX Designer",
     year: "June'24 - present",
     description: [
