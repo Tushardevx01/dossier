@@ -72,7 +72,7 @@ export const ContactSocials = () => {
   ];
 
   return (
-    <ul className="flex mt-12 space-x-4">
+    <ul className="flex gap-5 flex-wrap">
       {socialLinks.map((social, index) => (
         <ContactSocialItem
           key={index}
@@ -117,7 +117,7 @@ const ContactSocialItem = ({
         stiffness: 400,
         damping: 10,
       }}
-      className="h-10 w-10 flex items-center justify-center shrink-0"
+      className="flex items-center justify-center"
     >
       <Link
         href={link}
@@ -127,22 +127,17 @@ const ContactSocialItem = ({
       >
         <motion.div
           whileHover={{
-            scale: 1.1,
-            y: -2,
+            scale: 1.05,
+            transition: { duration: 0.2 },
           }}
           whileTap={{
             scale: 0.95,
           }}
-          transition={{
-            type: "spring",
-            stiffness: 400,
-            damping: 17,
-          }}
         >
           <Icon
-            className={`w-6 h-6 transition-all duration-300 ${isGoogle
+            className={`w-5 h-5 transition-all duration-300 ${isGoogle
                 ? 'opacity-70 [filter:brightness(0)_invert(1)] group-hover:[filter:none] group-hover:opacity-100'
-                : 'text-slate-400 group-hover:drop-shadow-[0_0_10px_currentColor]'
+                : 'text-slate-400 group-hover:text-white'
               }`}
             style={{
               color: isGoogle ? undefined : 'inherit',
@@ -154,7 +149,7 @@ const ContactSocialItem = ({
             }}
             onMouseLeave={(e) => {
               if (!isGoogle) {
-                e.currentTarget.style.color = 'inherit';
+                e.currentTarget.style.color = '#94a3b8';
               }
             }}
           />

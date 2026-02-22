@@ -11,7 +11,7 @@ export const ContactFormCard = () => {
   const [formValues, setFormValues] = useState({
     senderName: "",
     senderEmail: "",
-    reasonToContact: "General inquries",
+    reasonToContact: "Collaboration",
     senderMsg: "",
   });
 
@@ -42,7 +42,7 @@ export const ContactFormCard = () => {
           setFormValues({
             senderName: "",
             senderEmail: "",
-            reasonToContact: "General inquries",
+            reasonToContact: "Collaboration",
             senderMsg: "",
           });
           resolve(data.message);
@@ -97,216 +97,137 @@ export const ContactFormCard = () => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 60, scale: 0.9, rotateX: 15 }}
-      whileInView={{
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        rotateX: 0,
-      }}
-      transition={{
-        duration: 0.8,
-        ease: [0.16, 1, 0.3, 1],
-        type: "spring",
-        stiffness: 100,
-        damping: 15,
-      }}
-      whileHover={{
-        y: -15,
-        scale: 1.03,
-        rotateX: -2,
-        rotateY: 2,
-        transition: {
-          duration: 0.4,
-          type: "spring",
-          stiffness: 300,
-          damping: 20,
-        },
-      }}
-      className="group h-full perspective-1000"
-      style={{
-        transformStyle: "preserve-3d",
-        perspective: "1000px",
-      }}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+      className="h-full"
     >
       <Card
-        className="relative overflow-hidden backdrop-blur-xl border transition-all duration-700 h-full flex flex-col shadow-xl hover:shadow-2xl"
+        className="relative overflow-hidden border transition-all duration-300 h-full flex flex-col"
         style={{
-          background: "hsl(var(--glass-bg))",
+          background: "hsl(var(--glass-bg) / 0.5)",
           borderColor: "hsl(var(--glass-border))",
-          transformStyle: "preserve-3d",
         }}
       >
-        <div className="relative z-10 p-4 md:p-6 flex flex-col flex-grow">
-          <form onSubmit={sendEmail} className="space-y-3">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="relative z-10 p-8 md:p-10 flex flex-col flex-grow">
+          <form onSubmit={sendEmail} className="space-y-6 flex flex-col flex-grow">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <motion.div
-                initial={{ opacity: 0, x: -40, rotateY: -15 }}
-                whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
-                transition={{
-                  duration: 0.7,
-                  delay: 0.3,
-                  type: "spring",
-                  stiffness: 120,
-                  damping: 15,
-                }}
-                whileHover={{ scale: 1.02, rotateY: 2 }}
-                whileFocus={{ scale: 1.02, rotateY: 2 }}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
               >
+                <label className="block text-xs uppercase tracking-wider text-white/50 mb-2">
+                  Name
+                </label>
                 <input
                   required
                   type="text"
-                  placeholder="Your Name"
+                  placeholder="Your name"
                   name="senderName"
                   onChange={handleChange}
                   value={formValues.senderName}
-                  className="w-full px-4 py-3 text-sm rounded-xl backdrop-blur-xl border transition-all duration-300 outline-none focus:ring-2 focus:ring-white/20 hover:border-white/30"
+                  className="w-full px-4 py-3 text-sm rounded-xl border border-white/10 bg-white/5 transition-all duration-200 outline-none focus:border-white/30 focus:bg-white/[0.08] hover:border-white/20 placeholder:text-white/30"
                   style={{
                     color: "hsl(var(--foreground))",
-                    background: "hsl(var(--glass-bg))",
-                    borderColor: "hsl(var(--glass-border))",
                   }}
                 />
               </motion.div>
 
               <motion.div
-                initial={{ opacity: 0, x: 40, rotateY: 15 }}
-                whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
-                transition={{
-                  duration: 0.7,
-                  delay: 0.4,
-                  type: "spring",
-                  stiffness: 120,
-                  damping: 15,
-                }}
-                whileHover={{ scale: 1.02, rotateY: -2 }}
-                whileFocus={{ scale: 1.02, rotateY: -2 }}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.15 }}
               >
+                <label className="block text-xs uppercase tracking-wider text-white/50 mb-2">
+                  Email
+                </label>
                 <input
                   required
                   type="email"
-                  placeholder="Your Email"
+                  placeholder="your@email.com"
                   name="senderEmail"
                   onChange={handleChange}
                   value={formValues.senderEmail}
-                  className="w-full px-4 py-3 text-sm rounded-xl backdrop-blur-xl border transition-all duration-300 outline-none focus:ring-2 focus:ring-white/20 hover:border-white/30"
+                  className="w-full px-4 py-3 text-sm rounded-xl border border-white/10 bg-white/5 transition-all duration-200 outline-none focus:border-white/30 focus:bg-white/[0.08] hover:border-white/20 placeholder:text-white/30"
                   style={{
                     color: "hsl(var(--foreground))",
-                    background: "hsl(var(--glass-bg))",
-                    borderColor: "hsl(var(--glass-border))",
                   }}
                 />
               </motion.div>
             </div>
 
             <motion.div
-              initial={{ opacity: 0, y: 30, scale: 0.95 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{
-                duration: 0.6,
-                delay: 0.5,
-                type: "spring",
-                stiffness: 150,
-                damping: 12,
-              }}
-              whileHover={{ scale: 1.02, y: -2 }}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
             >
+              <label className="block text-xs uppercase tracking-wider text-white/50 mb-2">
+                Type of Inquiry
+              </label>
               <select
                 required
                 name="reasonToContact"
                 onChange={handleChange}
                 value={formValues.reasonToContact}
-                className="w-full px-4 py-3 text-sm rounded-xl backdrop-blur-xl border transition-all duration-300 outline-none focus:ring-2 focus:ring-white/20 hover:border-white/30"
+                className="w-full px-4 py-3 text-sm rounded-xl border border-white/10 bg-white/5 transition-all duration-200 outline-none focus:border-white/30 focus:bg-white/[0.08] hover:border-white/20"
                 style={{
                   color: "hsl(var(--foreground))",
-                  background: "hsl(var(--glass-bg))",
-                  borderColor: "hsl(var(--glass-border))",
                 }}
               >
-                <option className="text-black" value="General inquries">
-                  General Inquiries
+                <option className="text-black" value="Collaboration">
+                  Collaboration
                 </option>
-                <option className="text-black" value="Project inquiries">
-                  Project Inquiries
+                <option className="text-black" value="Project Discussion">
+                  Project Discussion
                 </option>
-                <option className="text-black" value="Collaboration request">
-                  Collaboration Request
+                <option className="text-black" value="Hiring Opportunity">
+                  Hiring Opportunity
                 </option>
-                <option className="text-black" value="Feedback/Question">
-                  Feedback/Question
-                </option>
-                <option className="text-black" value="Bug report">
-                  Bug Report
-                </option>
-                <option className="text-black" value="Feature request">
-                  Feature Request
+                <option className="text-black" value="Technical Conversation">
+                  Technical Conversation
                 </option>
               </select>
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, y: 30, scale: 0.95 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{
-                duration: 0.6,
-                delay: 0.6,
-                type: "spring",
-                stiffness: 150,
-                damping: 12,
-              }}
-              whileHover={{ scale: 1.02, y: -2 }}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.25 }}
+              className="flex-grow flex flex-col"
             >
+              <label className="block text-xs uppercase tracking-wider text-white/50 mb-2">
+                Message
+              </label>
               <textarea
-                placeholder="Your Message"
-                rows={4}
+                placeholder="Share your thoughts, project ideas, or how we might work together."
+                rows={5}
                 name="senderMsg"
                 onChange={handleChange}
                 value={formValues.senderMsg}
                 required
-                className="w-full px-4 py-3 text-sm rounded-xl backdrop-blur-xl border transition-all duration-300 outline-none focus:ring-2 focus:ring-white/20 hover:border-white/30 resize-none"
+                className="w-full px-4 py-3 text-sm rounded-xl border border-white/10 bg-white/5 transition-all duration-200 outline-none focus:border-white/30 focus:bg-white/[0.08] hover:border-white/20 resize-none placeholder:text-white/30 flex-grow"
                 style={{
                   color: "hsl(var(--foreground))",
-                  background: "hsl(var(--glass-bg))",
-                  borderColor: "hsl(var(--glass-border))",
                 }}
               />
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, y: 40, scale: 0.9 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{
-                duration: 0.7,
-                delay: 0.7,
-                type: "spring",
-                stiffness: 130,
-                damping: 15,
-              }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="pt-4"
             >
               <motion.button
                 type="submit"
                 disabled={isSending}
                 whileHover={{
-                  scale: 1.05,
-                  y: -3,
-                  transition: {
-                    duration: 0.2,
-                    type: "spring",
-                    stiffness: 400,
-                    damping: 10,
-                  },
+                  y: -2,
+                  transition: { duration: 0.2 },
                 }}
-                whileTap={{
-                  scale: 0.95,
-                  y: 1,
-                  transition: { duration: 0.1 },
-                }}
-                animate={{
-                  boxShadow: isSending
-                    ? "0 0 30px rgba(255, 255, 255, 0.2)"
-                    : "0 0 20px rgba(255, 255, 255, 0.1)",
-                }}
-                className="w-full btn-primary px-6 py-3 rounded-xl font-medium text-base flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
+                whileTap={{ y: 0 }}
+                className="w-full btn-primary px-6 py-3 rounded-xl font-medium text-base flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
               >
                 {isSending ? (
                   <>
@@ -317,18 +238,9 @@ export const ContactFormCard = () => {
                         repeat: Infinity,
                         ease: "linear",
                       }}
-                      className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
+                      className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
                     />
-                    <motion.span
-                      animate={{ opacity: [1, 0.5, 1] }}
-                      transition={{
-                        duration: 1.5,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
-                    >
-                      Sending...
-                    </motion.span>
+                    <span>Sending...</span>
                   </>
                 ) : isSent ? (
                   <>
@@ -341,27 +253,14 @@ export const ContactFormCard = () => {
                         damping: 10,
                       }}
                     >
-                      <BsSendCheck className="w-5 h-5" />
+                      <BsSendCheck className="w-4 h-4" />
                     </motion.div>
-                    <motion.span
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.2 }}
-                    >
-                      Sent!
-                    </motion.span>
+                    <span>Sent! Thanks for reaching out.</span>
                   </>
                 ) : (
                   <>
-                    <motion.div
-                      whileHover={{
-                        rotate: [0, -10, 10, 0],
-                        transition: { duration: 0.4 },
-                      }}
-                    >
-                      <BsSend className="w-5 h-5" />
-                    </motion.div>
-                    Send Message
+                    <BsSend className="w-4 h-4" />
+                    <span>Start a Conversation</span>
                   </>
                 )}
               </motion.button>

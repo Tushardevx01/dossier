@@ -18,17 +18,17 @@ export const Contact = () => {
     <section
       ref={ref}
       id="contact"
-      className="py-24 max-w-6xl mx-auto relative overflow-hidden"
+      className="py-20 max-w-6xl mx-auto relative overflow-hidden"
     >
       <div className="px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
           <motion.h2
-            className={`text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 relative ${nasalization.className}`}
+            className={`text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 relative ${nasalization.className}`}
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7, delay: 0.1 }}
@@ -36,26 +36,34 @@ export const Contact = () => {
           >
             Let&apos;s Connect
           </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="text-base md:text-lg text-white/60 max-w-2xl mx-auto"
+          >
+            Open to full-stack and infrastructure-focused opportunities.
+          </motion.p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start p-10 lg:p-0">
           {/* Contact Form */}
           <ContactFormCard />
 
           {/* Contact Information */}
-          <div className="space-y-8">
+          <div className="space-y-12">
             {/* Contact List */}
             <motion.div
               initial={{ opacity: 0, x: 40 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="space-y-4"
+              className="space-y-6"
             >
               <h3
-                className="text-xl md:text-2xl font-semibold mb-6 font-mono"
+                className="text-lg font-semibold tracking-wide uppercase"
                 style={{ color: "hsl(var(--foreground))" }}
               >
-                Get In Touch
+                Contact Information
               </h3>
               <ContactList />
             </motion.div>
@@ -64,13 +72,13 @@ export const Contact = () => {
             <motion.div
               initial={{ opacity: 0, x: 40 }}
               whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 0.4 }}
+              transition={{ duration: 0.7, delay: 0.3 }}
             >
               <h3
-                className="text-xl md:text-2xl font-semibold mb-6 font-mono"
+                className="text-lg font-semibold tracking-wide uppercase mb-6"
                 style={{ color: "hsl(var(--foreground))" }}
               >
-                Socials . . .
+                Connect Professionally
               </h3>
               <ContactSocials />
             </motion.div>
@@ -98,22 +106,18 @@ const ContactItem: React.FC<ContactItemProps> = ({
     <motion.div
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      className="p-4 rounded-xl transition-all duration-300 hover:bg-white/5 group cursor-pointer border border-transparent hover:border-primary/20"
+      className="p-5 rounded-xl transition-all duration-300 hover:bg-white/5 group cursor-pointer border border-white/10 bg-white/[0.02]"
     >
-      <div className="flex items-center space-x-4">
-        <motion.div
-          className="p-3 rounded-lg"
-          style={{ backgroundColor: "hsl(var(--primary) / 0.2)" }}
-          whileHover={{
-            scale: 1.1,
-            transition: { type: "spring", stiffness: 400, damping: 10 },
-          }}
+      <div className="flex items-start space-x-4">
+        <div
+          className="p-2.5 rounded-lg mt-0.5 flex-shrink-0"
+          style={{ backgroundColor: "hsl(var(--primary) / 0.15)" }}
         >
-          <Icon className="w-6 h-6" style={{ color: "hsl(var(--primary))" }} />
-        </motion.div>
-        <div className="flex-1">
-          <p className="text-sm text-white mb-1">{label}</p>
-          <p className="font-medium group-hover:text-primary transition-colors duration-300">
+          <Icon className="w-5 h-5" style={{ color: "hsl(var(--primary))" }} />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-xs uppercase tracking-wider text-white/40 mb-2 font-medium">{label}</p>
+          <p className="text-base text-white/85 group-hover:text-primary transition-colors duration-300 break-words">
             {value}
           </p>
         </div>
@@ -134,7 +138,7 @@ const ContactItem: React.FC<ContactItemProps> = ({
 
 const ContactList = () => {
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <ContactItem
         icon={IoMailOutline}
         label="Email"
@@ -145,6 +149,11 @@ const ContactList = () => {
         icon={IoLocationOutline}
         label="Location"
         value={`${selfData.current_location.city}, ${selfData.current_location.state}, ${selfData.current_location.country}`}
+      />
+      <ContactItem
+        icon={IoMailOutline}
+        label="Response Time"
+        value="Typically responds within 24–48 hours"
       />
     </div>
   );
