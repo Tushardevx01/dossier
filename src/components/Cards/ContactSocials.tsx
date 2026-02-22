@@ -2,11 +2,38 @@ import Link from "next/link";
 import { IconType } from "react-icons";
 import { motion } from "motion/react";
 
-import { SiLeetcode } from "react-icons/si";
-import { PiTelegramLogo } from "react-icons/pi";
 import { FaGithub, FaLinkedinIn, FaTwitter, FaDiscord, FaWhatsapp } from "react-icons/fa6";
 
 import { selfData } from "@/constant";
+
+// Custom GDG Icon Component (Google Developer Groups)
+// Two chevrons < > each made of two rotated pill-shaped arms
+// Math: pill center = apex + (half_length * cos(±35°), ±half_length * sin(35°))
+// At 35°: cos≈0.819, sin≈0.574. Half-length=28 → offset=(22.9, 16.1)
+const GDGIcon = ({ className, style }: { className?: string; style?: React.CSSProperties }) => (
+  <svg
+    viewBox="0 0 200 100"
+    className={className}
+    style={style}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    {/* ── LEFT  <  chevron, apex at (40, 50) ── */}
+    {/* Blue (bottom arm) — rendered first so Red overlaps at apex */}
+    <rect x="35" y="59" width="56" height="14" rx="7" fill="#4285F4"
+      transform="rotate(35, 63, 66)" />
+    {/* Red (top arm) */}
+    <rect x="35" y="27" width="56" height="14" rx="7" fill="#EA4335"
+      transform="rotate(-35, 63, 34)" />
+
+    {/* ── RIGHT  >  chevron, apex at (160, 50) ── */}
+    {/* Yellow (bottom arm) — rendered first so Green overlaps at apex */}
+    <rect x="109" y="59" width="56" height="14" rx="7" fill="#FBBC04"
+      transform="rotate(-35, 137, 66)" />
+    {/* Green (top arm) */}
+    <rect x="109" y="27" width="56" height="14" rx="7" fill="#34A853"
+      transform="rotate(35, 137, 34)" />
+  </svg>
+);
 
 export const ContactSocials = () => {
   const socialLinks = [
@@ -20,21 +47,13 @@ export const ContactSocials = () => {
       link: `https://www.linkedin.com/in/${selfData.socials_username.linkedin}`,
       initial: 10,
     },
-    {
-      Icon: PiTelegramLogo,
-      link: `https://t.me/${selfData.socials_username.telegram}`,
-      initial: -10,
-    },
+
     {
       Icon: FaTwitter,
       link: `https://twitter.com/${selfData.socials_username.twitter}`,
       initial: 10,
     },
-    {
-      Icon: SiLeetcode,
-      link: `https://leetcode.com/${selfData.socials_username.leetcode}`,
-      initial: -10,
-    },
+
     {
       Icon: FaDiscord,
       link: `https://discord.com/users/${selfData.socials_username.discord}`,
@@ -44,6 +63,11 @@ export const ContactSocials = () => {
       Icon: FaWhatsapp,
       link: `https://wa.me/${selfData.socials_username.whatsapp.replace(/[\s+]/g, '')}`,
       initial: -10,
+    },
+    {
+      Icon: GDGIcon as IconType,
+      link: `https://developers.google.com/profile/u/${selfData.socials_username.gdg}`,
+      initial: 10,
     },
   ];
 
@@ -79,8 +103,11 @@ const ContactSocialItem = ({
     if (link.includes('leetcode')) return '#FFA116';
     if (link.includes('discord')) return '#5865F2';
     if (link.includes('whatsapp') || link.includes('wa.me')) return '#25D366';
+    if (link.includes('google') || link.includes('developers.google')) return 'inherit'; // GDG has built-in colors
     return '#ffffff';
   };
+
+  const isGoogle = link.includes('google') || link.includes('developers.google');
 
   return (
     <motion.li
@@ -114,16 +141,23 @@ const ContactSocialItem = ({
             damping: 17,
           }}
         >
-          <Icon 
-            className="text-slate-400 group-hover:drop-shadow-[0_0_10px_currentColor] w-6 h-6 transition-colors duration-300" 
+          <Icon
+            className={`w-6 h-6 transition-all duration-300 ${isGoogle
+                ? 'opacity-70 [filter:brightness(0)_invert(1)] group-hover:[filter:none] group-hover:opacity-100'
+                : 'text-slate-400 group-hover:drop-shadow-[0_0_10px_currentColor]'
+              }`}
             style={{
-              color: 'inherit',
+              color: isGoogle ? undefined : 'inherit',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.color = getBrandColor();
+              if (!isGoogle) {
+                e.currentTarget.style.color = getBrandColor();
+              }
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.color = 'inherit';
+              if (!isGoogle) {
+                e.currentTarget.style.color = 'inherit';
+              }
             }}
           />
         </motion.div>
