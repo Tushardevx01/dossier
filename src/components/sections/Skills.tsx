@@ -248,7 +248,7 @@ export const Skills = () => {
               className="group inline-flex items-center gap-2 px-5 py-3 rounded-lg transition-all"
               style={{
                 background: "hsl(245 30% 8% / 0.8)",
-                border: "1px solid hsl(275 30% 25% / 0.5)",
+                border: "1px solid hsl(210 30% 25% / 0.5)",
                 color: "hsl(var(--foreground) / 0.8)",
               }}
             >

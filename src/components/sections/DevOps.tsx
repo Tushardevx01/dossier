@@ -107,7 +107,7 @@ export const DevOps = () => {
                     {/* Top bar */}
                     <div
                         className="flex items-center justify-between px-5 py-3 border-b"
-                        style={{ borderColor: "hsl(275 25% 15% / 0.6)" }}
+                        style={{ borderColor: "hsl(210 25% 15% / 0.6)" }}
                     >
                         <div className="flex items-center gap-2">
                             <div className="flex gap-1.5">
@@ -139,7 +139,7 @@ export const DevOps = () => {
                     {/* Pipeline steps */}
                     <div
                         className="px-5 py-4 border-b flex flex-wrap gap-3 items-center"
-                        style={{ borderColor: "hsl(275 25% 15% / 0.6)" }}
+                        style={{ borderColor: "hsl(210 25% 15% / 0.6)" }}
                     >
                         {pipelineSteps.map((step, i) => (
                             <div key={step.name} className="flex items-center gap-2">
@@ -149,11 +149,11 @@ export const DevOps = () => {
                                         background:
                                             step.status === "live"
                                                 ? "hsl(145 60% 30% / 0.15)"
-                                                : "hsl(275 40% 20% / 0.2)",
+                                                : "hsl(210 40% 20% / 0.2)",
                                         border:
                                             step.status === "live"
                                                 ? "1px solid hsl(145 50% 35% / 0.4)"
-                                                : "1px solid hsl(275 25% 22% / 0.5)",
+                                                : "1px solid hsl(210 25% 22% / 0.5)",
                                         color:
                                             step.status === "live"
                                                 ? "hsl(145 60% 55%)"
@@ -163,7 +163,7 @@ export const DevOps = () => {
                                     {step.status === "done" ? "✓" : "▶"} {step.name}
                                 </div>
                                 {i < pipelineSteps.length - 1 && (
-                                    <span style={{ color: "hsl(275 30% 30% / 0.5)" }}>→</span>
+                                    <span style={{ color: "hsl(210 30% 30% / 0.5)" }}>→</span>
                                 )}
                             </div>
                         ))}
