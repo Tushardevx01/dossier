@@ -98,9 +98,7 @@ const ContactSocialItem = ({
   const getBrandColor = () => {
     if (link.includes('github')) return '#ffffff';
     if (link.includes('linkedin')) return '#0A66C2';
-    if (link.includes('telegram')) return '#26A5E4';
     if (link.includes('twitter')) return '#1DA1F2';
-    if (link.includes('leetcode')) return '#FFA116';
     if (link.includes('discord')) return '#5865F2';
     if (link.includes('whatsapp') || link.includes('wa.me')) return '#25D366';
     if (link.includes('google') || link.includes('developers.google')) return 'inherit'; // GDG has built-in colors
