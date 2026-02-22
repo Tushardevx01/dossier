@@ -3,23 +3,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
-import { usePathname } from "next/navigation";
-
-import { RiMenu4Fill, RiCloseLargeFill } from "react-icons/ri";
 
 import { quentine } from "@/app/fonts";
 
-import { Button } from "../ui/button";
 import { createBlurDataURL } from "@/lib/BlurDataURL";
-import { selfData } from "@/constant";
 
 export const Navbar = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const lastScrollY = useRef(0);
-  const pathname = usePathname();
-  const isResumePage = pathname === "/resume";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,7 +29,6 @@ export const Navbar = () => {
       } else if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
         if (isVisible) {
           setIsVisible(false);
-          setIsMenuOpen(false);
         }
       }
 
@@ -83,24 +74,6 @@ export const Navbar = () => {
               />
             </div>
           </Link>
-
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="sm:hidden p-2 rounded-lg hover:bg-muted/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary/50"
-            aria-label="Toggle mobile menu"
-          >
-            {isMenuOpen ? (
-              <RiCloseLargeFill
-                size={20}
-                className="transition-transform duration-200"
-              />
-            ) : (
-              <RiMenu4Fill
-                size={20}
-                className="transition-transform duration-200"
-              />
-            )}
-          </button>
         </div>
 
 
