@@ -1,223 +1,431 @@
 "use client";
 
 import Link from "next/link";
-import { use } from "react";
+import { useParams } from "next/navigation";
+import { nasalization } from "@/app/fonts";
 
-interface BlogPost {
-  id: string;
-  title: string;
-  description: string;
-  date: string;
-  category: string;
-  readTime: string;
-  slug: string;
-  content: string;
-  author: string;
-}
-
-const blogPostsData: Record<string, BlogPost> = {
-  "getting-started-nextjs-14": {
-    id: "1",
-    title: "Getting Started with Next.js 14",
-    description:
-      "Learn how to set up and build modern web applications with Next.js 14, the latest version of the popular React framework.",
+// Blog articles data
+const articles: Record<
+  string,
+  {
+    title: string;
+    subtitle: string;
+    date: string;
+    readTime: number;
+    category: string;
+    content: React.ReactNode;
+    whatILearned: string[];
+    improvements: string[];
+  }
+> = {
+  "structuring-scalable-fullstack": {
+    title: "Structuring a Scalable Full-Stack Project",
+    subtitle: "From Next.js to Deployment",
     date: "Feb 20, 2026",
-    category: "NextJS",
-    readTime: "5 min read",
-    slug: "getting-started-nextjs-14",
-    author: "Tushardevx01",
-    content: `Next.js 14 brings powerful new features and improvements to make building web applications easier than ever.
+    readTime: 12,
+    category: "Full-Stack",
+    content: (
+      <div className="space-y-6 text-gray-300 leading-relaxed">
+        <p>
+          Building a scalable full-stack application requires more than just writing code. It requires thoughtful architecture,
+          clear separation of concerns, and patterns that scale as your application grows.
+        </p>
 
-## Why Next.js 14?
+        <h3 className="text-xl font-semibold text-white mt-8">The Foundation: Folder Structure</h3>
+        <p>
+          Start with a clear folder hierarchy. Your project should tell a story about how data flows through it.
+        </p>
+        <pre className="bg-gray-900 p-4 rounded-lg text-sm overflow-x-auto">
+          <code>{`src/
+├── app/              # Next.js App Router
+├── components/       # Reusable UI components
+├── lib/              # Utilities and helpers
+├── services/         # External API calls
+├── types/            # TypeScript definitions
+├── middleware/       # Middleware functions
+└── config/           # Environment & config`}</code>
+        </pre>
 
-Next.js has become the go-to framework for modern React development. With version 14, we see significant improvements in performance, developer experience, and features.
+        <h3 className="text-xl font-semibold text-white mt-8">API Routes and Data Flow</h3>
+        <p>
+          Keep your API routes lean. They should handle HTTP concerns only: validation, auth, error handling.
+          Business logic belongs in services, not in route handlers.
+        </p>
 
-### Key Features
+        <h3 className="text-xl font-semibold text-white mt-8">Environment and Secrets</h3>
+        <p>
+          Never hardcode secrets. Use .env.local for development and environment variables in production.
+          Validate that required variables exist on startup.
+        </p>
 
-1. **App Router**: A more intuitive file-based routing system that makes it easier to build complex applications.
-2. **Server Components**: Write components that run on the server, improving performance and security.
-3. **Streaming**: Stream content as it's ready, providing faster perceived performance.
-4. **Image Optimization**: Built-in image optimization for better performance.
+        <h3 className="text-xl font-semibold text-white mt-8">Database and Migrations</h3>
+        <p>
+          Use an ORM like Prisma or TypeORM. Keep migrations in version control. Test migrations locally before deploying.
+        </p>
 
-## Getting Started
+        <h3 className="text-xl font-semibold text-white mt-8">Error Handling Strategy</h3>
+        <p>
+          Errors should be structured, loggable, and safe to show to users. Create custom error classes for different
+          failure scenarios. Log them with context, not just the message.
+        </p>
 
-To create a new Next.js 14 project, run:
-
-\`\`\`bash
-npx create-next-app@latest my-app
-cd my-app
-npm run dev
-\`\`\`
-
-## Building Your First Page
-
-Create a new file at \`src/app/page.tsx\`:
-
-\`\`\`typescript
-export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1 className="text-4xl font-bold">Welcome to Next.js 14</h1>
-    </main>
-  );
-}
-\`\`\`
-
-## Conclusion
-
-Next.js 14 is a fantastic choice for building modern web applications. With its powerful features and excellent developer experience, you'll be productive from day one.`,
+        <h3 className="text-xl font-semibold text-white mt-8">Testing and Type Safety</h3>
+        <p>
+          TypeScript catches many errors at compile time. Write integration tests for critical paths.
+          Mock external services in unit tests.
+        </p>
+      </div>
+    ),
+    whatILearned: [
+      "Clear folder structure prevents architectural debt",
+      "Separating concerns makes testing easier",
+      "Environment management is critical for multi-environment deployments",
+      "Type safety catches errors early",
+    ],
+    improvements: [
+      "Add a monitoring and logging strategy from day one",
+      "Implement feature flags for safer deployments",
+      "Use API versioning if you have external consumers",
+    ],
   },
-  "typescript-best-practices": {
-    id: "2",
-    title: "TypeScript Best Practices",
-    description:
-      "Master TypeScript by learning industry-standard practices and patterns used in production applications.",
+
+  "contact-email-pipeline-nodemailer": {
+    title: "Designing a Contact Email Pipeline with Nodemailer",
+    subtitle: "Building Reliability into Form Submissions",
+    date: "Feb 18, 2026",
+    readTime: 10,
+    category: "Full-Stack",
+    content: (
+      <div className="space-y-6 text-gray-300 leading-relaxed">
+        <p>
+          Email feels simple: form submission → send email. In production, it's more complex.
+          You need error handling, retries, rate limiting, and monitoring.
+        </p>
+
+        <h3 className="text-xl font-semibold text-white mt-8">The Architecture</h3>
+        <p>
+          A reliable email system has three parts: validation, queueing, and sending.
+          You don't want to send an email and have the user wait for the response.
+        </p>
+
+        <h3 className="text-xl font-semibold text-white mt-8">Setting Up Nodemailer</h3>
+        <pre className="bg-gray-900 p-4 rounded-lg text-sm overflow-x-auto">
+          <code>{`const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD,
+  },
+});
+
+async function sendEmail(to, subject, html) {
+  try {
+    const result = await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to,
+      subject,
+      html,
+    });
+    return result;
+  } catch (error) {
+    console.error('Email send failed:', error);
+    throw error;
+  }
+}`}</code>
+        </pre>
+
+        <h3 className="text-xl font-semibold text-white mt-8">Rate Limiting</h3>
+        <p>
+          Without rate limiting, a bot can spam emails from your server. Use Redis to track submission counts
+          and reject requests that exceed the limit.
+        </p>
+
+        <h3 className="text-xl font-semibold text-white mt-8">Error Handling</h3>
+        <p>
+          Email failures happen. Your system should retry with exponential backoff.
+          Log failures to a database so you can investigate why emails aren't getting through.
+        </p>
+
+        <h3 className="text-xl font-semibold text-white mt-8">Monitoring</h3>
+        <p>
+          Track: sent emails, failed sending attempts, bounces, and user complaints.
+          Set up alerts if the failure rate spikes.
+        </p>
+      </div>
+    ),
+    whatILearned: [
+      "Queuing separates submission from sending",
+      "Rate limiting prevents abuse",
+      "Logging failures helps you find issues fast",
+      "Email providers have limits too—watch your quota",
+    ],
+    improvements: [
+      "Implement a dead letter queue for permanently failed emails",
+      "Add email preview rendering to catch template bugs",
+      "Use webhook verification to confirm email provider responses",
+    ],
+  },
+
+  "nextjs-production-deployment": {
+    title: "Deploying Next.js to Production",
+    subtitle: "What Actually Matters",
     date: "Feb 15, 2026",
-    category: "TypeScript",
-    readTime: "8 min read",
-    slug: "typescript-best-practices",
-    author: "Tushardevx01",
-    content: `TypeScript has revolutionized how we write JavaScript. Here are the best practices to follow when using TypeScript in your projects.
+    readTime: 15,
+    category: "DevOps",
+    content: (
+      <div className="space-y-6 text-gray-300 leading-relaxed">
+        <p>
+          Deploying to production is different from running locally. You need to think about uptime, scaling,
+          secrets, monitoring, and rollback strategies.
+        </p>
 
-## Use Strict Mode
+        <h3 className="text-xl font-semibold text-white mt-8">Environment Configuration</h3>
+        <p>
+          Never commit secrets. Use environment variables for everything that changes between dev and production.
+          Validate required variables exist on startup.
+        </p>
 
-Enable strict mode in your \`tsconfig.json\` to catch potential issues:
+        <h3 className="text-xl font-semibold text-white mt-8">Database Connections</h3>
+        <p>
+          Connection pooling is critical. If you create a new database connection per request, you'll run out of
+          connections. Use a connection pool and set reasonable limits.
+        </p>
 
-\`\`\`json
-{
-  "compilerOptions": {
-    "strict": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true
-  }
-}
-\`\`\`
+        <h3 className="text-xl font-semibold text-white mt-8">Error Logging and Monitoring</h3>
+        <p>
+          Set up Sentry, LogRocket, or similar. Errors in production need immediate visibility.
+          You can't debug what you don't know about.
+        </p>
 
-## Type Your Functions
+        <h3 className="text-xl font-semibold text-white mt-8">Gzip and Caching Headers</h3>
+        <p>
+          Enable Gzip compression. Set proper Cache-Control headers for static assets.
+          This reduces bandwidth costs and improves page load time.
+        </p>
 
-Always provide explicit type annotations for function parameters and return types:
+        <h3 className="text-xl font-semibold text-white mt-8">Health Checks and Graceful Shutdown</h3>
+        <p>
+          Implement a /health endpoint that your orchestrator (Kubernetes, load balancer) can hit.
+          Gracefully handle SIGTERM signals for clean shutdown during deployments.
+        </p>
 
-\`\`\`typescript
-function greet(name: string): string {
-  return \`Hello, \${name}!\`;
-}
-\`\`\`
-
-## Use Interfaces Over Types
-
-For object shapes, prefer interfaces:
-
-\`\`\`typescript
-interface User {
-  id: number;
-  name: string;
-  email: string;
-}
-\`\`\`
-
-## Avoid Any
-
-Never use \`any\` unless absolutely necessary. It defeats the purpose of TypeScript:
-
-\`\`\`typescript
-// Bad
-function process(data: any) {}
-
-// Good
-function process(data: unknown) {
-  if (typeof data === 'string') {
-    // Process string
-  }
-}
-\`\`\`
-
-## Conclusion
-
-Following these practices will make your TypeScript code more maintainable, safer, and easier to understand.`,
+        <h3 className="text-xl font-semibold text-white mt-8">Secrets and .env Management</h3>
+        <p>
+          Use your platform's native secrets management (Vercel Secrets, AWS Secrets Manager, etc.).
+          Never use .env files in production—they're for local development only.
+        </p>
+      </div>
+    ),
+    whatILearned: [
+      "Production is not a bigger localhost",
+      "Monitoring is non-negotiable",
+      "Graceful shutdown prevents data loss",
+      "Connection pooling scales better than raw connections",
+    ],
+    improvements: [
+      "Implement gradual rollouts instead of big-bang deployments",
+      "Add synthetic monitoring to catch issues before users do",
+      "Set up performance budgets to track Core Web Vitals",
+    ],
   },
-  "tailwind-tips-tricks": {
-    id: "3",
-    title: "Tailwind CSS Tips & Tricks",
-    description:
-      "Discover advanced Tailwind CSS techniques to create stunning, responsive designs with minimal code.",
+
+  "database-schema-design": {
+    title: "Database Schema Design for High-Performance Applications",
+    subtitle: "Lessons from Optimizing Queries",
+    date: "Feb 12, 2026",
+    readTime: 14,
+    category: "Architecture",
+    content: (
+      <div className="space-y-6 text-gray-300 leading-relaxed">
+        <p>
+          Schema design decisions made early echo through your system for years. Bad design causes slow queries,
+          scaling problems, and technical debt.
+        </p>
+
+        <h3 className="text-xl font-semibold text-white mt-8">Normalization vs. Denormalization</h3>
+        <p>
+          Normalize to avoid duplication. Denormalize when you have a specific performance problem.
+          Don't denormalize speculatively—measure first.
+        </p>
+
+        <h3 className="text-xl font-semibold text-white mt-8">Indexing Strategy</h3>
+        <p>
+          Indexes speed up reads at the cost of write performance. Index columns you filter or join on.
+          Don't index everything. Measure query performance with EXPLAIN ANALYZE.
+        </p>
+
+        <h3 className="text-xl font-semibold text-white mt-8">Foreign Keys and Constraints</h3>
+        <p>
+          Foreign keys enforce data consistency but add overhead. Use them for critical relationships.
+          Be careful with cascading deletes—they can delete more than you expect.
+        </p>
+
+        <h3 className="text-xl font-semibold text-white mt-8">Handling Large Tables</h3>
+        <p>
+          As tables grow, queries slow down. Partition large tables by date or ID range.
+          Archive old data. Use pagination instead of loading everything.
+        </p>
+
+        <h3 className="text-xl font-semibold text-white mt-8">Common Pitfalls</h3>
+        <p>
+          Storing JSON in a text column when you need to query it. Using VARCHAR(255) for everything.
+          Not setting NOT NULL constraints. Missing unique constraints.
+        </p>
+      </div>
+    ),
+    whatILearned: [
+      "Bad indexes hurt more than no indexes",
+      "Normalization is a starting point, not the end goal",
+      "Query performance depends on schema design",
+      "Foreign keys catch errors early",
+    ],
+    improvements: [
+      "Use a query analyzer to identify slow queries early",
+      "Document why denormalization exists in your schema",
+      "Set up monitoring for query performance trends",
+    ],
+  },
+
+  "infrastructure-as-code-terraform": {
+    title: "Infrastructure as Code",
+    subtitle: "Managing Your Stack with Terraform",
     date: "Feb 10, 2026",
-    category: "CSS",
-    readTime: "6 min read",
-    slug: "tailwind-tips-tricks",
-    author: "Tushardevx01",
-    content: `Tailwind CSS is an amazing utility-first CSS framework. Here are some tips and tricks to level up your styling game.
+    readTime: 16,
+    category: "Infrastructure",
+    content: (
+      <div className="space-y-6 text-gray-300 leading-relaxed">
+        <p>
+          Manual infrastructure is fragile. Terraform lets you version control your infrastructure,
+          review changes, and reproduce environments exactly.
+        </p>
 
-## Use Arbitrary Values
+        <h3 className="text-xl font-semibold text-white mt-8">Basic Terraform Structure</h3>
+        <pre className="bg-gray-900 p-4 rounded-lg text-sm overflow-x-auto">
+          <code>{`terraform/
+├── main.tf           # Main resources
+├── variables.tf      # Input variables
+├── outputs.tf        # Output values
+├── provider.tf       # Provider config
+└── terraform.tfstate # State file (don't commit)`}</code>
+        </pre>
 
-Tailwind allows you to use arbitrary values when the default scale doesn't fit:
+        <h3 className="text-xl font-semibold text-white mt-8">State Management</h3>
+        <p>
+          Terraform state tracks your infrastructure. Store it remotely (S3, Terraform Cloud) and lock it
+          to prevent concurrent modifications.
+        </p>
 
-\`\`\`jsx
-<div className="w-[572px] h-[242px]">
-  Custom dimensions
-</div>
-\`\`\`
+        <h3 className="text-xl font-semibold text-white mt-8">Modules for Reusability</h3>
+        <p>
+          Group related resources into modules. You can reuse modules across projects and version them.
+          This reduces copy-paste mistakes.
+        </p>
 
-## Compose with @apply
+        <h3 className="text-xl font-semibold text-white mt-8">Testing Infrastructure</h3>
+        <p>
+          Use terratest or similar tools to test your infrastructure code. Catch configuration errors
+          before they reach production.
+        </p>
 
-Create reusable component styles with @apply:
+        <h3 className="text-xl font-semibold text-white mt-8">Disaster Recovery</h3>
+        <p>
+          IaC makes disaster recovery straightforward. Recreate your entire stack from code.
+          Test recovery regularly—don't assume it will work.
+        </p>
+      </div>
+    ),
+    whatILearned: [
+      "IaC is essential for reproducibility",
+      "State files are critical—protect them",
+      "Modules are worth building from the start",
+      "Infrastructure bugs are as critical as code bugs",
+    ],
+    improvements: [
+      "Implement policy checks with Sentinel or similar",
+      "Use workspaces to separate dev and production",
+      "Document assumptions baked into infrastructure",
+    ],
+  },
 
-\`\`\`css
-@layer components {
-  .btn-primary {
-    @apply px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors;
-  }
-}
-\`\`\`
+  "react-performance-optimization": {
+    title: "Optimizing React Performance",
+    subtitle: "Beyond the Obvious",
+    date: "Feb 8, 2026",
+    readTime: 13,
+    category: "Performance",
+    content: (
+      <div className="space-y-6 text-gray-300 leading-relaxed">
+        <p>
+          React is fast by default. Most performance problems aren't React's fault—they're your code's.
+          Focus on the right optimizations.
+        </p>
 
-## Use Dark Mode
+        <h3 className="text-xl font-semibold text-white mt-8">Identify the Problem First</h3>
+        <p>
+          Use React DevTools Profiler to measure. Don't optimize what you haven't measured.
+          Optimize the biggest bottlenecks first.
+        </p>
 
-Tailwind makes it easy to support dark mode:
+        <h3 className="text-xl font-semibold text-white mt-8">Code Splitting and Lazy Loading</h3>
+        <p>
+          Split your bundle by route. Lazy load components that aren't immediately visible.
+          This reduces initial page load time.
+        </p>
 
-\`\`\`jsx
-<div className="bg-white dark:bg-slate-900 text-black dark:text-white">
-  Dark mode support
-</div>
-\`\`\`
+        <h3 className="text-xl font-semibold text-white mt-8">Memoization: When It Helps</h3>
+        <p>
+          useMemo and useCallback prevent recreating values. But they have overhead.
+          Only use them if you've measured that they help. Premature memoization slows things down.
+        </p>
 
-## Responsive Design
+        <h3 className="text-xl font-semibold text-white mt-8">Virtual Scrolling for Large Lists</h3>
+        <p>
+          Don't render 10,000 list items. Use a virtual scroller to render only visible items.
+          This is a night-and-day difference for performance.
+        </p>
 
-Build responsive designs effortlessly:
+        <h3 className="text-xl font-semibold text-white mt-8">Image Optimization</h3>
+        <p>
+          Images are often the biggest assets. Use next/image, serve modern formats (WebP),
+          and resize for different screen sizes.
+        </p>
 
-\`\`\`jsx
-<div className="w-full md:w-1/2 lg:w-1/3">
-  Responsive layout
-</div>
-\`\`\`
-
-## Conclusion
-
-Tailwind CSS empowers you to build beautiful interfaces quickly. Master these techniques to become a Tailwind pro.`,
+        <h3 className="text-xl font-semibold text-white mt-8">Network Waterfall</h3>
+        <p>
+          Sometimes the bottleneck isn't React—it's slow API requests. Parallelize requests.
+          Use caching. Consider prefetching.
+        </p>
+      </div>
+    ),
+    whatILearned: [
+      "Measure before optimizing",
+      "Most React apps don't need heavy optimization",
+      "Network is often the bottleneck, not rendering",
+      "Small optimizations compound",
+    ],
+    improvements: [
+      "Set up performance budgets in your CI",
+      "Use Lighthouse for automated audits",
+      "Profile with real user data, not just synthetic tests",
+    ],
   },
 };
 
-export default function BlogPost({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = use(params);
+export default function ArticlePage() {
+  const params = useParams();
+  const slug = params.slug as string;
 
-  const post = blogPostsData[slug];
+  const article = articles[slug];
 
-  if (!post) {
+  if (!article) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-black to-gray-950 pt-32 pb-20">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
-          <h1 className="text-4xl font-bold text-white mb-4">Post Not Found</h1>
-          <p className="text-gray-400 mb-8">
-            The blog post you're looking for doesn't exist.
-          </p>
-          <Link
-            href="/blog"
-            className="inline-block px-4 py-2 border border-white/30 hover:border-white/50 text-white rounded-lg transition-colors duration-200"
-          >
-            Back to Blog
+      <div className="min-h-screen bg-black pt-32">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+          <h1 className="text-4xl font-bold text-white mb-4">Article not found</h1>
+          <Link href="/blog" className="text-white hover:text-gray-300">
+            ← Back to all articles
           </Link>
         </div>
       </div>
@@ -225,95 +433,83 @@ export default function BlogPost({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black to-gray-950 pt-32 pb-20">
-      {/* Header */}
-      <section className="max-w-2xl mx-auto px-4 sm:px-6 mb-12">
-        
-
-        <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-          {post.title}
-        </h1>
-
-        <div className="flex flex-wrap items-center gap-4 text-gray-400 border-b border-white/10 pb-6">
-          <span>{post.date}</span>
-          <span className="text-xs px-3 py-1 rounded-full bg-white/10">
-            {post.category}
-          </span>
-          <span>{post.readTime}</span>
-          <span>by {post.author}</span>
-        </div>
-      </section>
-
-      {/* Content */}
-      <section className="max-w-2xl mx-auto px-4 sm:px-6">
-        <article className="prose prose-invert max-w-none">
-          <div className="space-y-6 text-gray-300 leading-relaxed">
-            {post.content.split("\n\n").map((paragraph, index) => {
-              if (paragraph.startsWith("##")) {
-                return (
-                  <h2
-                    key={index}
-                    className="text-2xl font-bold text-white mt-8 mb-4"
-                  >
-                    {paragraph.replace("## ", "")}
-                  </h2>
-                );
-              }
-              if (paragraph.startsWith("###")) {
-                return (
-                  <h3
-                    key={index}
-                    className="text-xl font-semibold text-gray-200 mt-6 mb-3"
-                  >
-                    {paragraph.replace("### ", "")}
-                  </h3>
-                );
-              }
-              if (paragraph.startsWith("```")) {
-                return (
-                  <pre key={index} className="bg-gray-900 p-4 rounded-lg overflow-x-auto border border-white/10">
-                    <code className="text-gray-300 font-mono text-sm">
-                      {paragraph
-                        .replace(/```typescript\n?/g, "")
-                        .replace(/```bash\n?/g, "")
-                        .replace(/```json\n?/g, "")
-                        .replace(/```jsx\n?/g, "")
-                        .replace(/```css\n?/g, "")
-                        .replace(/```/g, "")}
-                    </code>
-                  </pre>
-                );
-              }
-              if (paragraph.startsWith("1.") || paragraph.startsWith("2.") || paragraph.startsWith("3.")) {
-                return (
-                  <ul key={index} className="list-decimal list-inside space-y-2">
-                    {paragraph.split("\n").map((item, i) => (
-                      <li key={i} className="text-gray-300">
-                        {item.replace(/^\d+\.\s*/, "")}
-                      </li>
-                    ))}
-                  </ul>
-                );
-              }
-              return (
-                <p key={index} className="text-gray-300">
-                  {paragraph}
-                </p>
-              );
-            })}
-          </div>
-        </article>
-
-        {/* CTA */}
-        <div className="mt-12 pt-8 border-t border-white/10">
-          <Link
-            href="/blog"
-            className="inline-block px-6 py-3 border border-white/30 hover:border-white/50 text-white rounded-lg transition-colors duration-200"
-          >
-            ← Back to Blog
+    <div className="min-h-screen bg-black">
+      {/* Article Header */}
+      <div className="bg-black pt-32 pb-12 border-b border-gray-800">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <Link href="/blog" className="text-gray-400 hover:text-gray-300 mb-8 inline-block">
+            ← Engineering Notes
           </Link>
+
+          <h1 className={`${nasalization.className} text-5xl sm:text-6xl font-bold text-white mb-4`}>
+            {article.title}
+          </h1>
+
+          {article.subtitle && (
+            <p className="text-2xl text-gray-400 mb-6">{article.subtitle}</p>
+          )}
+
+          <div className="flex flex-wrap items-center gap-4 text-gray-500 text-sm">
+            <span>{article.date}</span>
+            <span className="text-gray-600">•</span>
+            <span className="px-3 py-1 bg-gray-900 text-gray-300 rounded">
+              {article.category}
+            </span>
+            <span className="text-gray-600">•</span>
+            <span>{article.readTime} min read</span>
+          </div>
         </div>
-      </section>
+      </div>
+
+      {/* Article Content */}
+      <div className="py-16">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <div className="prose prose-invert max-w-none">
+            {article.content}
+          </div>
+
+          {/* Divider */}
+          <div className="my-16 border-t border-gray-800" />
+
+          {/* Takeaways Section */}
+          <div className="space-y-12">
+            <div>
+              <h2 className={`${nasalization.className} text-3xl font-bold text-white mb-6`}>
+                Key Takeaways
+              </h2>
+              <ul className="space-y-3">
+                {article.whatILearned.map((point, index) => (
+                  <li key={index} className="flex gap-4 text-gray-300">
+                    <span className="text-white font-semibold min-w-6">•</span>
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <h2 className={`${nasalization.className} text-3xl font-bold text-white mb-6`}>
+                Future Improvements
+              </h2>
+              <ul className="space-y-3">
+                {article.improvements.map((point, index) => (
+                  <li key={index} className="flex gap-4 text-gray-300">
+                    <span className="text-white font-semibold min-w-6">→</span>
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Back Link */}
+          <div className="mt-16 pt-8 border-t border-gray-800">
+            <Link href="/blog" className="text-white hover:text-gray-300 font-medium">
+              ← Back to all articles
+            </Link>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

@@ -3,50 +3,79 @@
 import { useState } from "react";
 import Link from "next/link";
 
+import { nasalization } from "@/app/fonts";
+
 interface BlogPost {
   id: string;
   title: string;
-  description: string;
+  summary: string;
   date: string;
-  category: string;
-  readTime: string;
+  category: "Architecture" | "DevOps" | "Full-Stack" | "Performance" | "Infrastructure";
+  readTime: number;
   slug: string;
 }
 
 const blogPosts: BlogPost[] = [
   {
     id: "1",
-    title: "Getting Started with Next.js 14",
-    description: "Learn how to set up and build modern web applications with Next.js 14, the latest version of the popular React framework.",
+    title: "Structuring a Scalable Full-Stack Project: From Next.js to Deployment",
+    summary: "How to organize a modern full-stack application with clear separation of concerns, proper folder structure, and production-ready deployment patterns.",
     date: "Feb 20, 2026",
-    category: "NextJS",
-    readTime: "5 min read",
-    slug: "getting-started-nextjs-14",
+    category: "Full-Stack",
+    readTime: 12,
+    slug: "structuring-scalable-fullstack",
   },
   {
     id: "2",
-    title: "TypeScript Best Practices",
-    description: "Master TypeScript by learning industry-standard practices and patterns used in production applications.",
-    date: "Feb 15, 2026",
-    category: "TypeScript",
-    readTime: "8 min read",
-    slug: "typescript-best-practices",
+    title: "Designing a Contact Email Pipeline with Nodemailer",
+    summary: "Building a reliable, production-grade email system for form submissions. Includes error handling, rate limiting, and monitoring strategies.",
+    date: "Feb 18, 2026",
+    category: "Full-Stack",
+    readTime: 10,
+    slug: "contact-email-pipeline-nodemailer",
   },
   {
     id: "3",
-    title: "Tailwind CSS Tips & Tricks",
-    description: "Discover advanced Tailwind CSS techniques to create stunning, responsive designs with minimal code.",
+    title: "Deploying Next.js to Production: What Actually Matters",
+    summary: "Moving beyond local development. Environment configuration, database connections, error monitoring, and performance optimization in production.",
+    date: "Feb 15, 2026",
+    category: "DevOps",
+    readTime: 15,
+    slug: "nextjs-production-deployment",
+  },
+  {
+    id: "4",
+    title: "Database Schema Design for High-Performance Applications",
+    summary: "Lessons learned from optimizing queries. Indexing strategies, query patterns, and how bad schema design manifests as production incidents.",
+    date: "Feb 12, 2026",
+    category: "Architecture",
+    readTime: 14,
+    slug: "database-schema-design",
+  },
+  {
+    id: "5",
+    title: "Infrastructure as Code: Managing Your Stack with Terraform",
+    summary: "Automating infrastructure provisioning, version control, and disaster recovery. Why IaC matters and common pitfalls to avoid.",
     date: "Feb 10, 2026",
-    category: "CSS",
-    readTime: "6 min read",
-    slug: "tailwind-tips-tricks",
+    category: "Infrastructure",
+    readTime: 16,
+    slug: "infrastructure-as-code-terraform",
+  },
+  {
+    id: "6",
+    title: "Optimizing React Performance: Beyond the Obvious",
+    summary: "Deep dive into bundle splitting, lazy loading, memoization patterns, and when micro-optimizations actually matter in production.",
+    date: "Feb 8, 2026",
+    category: "Performance",
+    readTime: 13,
+    slug: "react-performance-optimization",
   },
 ];
 
 export default function BlogPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
 
-  const categories = ["All", "NextJS", "TypeScript", "CSS"];
+  const categories = ["All", "Architecture", "DevOps", "Full-Stack", "Performance", "Infrastructure"];
 
   const filteredPosts =
     selectedCategory === "All"
@@ -54,28 +83,28 @@ export default function BlogPage() {
       : blogPosts.filter((post) => post.category === selectedCategory);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black to-gray-950 pt-32 pb-20">
+    <div className="min-h-screen bg-black pt-32 pb-20">
       {/* Hero Section */}
-      <section className="max-w-4xl mx-auto px-4 sm:px-6 mb-16">
-        <h1 className="text-5xl sm:text-6xl font-bold text-white mb-4">
-          Blog & Insights
+      <section className="max-w-3xl mx-auto px-4 sm:px-6 mb-24">
+        <h1 className={`${nasalization.className} text-6xl sm:text-7xl font-bold text-white mb-6`}>
+          Engineering Notes
         </h1>
-        <p className="text-lg text-gray-400">
-          Exploring web development, design, and technology trends
+        <p className="text-lg text-gray-400 leading-relaxed">
+          Writing about systems, architecture, and production lessons.
         </p>
       </section>
 
       {/* Category Filter */}
-      <section className="max-w-4xl mx-auto px-4 sm:px-6 mb-12">
-        <div className="flex flex-wrap gap-3">
+      <section className="max-w-3xl mx-auto px-4 sm:px-6 mb-16">
+        <div className="flex flex-wrap gap-2">
           {categories.map((category) => (
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}
-              className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
                 selectedCategory === category
                   ? "bg-white text-black"
-                  : "border border-white/30 text-white hover:border-white/50"
+                  : "border border-gray-600 text-gray-300 hover:border-gray-400 hover:text-gray-200"
               }`}
             >
               {category}
@@ -84,46 +113,42 @@ export default function BlogPage() {
         </div>
       </section>
 
-      {/* Blog Posts Grid */}
-      <section className="max-w-4xl mx-auto px-4 sm:px-6">
+      {/* Blog Posts List */}
+      <section className="max-w-3xl mx-auto px-4 sm:px-6">
         {filteredPosts.length > 0 ? (
-          <div className="grid gap-6">
+          <div className="space-y-8">
             {filteredPosts.map((post) => (
-              <article
-                key={post.id}
-                className="group border border-white/10 rounded-xl p-6 hover:border-white/30 transition-all duration-300 hover:bg-white/5"
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h2 className="text-2xl font-bold text-white group-hover:text-gray-200 transition-colors duration-200">
+              <Link key={post.id} href={`/blog/${post.slug}`}>
+                <article className="group cursor-pointer py-6 border-b border-gray-800 hover:border-gray-700 transition-colors duration-300">
+                  <div className="space-y-3">
+                    <h2 className="text-2xl font-semibold text-white group-hover:text-gray-300 transition-colors duration-200 leading-tight">
                       {post.title}
                     </h2>
-                    <p className="text-gray-400 mt-2">{post.description}</p>
+                    <p className="text-gray-400 text-base leading-relaxed max-w-2xl">
+                      {post.summary}
+                    </p>
                   </div>
-                </div>
 
-                <div className="flex flex-wrap items-center justify-between gap-4 mt-6 pt-4 border-t border-white/10">
-                  <div className="flex items-center gap-3">
-                    <span className="text-sm text-gray-400">{post.date}</span>
-                    <span className="text-xs px-3 py-1 rounded-full bg-white/10 text-gray-300">
+                  <div className="flex flex-wrap items-center gap-4 mt-4 text-sm text-gray-500">
+                    <span>{post.date}</span>
+                    <span className="text-gray-600">•</span>
+                    <span className="px-2 py-1 bg-gray-900 text-gray-300 rounded">
                       {post.category}
                     </span>
-                    <span className="text-sm text-gray-400">{post.readTime}</span>
+                    <span className="text-gray-600">•</span>
+                    <span>{post.readTime} min read</span>
+                    <span className="text-gray-600 ml-auto group-hover:text-gray-400 transition-colors duration-200">
+                      Read →
+                    </span>
                   </div>
-                  <Link
-                    href={`/blog/${post.slug}`}
-                    className="text-white border border-white/30 hover:border-white/50 px-4 py-2 rounded-lg transition-colors duration-200"
-                  >
-                    Read More
-                  </Link>
-                </div>
-              </article>
+                </article>
+              </Link>
             ))}
           </div>
         ) : (
-          <div className="text-center py-12">
+          <div className="py-16 text-center">
             <p className="text-gray-400 text-lg">
-              No posts found in this category
+              No articles found in this category.
             </p>
           </div>
         )}

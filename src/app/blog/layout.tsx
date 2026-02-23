@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Blog - Tushardevx01",
-  description: "Articles and insights about web development, design, and technology",
+  title: "Engineering Notes - Tushardevx01",
+  description: "Articles about systems architecture, DevOps, full-stack development, and production engineering lessons.",
 };
 
 export default function BlogLayout({
