@@ -74,6 +74,12 @@ export const Navbar = () => {
               />
             </div>
           </Link>
+          <Link
+            href="/blog"
+            className="px-4 py-2 rounded-xl border border-white/30 hover:border-white/50 text-white transition-colors duration-200 font-medium"
+          >
+            Blog
+          </Link>
         </div>
 
 
