@@ -2,49 +2,55 @@ export const projectsData = [
   {
     name: "SimpUI",
     description:
-      "SimpyUI is a curated collection of uncommon, highly-polished React components designed to elevate your web applications. Built with React, TypeScript, and Framer Motion, each component is crafted with attention to detail, offering smooth animations, modern aesthetics, and a delightful user experience.",
+      "A curated library of refined UI components built for production teams. Focused on motion, consistency, and systems-level reuse across large product surfaces.",
     github_link: "https://github.com/AbhishekS04/SimpyUI",
     demo: "https://simpyui.vercel.app/",
     tech: ["Next.js", "Tailwind CSS", "Framer Motion"],
+    role: "Frontend Systems",
   },
   {
     name: "Signifiya app",
     description:
-      "Signifiya is a tech fest management app designed to streamline event organization and enhance attendee engagement. Built with Next.js, Expo Go, JavaScript, and Supabase, Signifiya offers a seamless experience for managing schedules, registrations, and real-time updates during tech festivals.",
+      "Event operations platform for schedules, registration, and live updates. Built to handle peak traffic and real-time coordination across teams and attendees.",
     github_link: "https://github.com/AbhishekS04/signifiyaAppFinal",
     demo: "https://signifiya.in",
     tech: ["Next.js", "Expo Go", "JavaScript", "Supabase"],
+    role: "Full-Stack + Mobile",
   },
   {
     name: "carepulse",
     description:
-      "CarePulse is a scalable healthcare management platform built for modern clinics and hospitals. Empowering healthcare with Next.js 14, Appwrite, Twilio, and Tailwind CSS.",
+      "Healthcare operations platform for clinics and hospitals with secure workflows. Focused on reliability, integrations, and production-grade UX.",
     github_link: "https://github.com/Tusharxhub/carepulse",
     demo: "https://carepulse-brown-omega.vercel.app/",
     tech: ["TypeScript", "Appwrite", "JavaScript"],
+    role: "Full-Stack + Integrations",
   },
   {
     name: "Fenix",
     description:
-      "Fenix is a modern video communication platform designed for secure, high-performance real-time interactions, built using Next.js for a responsive user experience, LiveKit for low-latency audio and video, and Clerk for reliable user authentication.",
+      "Real-time video platform with low-latency audio/video and secure authentication. Optimized for stable sessions and consistent call quality.",
     github_link: "https://github.com/Tusharxhub/Fenix",
     demo:"https://fenix-ecru.vercel.app/",
     tech: ["Next.js", "clerk", "LiveKit"],
+    role: "Realtime Platform",
   },
   {
     name: "PopcornPlay",
     description:
-      "A sleek and modern movie search app powered by TMDB API. Explore trending titles, discover new favorites, and dive into detailed movie info — all in one place.",
+      "Discovery experience for trending and curated media with fast search. Built for performance and a clean browsing flow.",
     github_link: "https://github.com/Tusharxhub/PopcornPlay",
     demo: "https://popcornplay-gamma.vercel.app",
     tech: ["JavaScript", "TMDB API", "CSS"],
+    role: "Frontend + API",
   },
    {
     name: "Subscription Tracker",
     description:
-      "A lightweight Node.js + Express API to manage, monitor, and optimize all your subscriptions in one place.Easily track costs, set reminders, and never miss a renewal date again..",
+      "Subscription management API with tracking, reminders, and cost controls. Built to keep financial operations predictable and auditable.",
     github_link: "https://github.com/Tusharxhub/subscription-tracker",
     demo: "https://subscription-tracker-jet.vercel.app/",
     tech: ["Node.js", "Express", "MongoDB"],
+    role: "Backend API",
   }
 ];
