@@ -20,7 +20,7 @@ export const experienceData = [
   },
 {
     role: "Full Stack web developer",
-    year: "Feb'26 - Present",
+    year: "Feb'25 - Present",
     description: [
   "The official Computer Science Club of Adamas University, built by sharp minds and passionate hackers.",
   "Empowering students to design, build, and scale impactful technology through collaboration and innovation.",
