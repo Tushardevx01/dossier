@@ -2,48 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect, useRef } from "react";
+
+import { useHideOnScroll } from "@/hooks/useHideOnScroll";
 
 export const Navbar = () => {
-  const [isVisible, setIsVisible] = useState(true);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const lastScrollY = useRef(0);
-  const isVisibleRef = useRef(true);
-  const isScrolledRef = useRef(false);
-
-  useEffect(() => {
-    isVisibleRef.current = isVisible;
-  }, [isVisible]);
-
-  useEffect(() => {
-    isScrolledRef.current = isScrolled;
-  }, [isScrolled]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-
-      // Optimize state updates to avoid unnecessary re-renders
-      if (currentScrollY > 100 && !isScrolledRef.current) {
-        setIsScrolled(true);
-      } else if (currentScrollY <= 100 && isScrolledRef.current) {
-        setIsScrolled(false);
-      }
-
-      if (currentScrollY < lastScrollY.current || currentScrollY < 100) {
-        if (!isVisibleRef.current) setIsVisible(true);
-      } else if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
-        if (isVisibleRef.current) {
-          setIsVisible(false);
-        }
-      }
-
-      lastScrollY.current = currentScrollY;
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const { isVisible, isScrolled } = useHideOnScroll();
 
   return (
     <nav

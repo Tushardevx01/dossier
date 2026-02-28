@@ -1,16 +1,5 @@
 import React from "react";
-
-export interface BlogArticle {
-  title: string;
-  subtitle: string;
-  date: string;
-  readTime: number;
-  category: "Architecture" | "DevOps" | "Full-Stack" | "Performance" | "Infrastructure";
-  description: string;
-  content: React.ReactNode;
-  whatILearned: string[];
-  improvements: string[];
-}
+import type { BlogArticle } from "@/types/blog";
 
 export const blogData: Record<string, BlogArticle> = {
   "structuring-scalable-fullstack": {

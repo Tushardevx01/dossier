@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { FC, useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView } from "motion/react";
 import { FaGithub } from "react-icons/fa6";
 import { FiExternalLink } from "react-icons/fi";
 

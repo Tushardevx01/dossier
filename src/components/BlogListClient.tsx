@@ -3,18 +3,13 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
-import { BlogCategoryFilter, BlogMetadata } from "@/lib/blogLoader";
+import type { BlogCategoryFilter, BlogMetadata } from "@/lib/blogLoader";
+import { DIFFICULTY_COLORS } from "@/types/blog";
 
 interface BlogListClientProps {
   posts: BlogMetadata[];
   categories: BlogCategoryFilter[];
 }
-
-const difficultyColors: Record<"Beginner" | "Intermediate" | "Advanced", string> = {
-  Beginner: "text-green-400/70",
-  Intermediate: "text-blue-400/70",
-  Advanced: "text-orange-400/70",
-};
 
 export function BlogListClient({ posts, categories }: BlogListClientProps) {
   const [selectedCategory, setSelectedCategory] = useState<BlogCategoryFilter>("All");
@@ -78,7 +73,7 @@ export function BlogListClient({ posts, categories }: BlogListClientProps) {
                     </span>
                     <span
                       className={`text-xs uppercase tracking-widest font-semibold ${
-                        difficultyColors[post.difficulty]
+                        DIFFICULTY_COLORS[post.difficulty]
                       }`}
                     >
                       {post.difficulty}

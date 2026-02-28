@@ -17,3 +17,5 @@ export {
   supportingStack,
   additionalStack,
 };
+
+export type { Skill, SkillsCategory, SkillsTier } from "./skillsTiers";

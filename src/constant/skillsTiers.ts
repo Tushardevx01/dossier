@@ -54,18 +54,18 @@ import {
 
 import { TbBrandCpp } from "react-icons/tb";
 
-interface Skill {
+export interface Skill {
   title: string;
   logoComponent: React.ElementType;
   color?: string;
 }
 
-interface SkillsCategory {
+export interface SkillsCategory {
   title: string;
   skills: Skill[];
 }
 
-interface SkillsTier {
+export interface SkillsTier {
   label: string;
   description: string;
   categories: SkillsCategory[];

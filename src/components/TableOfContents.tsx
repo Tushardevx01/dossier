@@ -13,7 +13,9 @@
 
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+
+import { useScrollSpy } from "@/hooks/useScrollSpy";
 
 interface Heading {
   id: string;
@@ -22,14 +24,9 @@ interface Heading {
 }
 
 interface TableOfContentsProps {
-  /**
-   * Container selector where headings are located
-   * Defaults to looking for h3 tags in siblings
-   */
+  /** Container selector where headings are located */
   containerSelector?: string;
-  /**
-   * Heading levels to include in TOC (3 = h3, 2 = h2)
-   */
+  /** Heading levels to include in TOC (3 = h3, 2 = h2) */
   headingLevels?: number[];
 }
 
@@ -42,90 +39,42 @@ function toHeadingId(value: string): string {
 }
 
 /**
- * Component that generates and manages a table of contents
- * with scroll spy highlighting
+ * Table of contents with scroll spy highlighting.
+ * Heading extraction is local; observation is delegated to useScrollSpy.
  */
 export function TableOfContents({
   containerSelector = '.prose',
   headingLevels = [3],
 }: TableOfContentsProps) {
   const [headings, setHeadings] = useState<Heading[]>([]);
-  const [activeHeading, setActiveHeading] = useState<string>("");
-  const observerRef = useRef<IntersectionObserver | null>(null);
 
   // Extract headings from DOM on mount
   useEffect(() => {
     const container = document.querySelector(containerSelector);
     if (!container) return;
 
-    // Find all headings matching specified levels
     const headingElements = Array.from(
       container.querySelectorAll(
         headingLevels.map((level) => `h${level}`).join(",")
       )
     ).filter((el): el is HTMLHeadingElement => el instanceof HTMLHeadingElement);
 
-    // Extract heading data
-    const extractedHeadings: Heading[] = headingElements.map((el) => ({
-      id: el.id || toHeadingId(el.textContent || ""),
-      text: el.textContent || "",
-      level: parseInt(el.tagName.substring(1)),
-    }));
-
-    // Ensure headings have IDs for linking
-    extractedHeadings.forEach((heading, idx) => {
-      const el = headingElements[idx];
-      if (!el.id) {
-        el.id = heading.id;
-      }
+    const extracted: Heading[] = headingElements.map((el) => {
+      const id = el.id || toHeadingId(el.textContent || "");
+      if (!el.id) el.id = id;
+      return {
+        id,
+        text: el.textContent || "",
+        level: parseInt(el.tagName.substring(1)),
+      };
     });
 
-    setHeadings(extractedHeadings);
+    setHeadings(extracted);
   }, [containerSelector, headingLevels]);
 
-  // Set up scroll spy with Intersection Observer
-  useEffect(() => {
-    if (headings.length === 0) return;
-
-    // Clean up old observer
-    if (observerRef.current) {
-      observerRef.current.disconnect();
-    }
-
-    // Create new observer
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        let nextActive = "";
-
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            nextActive = entry.target.id;
-            break;
-          }
-        }
-
-        if (nextActive) {
-          setActiveHeading((prev) => (prev === nextActive ? prev : nextActive));
-        }
-      },
-      {
-        // Trigger when heading reaches top 40% of viewport
-        rootMargin: "-40% 0px -55% 0px",
-      }
-    );
-
-    // Observe all headings
-    const headingElements = headings.map(
-      (h) => document.getElementById(h.id) as HTMLElement
-    );
-    headingElements.forEach((el) => {
-      if (el) observerRef.current?.observe(el);
-    });
-
-    return () => {
-      observerRef.current?.disconnect();
-    };
-  }, [headings]);
+  // Derive IDs array for the scroll spy hook (stable reference via useMemo)
+  const headingIds = useMemo(() => headings.map((h) => h.id), [headings]);
+  const activeHeading = useScrollSpy(headingIds);
 
   // Don't render if no headings found
   if (headings.length === 0) {

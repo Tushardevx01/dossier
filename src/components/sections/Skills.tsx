@@ -1,9 +1,10 @@
 "use client";
 
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { motion, useInView, AnimatePresence } from "motion/react";
 import { useRef, useState, useMemo } from "react";
 import { mono, nasalization } from "@/app/fonts";
 import { primaryStack, supportingStack, additionalStack } from "@/constant";
+import type { Skill, SkillsCategory } from "@/constant/skillsTiers";
 import React from "react";
 
 interface SkillBadgeProps {
@@ -80,7 +81,7 @@ const SkillCategory = ({
   size = "md",
 }: {
   title: string;
-  skills: any[];
+  skills: Skill[];
   categoryDelay?: number;
   size?: "sm" | "md" | "lg";
 }) => {
@@ -126,7 +127,7 @@ const SkillTier = ({
 }: {
   label: string;
   description: string;
-  categories: any[];
+  categories: SkillsCategory[];
   badgeSize?: "sm" | "md" | "lg";
   isExpanded?: boolean;
   tierDelay?: number;

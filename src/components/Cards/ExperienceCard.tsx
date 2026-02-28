@@ -1,5 +1,5 @@
 import { FC, useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView } from "motion/react";
 
 import { Card } from "../ui/card";
 import { Badge } from "../ui/badge";

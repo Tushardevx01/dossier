@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Prism from "prismjs";
 import "prismjs/themes/prism-tomorrow.css";
 import "prismjs/components/prism-typescript";
@@ -10,6 +10,8 @@ import "prismjs/components/prism-tsx";
 import "prismjs/components/prism-sql";
 import "prismjs/components/prism-bash";
 import "prismjs/components/prism-hcl";
+
+import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 
 interface CodeBlockProps {
   children: string;
@@ -22,7 +24,7 @@ export function CodeBlock({
   className = "",
   language = "text",
 }: CodeBlockProps) {
-  const [copied, setCopied] = useState(false);
+  const { copied, copy } = useCopyToClipboard();
 
   // Extract language from className if present
   const classMatch = className.match(/language-(\w+)/);
@@ -33,16 +35,6 @@ export function CodeBlock({
     Prism.highlightAll();
   }, [lang, children]);
 
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(children);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (error) {
-      console.error("Failed to copy:", error);
-    }
-  };
-
   return (
     <div className="relative my-6 overflow-hidden rounded-lg bg-[#1e1e1e] border border-neutral-800">
       {/* Header with language and copy button */}
@@ -51,7 +43,7 @@ export function CodeBlock({
           {lang}
         </span>
         <button
-          onClick={handleCopy}
+          onClick={() => copy(children)}
           className="px-3 py-1.5 text-xs font-medium text-neutral-400 hover:text-white transition-colors duration-200 hover:bg-[#3a3a3a] rounded"
         >
           {copied ? "Copied!" : "Copy"}

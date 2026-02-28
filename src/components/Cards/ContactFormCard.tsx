@@ -1,99 +1,11 @@
 import { motion } from "motion/react";
-import { toast } from "sonner";
-import { useState, useEffect } from "react";
-
 import { BsSend, BsSendCheck } from "react-icons/bs";
+
 import { Card } from "../ui/card";
+import { useContactForm } from "@/hooks/useContactForm";
 
 export const ContactFormCard = () => {
-  const [isSending, setIsSending] = useState(false);
-  const [isSent, setIsSent] = useState(false);
-  const [formValues, setFormValues] = useState({
-    senderName: "",
-    senderEmail: "",
-    reasonToContact: "Collaboration",
-    senderMsg: "",
-    website: "",
-  });
-
-  const sendEmail = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSending(true);
-
-    const sendEmailPromise = new Promise(async (resolve, reject) => {
-      try {
-        const response = await fetch("/api/send", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            senderName: formValues.senderName,
-            senderEmail: formValues.senderEmail,
-            reasonToContact: formValues.reasonToContact,
-            senderMsg: formValues.senderMsg,
-            website: formValues.website,
-          }),
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          setIsSent(true);
-          setFormValues({
-            senderName: "",
-            senderEmail: "",
-            reasonToContact: "Collaboration",
-            senderMsg: "",
-            website: "",
-          });
-          resolve(data.message);
-        } else {
-          reject(new Error(data.error || "Failed to send message"));
-        }
-      } catch (error) {
-        reject(error);
-      } finally {
-        setIsSending(false);
-      }
-    });
-
-    toast.promise(sendEmailPromise, {
-      loading: "Sending your message...",
-      success: "Message has been received! I'll get back to you soon.",
-      error: (error) => {
-        if (error.message.includes("not valid")) {
-          return "❌ The email address you entered is not valid (".concat(
-            formValues.senderEmail,
-            "). Please use a real email."
-          );
-        }
-        return (
-          error.message ||
-          "An error occurred while sending your message. Please try again later."
-        );
-      },
-    });
-  };
-
-  useEffect(() => {
-    if (isSent) {
-      setTimeout(() => {
-        setIsSent(false);
-      }, 3000);
-    }
-  }, [isSent]);
-
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
-  ) => {
-    setFormValues({
-      ...formValues,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const { formValues, isSending, isSent, handleChange, handleSubmit } = useContactForm();
 
   return (
     <motion.div
@@ -110,7 +22,7 @@ export const ContactFormCard = () => {
         }}
       >
         <div className="relative z-10 p-8 md:p-10 flex flex-col flex-grow">
-          <form onSubmit={sendEmail} className="space-y-6 flex flex-col flex-grow">
+          <form onSubmit={handleSubmit} className="space-y-6 flex flex-col flex-grow">
             <input
               type="text"
               name="website"

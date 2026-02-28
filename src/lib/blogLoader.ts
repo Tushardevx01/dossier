@@ -1,49 +1,41 @@
 /**
  * Blog Data Layer
- * 
- * Single source of truth for all blog posts.
- * This replaces the duplication between blog/page.tsx and data/blogData.tsx
- * Ensures consistency across the entire blog system.
+ *
+ * Single source of truth for all blog post access.
+ * Types are imported from @/types/blog — never redefined here.
+ *
+ * Performance: metadata list is computed once per process (module-level cache).
+ * At 100+ articles this avoids re-mapping on every page render.
  */
 
 import { blogData } from "@/data/blogData";
+import type {
+  BlogMetadata,
+  BlogPost,
+  BlogCategoryFilter,
+  BlogDifficulty,
+} from "@/types/blog";
 
-export interface BlogMetadata {
-  slug: string;
-  id: string;
-  title: string;
-  subtitle: string;
-  date: string;
-  readTime: number;
-  category: "Architecture" | "DevOps" | "Full-Stack" | "Performance" | "Infrastructure";
-  description: string;
-  difficulty: "Beginner" | "Intermediate" | "Advanced";
-}
+// Re-export types so consumers can import from one place
+export type { BlogMetadata, BlogPost, BlogCategoryFilter };
 
-export interface BlogPost extends BlogMetadata {
-  content: React.ReactNode;
-  whatILearned: string[];
-  improvements: string[];
-}
+// ─── Helpers ────────────────────────────────────────────────────────────────
 
-export type BlogCategoryFilter = "All" | BlogMetadata["category"];
-
-/**
- * Derive difficulty from readTime - this is a computed field
- * avoids duplication while still maintaining the concept
- */
-function calculateDifficulty(readTime: number): BlogMetadata["difficulty"] {
+function calculateDifficulty(readTime: number): BlogDifficulty {
   if (readTime <= 8) return "Beginner";
   if (readTime <= 12) return "Intermediate";
   return "Advanced";
 }
 
-/**
- * Get all blog posts with metadata
- * Use this for the blog list page
- */
-export function getAllBlogMetadata(): BlogMetadata[] {
-  return Object.entries(blogData).map(([slug, article], index) => ({
+// ─── Module-level cache ─────────────────────────────────────────────────────
+
+let _metadataCache: BlogMetadata[] | null = null;
+let _categoryCache: BlogCategoryFilter[] | null = null;
+
+function buildMetadataCache(): BlogMetadata[] {
+  if (_metadataCache) return _metadataCache;
+
+  _metadataCache = Object.entries(blogData).map(([slug, article], index) => ({
     slug,
     id: String(index + 1),
     title: article.title,
@@ -54,19 +46,28 @@ export function getAllBlogMetadata(): BlogMetadata[] {
     description: article.description,
     difficulty: calculateDifficulty(article.readTime),
   }));
+
+  return _metadataCache;
 }
 
-/**
- * Get a single blog post by slug
- * Use this for the article page
- */
+// ─── Public API ─────────────────────────────────────────────────────────────
+
+/** Get all blog posts metadata (cached — safe for repeated calls). */
+export function getAllBlogMetadata(): BlogMetadata[] {
+  return buildMetadataCache();
+}
+
+/** Get a single blog post by slug. Returns null if not found. */
 export function getBlogPost(slug: string): BlogPost | null {
   const article = blogData[slug];
   if (!article) return null;
 
+  const allSlugs = Object.keys(blogData);
+  const id = String(allSlugs.indexOf(slug) + 1);
+
   return {
     slug,
-    id: calculatePostId(slug),
+    id,
     title: article.title,
     subtitle: article.subtitle,
     date: article.date,
@@ -80,50 +81,29 @@ export function getBlogPost(slug: string): BlogPost | null {
   };
 }
 
-/**
- * Get all available categories
- * Dynamically extracted from blog data
- */
+/** Get all available categories (cached). */
 export function getBlogCategories(): BlogCategoryFilter[] {
-  const categories = new Set<BlogMetadata["category"]>();
-  Object.values(blogData).forEach((article) => {
-    categories.add(article.category);
-  });
-  return ["All", ...Array.from(categories)];
+  if (_categoryCache) return _categoryCache;
+
+  const categories = new Set(
+    Object.values(blogData).map((article) => article.category)
+  );
+  _categoryCache = ["All", ...Array.from(categories)];
+  return _categoryCache;
 }
 
-/**
- * Get total number of published posts
- * Useful for pagination or stats
- */
+/** Total published post count. */
 export function getTotalBlogCount(): number {
   return Object.keys(blogData).length;
 }
 
-/**
- * Helper to generate static params for Next.js
- */
-export function generateBlogStaticParams() {
+/** Generate static params for Next.js SSG. */
+export function generateBlogStaticParams(): { slug: string }[] {
   return Object.keys(blogData).map((slug) => ({ slug }));
 }
 
-/**
- * Helper to calculate post ID from slug
- * Ensures consistency across the app
- */
-function calculatePostId(slug: string): string {
-  const allSlugs = Object.keys(blogData);
-  const index = allSlugs.indexOf(slug);
-  return String(index + 1);
-}
-
-/**
- * Filter blog posts by category
- * Reusable utility for filtering logic
- */
-export function filterBlogByCategory(
-  category: BlogCategoryFilter
-): BlogMetadata[] {
+/** Filter posts by category. */
+export function filterBlogByCategory(category: BlogCategoryFilter): BlogMetadata[] {
   const allPosts = getAllBlogMetadata();
   if (category === "All") return allPosts;
   return allPosts.filter((post) => post.category === category);
