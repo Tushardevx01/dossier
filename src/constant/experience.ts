@@ -39,7 +39,7 @@ export const experienceData = [
     "Collaborated with developers for clean, consistent implementation."
     ],
     company: "azmth",
-    technologies: ["Adobe Illustrator", "Canva", "Figma", "Illustrator"],
-    url: "https://www.linkedin.com/company/azmth/"
+    technologies: ["Next.js", "Tailwind CSS", "Supabase", "Git", "Vercel"],
+    url: "https://crm.azmth.in/"
   },
 ];
