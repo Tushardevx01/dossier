@@ -1,13 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { motion } from "framer-motion";
 
 import { TbHeart, TbHeartFilled } from "react-icons/tb";
-import { LuGithub, LuLinkedin, LuTwitter, LuMail } from "react-icons/lu";
 
-import { quentine } from "@/app/fonts";
 import { selfData } from "@/constant/";
 
 const floatingParticles = [
@@ -19,7 +16,7 @@ const floatingParticles = [
 
 export const Footer = () => {
   const [isHeartFilled, setIsHeartFilled] = useState(false);
-  const toggleHeart = () => setIsHeartFilled(!isHeartFilled);
+  const toggleHeart = () => setIsHeartFilled((prev) => !prev);
 
 
   return (

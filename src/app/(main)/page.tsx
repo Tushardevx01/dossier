@@ -1,19 +1,19 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
 
 import { Navbar, Footer } from "@/components/common";
-import {
-  Hero,
-  About,
-  Experience,
-  Skills,
-  Projects,
-  GitHub,
-  DevOps,
-  Contact,
-} from "@/components/sections";
-import { PreLoader, Background } from "@/components/common";
+import { Hero } from "@/components/sections";
+import { Background, PreLoader } from "@/components/common";
+
+const About = dynamic(() => import("@/components/sections/About").then((mod) => mod.About));
+const Experience = dynamic(() => import("@/components/sections/Experience").then((mod) => mod.Experience));
+const Skills = dynamic(() => import("@/components/sections/Skills").then((mod) => mod.Skills));
+const Projects = dynamic(() => import("@/components/sections/Projects").then((mod) => mod.Projects));
+const GitHub = dynamic(() => import("@/components/sections/GitHub").then((mod) => mod.GitHub));
+const DevOps = dynamic(() => import("@/components/sections/DevOps").then((mod) => mod.DevOps));
+const Contact = dynamic(() => import("@/components/sections/Contact").then((mod) => mod.Contact));
 
 export default function Home() {
   const [loading, setLoading] = useState(true);

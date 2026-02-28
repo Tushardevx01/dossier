@@ -21,13 +21,30 @@ export function useScrollProgress(): number {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    // Calculate scroll progress
-    const handleScroll = () => {
+    let animationFrameId = 0;
+
+    const calculateProgress = () => {
       const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
       const scrolled = window.scrollY;
       const percentage = scrollHeight > 0 ? (scrolled / scrollHeight) * 100 : 0;
-      setProgress(Math.min(percentage, 100)); // Cap at 100%
+      const nextProgress = Math.min(percentage, 100);
+
+      setProgress((prev) => {
+        if (Math.abs(prev - nextProgress) < 0.2) {
+          return prev;
+        }
+        return nextProgress;
+      });
+      animationFrameId = 0;
     };
+
+    // Calculate scroll progress
+    const handleScroll = () => {
+      if (animationFrameId) return;
+      animationFrameId = window.requestAnimationFrame(calculateProgress);
+    };
+
+    handleScroll();
 
     // Add event listener
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -35,6 +52,9 @@ export function useScrollProgress(): number {
     return () => {
       // Cleanup: remove listener
       window.removeEventListener("scroll", handleScroll);
+      if (animationFrameId) {
+        window.cancelAnimationFrame(animationFrameId);
+      }
     };
   }, []);
 

@@ -2,11 +2,24 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    unoptimized: false,
+    formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 60 * 60 * 24 * 30,
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "Tushar.vercel.app",
+        hostname: "tushardevx01.vercel.app",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "github-readme-activity-graph.vercel.app",
+        port: "",
+        pathname: "/graph",
+      },
+      {
+        protocol: "https",
+        hostname: "camo.githubusercontent.com",
         port: "",
         pathname: "/**",
       },
@@ -14,6 +27,7 @@ const nextConfig: NextConfig = {
   },
 
   compress: true,
+  poweredByHeader: false,
 
   experimental: {
     optimizeCss: true,

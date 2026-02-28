@@ -4,30 +4,36 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 
-import { quentine } from "@/app/fonts";
-
-import { createBlurDataURL } from "@/lib/BlurDataURL";
-
 export const Navbar = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const lastScrollY = useRef(0);
+  const isVisibleRef = useRef(true);
+  const isScrolledRef = useRef(false);
+
+  useEffect(() => {
+    isVisibleRef.current = isVisible;
+  }, [isVisible]);
+
+  useEffect(() => {
+    isScrolledRef.current = isScrolled;
+  }, [isScrolled]);
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
       // Optimize state updates to avoid unnecessary re-renders
-      if (currentScrollY > 100 && !isScrolled) {
+      if (currentScrollY > 100 && !isScrolledRef.current) {
         setIsScrolled(true);
-      } else if (currentScrollY <= 100 && isScrolled) {
+      } else if (currentScrollY <= 100 && isScrolledRef.current) {
         setIsScrolled(false);
       }
 
       if (currentScrollY < lastScrollY.current || currentScrollY < 100) {
-        if (!isVisible) setIsVisible(true);
+        if (!isVisibleRef.current) setIsVisible(true);
       } else if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
-        if (isVisible) {
+        if (isVisibleRef.current) {
           setIsVisible(false);
         }
       }
@@ -37,7 +43,7 @@ export const Navbar = () => {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [isScrolled, isVisible]);
+  }, []);
 
   return (
     <nav
@@ -61,13 +67,8 @@ export const Navbar = () => {
                 alt="logo"
                 width={40}
                 height={40}
-                placeholder="blur"
-                loading="lazy"
-                quality={100}
-                blurDataURL={`${createBlurDataURL({
-                  width: 40,
-                  height: 40,
-                })}`}
+                priority
+                fetchPriority="high"
                 style={{
                   objectFit: "cover",
                 }}

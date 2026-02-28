@@ -11,13 +11,14 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 import { nasalization } from "@/app/fonts";
 import { PrismHighlighter } from "@/components/PrismHighlighter";
 import { TableOfContents } from "@/components/TableOfContents";
 import { BlogPost } from "@/lib/blogLoader";
 import { useScrollProgress } from "@/hooks/useScrollProgress";
+
+const TOC_HEADING_LEVELS = [3];
 
 interface BlogArticlePageProps {
   post: BlogPost;
@@ -37,7 +38,7 @@ export function BlogArticlePage({ post, slug }: BlogArticlePageProps) {
       <ScrollPercentageIndicator percentage={scrollPercentage} />
 
       {/* Table of Contents - proper React component */}
-      <TableOfContents containerSelector=".article-content" headingLevels={[3]} />
+      <TableOfContents containerSelector=".article-content" headingLevels={TOC_HEADING_LEVELS} />
 
       {/* Article Header */}
       <ArticleHeader post={post} />

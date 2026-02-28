@@ -11,6 +11,7 @@ export const GitHub = () => {
     const isInView = useInView(ref, { once: true, margin: "-80px", amount: 0.2 });
 
     const githubUsername = selfData.socials_username.github;
+    const contributionGraphUrl = `https://github-readme-activity-graph.vercel.app/graph?username=${githubUsername}&radius=16&theme=react&area=true&order=5`;
 
     return (
         <section id="github" ref={ref} className="py-24 relative overflow-hidden">
@@ -89,13 +90,14 @@ export const GitHub = () => {
                     {/* Contribution graph image */}
                     <div className="w-full overflow-x-auto rounded-lg">
                         <Image
-                            src={`https://camo.githubusercontent.com/f8b32f9b4dc028f0fee8ce9cbf3edbdf145fd59a7e86fabdad5a310ec2fc190f/68747470733a2f2f6769746875622d726561646d652d61637469766974792d67726170682e76657263656c2e6170702f67726170683f757365726e616d653d54757368617278687562267261646975733d3136267468656d653d726561637426617265613d74727565266f726465723d35`}
+                            src={contributionGraphUrl}
                             alt={`${githubUsername} GitHub contribution graph`}
                             width={900}
                             height={130}
                             className="w-full h-auto min-w-[600px]"
+                            loading="lazy"
+                            sizes="(max-width: 768px) 100vw, 900px"
                             style={{ filter: "brightness(0.9) contrast(1.2)" }}
-                            unoptimized
                         />
                     </div>
 

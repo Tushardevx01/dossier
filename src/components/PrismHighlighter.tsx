@@ -1,15 +1,28 @@
 "use client";
 
-import { useEffect } from "react";
-import Prism from "prismjs";
-import "prismjs/themes/prism-tomorrow.css";
-import "prismjs/components/prism-typescript";
-import "prismjs/components/prism-javascript";
-import "prismjs/components/prism-jsx";
-import "prismjs/components/prism-tsx";
-import "prismjs/components/prism-sql";
-import "prismjs/components/prism-bash";
-import "prismjs/components/prism-hcl";
+import { useEffect, useRef } from "react";
+
+let prismBootPromise: Promise<typeof import("prismjs")> | null = null;
+
+async function loadPrism() {
+  if (!prismBootPromise) {
+    prismBootPromise = (async () => {
+      const prismModule = await import("prismjs");
+      await Promise.all([
+        import("prismjs/components/prism-typescript"),
+        import("prismjs/components/prism-javascript"),
+        import("prismjs/components/prism-jsx"),
+        import("prismjs/components/prism-tsx"),
+        import("prismjs/components/prism-sql"),
+        import("prismjs/components/prism-bash"),
+        import("prismjs/components/prism-hcl"),
+      ]);
+      return prismModule;
+    })();
+  }
+
+  return prismBootPromise;
+}
 
 interface PrismHighlighterProps {
   slug: string;
@@ -26,15 +39,28 @@ interface PrismHighlighterProps {
  * - Proper DOM mutation for new content
  */
 export function PrismHighlighter({ slug, children }: PrismHighlighterProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    // Highlight all code blocks when slug changes
-    if (typeof Prism !== "undefined") {
-      // Use requestAnimationFrame to ensure DOM is updated
+    let cancelled = false;
+
+    const highlight = async () => {
+      const prismModule = await loadPrism();
+      if (cancelled || !containerRef.current) return;
+
       requestAnimationFrame(() => {
-        Prism.highlightAllUnder(document.body);
+        if (!cancelled && containerRef.current) {
+          prismModule.highlightAllUnder(containerRef.current);
+        }
       });
-    }
+    };
+
+    void highlight();
+
+    return () => {
+      cancelled = true;
+    };
   }, [slug]); // Re-run when slug changes
 
-  return <>{children}</>;
+  return <div ref={containerRef}>{children}</div>;
 }

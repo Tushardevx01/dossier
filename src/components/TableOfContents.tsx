@@ -33,6 +33,14 @@ interface TableOfContentsProps {
   headingLevels?: number[];
 }
 
+function toHeadingId(value: string): string {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-");
+}
+
 /**
  * Component that generates and manages a table of contents
  * with scroll spy highlighting
@@ -59,7 +67,7 @@ export function TableOfContents({
 
     // Extract heading data
     const extractedHeadings: Heading[] = headingElements.map((el) => ({
-      id: el.id || el.textContent?.toLowerCase().replace(/\s+/g, "-") || "",
+      id: el.id || toHeadingId(el.textContent || ""),
       text: el.textContent || "",
       level: parseInt(el.tagName.substring(1)),
     }));
@@ -87,14 +95,17 @@ export function TableOfContents({
     // Create new observer
     observerRef.current = new IntersectionObserver(
       (entries) => {
-        // Find the heading that's currently in view
-        const visibleHeading = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)
-          .at(0);
+        let nextActive = "";
 
-        if (visibleHeading) {
-          setActiveHeading(visibleHeading.target.id);
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            nextActive = entry.target.id;
+            break;
+          }
+        }
+
+        if (nextActive) {
+          setActiveHeading((prev) => (prev === nextActive ? prev : nextActive));
         }
       },
       {

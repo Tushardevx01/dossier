@@ -2,7 +2,6 @@ import "./globals.css";
 import type { Metadata } from "next";
 
 import { Analytics } from "@vercel/analytics/next";
-
 import { Toaster } from "sonner";
 
 import { inter, mono, nasalization, quentine } from "./fonts";
