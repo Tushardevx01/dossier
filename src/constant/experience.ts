@@ -31,7 +31,7 @@ export const experienceData = [
   //   url: "https://www.namespace.world/",
   // },
   {
-    role: "Ui/UX Designer",
+    role: "Full Stack web developer",
     year: "June'24 - present",
     description: [
       "Designed intuitive, user-focused interfaces for web and mobile.",
