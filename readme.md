@@ -25,18 +25,22 @@ A modern, responsive portfolio website built with Next.js, showcasing my skills,
 ## 📦 Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/yourusername/tushardevx01.git
    cd tushardevx01
    ```
 
 2. Install dependencies:
+
    ```bash
    npm install
    ```
 
 3. Set up environment variables:
+
    Create a `.env.local` file in the root directory and add your email configuration:
+
    ```env
    EMAIL_USER=your-email@example.com
    EMAIL_PASS=your-email-password
@@ -44,6 +48,7 @@ A modern, responsive portfolio website built with Next.js, showcasing my skills,
    ```
 
 4. Run the development server:
+
    ```bash
    npm run dev
    ```
@@ -59,7 +64,7 @@ A modern, responsive portfolio website built with Next.js, showcasing my skills,
 
 ## 📁 Project Structure
 
-```
+```text
 src/
 ├── app/                 # Next.js app directory
 │   ├── (main)/         # Main page
