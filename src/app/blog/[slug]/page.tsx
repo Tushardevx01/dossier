@@ -1,78 +1,10 @@
-import { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 
-import { BlogArticlePage } from "@/components/BlogArticlePage";
-import { generateBlogStaticParams, getBlogPost } from "@/lib/blogLoader";
-import "prismjs/themes/prism-tomorrow.css";
-
-/* =========================================
-   METADATA GENERATION
-========================================= */
-
-interface GenerateMetadataParams {
-  params: Promise<{ slug: string }>;
-}
-
-export async function generateMetadata(
-  { params }: GenerateMetadataParams
-): Promise<Metadata> {
-  const { slug } = await params;
-  const article = getBlogPost(slug);
-
-  if (!article) {
-    return {
-      title: "Article Not Found",
-    };
-  }
-
-  const baseUrl = "https://tushardevx01.dev"; // Update with your domain
-  const articleUrl = `${baseUrl}/blog/${slug}`;
-
-  return {
-    title: `${article.title} — Tushar DevX`,
-    description: article.description,
-    authors: [{ name: "Tushar DevX" }],
-    openGraph: {
-      title: article.title,
-      description: article.description,
-      type: "article",
-      url: articleUrl,
-      publishedTime: article.date,
-      authors: ["Tushar DevX"],
-      tags: [article.category],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: article.title,
-      description: article.description,
-    },
-    keywords: [article.category, "engineering", "software development"],
-  };
-}
-
-/* =========================================
-   STATIC GENERATION
-========================================= */
-
-export function generateStaticParams() {
-  return generateBlogStaticParams();
-}
-
-/* =========================================
-   PAGE COMPONENT
-========================================= */
-
-export default async function ArticlePage({
+export default async function BlogArticleRedirectPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const article = getBlogPost(slug);
-
-  if (!article) {
-    notFound();
-  }
-
-  return <BlogArticlePage post={article} slug={slug} />;
-  }
+  redirect(`/engineering-notes/${slug}`);
+}

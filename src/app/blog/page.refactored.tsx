@@ -173,7 +173,7 @@ function CategoryButton({
 function BlogPostCard({ post }: { post: BlogMetadata }) {
   return (
     <motion.div variants={ITEM_VARIANTS}>
-      <Link href={`/blog/${post.slug}`}>
+      <Link href={`/engineering-notes/${post.slug}`}>
         <article className="group cursor-pointer border border-neutral-800 rounded-lg p-6 sm:p-8 hover:border-neutral-700 hover:bg-neutral-950/30 transition-all duration-300 ease-out hover:-translate-y-1">
           <div className="space-y-4">
             <h3 className="text-2xl sm:text-3xl font-semibold text-white group-hover:text-neutral-200 transition-colors duration-200 leading-tight">

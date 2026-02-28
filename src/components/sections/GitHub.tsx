@@ -14,17 +14,17 @@ export const GitHub = () => {
     const contributionGraphUrl = `https://github-readme-activity-graph.vercel.app/graph?username=${githubUsername}&radius=16&theme=react&area=true&order=5`;
 
     return (
-        <section id="github" ref={ref} className="py-24 relative overflow-hidden">
+        <section id="github" ref={ref} className="py-24 sm:py-28 relative overflow-hidden">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 {/* Heading */}
                 <motion.div
-                    className="mb-12 space-y-2"
+                    className="mb-10 sm:mb-12 space-y-3"
                     initial={{ opacity: 0, y: 20 }}
                     animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                     transition={{ duration: 0.6 }}
                 >
                     <h2
-                        className={`${nasalization.className} text-4xl md:text-5xl font-bold`}
+                        className={`${nasalization.className} text-4xl md:text-5xl font-semibold tracking-tight`}
                         style={{ color: "hsl(var(--foreground))" }}
                     >
                         Built with{" "}
@@ -33,7 +33,7 @@ export const GitHub = () => {
                         </span>
                     </h2>
                     <p
-                        className={`${mono.className} text-sm`}
+                        className={`${mono.className} text-sm uppercase tracking-[0.14em]`}
                         style={{ color: "hsl(var(--foreground) / 0.4)" }}
                     >
                         Discipline compounds.
@@ -42,7 +42,7 @@ export const GitHub = () => {
 
                 {/* Contribution graph container */}
                 <motion.div
-                    className="github-container"
+                    className="github-container rounded-2xl border border-neutral-800/70 bg-neutral-950/30 p-4 sm:p-6"
                     initial={{ opacity: 0, y: 30 }}
                     animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
                     transition={{ duration: 0.7, delay: 0.2 }}
@@ -77,7 +77,7 @@ export const GitHub = () => {
                             href={`https://github.com/${githubUsername}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={`${mono.className} text-xs px-3 py-1.5 rounded-lg transition-all duration-200`}
+                            className={`${mono.className} text-xs px-3 py-1.5 rounded-lg transition-all duration-200 hover:-translate-y-0.5`}
                             style={{
                                 color: "hsl(var(--primary) / 0.7)",
                                 border: "1px solid hsl(210 30% 25% / 0.5)",
@@ -88,7 +88,7 @@ export const GitHub = () => {
                     </div>
 
                     {/* Contribution graph image */}
-                    <div className="w-full overflow-x-auto rounded-lg">
+                    <div className="w-full overflow-x-auto rounded-xl border border-neutral-800/70 bg-black/40">
                         <Image
                             src={contributionGraphUrl}
                             alt={`${githubUsername} GitHub contribution graph`}

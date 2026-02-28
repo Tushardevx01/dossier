@@ -47,6 +47,7 @@ export const Navbar = () => {
 
   return (
     <nav
+      aria-label="Primary"
       className={`fixed top-4 left-0 right-0 z-50 transition-all duration-300 ease-out ${
         isScrolled ? "pt-0 px-2 sm:px-4" : "px-2 sm:px-2"
       } ${isVisible ? "translate-y-0" : "-translate-y-full"}`}
@@ -60,6 +61,7 @@ export const Navbar = () => {
           <Link
             href="/"
             className="flex items-center space-x-2 sm:space-x-3 group"
+            aria-label="Go to homepage"
           >
             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-glass-bg flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
               <Image
@@ -75,15 +77,16 @@ export const Navbar = () => {
               />
             </div>
           </Link>
-          <Link
-            href="/blog"
-            className="px-4 py-2 rounded-xl border border-white/30 hover:border-white/50 text-white transition-colors duration-200 font-medium"
-          >
-            Blog
-          </Link>
+
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Link
+              href="/engineering-notes"
+              className="px-3 sm:px-4 py-2 rounded-xl border border-white/20 hover:border-white/45 text-white transition-colors duration-200 font-medium text-sm"
+            >
+              Engineering Notes
+            </Link>
+          </div>
         </div>
-
-
       </div>
     </nav>
   );

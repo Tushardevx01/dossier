@@ -35,10 +35,10 @@ export const Projects = () => {
   return (
     <section
       id="projects"
-      className="py-32 sm:py-36 max-w-6xl mx-auto relative"
+      className="py-28 sm:py-32 max-w-6xl mx-auto relative"
     >
       <div className="mx-auto px-4 lg:px-8">
-        <div className="mb-16 sm:mb-20">
+        <div className="mb-14 sm:mb-16">
           <h2
             className={`${nasalization.className} text-4xl md:text-5xl font-semibold text-white tracking-tight`}
           >
@@ -50,7 +50,7 @@ export const Projects = () => {
         </div>
 
         {projects.length > 0 && (
-          <div className="mt-12 sm:mt-16 grid gap-10 lg:gap-12 md:grid-cols-2">
+          <div className="mt-10 sm:mt-14 grid gap-8 lg:gap-10 md:grid-cols-2">
             {projects.map((project) => (
               <motion.article
                 key={project.name}
@@ -59,10 +59,10 @@ export const Projects = () => {
                 whileHover="hover"
                 variants={cardVariants}
                 transition={{ duration: 0.3 }}
-                className="group border border-neutral-800/60 hover:border-neutral-700/80 rounded-2xl p-8 transition-colors duration-300"
+                className="group border border-neutral-800/60 hover:border-neutral-700/80 rounded-2xl p-6 sm:p-7 transition-colors duration-300 bg-neutral-950/20"
               >
-                <div className="flex flex-col gap-5">
-                  <div className="text-xs uppercase tracking-widest text-neutral-500">
+                <div className="flex flex-col gap-4 sm:gap-5">
+                  <div className="text-[11px] uppercase tracking-[0.18em] text-neutral-500">
                     {project.role}
                   </div>
 
@@ -73,7 +73,7 @@ export const Projects = () => {
                     {project.name}
                   </motion.h3>
 
-                  <p className="text-base text-neutral-400 leading-relaxed">
+                  <p className="text-sm sm:text-base text-neutral-400 leading-relaxed">
                     {project.description}
                   </p>
 
@@ -81,7 +81,7 @@ export const Projects = () => {
                     {project.tech.slice(0, 3).map((techItem) => (
                       <span
                         key={techItem}
-                        className="px-3 py-1 rounded-full text-xs uppercase tracking-wide text-neutral-400 border border-neutral-800/80"
+                        className="px-2.5 py-1 rounded-full text-[11px] uppercase tracking-wide text-neutral-400 border border-neutral-800/80"
                       >
                         {techItem}
                       </span>
@@ -94,9 +94,10 @@ export const Projects = () => {
                         href={project.demo}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 text-sm font-medium text-white border border-neutral-700 px-4 py-2 rounded-full hover:border-neutral-600 transition-colors"
+                        aria-label={`Open live preview for ${project.name}`}
+                        className="inline-flex items-center gap-2 text-sm font-medium text-white border border-neutral-700 px-4 py-2 rounded-full hover:border-neutral-500 hover:bg-white/[0.03] transition-colors"
                       >
-                        Live Preview
+                        View Case Study
                         <motion.span variants={arrowVariants} className="inline-block">
                           →
                         </motion.span>
@@ -106,9 +107,10 @@ export const Projects = () => {
                       href={project.github_link}
                       target="_blank"
                       rel="noopener noreferrer"
+                      aria-label={`Open source code for ${project.name}`}
                       className="inline-flex items-center gap-2 text-sm font-medium text-neutral-400 hover:text-neutral-200 transition-colors"
                     >
-                      Source
+                      Source Code
                       <motion.span variants={arrowVariants} className="inline-block">
                         →
                       </motion.span>

@@ -18,35 +18,35 @@ export const Contact = () => {
     <section
       ref={ref}
       id="contact"
-      className="py-20 max-w-6xl mx-auto relative overflow-hidden"
+      className="py-24 sm:py-28 max-w-6xl mx-auto relative overflow-hidden"
     >
       <div className="px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="text-center mb-20"
+          className="text-center mb-14 sm:mb-16"
         >
           <motion.h2
-            className={`text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 relative ${nasalization.className}`}
+            className={`text-4xl md:text-5xl lg:text-6xl font-semibold mb-5 relative tracking-tight ${nasalization.className}`}
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7, delay: 0.1 }}
             style={{ color: "hsl(var(--primary))" }}
           >
-            Let&apos;s Connect
+            Let&apos;s Build Something That Ships
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-base md:text-lg text-white/60 max-w-2xl mx-auto"
+            className="text-base md:text-lg text-white/60 max-w-2xl mx-auto leading-relaxed"
           >
-            Open to full-stack and infrastructure-focused opportunities.
+            Open to full-stack product engineering and infrastructure ownership roles.
           </motion.p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start p-10 lg:p-0">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-start px-0 sm:px-4 lg:px-0">
           {/* Contact Form */}
           <ContactFormCard />
 
@@ -60,7 +60,7 @@ export const Contact = () => {
               className="space-y-6"
             >
               <h3
-                className="text-lg font-semibold tracking-wide uppercase"
+                className="text-base font-semibold tracking-[0.16em] uppercase"
                 style={{ color: "hsl(var(--foreground))" }}
               >
                 Contact Information
@@ -75,7 +75,7 @@ export const Contact = () => {
               transition={{ duration: 0.7, delay: 0.3 }}
             >
               <h3
-                className="text-lg font-semibold tracking-wide uppercase mb-6"
+                className="text-base font-semibold tracking-[0.16em] uppercase mb-6"
                 style={{ color: "hsl(var(--foreground))" }}
               >
                 Connect Professionally
@@ -106,7 +106,7 @@ const ContactItem: React.FC<ContactItemProps> = ({
     <motion.div
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      className="p-5 rounded-xl transition-all duration-300 hover:bg-white/5 group cursor-pointer border border-white/10 bg-white/[0.02]"
+      className="p-5 rounded-xl transition-all duration-300 hover:bg-white/5 group cursor-pointer border border-white/10 bg-white/[0.02] hover:border-white/20"
     >
       <div className="flex items-start space-x-4">
         <div

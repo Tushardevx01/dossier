@@ -8,6 +8,10 @@ body {
   @apply m-0 p-0 box-border;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 *::-webkit-scrollbar {
   display: none;
 }
@@ -185,6 +189,14 @@ body {
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-inter), sans-serif;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
   }
 
   /* Font family utilities */
@@ -301,6 +313,10 @@ body {
     transform: translateY(-1px);
   }
 
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+
   .btn-secondary {
     background: hsl(var(--secondary));
     color: hsl(var(--secondary-foreground));
@@ -312,6 +328,21 @@ body {
     background: hsl(var(--hover-secondary));
     box-shadow: var(--luxury-hover-glow);
     transform: translateY(-1px);
+  }
+
+  .btn-secondary:active {
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 
   .btn-glass {

@@ -1,8 +1,10 @@
 import { MetadataRoute } from "next";
+import { generateBlogStaticParams } from "@/lib/blogLoader";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://tushardevx01.vercel.app";
   const lastModified = new Date();
+  const engineeringNotesSlugs = generateBlogStaticParams();
 
   const sections = [
     { id: "", priority: 1.0 },
@@ -22,6 +24,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     ...mainPageEntries,
+    {
+      url: `${baseUrl}/engineering-notes`,
+      lastModified,
+      changeFrequency: "weekly" as const,
+      priority: 0.9,
+    },
+    ...engineeringNotesSlugs.map(({ slug }) => ({
+      url: `${baseUrl}/engineering-notes/${slug}`,
+      lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    })),
     {
       url: `${baseUrl}/resume`,
       lastModified,

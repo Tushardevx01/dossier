@@ -60,7 +60,7 @@ export function BlogArticlePage({ post, slug }: BlogArticlePageProps) {
  */
 function ScrollPercentageIndicator({ percentage }: { percentage: number }) {
   return (
-    <div className="fixed top-3 right-6 text-xs text-neutral-500 z-40">
+    <div className="fixed top-3 right-6 text-[11px] tracking-wider uppercase text-neutral-500 z-40">
       <span>{Math.round(percentage)}</span>%
     </div>
   );
@@ -72,15 +72,15 @@ function ScrollPercentageIndicator({ percentage }: { percentage: number }) {
  */
 function ArticleHeader({ post }: { post: BlogPost }) {
   return (
-    <div className="pt-28 pb-16 border-b border-neutral-800">
+    <div className="pt-24 sm:pt-28 pb-14 sm:pb-16 border-b border-neutral-800">
       <div className="max-w-[720px] mx-auto px-6">
         <h1
-          className={`${nasalization.className} text-5xl font-semibold text-white`}
+          className={`${nasalization.className} text-4xl sm:text-5xl font-semibold text-white leading-tight`}
         >
           {post.title}
         </h1>
-        <p className="text-2xl text-neutral-500 mt-6">{post.subtitle}</p>
-        <div className="flex gap-4 mt-8 text-neutral-500 text-xs uppercase tracking-widest flex-wrap">
+        <p className="text-xl sm:text-2xl text-neutral-500 mt-5 leading-relaxed">{post.subtitle}</p>
+        <div className="flex gap-4 mt-7 text-neutral-500 text-xs uppercase tracking-widest flex-wrap">
           <time dateTime={post.date}>{post.date}</time>
           <span>•</span>
           <span>{post.readTime} min read</span>
@@ -100,10 +100,10 @@ function ArticleHeader({ post }: { post: BlogPost }) {
  */
 function ArticleContent({ post }: { post: BlogPost }) {
   return (
-    <div className="py-20">
+    <div className="py-16 sm:py-20">
       <div className="max-w-[720px] mx-auto px-6">
         {/* Main article prose section */}
-        <div className="article-content prose prose-invert max-w-none space-y-6">
+        <div className="article-content prose prose-invert prose-neutral max-w-none prose-headings:scroll-mt-28 prose-headings:tracking-tight prose-h2:text-3xl prose-h3:text-2xl prose-p:text-[17px] prose-p:leading-8 prose-li:text-[16px] prose-li:leading-7 prose-code:text-[0.9em] prose-pre:border prose-pre:border-neutral-800 prose-pre:bg-neutral-950/80 space-y-6">
           {post.content}
         </div>
 
@@ -127,7 +127,7 @@ function ArticleContent({ post }: { post: BlogPost }) {
 function TakeawaysSection({ takeaways }: { takeaways: string[] }) {
   return (
     <section>
-      <h2 className="text-3xl text-white mb-6">Key Takeaways</h2>
+      <h2 className="text-3xl text-white mb-6 tracking-tight">Key Takeaways</h2>
       <ul className="space-y-4 text-neutral-400">
         {takeaways.map((point, i) => (
           <li key={i} className="text-base leading-relaxed">
@@ -146,7 +146,7 @@ function TakeawaysSection({ takeaways }: { takeaways: string[] }) {
 function ImprovementsSection({ improvements }: { improvements: string[] }) {
   return (
     <section className="mt-16">
-      <h2 className="text-3xl text-white mb-6">Future Improvements</h2>
+      <h2 className="text-3xl text-white mb-6 tracking-tight">Future Improvements</h2>
       <ul className="space-y-4 text-neutral-400">
         {improvements.map((point, i) => (
           <li key={i} className="text-base leading-relaxed">
@@ -166,7 +166,7 @@ function ArticleFooter() {
   return (
     <div className="max-w-[720px] mx-auto px-6 mt-20 pt-10 border-t border-neutral-800 pb-20">
       <Link
-        href="/blog"
+        href="/engineering-notes"
         className="text-neutral-400 hover:text-white text-sm uppercase tracking-widest transition-colors duration-200"
       >
         ← Back to all articles

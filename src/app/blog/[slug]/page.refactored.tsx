@@ -49,7 +49,7 @@ export async function generateMetadata(
   }
 
   const baseUrl = "https://tushardevx01.dev";
-  const articleUrl = `${baseUrl}/blog/${slug}`;
+  const articleUrl = `${baseUrl}/engineering-notes/${slug}`;
 
   return {
     title: `${post.title} — Tushar DevX`,

@@ -22,14 +22,22 @@ export const Hero = () => {
 
       <div className="max-w-full sm:max-w-7xl mx-auto w-full relative z-10">
         <motion.div
-          className="max-w-4xl space-y-8"
+          className="max-w-4xl space-y-9"
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
         >
-          <div className="space-y-6">
+          <div className="space-y-5">
+            <motion.p
+              className={`${mono.className} text-xs sm:text-sm uppercase tracking-[0.2em] text-white/45`}
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.12 }}
+            >
+              Engineering • Product • Infrastructure
+            </motion.p>
             <motion.h1
-              className={`${quentine.className} text-5xl md:text-7xl lg:text-8xl font-bold`}
+              className={`${quentine.className} text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.95]`}
               style={{ color: "hsl(var(--primary))" }}
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -47,7 +55,7 @@ export const Hero = () => {
             </motion.h1>
 
             <motion.p
-              className={`${mono.className} text-lg md:text-xl`}
+              className={`${mono.className} text-base md:text-lg tracking-wide`}
               style={{ color: "hsl(var(--secondary))" }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -57,7 +65,7 @@ export const Hero = () => {
             </motion.p>
 
             <motion.p
-              className="text-base md:text-lg max-w-2xl leading-relaxed"
+              className="text-base md:text-lg max-w-2xl leading-relaxed text-balance"
               style={{ color: "hsl(var(--foreground) / 0.8)" }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -68,7 +76,7 @@ export const Hero = () => {
           </div>
 
           <motion.div
-            className="flex flex-col sm:flex-row gap-4"
+            className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.8 }}
