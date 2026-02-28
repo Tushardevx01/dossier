@@ -1,105 +1,83 @@
 # Tushardevx01 Portfolio
 
-A modern, responsive portfolio website built with Next.js, showcasing my skills, projects, and experience as a developer.
+Modern personal portfolio built with Next.js 16, TypeScript, and Tailwind CSS.
 
-## 🚀 Features
+## Features
 
-- **Responsive Design**: Optimized for all devices using Tailwind CSS
-- **Smooth Animations**: Powered by Motion library for engaging user interactions
-- **Contact Form**: Integrated email functionality using Nodemailer
-- **SEO Optimized**: Includes structured data and meta tags
-- **Performance Focused**: Built with Next.js for optimal loading speeds
-- **TypeScript**: Fully typed for better development experience
+- Responsive single-page experience with dedicated pages for resume and engineering notes.
+- Contact API endpoint with validation, sanitization, and rate-limiting.
+- SEO support via metadata, sitemap, robots, and structured data.
+- Lightweight rendering strategy with lazy-loaded sections and reduced client overhead.
 
-## 🛠️ Tech Stack
+## Tech Stack
 
-- **Framework**: Next.js 16
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **Animations**: Motion
-- **Email**: Nodemailer
-- **Icons**: React Icons
-- **UI Components**: Radix UI
-- **Validation**: Validator.js
+- Next.js 16 (App Router)
+- TypeScript
+- Tailwind CSS
+- Motion
+- Nodemailer + React Email
+- Validator.js
 
-## 📦 Installation
+## Getting Started
 
-1. Clone the repository:
+1. Clone and install dependencies:
 
    ```bash
    git clone https://github.com/yourusername/tushardevx01.git
    cd tushardevx01
-   ```
-
-2. Install dependencies:
-
-   ```bash
    npm install
    ```
 
-3. Set up environment variables:
-
-   Create a `.env.local` file in the root directory and add your email configuration:
+2. Create `.env.local` in the project root:
 
    ```env
-   EMAIL_USER=your-email@example.com
-   EMAIL_PASS=your-email-password
-   EMAIL_TO=your-receiving-email@example.com
+   QEV_API_KEY=your_qev_api_key
+   email_from=your_email@gmail.com
+   email_password=your_app_password
+   NEXT_PUBLIC_GITHUB_COMMIT_GRAPH_URL=
    ```
 
-4. Run the development server:
+3. Start development:
 
    ```bash
    npm run dev
    ```
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser.
+4. Open `http://localhost:3000`.
 
-## 📜 Scripts
+## Scripts
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
+- `npm run dev` — start development server
+- `npm run build` — build for production
+- `npm run start` — run production server
+- `npm run lint` — run lint checks
 
-## 📁 Project Structure
+## Project Structure
 
 ```text
 src/
-├── app/                 # Next.js app directory
-│   ├── (main)/         # Main page
-│   ├── api/            # API routes
-│   ├── resume/         # Resume page
-│   └── ...
-├── components/         # Reusable components
-│   ├── Cards/         # Card components
-│   ├── common/        # Common components
-│   ├── sections/      # Page sections
-│   └── ui/            # UI components
-├── constant/           # Constants and data
-└── lib/               # Utility functions
+├── app/                 # Routes, metadata, sitemap, robots, API
+├── components/          # UI, common, cards, sections
+├── constant/            # Static profile/content constants
+├── data/                # Engineering note content
+├── hooks/               # Client hooks
+├── lib/                 # Utilities, env handling, loaders
+└── types/               # Type definitions
 ```
 
-## 🎨 Customization
+## Performance Notes
 
-1. **Personal Information**: Update `src/constant/self.ts` with your details
-2. **Projects**: Modify `src/constant/projects.ts` to showcase your work
-3. **Skills**: Edit `src/constant/skillsData.tsx` for your skill set
-4. **Experience**: Update `src/constant/experience.ts` with your work history
-5. **Styling**: Customize Tailwind config in `tailwind.config.js`
+- Background rendering is static (no unnecessary client-side listeners).
+- Home sections are dynamically imported to keep initial payload smaller.
+- Global client runtime is minimized by mounting toast UI only where needed.
+- Font payload is trimmed to practical weights.
 
-## 📧 Contact
+## Security Notes
 
-Feel free to reach out through the contact form on the website or connect with me on:
+- Never commit real secrets.
+- Rotate keys immediately if any secret is exposed.
+- Keep sensitive values only in local/private environment files.
 
-- LinkedIn: [Your LinkedIn]
-- GitHub: [Your GitHub]
-- Email: [Your Email]
+## License
 
-## 📄 License
-
-This project is private and not licensed for public use.
-
-## 🤝 Contributing
-
-This is a personal portfolio project. Contributions are not accepted at this time.
+Private project. Not licensed for public reuse.
