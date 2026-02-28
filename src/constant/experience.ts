@@ -18,6 +18,24 @@ export const experienceData = [
     ],
     url: "https://0day-iota.vercel.app/",
   },
+{
+    role: "Full Stack web developer",
+    year: "Feb'26 - Present",
+    description: [
+  "The official Computer Science Club of Adamas University, built by sharp minds and passionate hackers.",
+  "Empowering students to design, build, and scale impactful technology through collaboration and innovation.",
+  "Driving technical excellence via projects, hackathons, open-source contributions, and continuous learning."
+],
+    company: "CYCODERS",
+    technologies: [
+      "TypeScript",
+      "Node.js",
+      "supabase",
+      "Git",
+      "Vercel",
+    ],
+    url: "https://cycoder-au.vercel.app/",
+  },
   // {
   //   role: "Full Stack Developer",
   //   year: "June'25 - Jan'26",
