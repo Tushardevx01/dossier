@@ -1,6 +1,6 @@
 export const experienceData = [
   {
-    role: "Full Stack Developer",
+    role: "Full Stack web developer",
     year: "Feb'26 - Present",
     description: [
       "Building and maintaining web applications using Next.js, React, and Node.js.",
