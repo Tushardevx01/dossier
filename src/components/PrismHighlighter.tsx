@@ -8,15 +8,15 @@ async function loadPrism() {
   if (!prismBootPromise) {
     prismBootPromise = (async () => {
       const prismModule = await import("prismjs");
-      await Promise.all([
-        import("prismjs/components/prism-typescript"),
-        import("prismjs/components/prism-javascript"),
-        import("prismjs/components/prism-jsx"),
-        import("prismjs/components/prism-tsx"),
-        import("prismjs/components/prism-sql"),
-        import("prismjs/components/prism-bash"),
-        import("prismjs/components/prism-hcl"),
-      ]);
+
+      await import("prismjs/components/prism-javascript");
+      await import("prismjs/components/prism-jsx");
+      await import("prismjs/components/prism-typescript");
+      await import("prismjs/components/prism-tsx");
+      await import("prismjs/components/prism-sql");
+      await import("prismjs/components/prism-bash");
+      await import("prismjs/components/prism-hcl");
+
       return prismModule;
     })();
   }
@@ -50,7 +50,17 @@ export function PrismHighlighter({ slug, children }: PrismHighlighterProps) {
 
       requestAnimationFrame(() => {
         if (!cancelled && containerRef.current) {
-          prismModule.highlightAllUnder(containerRef.current);
+          try {
+            prismModule.highlightAllUnder(containerRef.current);
+          } catch {
+            const blocks = containerRef.current.querySelectorAll("pre code");
+            blocks.forEach((block) => {
+              if (!block.className.includes("language-")) {
+                block.className = `${block.className} language-text`.trim();
+              }
+            });
+            prismModule.highlightAllUnder(containerRef.current);
+          }
         }
       });
     };

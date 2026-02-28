@@ -72,7 +72,7 @@ function ScrollPercentageIndicator({ percentage }: { percentage: number }) {
  */
 function ArticleHeader({ post }: { post: ArticlePost }) {
   return (
-    <div className="pt-24 sm:pt-28 pb-14 sm:pb-16 border-b border-neutral-800">
+    <div className="pt-24 sm:pt-28 pb-14 sm:pb-16">
       <div className="max-w-[720px] mx-auto px-4 sm:px-6">
         <h1
           className={`${nasalization.className} text-3xl sm:text-5xl font-semibold text-white leading-tight`}
