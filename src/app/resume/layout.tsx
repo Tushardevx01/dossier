@@ -3,31 +3,16 @@ import { resumeKeywords } from "@/constant";
 import { generateResumeStructuredData } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  title: "Resume - Tushar kanti Dey",
+  title: "Resume - Tushar Kanti Dey",
   description:
-    "View and download Tushar kanti Dey's professional resume. Student developer with expertise in React, Next.js, and full-stack development.",
+    "View and download Tushar Kanti Dey's professional resume. Student developer with expertise in React, Next.js, and full-stack development.",
   keywords: resumeKeywords,
   openGraph: {
-    title: "Resume - Tushar kanti Dey",
+    title: "Resume - Tushar Kanti Dey",
     description:
-      "View and download Tushar kanti Dey's professional resume featuring his experience and skills as a student developer.",
+      "View and download Tushar Kanti Dey's professional resume featuring his experience and skills as a student developer.",
     url: "https://tushardevx01.vercel.app",
-    siteName: "Tushar kanti Dey",
-    images: [
-      {
-        url: "/images/thumbnail.png",
-        width: 1200,
-        height: 630,
-        alt: "Tushar kanti Dey Resume",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Resume - Tushar kanti Dey",
-    description:
-      "View Tushar kanti Dey's professional resume and experience as a student developer.",
-    images: ["/images/thumbnail.png"],
+    siteName: "Tushar Kanti Dey",
   },
 };
 

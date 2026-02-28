@@ -14,17 +14,17 @@ import {
 } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
-  applicationName: "Tushar kanti Dey",
-  title: "Tushar kanti Dey | Full Stack Developer & AI Engineer",
+  applicationName: "Tushar Kanti Dey",
+  title: "Tushar Kanti Dey | Full Stack Developer & AI Engineer",
   description:
-    "Tushar kanti Dey is a student developer passionate about building modern web apps with Next.js, React, and open-source tools. Explore his projects, experiments, and developer portfolio.",
+    "Tushar Kanti Dey is a student developer passionate about building modern web apps with Next.js, React, and open-source tools. Explore his projects, experiments, and developer portfolio.",
   authors: [
     {
-      name: "Tushar kanti Dey",
+      name: "Tushar Kanti Dey",
       url: "https://tushardevx01.vercel.app",
     },
   ],
-  creator: "Tushar kanti Dey",
+  creator: "Tushar Kanti Dey",
   referrer: "origin-when-cross-origin",
   category: "Portfolio",
   classification: "Software Development",
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
   },
   appleWebApp: {
     capable: true,
-    title: "Tushar kanti Dey",
+    title: "Tushar Kanti Dey",
     statusBarStyle: "black-translucent",
   },
   formatDetection: {
@@ -91,32 +91,15 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
 
   openGraph: {
-    title: "Tushar kanti Dey",
+    title: "Tushar Kanti Dey",
     description:
-      "Explore Tushar kanti Dey’s portfolio featuring projects in React, Next.js, AI, and developer tools. Discover a world of creative web applications and open-source experiments.",
+      "Explore Tushar Kanti Dey’s portfolio featuring projects in React, Next.js, AI, and developer tools. Discover a world of creative web applications and open-source experiments.",
     url: "https://tushardevx01.vercel.app",
-    siteName: "Tushar kanti Dey",
+    siteName: "Tushar Kanti Dey",
     images: [
-      {
-        url: "/images/thumbnail.png",
-        width: 1200,
-        height: 630,
-        alt: "Tushar kanti Dey Portfolio Thumbnail",
-      },
     ],
-    locale: "en_US",
+    locale: "Kolkata",
     type: "website",
-  },
-
-
-  twitter: {
-    card: "summary_large_image",
-    title: "Tushar kanti Dey",
-    description:
-      "Check out Tushar kanti Dey’s personal portfolio and dev projects using Next.js, React, Tailwind, and modern web tech.",
-    images: ["/images/thumbnail.png"],
-    creator: "@Tushardevx01",
-    site: "@Tushardevx01",
   },
 };
 

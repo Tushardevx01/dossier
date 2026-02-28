@@ -1,5 +1,5 @@
 export const selfData = {
-  name: "Tushar kanti Dey",
+  name: "Tushar Kanti Dey",
   first_name: "Tushar",
   middle_name: "Kanti",
   last_name: "Dey",
@@ -38,7 +38,7 @@ export const selfData = {
   socials_username: {
     github: "Tusharxhub",
     instagram: "Tushardevx01",
-    linkedin: "tushar-kanti-dey",
+    linkedin: "tushardevx01",
     twitter: "tushardevX01",
     discord: "tushardevx01",
     whatsapp: "+91 629 528 9626",

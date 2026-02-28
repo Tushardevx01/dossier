@@ -219,7 +219,7 @@ export async function POST(request: Request) {
   );
 
   const message = {
-    from: `"Tushar kanti Dey - Contact Team" <${env.EMAIL_FROM}>`,
+    from: `"Tushar Kanti Dey - Contact Team" <${env.EMAIL_FROM}>`,
     to: {
       name: sanitizedName,
       address: sanitizedEmail,

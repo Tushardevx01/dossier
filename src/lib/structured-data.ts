@@ -43,10 +43,10 @@ export function generateWebsiteStructuredData() {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "Tushar kanti Dey - Portfolio",
+    name: "Tushar Kanti Dey - Portfolio",
     url: "https://tushardevx01.vercel.app",
     description:
-      "Tushar kanti Dey's portfolio featuring projects in React, Next.js, and modern web development",
+      "Tushar Kanti Dey's portfolio featuring projects in React, Next.js, and modern web development",
     author: {
       "@type": "Person",
       name: selfData.name,
@@ -89,9 +89,9 @@ export function generateResumeStructuredData() {
   return {
     "@context": "https://schema.org",
     "@type": "DigitalDocument",
-    name: "Tushar kanti Dey Resume",
+    name: "Tushar Kanti Dey Resume",
     description:
-      "Professional resume of Tushar kanti Dey - Student Developer specializing in Full-Stack Web Development",
+      "Professional resume of Tushar Kanti Dey - Student Developer specializing in Full-Stack Web Development",
     url: "https://tushardevx01.vercel.app/resume",
     author: {
       "@type": "Person",

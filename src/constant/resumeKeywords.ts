@@ -1,8 +1,8 @@
 export const resumeKeywords = [
 
-  "Tushar kanti Dey",
-  "Tushar kanti Dey resume",
-  "Tushar kanti Dey CV",
+  "Tushar Kanti Dey",
+  "Tushar Kanti Dey resume",
+  "Tushar Kanti Dey CV",
   "Software Developer",
   "Full Stack Developer",
   "Frontend Developer",

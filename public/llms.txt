@@ -1,7 +1,7 @@
-# Tushar kanti Dey - Student Developer Portfolio
+# Tushar Kanti Dey - Student Developer Portfolio
 
 ## About
-Tushar kanti Dey is a Student Developer and Creative Coder based in Kolkata, India. He specializes in Full-Stack Web Development, primarily using the React and Next.js ecosystem.
+Tushar Kanti Dey is a Student Developer and Creative Coder based in Kolkata, India. He specializes in Full-Stack Web Development, primarily using the React and Next.js ecosystem.
 
 ## Skills
 - **Languages**: JavaScript, TypeScript, Python, Java, C/C++, SQL
@@ -15,7 +15,7 @@ Tushar kanti Dey is a Student Developer and Creative Coder based in Kolkata, Ind
 ## Contact
 - **Email**: thetushardev0@gmail.com
 - **GitHub**: https://github.com/Tusharxhub
-- **LinkedIn**: https://linkedin.com/in/tushar-kanti-dey
+- **LinkedIn**: https://linkedin.com/in/tushardevx01
 - **Twitter**: https://twitter.com/tushardevx01
 
 ## Content Structure

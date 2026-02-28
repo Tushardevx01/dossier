@@ -1,9 +1,9 @@
 const names = [
-  "Tushar kanti Dey",
-  "Tushar kanti Dey Portfolio",
+  "Tushar Kanti Dey",
+  "Tushar Kanti Dey Portfolio",
   "Tushar",
-  "Tushar kanti Dey Adamas University",
-  "Tushar kanti Dey Kolkata",
+  "Tushar Kanti Dey Adamas University",
+  "Tushar Kanti Dey Kolkata",
 ];
 
 const roles = [
