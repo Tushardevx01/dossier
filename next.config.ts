@@ -118,6 +118,17 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
+      // Legacy /blog → /engineering-notes (SEO-safe permanent redirects)
+      {
+        source: "/blog",
+        destination: "/engineering-notes",
+        permanent: true,
+      },
+      {
+        source: "/blog/:slug",
+        destination: "/engineering-notes/:slug",
+        permanent: true,
+      },
       {
         source: "/home",
         destination: "/",

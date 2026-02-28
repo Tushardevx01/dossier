@@ -1,5 +1,5 @@
 /**
- * Blog Article Page Component
+ * Article Page Component
  * 
  * Extracted into a separate component for:
  * 1. Better separation of concerns (page component vs rendering)
@@ -15,21 +15,21 @@ import Link from "next/link";
 import { nasalization } from "@/app/fonts";
 import { PrismHighlighter } from "@/components/PrismHighlighter";
 import { TableOfContents } from "@/components/TableOfContents";
-import { BlogPost } from "@/lib/blogLoader";
+import { ArticlePost } from "@/lib/articleLoader";
 import { useScrollProgress } from "@/hooks/useScrollProgress";
 
 const TOC_HEADING_LEVELS = [3];
 
-interface BlogArticlePageProps {
-  post: BlogPost;
+interface ArticlePageProps {
+  post: ArticlePost;
   slug: string;
 }
 
 /**
- * Blog Article Renderer
+ * Article Renderer
  * Displays the full article with all interactive features
  */
-export function BlogArticlePage({ post, slug }: BlogArticlePageProps) {
+export function ArticlePage({ post, slug }: ArticlePageProps) {
   const scrollPercentage = useScrollProgress();
 
   return (
@@ -70,7 +70,7 @@ function ScrollPercentageIndicator({ percentage }: { percentage: number }) {
  * Article Header Section
  * Displays title, subtitle, and metadata
  */
-function ArticleHeader({ post }: { post: BlogPost }) {
+function ArticleHeader({ post }: { post: ArticlePost }) {
   return (
     <div className="pt-24 sm:pt-28 pb-14 sm:pb-16 border-b border-neutral-800">
       <div className="max-w-[720px] mx-auto px-6">
@@ -98,7 +98,7 @@ function ArticleHeader({ post }: { post: BlogPost }) {
  * Main Article Content
  * Includes content, takeaways, and improvements sections
  */
-function ArticleContent({ post }: { post: BlogPost }) {
+function ArticleContent({ post }: { post: ArticlePost }) {
   return (
     <div className="py-16 sm:py-20">
       <div className="max-w-[720px] mx-auto px-6">
@@ -160,7 +160,7 @@ function ImprovementsSection({ improvements }: { improvements: string[] }) {
 
 /**
  * Article Footer
- * Navigation back to blog list
+ * Navigation back to engineering notes
  */
 function ArticleFooter() {
   return (

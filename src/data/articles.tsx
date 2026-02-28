@@ -1,7 +1,7 @@
 import React from "react";
-import type { BlogArticle } from "@/types/blog";
+import type { Article } from "@/types/article";
 
-export const blogData: Record<string, BlogArticle> = {
+export const articlesData: Record<string, Article> = {
   "structuring-scalable-fullstack": {
     title: "Structuring a Scalable Full-Stack Project",
     subtitle: "From Next.js to Deployment",

@@ -1,10 +1,10 @@
 import { MetadataRoute } from "next";
-import { generateBlogStaticParams } from "@/lib/blogLoader";
+import { generateArticleStaticParams } from "@/lib/articleLoader";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://tushardevx01.vercel.app";
   const lastModified = new Date();
-  const engineeringNotesSlugs = generateBlogStaticParams();
+  const engineeringNotesSlugs = generateArticleStaticParams();
 
   const sections = [
     { id: "", priority: 1.0 },

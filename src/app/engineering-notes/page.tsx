@@ -1,10 +1,10 @@
 import { nasalization } from "@/app/fonts";
-import { BlogListClient } from "@/components/BlogListClient";
-import { getAllBlogMetadata, getBlogCategories } from "@/lib/blogLoader";
+import { NotesListClient } from "@/components/NotesListClient";
+import { getAllArticles, getArticleCategories } from "@/lib/articleLoader";
 
 export default function EngineeringNotesPage() {
-  const posts = getAllBlogMetadata();
-  const categories = getBlogCategories();
+  const posts = getAllArticles();
+  const categories = getArticleCategories();
 
   return (
     <div className="min-h-screen bg-black">
@@ -19,7 +19,7 @@ export default function EngineeringNotesPage() {
         </p>
       </section>
 
-      <BlogListClient posts={posts} categories={categories} />
+      <NotesListClient posts={posts} categories={categories} />
     </div>
   );
 }

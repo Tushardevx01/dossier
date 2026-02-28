@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { BlogArticlePage } from "@/components/BlogArticlePage";
-import { generateBlogStaticParams, getBlogPost } from "@/lib/blogLoader";
+import { ArticlePage } from "@/components/ArticlePage";
+import { generateArticleStaticParams, getArticle } from "@/lib/articleLoader";
 import "prismjs/themes/prism-tomorrow.css";
 
 interface GenerateMetadataParams {
@@ -13,7 +13,7 @@ export async function generateMetadata(
   { params }: GenerateMetadataParams
 ): Promise<Metadata> {
   const { slug } = await params;
-  const article = getBlogPost(slug);
+  const article = getArticle(slug);
 
   if (!article) {
     return {
@@ -47,7 +47,7 @@ export async function generateMetadata(
 }
 
 export function generateStaticParams() {
-  return generateBlogStaticParams();
+  return generateArticleStaticParams();
 }
 
 export default async function EngineeringNotesArticlePage({
@@ -56,11 +56,11 @@ export default async function EngineeringNotesArticlePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const article = getBlogPost(slug);
+  const article = getArticle(slug);
 
   if (!article) {
     notFound();
   }
 
-  return <BlogArticlePage post={article} slug={slug} />;
+  return <ArticlePage post={article} slug={slug} />;
 }

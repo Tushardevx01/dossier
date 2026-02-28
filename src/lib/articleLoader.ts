@@ -1,27 +1,27 @@
 /**
- * Blog Data Layer
+ * Article Data Layer
  *
- * Single source of truth for all blog post access.
- * Types are imported from @/types/blog — never redefined here.
+ * Single source of truth for all article access.
+ * Types are imported from @/types/article — never redefined here.
  *
  * Performance: metadata list is computed once per process (module-level cache).
  * At 100+ articles this avoids re-mapping on every page render.
  */
 
-import { blogData } from "@/data/blogData";
+import { articlesData } from "@/data/articles";
 import type {
-  BlogMetadata,
-  BlogPost,
-  BlogCategoryFilter,
-  BlogDifficulty,
-} from "@/types/blog";
+  ArticleMetadata,
+  ArticlePost,
+  CategoryFilter,
+  ArticleDifficulty,
+} from "@/types/article";
 
 // Re-export types so consumers can import from one place
-export type { BlogMetadata, BlogPost, BlogCategoryFilter };
+export type { ArticleMetadata, ArticlePost, CategoryFilter };
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
-function calculateDifficulty(readTime: number): BlogDifficulty {
+function calculateDifficulty(readTime: number): ArticleDifficulty {
   if (readTime <= 8) return "Beginner";
   if (readTime <= 12) return "Intermediate";
   return "Advanced";
@@ -29,13 +29,13 @@ function calculateDifficulty(readTime: number): BlogDifficulty {
 
 // ─── Module-level cache ─────────────────────────────────────────────────────
 
-let _metadataCache: BlogMetadata[] | null = null;
-let _categoryCache: BlogCategoryFilter[] | null = null;
+let _metadataCache: ArticleMetadata[] | null = null;
+let _categoryCache: CategoryFilter[] | null = null;
 
-function buildMetadataCache(): BlogMetadata[] {
+function buildMetadataCache(): ArticleMetadata[] {
   if (_metadataCache) return _metadataCache;
 
-  _metadataCache = Object.entries(blogData).map(([slug, article], index) => ({
+  _metadataCache = Object.entries(articlesData).map(([slug, article], index) => ({
     slug,
     id: String(index + 1),
     title: article.title,
@@ -52,17 +52,17 @@ function buildMetadataCache(): BlogMetadata[] {
 
 // ─── Public API ─────────────────────────────────────────────────────────────
 
-/** Get all blog posts metadata (cached — safe for repeated calls). */
-export function getAllBlogMetadata(): BlogMetadata[] {
+/** Get all article metadata (cached — safe for repeated calls). */
+export function getAllArticles(): ArticleMetadata[] {
   return buildMetadataCache();
 }
 
-/** Get a single blog post by slug. Returns null if not found. */
-export function getBlogPost(slug: string): BlogPost | null {
-  const article = blogData[slug];
+/** Get a single article by slug. Returns null if not found. */
+export function getArticle(slug: string): ArticlePost | null {
+  const article = articlesData[slug];
   if (!article) return null;
 
-  const allSlugs = Object.keys(blogData);
+  const allSlugs = Object.keys(articlesData);
   const id = String(allSlugs.indexOf(slug) + 1);
 
   return {
@@ -82,29 +82,29 @@ export function getBlogPost(slug: string): BlogPost | null {
 }
 
 /** Get all available categories (cached). */
-export function getBlogCategories(): BlogCategoryFilter[] {
+export function getArticleCategories(): CategoryFilter[] {
   if (_categoryCache) return _categoryCache;
 
   const categories = new Set(
-    Object.values(blogData).map((article) => article.category)
+    Object.values(articlesData).map((article) => article.category)
   );
   _categoryCache = ["All", ...Array.from(categories)];
   return _categoryCache;
 }
 
-/** Total published post count. */
-export function getTotalBlogCount(): number {
-  return Object.keys(blogData).length;
+/** Total published article count. */
+export function getTotalArticleCount(): number {
+  return Object.keys(articlesData).length;
 }
 
 /** Generate static params for Next.js SSG. */
-export function generateBlogStaticParams(): { slug: string }[] {
-  return Object.keys(blogData).map((slug) => ({ slug }));
+export function generateArticleStaticParams(): { slug: string }[] {
+  return Object.keys(articlesData).map((slug) => ({ slug }));
 }
 
-/** Filter posts by category. */
-export function filterBlogByCategory(category: BlogCategoryFilter): BlogMetadata[] {
-  const allPosts = getAllBlogMetadata();
+/** Filter articles by category. */
+export function filterArticlesByCategory(category: CategoryFilter): ArticleMetadata[] {
+  const allPosts = getAllArticles();
   if (category === "All") return allPosts;
   return allPosts.filter((post) => post.category === category);
 }

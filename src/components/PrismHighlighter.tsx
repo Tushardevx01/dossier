@@ -35,7 +35,7 @@ interface PrismHighlighterProps {
  * 
  * This handles:
  * - Initial highlighting on mount
- * - Re-highlighting when navigating between blog posts
+ * - Re-highlighting when navigating between articles
  * - Proper DOM mutation for new content
  */
 export function PrismHighlighter({ slug, children }: PrismHighlighterProps) {

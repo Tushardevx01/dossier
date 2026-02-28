@@ -3,16 +3,16 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
-import type { BlogCategoryFilter, BlogMetadata } from "@/lib/blogLoader";
-import { DIFFICULTY_COLORS } from "@/types/blog";
+import type { CategoryFilter, ArticleMetadata } from "@/lib/articleLoader";
+import { DIFFICULTY_COLORS } from "@/types/article";
 
-interface BlogListClientProps {
-  posts: BlogMetadata[];
-  categories: BlogCategoryFilter[];
+interface NotesListClientProps {
+  posts: ArticleMetadata[];
+  categories: CategoryFilter[];
 }
 
-export function BlogListClient({ posts, categories }: BlogListClientProps) {
-  const [selectedCategory, setSelectedCategory] = useState<BlogCategoryFilter>("All");
+export function NotesListClient({ posts, categories }: NotesListClientProps) {
+  const [selectedCategory, setSelectedCategory] = useState<CategoryFilter>("All");
 
   const filteredPosts = useMemo(() => {
     if (selectedCategory === "All") {

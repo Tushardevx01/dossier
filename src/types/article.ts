@@ -1,12 +1,16 @@
 /**
- * Shared Blog Type Definitions
+ * Shared Article Type Definitions
  *
- * Single source of truth for all blog-related types.
+ * Single source of truth for all engineering-notes types.
  * Consumed by: data layer, components, route files.
+ *
+ * Domain language:
+ *   "article"            — a single engineering note
+ *   "engineering notes"  — the collection / section name
  */
 
 /** Supported article categories */
-export type BlogCategory =
+export type ArticleCategory =
   | "Architecture"
   | "DevOps"
   | "Full-Stack"
@@ -14,21 +18,21 @@ export type BlogCategory =
   | "Infrastructure";
 
 /** Difficulty levels derived from read time */
-export type BlogDifficulty = "Beginner" | "Intermediate" | "Advanced";
+export type ArticleDifficulty = "Beginner" | "Intermediate" | "Advanced";
 
 /** Category filter including the "All" option */
-export type BlogCategoryFilter = "All" | BlogCategory;
+export type CategoryFilter = "All" | ArticleCategory;
 
 /**
  * Raw article shape stored in the data layer.
  * This is the authoring contract — what writers provide.
  */
-export interface BlogArticle {
+export interface Article {
   title: string;
   subtitle: string;
   date: string;
   readTime: number;
-  category: BlogCategory;
+  category: ArticleCategory;
   description: string;
   content: React.ReactNode;
   whatILearned: string[];
@@ -39,29 +43,29 @@ export interface BlogArticle {
  * Lightweight metadata for list pages and SEO.
  * Never includes content — keeps list renders fast.
  */
-export interface BlogMetadata {
+export interface ArticleMetadata {
   slug: string;
   id: string;
   title: string;
   subtitle: string;
   date: string;
   readTime: number;
-  category: BlogCategory;
+  category: ArticleCategory;
   description: string;
-  difficulty: BlogDifficulty;
+  difficulty: ArticleDifficulty;
 }
 
 /**
- * Full post including content — used on article detail page.
+ * Full article including content — used on the detail page.
  */
-export interface BlogPost extends BlogMetadata {
+export interface ArticlePost extends ArticleMetadata {
   content: React.ReactNode;
   whatILearned: string[];
   improvements: string[];
 }
 
 /** Difficulty color mapping for UI components */
-export const DIFFICULTY_COLORS: Record<BlogDifficulty, string> = {
+export const DIFFICULTY_COLORS: Record<ArticleDifficulty, string> = {
   Beginner: "text-green-400/70",
   Intermediate: "text-blue-400/70",
   Advanced: "text-orange-400/70",
