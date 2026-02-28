@@ -14,7 +14,6 @@ interface BlogPost {
   category: "Architecture" | "DevOps" | "Full-Stack" | "Performance" | "Infrastructure";
   readTime: number;
   difficulty: "Beginner" | "Intermediate" | "Advanced";
-  featured?: boolean;
   slug: string;
 }
 
@@ -27,7 +26,6 @@ const blogPosts: BlogPost[] = [
     category: "Full-Stack",
     readTime: 12,
     difficulty: "Intermediate",
-    featured: true,
     slug: "structuring-scalable-fullstack",
   },
   {
@@ -99,9 +97,6 @@ export default function BlogPage() {
       ? blogPosts
       : blogPosts.filter((post) => post.category === selectedCategory);
 
-  const featuredPost = filteredPosts.find((post) => post.featured);
-  const regularPosts = filteredPosts.filter((post) => !post.featured);
-
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -168,59 +163,9 @@ export default function BlogPage() {
         </motion.div>
       </section>
 
-      {/* Featured Article */}
-      {featuredPost && (
-        <section className="max-w-4xl mx-auto px-4 sm:px-6 mb-12 sm:mb-16">
-          <motion.div
-            key={featuredPost.id}
-            variants={itemVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            <Link href={`/blog/${featuredPost.slug}`}>
-              <article className="group cursor-pointer border border-neutral-800 rounded-lg p-6 sm:p-8 hover:border-neutral-700 hover:bg-neutral-950/30 transition-all duration-300 ease-out hover:-translate-y-1">
-                <div className="mb-3">
-                  <span className="text-xs uppercase tracking-widest text-neutral-500 font-semibold">Featured</span>
-                </div>
-
-                <div className="space-y-4">
-                  <h2 className="text-3xl sm:text-4xl font-semibold text-white group-hover:text-neutral-200 transition-colors duration-200 leading-tight">
-                    {featuredPost.title}
-                  </h2>
-                  <p className="text-base sm:text-lg text-neutral-400 leading-relaxed max-w-3xl">
-                    {featuredPost.summary}
-                  </p>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-4 mt-6 pt-6 border-t border-neutral-800">
-                  <span className="text-xs uppercase tracking-widest text-neutral-500">{featuredPost.date}</span>
-                  <span className="text-xs uppercase tracking-widest text-neutral-500">
-                    {featuredPost.readTime} min read
-                  </span>
-                  <span className={`text-xs uppercase tracking-widest font-semibold ${difficultyColors[featuredPost.difficulty]}`}>
-                    {featuredPost.difficulty}
-                  </span>
-                  <span className="px-2.5 py-1 rounded text-xs font-medium bg-neutral-900 text-neutral-300">
-                    {featuredPost.category}
-                  </span>
-                  <motion.span
-                    className="ml-auto text-neutral-500 group-hover:text-neutral-300 transition-colors duration-200 flex-shrink-0"
-                    animate={{ x: 0 }}
-                    whileHover={{ x: 3 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    Read →
-                  </motion.span>
-                </div>
-              </article>
-            </Link>
-          </motion.div>
-        </section>
-      )}
-
       {/* Blog Posts List */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 pb-20 sm:pb-28">
-        {regularPosts.length > 0 ? (
+        {filteredPosts.length > 0 ? (
           <motion.div
             key={selectedCategory}
             variants={containerVariants}
@@ -228,7 +173,7 @@ export default function BlogPage() {
             animate="visible"
             className="space-y-6 sm:space-y-8"
           >
-            {regularPosts.map((post, index) => (
+            {filteredPosts.map((post, index) => (
               <motion.div key={post.id} variants={itemVariants}>
                 <Link href={`/blog/${post.slug}`}>
                   <article className="group cursor-pointer border border-neutral-800 rounded-lg p-6 sm:p-8 hover:border-neutral-700 hover:bg-neutral-950/30 transition-all duration-300 ease-out hover:-translate-y-1">
