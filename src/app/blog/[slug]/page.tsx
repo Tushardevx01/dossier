@@ -452,9 +452,7 @@ export default function ArticlePage() {
       {/* Article Header */}
       <div className="bg-black pt-20 sm:pt-28 pb-12 sm:pb-16 border-b border-neutral-800">
         <div className="max-w-2xl mx-auto px-4 sm:px-6">
-          <Link href="/blog" className="text-neutral-500 hover:text-neutral-300 mb-8 inline-block text-xs uppercase tracking-widest font-medium">
-            ← Engineering Notes
-          </Link>
+          
 
           <h1 className={`${nasalization.className} text-4xl sm:text-5xl lg:text-6xl font-semibold text-white mb-4 sm:mb-6 tracking-tight leading-tight`}>
             {article.title}
