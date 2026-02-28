@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { mono, nasalization } from "@/app/fonts";
 import { selfData } from "@/constant";
 
@@ -11,7 +11,13 @@ export const GitHub = () => {
     const isInView = useInView(ref, { once: true, margin: "-80px", amount: 0.2 });
 
     const githubUsername = selfData.socials_username.github;
-    const contributionGraphUrl = `https://github-readme-activity-graph.vercel.app/graph?username=${githubUsername}&radius=16&theme=react&area=true&order=5`;
+    const contributionGraphFallbackUrl = `https://github-readme-activity-graph.vercel.app/graph?username=${githubUsername}&radius=16&theme=react&area=true&order=5`;
+    const configuredGraphUrl = process.env.NEXT_PUBLIC_GITHUB_COMMIT_GRAPH_URL;
+    const initialGraphUrl =
+        typeof configuredGraphUrl === "string" && configuredGraphUrl.trim().length > 0
+            ? configuredGraphUrl
+            : contributionGraphFallbackUrl;
+    const [contributionGraphUrl, setContributionGraphUrl] = useState(initialGraphUrl);
 
     return (
         <section id="github" ref={ref} className="py-24 sm:py-28 relative overflow-hidden">
@@ -98,6 +104,8 @@ export const GitHub = () => {
                             loading="lazy"
                             sizes="(max-width: 768px) 100vw, 900px"
                             style={{ filter: "brightness(0.9) contrast(1.2)" }}
+                            unoptimized
+                            onError={() => setContributionGraphUrl(contributionGraphFallbackUrl)}
                         />
                     </div>
 
