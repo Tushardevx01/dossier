@@ -97,7 +97,7 @@ export const Projects = () => {
                         aria-label={`Open live preview for ${project.name}`}
                         className="inline-flex items-center gap-2 text-sm font-medium text-white border border-neutral-700 px-4 py-2 rounded-full hover:border-neutral-500 hover:bg-white/[0.03] transition-colors"
                       >
-                        View Case Study
+                        View Live Deployment
                         <motion.span variants={arrowVariants} className="inline-block">
                           →
                         </motion.span>
@@ -110,7 +110,7 @@ export const Projects = () => {
                       aria-label={`Open source code for ${project.name}`}
                       className="inline-flex items-center gap-2 text-sm font-medium text-neutral-400 hover:text-neutral-200 transition-colors"
                     >
-                      Source Code
+                      View Architecture
                       <motion.span variants={arrowVariants} className="inline-block">
                         →
                       </motion.span>
