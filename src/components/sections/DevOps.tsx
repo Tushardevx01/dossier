@@ -41,7 +41,7 @@ export const DevOps = () => {
                     transition={{ duration: 0.6 }}
                 >
                     <h2
-                        className={`${nasalization.className} text-4xl md:text-5xl font-bold`}
+                        className={`${nasalization.className} text-3xl sm:text-4xl md:text-5xl font-bold`}
                         style={{ color: "hsl(var(--foreground))" }}
                     >
                         Infrastructure that{" "}
@@ -106,7 +106,7 @@ export const DevOps = () => {
                 >
                     {/* Top bar */}
                     <div
-                        className="flex items-center justify-between px-5 py-3 border-b"
+                        className="flex flex-wrap items-center justify-between gap-3 px-4 sm:px-5 py-3 border-b"
                         style={{ borderColor: "hsl(210 25% 15% / 0.6)" }}
                     >
                         <div className="flex items-center gap-2">
@@ -138,7 +138,7 @@ export const DevOps = () => {
 
                     {/* Pipeline steps */}
                     <div
-                        className="px-5 py-4 border-b flex flex-wrap gap-3 items-center"
+                        className="px-4 sm:px-5 py-4 border-b flex flex-wrap gap-3 items-center"
                         style={{ borderColor: "hsl(210 25% 15% / 0.6)" }}
                     >
                         {pipelineSteps.map((step, i) => (
@@ -170,7 +170,7 @@ export const DevOps = () => {
                     </div>
 
                     {/* Log output */}
-                    <div className="px-5 py-4 space-y-2">
+                    <div className="px-4 sm:px-5 py-4 space-y-2">
                         {logLines.map((line, i) => (
                             <motion.div
                                 key={i}

@@ -21,7 +21,7 @@ export const ContactFormCard = () => {
           borderColor: "hsl(var(--glass-border))",
         }}
       >
-        <div className="relative z-10 p-8 md:p-10 flex flex-col flex-grow">
+        <div className="relative z-10 p-5 sm:p-8 md:p-10 flex flex-col flex-grow">
           <form onSubmit={handleSubmit} className="space-y-6 flex flex-col flex-grow">
             <input
               type="text"
@@ -34,7 +34,7 @@ export const ContactFormCard = () => {
               aria-hidden="true"
             />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}

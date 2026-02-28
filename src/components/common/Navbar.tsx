@@ -12,11 +12,11 @@ export const Navbar = () => {
     <nav
       aria-label="Primary"
       className={`fixed top-4 left-0 right-0 z-50 transition-all duration-300 ease-out ${
-        isScrolled ? "pt-0 px-2 sm:px-4" : "px-2 sm:px-2"
+        isScrolled ? "pt-0 px-2 sm:px-4" : "px-2 sm:px-3"
       } ${isVisible ? "translate-y-0" : "-translate-y-full"}`}
     >
       <div
-        className={`floating-nav rounded-2xl px-4 sm:px-6 py-3 bg-glass-bg transition-all duration-300 max-w-7xl mx-auto ${
+        className={`floating-nav rounded-2xl px-3 sm:px-6 py-2.5 sm:py-3 bg-glass-bg transition-all duration-300 max-w-7xl mx-auto ${
           isScrolled ? "shadow-xl" : "shadow-lg"
         }`}
       >
@@ -44,7 +44,7 @@ export const Navbar = () => {
           <div className="flex items-center gap-2 sm:gap-3">
             <Link
               href="/engineering-notes"
-              className="px-3 sm:px-4 py-2 rounded-xl border border-white/20 hover:border-white/45 text-white transition-colors duration-200 font-medium text-sm"
+              className="px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-xl border border-white/20 hover:border-white/45 text-white transition-colors duration-200 font-medium text-xs sm:text-sm whitespace-nowrap"
             >
               Engineering Notes
             </Link>

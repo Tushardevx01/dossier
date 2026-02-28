@@ -82,7 +82,7 @@ export function TableOfContents({
   }
 
   return (
-    <aside className="hidden xl:block fixed right-10 top-40 w-64 text-sm">
+    <aside className="hidden 2xl:block fixed right-10 top-40 w-64 text-sm">
       <div className="text-xs uppercase tracking-widest text-neutral-500 mb-4 font-semibold">
         On This Page
       </div>

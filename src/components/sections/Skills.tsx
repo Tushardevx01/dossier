@@ -299,11 +299,11 @@ export const Skills = () => {
 
       {/* Ambient background effects */}
       <div
-        className="absolute top-32 left-0 w-96 h-96 bg-gradient-to-r from-purple-500/5 to-transparent rounded-full blur-3xl pointer-events-none"
+        className="absolute top-32 left-0 w-64 h-64 sm:w-96 sm:h-96 bg-gradient-to-r from-purple-500/5 to-transparent rounded-full blur-3xl pointer-events-none"
         style={{ transform: "translateX(-50%)" }}
       />
       <div
-        className="absolute bottom-20 right-0 w-96 h-96 bg-gradient-to-l from-blue-500/5 to-transparent rounded-full blur-3xl pointer-events-none"
+        className="absolute bottom-20 right-0 w-64 h-64 sm:w-96 sm:h-96 bg-gradient-to-l from-blue-500/5 to-transparent rounded-full blur-3xl pointer-events-none"
         style={{ transform: "translateX(50%)" }}
       />
     </section>

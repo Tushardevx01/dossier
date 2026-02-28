@@ -60,7 +60,7 @@ export function ArticlePage({ post, slug }: ArticlePageProps) {
  */
 function ScrollPercentageIndicator({ percentage }: { percentage: number }) {
   return (
-    <div className="fixed top-3 right-6 text-[11px] tracking-wider uppercase text-neutral-500 z-40">
+    <div className="hidden sm:block fixed top-3 right-6 text-[11px] tracking-wider uppercase text-neutral-500 z-40">
       <span>{Math.round(percentage)}</span>%
     </div>
   );
@@ -73,13 +73,13 @@ function ScrollPercentageIndicator({ percentage }: { percentage: number }) {
 function ArticleHeader({ post }: { post: ArticlePost }) {
   return (
     <div className="pt-24 sm:pt-28 pb-14 sm:pb-16 border-b border-neutral-800">
-      <div className="max-w-[720px] mx-auto px-6">
+      <div className="max-w-[720px] mx-auto px-4 sm:px-6">
         <h1
-          className={`${nasalization.className} text-4xl sm:text-5xl font-semibold text-white leading-tight`}
+          className={`${nasalization.className} text-3xl sm:text-5xl font-semibold text-white leading-tight`}
         >
           {post.title}
         </h1>
-        <p className="text-xl sm:text-2xl text-neutral-500 mt-5 leading-relaxed">{post.subtitle}</p>
+        <p className="text-lg sm:text-2xl text-neutral-500 mt-5 leading-relaxed">{post.subtitle}</p>
         <div className="flex gap-4 mt-7 text-neutral-500 text-xs uppercase tracking-widest flex-wrap">
           <time dateTime={post.date}>{post.date}</time>
           <span>•</span>
@@ -101,9 +101,9 @@ function ArticleHeader({ post }: { post: ArticlePost }) {
 function ArticleContent({ post }: { post: ArticlePost }) {
   return (
     <div className="py-16 sm:py-20">
-      <div className="max-w-[720px] mx-auto px-6">
+      <div className="max-w-[720px] mx-auto px-4 sm:px-6">
         {/* Main article prose section */}
-        <div className="article-content prose prose-invert prose-neutral max-w-none prose-headings:scroll-mt-28 prose-headings:tracking-tight prose-h2:text-3xl prose-h3:text-2xl prose-p:text-[17px] prose-p:leading-8 prose-li:text-[16px] prose-li:leading-7 prose-code:text-[0.9em] prose-pre:border prose-pre:border-neutral-800 prose-pre:bg-neutral-950/80 space-y-6">
+        <div className="article-content prose prose-invert prose-neutral max-w-none prose-headings:scroll-mt-28 prose-headings:tracking-tight prose-h2:text-2xl sm:prose-h2:text-3xl prose-h3:text-xl sm:prose-h3:text-2xl prose-p:text-[15px] sm:prose-p:text-[17px] prose-p:leading-7 sm:prose-p:leading-8 prose-li:text-[15px] sm:prose-li:text-[16px] prose-li:leading-7 prose-code:text-[0.9em] prose-pre:border prose-pre:border-neutral-800 prose-pre:bg-neutral-950/80 space-y-6">
           {post.content}
         </div>
 
@@ -164,7 +164,7 @@ function ImprovementsSection({ improvements }: { improvements: string[] }) {
  */
 function ArticleFooter() {
   return (
-    <div className="max-w-[720px] mx-auto px-6 mt-20 pt-10 border-t border-neutral-800 pb-20">
+    <div className="max-w-[720px] mx-auto px-4 sm:px-6 mt-20 pt-10 border-t border-neutral-800 pb-20">
       <Link
         href="/engineering-notes"
         className="text-neutral-400 hover:text-white text-sm uppercase tracking-widest transition-colors duration-200"

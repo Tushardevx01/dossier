@@ -89,7 +89,7 @@ export default function Resume() {
       <Background />
       <Navbar />
 
-      <div className="container mx-auto px-4 pt-32 pb-20">
+      <div className="container mx-auto px-4 sm:px-6 pt-28 sm:pt-32 pb-16 sm:pb-20">
         <motion.div
           className="flex flex-col md:flex-row justify-between items-center gap-6 mb-12"
           initial={{ opacity: 0, y: -20 }}
@@ -105,10 +105,10 @@ export default function Resume() {
             </p>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="flex flex-wrap justify-center md:justify-end gap-3 sm:gap-4 w-full md:w-auto">
             <motion.button
               onClick={toggleFullscreen}
-              className="group relative flex items-center gap-2 px-5 py-3 rounded-xl overflow-hidden transition-all duration-300 border border-secondary/30 bg-card/30 hover:bg-secondary/10"
+              className="group relative flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl overflow-hidden transition-all duration-300 border border-secondary/30 bg-card/30 hover:bg-secondary/10 text-sm sm:text-base w-full sm:w-auto"
               whileHover={{
                 scale: 1.05,
                 boxShadow: "0 8px 25px hsl(var(--secondary) / 0.2)",
@@ -129,7 +129,7 @@ export default function Resume() {
                 href={PDF_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative flex items-center gap-2 px-5 py-3 rounded-xl overflow-hidden transition-all duration-300 border border-secondary/30 bg-card/30 hover:bg-secondary/10"
+                className="group relative flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl overflow-hidden transition-all duration-300 border border-secondary/30 bg-card/30 hover:bg-secondary/10 text-sm sm:text-base w-full sm:w-auto"
                 whileHover={{
                   scale: 1.05,
                   borderColor: "hsl(var(--secondary) / 0.5)",
@@ -148,7 +148,7 @@ export default function Resume() {
               <motion.a
                 href={PDF_URL}
                 download="Resume.pdf"
-                className="group relative flex items-center gap-2 px-6 py-3 rounded-xl overflow-hidden transition-all duration-300 font-medium text-primary-foreground"
+                className="group relative flex items-center justify-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl overflow-hidden transition-all duration-300 font-medium text-primary-foreground text-sm sm:text-base w-full sm:w-auto"
                 style={{
                   background:
                     "linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.8) 100%)",
@@ -191,24 +191,24 @@ export default function Resume() {
             <PDFErrorBoundary pdfUrl={PDF_URL}>
               <motion.div
                 className="pdf-container relative w-full overflow-hidden bg-white/95 backdrop-blur-sm rounded-3xl"
-                style={{ height: "800px" }}
+                style={{ height: "clamp(520px, 75vh, 800px)" }}
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.8, delay: 1.6 }}
               >
                 <div className="pdf-viewer">
                   <div
-                    className="flex justify-center items-start min-h-full p-4"
+                    className="flex justify-center items-start min-h-full p-2 sm:p-4"
                   >
                     <iframe
                       src={`${PDF_URL}#view=FitH&toolbar=0&navpanes=0&scrollbar=1`}
                       width="100%"
-                      height="780px"
+                      height="100%"
                       className="border-0 shadow-lg rounded-lg"
                       title="Resume PDF"
                       style={{
                         maxWidth: "100%",
-                        minHeight: "600px",
+                        minHeight: "500px",
                         background: "#ffffff",
                       }}
                       allow="fullscreen"

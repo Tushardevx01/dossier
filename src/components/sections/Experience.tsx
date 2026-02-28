@@ -52,7 +52,7 @@ export function Experience() {
         <div className="relative">
           {/* Timeline line */}
           <motion.div
-            className="absolute left-6 top-0 w-px bg-gradient-to-b from-primary/50 via-secondary/30 to-transparent"
+            className="hidden sm:block absolute left-6 top-0 w-px bg-gradient-to-b from-primary/50 via-secondary/30 to-transparent"
             style={{ height: `${experienceData.length * 300}px` }}
             initial={{ scaleY: 0, originY: 0 }}
             animate={isInView ? { scaleY: 1 } : { scaleY: 0 }}

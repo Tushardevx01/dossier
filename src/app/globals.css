@@ -10,12 +10,21 @@ body {
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 html,
 body {
   overscroll-behavior-y: none;
   background-color: hsl(var(--background));
+}
+
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+  height: auto;
 }
 
 *::-webkit-scrollbar {
@@ -701,8 +710,14 @@ body {
 
   /* Ensure PDF is visible in all browsers */
   .pdf-viewer iframe {
-    min-height: 600px;
+    min-height: 500px;
     min-width: 100%;
+  }
+
+  @media (max-width: 640px) {
+    .pdf-viewer iframe {
+      min-height: 420px;
+    }
   }
 
   /* Loading state for PDF */

@@ -47,7 +47,7 @@ export const About = () => {
               }}
             >
               <div
-                className="w-full max-w-md h-80 rounded-2xl overflow-hidden relative  border-2 group/image"
+                className="w-full max-w-md h-64 sm:h-80 rounded-2xl overflow-hidden relative border-2 group/image"
                 style={{ borderColor: "hsl(var(--glass-border))" }}
               >
                 <motion.div
@@ -92,7 +92,7 @@ export const About = () => {
               }}
             >
               <h2
-                className={`${nasalization.className} text-4xl md:text-5xl font-bold relative`}
+                className={`${nasalization.className} text-3xl sm:text-4xl md:text-5xl font-bold relative`}
                 style={{ color: "hsl(var(--primary))" }}
               >
                 Engineering Philosophy
@@ -109,7 +109,7 @@ export const About = () => {
               {selfData.about.map((paragraph, index) => (
                 <motion.p
                   key={index}
-                  className="text-xs"
+                  className="text-sm sm:text-xs"
                   initial={{ opacity: 0, y: 15 }}
                   animate={
                     isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }
@@ -130,7 +130,7 @@ export const About = () => {
             </motion.div>
 
             <motion.div
-              className="flex items-center gap-4 text-sm"
+              className="flex items-center gap-4 text-xs sm:text-sm"
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{
@@ -151,7 +151,7 @@ export const About = () => {
                   href={`https://www.google.com/maps/place/${selfData.current_location.city}+${selfData.current_location.state}+${selfData.current_location.country}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 px-6 py-3 rounded-full border border-primary/20 hover:border-primary/50 group transition-all duration-300"
+                  className="flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-2.5 sm:py-3 rounded-full border border-primary/20 hover:border-primary/50 group transition-all duration-300"
                 >
                   <motion.div
                     animate={

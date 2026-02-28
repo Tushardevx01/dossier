@@ -56,11 +56,11 @@ export const ExperienceCard: FC<ExperienceCardProps> = ({
           damping: 25,
         },
       }}
-      className="relative flex items-start space-x-8 group"
+      className="relative flex items-start gap-4 sm:gap-8 group"
     >
       {/* Timeline dot */}
       <motion.div
-        className="mt-6 flex-shrink-0"
+        className="mt-6 flex-shrink-0 hidden sm:block"
         initial={{ scale: 0, opacity: 0 }}
         animate={isInView ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
         transition={{ duration: 0.4, delay: index * 0.1 + 0.2 }}
@@ -87,7 +87,7 @@ export const ExperienceCard: FC<ExperienceCardProps> = ({
             transition={{ duration: 0.8, ease: "easeInOut" }}
           />
 
-          <div className="relative z-10 p-6">
+          <div className="relative z-10 p-4 sm:p-6">
             <motion.div
               className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4"
               initial={{ opacity: 0, y: 10 }}

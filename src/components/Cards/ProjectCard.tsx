@@ -43,7 +43,7 @@ export const ProjectCard: FC<ProjectCardProps> = ({
       className="group h-full"
     >
       {/* Ultra-clean minimal container */}
-      <div className="relative h-full flex flex-col rounded-2xl bg-black border border-white/10 p-10 transition-all duration-300">
+      <div className="relative h-full flex flex-col rounded-2xl bg-black border border-white/10 p-5 sm:p-8 lg:p-10 transition-all duration-300">
         {/* Top accent line - very subtle */}
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
 
@@ -51,7 +51,7 @@ export const ProjectCard: FC<ProjectCardProps> = ({
         <div className="flex flex-col flex-grow">
           {/* Title - Large, strong visual anchor */}
           <motion.h3
-            className="text-4xl font-semibold tracking-tight text-white mb-4"
+            className="text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight text-white mb-4"
             initial={{ opacity: 0, y: 8 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
             transition={{ duration: 0.4, delay: index * 0.08 + 0.1 }}
@@ -88,7 +88,7 @@ export const ProjectCard: FC<ProjectCardProps> = ({
 
           {/* Buttons - Minimal, confident action */}
           <motion.div
-            className="flex gap-4 mt-auto"
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-auto"
             initial={{ opacity: 0, y: 12 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
             transition={{ duration: 0.4, delay: index * 0.08 + 0.4 }}

@@ -16,7 +16,7 @@ export const Hero = () => {
   return (
     <section
       ref={ref}
-      className="min-h-screen flex items-center justify-start px-6 relative"
+      className="min-h-screen flex items-center justify-start px-4 sm:px-6 lg:px-8 relative"
     >
       <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
 
@@ -37,7 +37,7 @@ export const Hero = () => {
               Engineering • Product • Infrastructure
             </motion.p>
             <motion.h1
-              className={`${quentine.className} text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.95]`}
+              className={`${quentine.className} text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.95] break-words`}
               style={{ color: "hsl(var(--primary))" }}
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -55,7 +55,7 @@ export const Hero = () => {
             </motion.h1>
 
             <motion.p
-              className={`${mono.className} text-base md:text-lg tracking-wide`}
+              className={`${mono.className} text-sm sm:text-base md:text-lg tracking-wide`}
               style={{ color: "hsl(var(--secondary))" }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -65,7 +65,7 @@ export const Hero = () => {
             </motion.p>
 
             <motion.p
-              className="text-base md:text-lg max-w-2xl leading-relaxed text-balance"
+              className="text-sm sm:text-base md:text-lg max-w-2xl leading-relaxed text-balance"
               style={{ color: "hsl(var(--foreground) / 0.8)" }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}

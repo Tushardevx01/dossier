@@ -30,7 +30,7 @@ export const GitHub = () => {
                     transition={{ duration: 0.6 }}
                 >
                     <h2
-                        className={`${nasalization.className} text-4xl md:text-5xl font-semibold tracking-tight`}
+                        className={`${nasalization.className} text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight`}
                         style={{ color: "hsl(var(--foreground))" }}
                     >
                         Built with{" "}
@@ -54,7 +54,7 @@ export const GitHub = () => {
                     transition={{ duration: 0.7, delay: 0.2 }}
                 >
                     {/* Header bar */}
-                    <div className="flex items-center justify-between mb-6">
+                    <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
                         <div className="flex items-center gap-3">
                             <div
                                 className="w-8 h-8 rounded-lg flex items-center justify-center"
@@ -100,7 +100,7 @@ export const GitHub = () => {
                             alt={`${githubUsername} GitHub contribution graph`}
                             width={900}
                             height={130}
-                            className="w-full h-auto min-w-[600px]"
+                            className="w-full h-auto min-w-[420px]"
                             loading="lazy"
                             sizes="(max-width: 768px) 100vw, 900px"
                             style={{ filter: "brightness(0.9) contrast(1.2)" }}

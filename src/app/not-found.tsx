@@ -21,7 +21,7 @@ export default function NotFound() {
         <Navbar />
 
 
-        <main className="flex-1 flex items-center justify-center px-6 py-16">
+        <main className="flex-1 flex items-center justify-center px-4 sm:px-6 py-12 sm:py-16">
           <div className="max-w-4xl mx-auto w-full text-center">
             <motion.div
               className="space-y-12"
@@ -37,12 +37,12 @@ export default function NotFound() {
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
                 <h1
-                  className={`${quentine.className} text-7xl md:text-9xl lg:text-[10rem] font-bold text-primary leading-none`}
+                  className={`${quentine.className} text-5xl sm:text-7xl md:text-9xl lg:text-[10rem] font-bold text-primary leading-none`}
                 >
                   404
                 </h1>
                 <h2
-                  className={`${nasalization.className} text-3xl md:text-4xl lg:text-5xl font-bold text-primary-foreground`}
+                  className={`${nasalization.className} text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-primary-foreground`}
                 >
                   Page Not Found
                 </h2>
@@ -55,21 +55,21 @@ export default function NotFound() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
               >
-                <p className="text-xs md:text-xl text-primary-foreground/80 leading-relaxed">
+                <p className="text-sm sm:text-base md:text-xl text-primary-foreground/80 leading-relaxed">
                   Oops! The page you&apos;re looking for seems to have wandered
                   off into the digital void.
                 </p>
 
-                <div className="bg-card/20 backdrop-blur-sm border border-primary/20 rounded-xl p-6">
-                  <p className="text-base text-primary-foreground/70">
+                <div className="bg-card/20 backdrop-blur-sm border border-primary/20 rounded-xl p-4 sm:p-6">
+                  <p className="text-sm sm:text-base text-primary-foreground/70">
                     Requested URL:
                   </p>
-                  <code className="mt-2 inline-block px-4 py-2 bg-primary/20 rounded-lg text-primary font-mono text-sm break-all">
+                  <code className="mt-2 inline-block px-3 sm:px-4 py-2 bg-primary/20 rounded-lg text-primary font-mono text-xs sm:text-sm break-all max-w-full">
                     {pathname}
                   </code>
                 </div>
 
-                <p className="text-base text-primary-foreground/60">
+                <p className="text-sm sm:text-base text-primary-foreground/60">
                   The page might have been moved, deleted, or the URL might be
                   incorrect.
                 </p>
@@ -85,7 +85,7 @@ export default function NotFound() {
                 <Button
                   onClick={() => router.push("/")}
                   size="lg"
-                  className="bg-primary hover:bg-primary/90 relative group overflow-hidden min-w-[180px] h-12 text-lg"
+                  className="bg-primary hover:bg-primary/90 relative group overflow-hidden w-full sm:w-auto min-w-0 sm:min-w-[180px] h-11 sm:h-12 text-base sm:text-lg"
                 >
                   <motion.div
                     className="absolute inset-0 bg-white/20"
@@ -101,7 +101,7 @@ export default function NotFound() {
                   onClick={() => router.back()}
                   variant="outline"
                   size="lg"
-                  className="border-primary/30 text-primary-foreground hover:bg-primary/10 min-w-[180px] h-12 text-lg"
+                  className="border-primary/30 text-primary-foreground hover:bg-primary/10 w-full sm:w-auto min-w-0 sm:min-w-[180px] h-11 sm:h-12 text-base sm:text-lg"
                 >
                   <FaArrowLeft className="w-5 h-5 mr-3" />
                   Go Back
@@ -115,10 +115,10 @@ export default function NotFound() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.8 }}
               >
-                <p className="text-base text-primary-foreground/60 mb-6">
+                <p className="text-sm sm:text-base text-primary-foreground/60 mb-6">
                   Or explore these sections:
                 </p>
-                <div className="flex flex-wrap justify-center gap-6 text-base">
+                <div className="flex flex-wrap justify-center gap-3 sm:gap-6 text-sm sm:text-base">
                   {[
                     { href: "/#about", label: "About" },
                     { href: "/#projects", label: "Projects" },

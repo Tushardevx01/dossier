@@ -56,7 +56,7 @@ export function NotesListClient({ posts, categories }: NotesListClientProps) {
                     <h3 className="text-2xl sm:text-3xl font-semibold text-white group-hover:text-neutral-200 transition-colors duration-200 leading-tight">
                       {post.title}
                     </h3>
-                    <p className="text-base sm:text-lg text-neutral-400 leading-relaxed max-w-3xl">
+                    <p className="text-sm sm:text-lg text-neutral-400 leading-relaxed max-w-3xl">
                       {post.description}
                     </p>
                   </div>
@@ -81,7 +81,7 @@ export function NotesListClient({ posts, categories }: NotesListClientProps) {
                     <span className="px-2.5 py-1 rounded text-xs font-medium bg-neutral-900 text-neutral-300">
                       {post.category}
                     </span>
-                    <span className="ml-auto text-neutral-500 group-hover:text-neutral-300 transition-colors duration-200 flex-shrink-0">
+                    <span className="w-full sm:w-auto sm:ml-auto text-neutral-500 group-hover:text-neutral-300 transition-colors duration-200 flex-shrink-0">
                       Read →
                     </span>
                   </div>

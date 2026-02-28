@@ -16,7 +16,7 @@ export const SkillCard = ({
 }) => {
   return (
     <motion.div
-      className={`${className} flex flex-row items-center justify-center gap-4 grayscale-[90%] hover:grayscale-0 transition-all duration-300 px-3 py-1 w-fit h-fit group`}
+      className={`${className} flex flex-row flex-wrap items-center justify-center gap-2 sm:gap-4 grayscale-[90%] hover:grayscale-0 transition-all duration-300 px-2 sm:px-3 py-1 w-fit h-fit group`}
       whileHover={{ scale: 1.05, y: -5 }}
       transition={{ duration: 0.2 }}
     >
@@ -34,7 +34,7 @@ export const SkillCard = ({
       <motion.small
         whileHover={{ scale: 1.05 }}
         transition={{ type: "spring", stiffness: 400, damping: 10 }}
-        className="text-sm text-secondry font-semibold group-hover:text-primary-foreground/90"
+        className="text-xs sm:text-sm text-secondry font-semibold group-hover:text-primary-foreground/90"
       >
         {title}
       </motion.small>
