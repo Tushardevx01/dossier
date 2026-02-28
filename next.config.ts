@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "tushardevx01.vercel.app",
+        hostname: "tushardevx01.tech",
         port: "",
         pathname: "/**",
       },
@@ -42,7 +42,7 @@ const nextConfig: NextConfig = {
       "form-action 'self'",
       "script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com",
       "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: blob: https://tushardevx01.vercel.app https://github-readme-activity-graph.vercel.app https://camo.githubusercontent.com",
+      "img-src 'self' data: blob: https://tushardevx01.tech https://github-readme-activity-graph.vercel.app https://camo.githubusercontent.com",
       "font-src 'self' data:",
       "connect-src 'self' https://vitals.vercel-insights.com",
       "frame-src 'self'",

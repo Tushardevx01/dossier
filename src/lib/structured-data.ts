@@ -33,7 +33,7 @@ export function generatePersonStructuredData() {
       `https://twitter.com/${selfData.socials_username.twitter}`,
       `https://instagram.com/${selfData.socials_username.instagram}`,
     ],
-    url: "https://tushardevx01.vercel.app",
+    url: "https://tushardevx01.tech",
     description: selfData.bio,
     knowsAbout: skills,
   };
@@ -44,7 +44,7 @@ export function generateWebsiteStructuredData() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "Tushar Kanti Dey - Portfolio",
-    url: "https://tushardevx01.vercel.app",
+    url: "https://tushardevx01.tech",
     description:
       "Tushar Kanti Dey's portfolio featuring projects in React, Next.js, and modern web development",
     author: {
@@ -69,8 +69,8 @@ export function generateOrganizationStructuredData() {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: selfData.name,
-    url: "https://tushardevx01.vercel.app",
-    logo: "https://tushardevx01.vercel.app/images/logo.png",
+    url: "https://tushardevx01.tech",
+    logo: "https://tushardevx01.tech/images/logo.png",
     description: selfData.bio,
     founder: {
       "@type": "Person",
@@ -92,7 +92,7 @@ export function generateResumeStructuredData() {
     name: "Tushar Kanti Dey Resume",
     description:
       "Professional resume of Tushar Kanti Dey - Student Developer specializing in Full-Stack Web Development",
-    url: "https://tushardevx01.vercel.app/resume",
+    url: "https://tushardevx01.tech/resume",
     author: {
       "@type": "Person",
       name: selfData.name,
@@ -115,8 +115,8 @@ export function generateResumeStructuredData() {
     },
     dateModified: new Date().toISOString(),
     fileFormat: "application/pdf",
-    contentUrl: "https://tushardevx01.vercel.app/docs/MyResume.pdf",
-    downloadUrl: "https://tushardevx01.vercel.app/docs/MyResume.pdf",
+    contentUrl: "https://tushardevx01.tech/docs/MyResume.pdf",
+    downloadUrl: "https://tushardevx01.tech/docs/MyResume.pdf",
     keywords: [
       "Software Developer",
       "Full Stack Developer",

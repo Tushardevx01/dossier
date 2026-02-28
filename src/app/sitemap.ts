@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 import { generateArticleStaticParams } from "@/lib/articleLoader";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://tushardevx01.vercel.app";
+  const baseUrl = "https://tushardevx01.tech";
   const lastModified = new Date();
   const engineeringNotesSlugs = generateArticleStaticParams();
 

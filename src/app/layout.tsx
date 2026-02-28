@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   authors: [
     {
       name: "Tushar Kanti Dey",
-      url: "https://tushardevx01.vercel.app",
+      url: "https://tushardevx01.tech",
     },
   ],
   creator: "Tushar Kanti Dey",
@@ -29,13 +29,13 @@ export const metadata: Metadata = {
   category: "Portfolio",
   classification: "Software Development",
   keywords: Keywords,
-  metadataBase: new URL("https://tushardevx01.vercel.app"),
+  metadataBase: new URL("https://tushardevx01.tech"),
 
 
   alternates: {
-    canonical: "https://tushardevx01.vercel.app",
+    canonical: "https://tushardevx01.tech",
     languages: {
-      "en-US": "https://tushardevx01.vercel.app",
+      "en-US": "https://tushardevx01.tech",
     },
   },
   robots: {
@@ -94,7 +94,7 @@ export const metadata: Metadata = {
     title: "Tushar Kanti Dey",
     description:
       "Explore Tushar Kanti Dey’s portfolio featuring projects in React, Next.js, AI, and developer tools. Discover a world of creative web applications and open-source experiments.",
-    url: "https://tushardevx01.vercel.app",
+    url: "https://tushardevx01.tech",
     siteName: "Tushar Kanti Dey",
     images: [
     ],
