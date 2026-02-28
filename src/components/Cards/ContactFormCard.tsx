@@ -13,6 +13,7 @@ export const ContactFormCard = () => {
     senderEmail: "",
     reasonToContact: "Collaboration",
     senderMsg: "",
+    website: "",
   });
 
   const sendEmail = async (e: React.FormEvent) => {
@@ -31,27 +32,26 @@ export const ContactFormCard = () => {
             senderEmail: formValues.senderEmail,
             reasonToContact: formValues.reasonToContact,
             senderMsg: formValues.senderMsg,
+            website: formValues.website,
           }),
         });
 
         const data = await response.json();
 
         if (response.ok) {
-          console.log("✅ Email sent successfully:", data.message);
           setIsSent(true);
           setFormValues({
             senderName: "",
             senderEmail: "",
             reasonToContact: "Collaboration",
             senderMsg: "",
+            website: "",
           });
           resolve(data.message);
         } else {
-          console.error("❌ Failed to send email:", data.error);
           reject(new Error(data.error || "Failed to send message"));
         }
       } catch (error) {
-        console.error("❌ Network error or unexpected error:", error);
         reject(error);
       } finally {
         setIsSending(false);
@@ -111,6 +111,17 @@ export const ContactFormCard = () => {
       >
         <div className="relative z-10 p-8 md:p-10 flex flex-col flex-grow">
           <form onSubmit={sendEmail} className="space-y-6 flex flex-col flex-grow">
+            <input
+              type="text"
+              name="website"
+              value={formValues.website}
+              onChange={handleChange}
+              autoComplete="off"
+              tabIndex={-1}
+              className="hidden"
+              aria-hidden="true"
+            />
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <motion.div
                 initial={{ opacity: 0, y: 10 }}

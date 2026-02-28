@@ -34,6 +34,21 @@ const nextConfig: NextConfig = {
   },
 
   async headers() {
+    const contentSecurityPolicy = [
+      "default-src 'self'",
+      "base-uri 'self'",
+      "frame-ancestors 'self'",
+      "object-src 'none'",
+      "form-action 'self'",
+      "script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com",
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data: blob: https://tushardevx01.vercel.app https://github-readme-activity-graph.vercel.app https://camo.githubusercontent.com",
+      "font-src 'self' data:",
+      "connect-src 'self' https://vitals.vercel-insights.com",
+      "frame-src 'self'",
+      "upgrade-insecure-requests",
+    ].join("; ");
+
     return [
       {
         source: "/(.*)",
@@ -49,6 +64,31 @@ const nextConfig: NextConfig = {
           {
             key: "Referrer-Policy",
             value: "origin-when-cross-origin",
+          },
+          {
+            key: "Strict-Transport-Security",
+            value: "max-age=31536000; includeSubDomains; preload",
+          },
+          {
+            key: "X-DNS-Prefetch-Control",
+            value: "off",
+          },
+          {
+            key: "Permissions-Policy",
+            value:
+              "camera=(), microphone=(), geolocation=(), payment=(), usb=(), accelerometer=(), gyroscope=()",
+          },
+          {
+            key: "Cross-Origin-Opener-Policy",
+            value: "same-origin",
+          },
+          {
+            key: "Cross-Origin-Resource-Policy",
+            value: "same-origin",
+          },
+          {
+            key: "Content-Security-Policy",
+            value: contentSecurityPolicy,
           },
           {
             key: "X-Robots-Tag",
@@ -100,7 +140,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/github",
-        destination: "www.github.com/Tusharxhub",
+        destination: "https://www.github.com/Tusharxhub",
         permanent: true,
       },
     ];
