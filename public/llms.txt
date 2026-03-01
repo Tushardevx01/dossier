@@ -1,7 +1,10 @@
-# Tushar Kanti Dey - Student Developer Portfolio
+# Tushar Kanti Dey - Full Stack Developer and & AI Engineer
+
+
+## Introduction
 
 ## About
-Tushar Kanti Dey is a Student Developer and Creative Coder based in Kolkata, India. He specializes in Full-Stack Web Development, primarily using the React and Next.js ecosystem.
+Tushar Kanti Dey is a Full Stack Developer and AI Engineer based in Kolkata, India. He specializes in Full-Stack Web Development, primarily using the React and Next.js ecosystem.
 
 ## Skills
 - **Languages**: JavaScript, TypeScript, Python, Java, C/C++, SQL
