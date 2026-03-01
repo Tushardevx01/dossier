@@ -15,6 +15,21 @@ type Project = {
   role: string;
 };
 
+const cardVariants = {
+  rest: { y: 0 },
+  hover: { y: -6 },
+};
+
+const titleVariants = {
+  rest: { opacity: 0.92 },
+  hover: { opacity: 1 },
+};
+
+const arrowVariants = {
+  rest: { x: 0 },
+  hover: { x: 3 },
+};
+
 export const Projects = () => {
   const projects = projectsData as unknown as Project[];
   const ref = useRef(null);
@@ -55,10 +70,11 @@ export const Projects = () => {
             {projects.map((project, index) => (
               <motion.article
                 key={project.name}
-                initial={{ opacity: 0, y: 20 }}
+                initial="rest"
+                whileHover="hover"
                 animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                 transition={{ duration: 0.5, delay: 0.08 * index }}
-                whileHover={{ y: -4 }}
+                variants={cardVariants}
                 className="rounded-xl border border-neutral-800/50 bg-[#0c0c0c] p-6 sm:p-8 transition-all duration-300 hover:border-neutral-700 hover:bg-[#111111] hover:shadow-lg hover:shadow-neutral-900/50"
               >
                 <div className="flex items-start justify-between gap-4 mb-4">
@@ -66,9 +82,12 @@ export const Projects = () => {
                     <p className={`${mono.className} text-[11px] uppercase tracking-widest text-neutral-500`}>
                       {project.role}
                     </p>
-                    <h3 className="mt-2 text-xl font-semibold text-white">
+                    <motion.h3 
+                      variants={titleVariants}
+                      className="mt-2 text-xl font-semibold text-white"
+                    >
                       {project.name}
-                    </h3>
+                    </motion.h3>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <span className="relative flex h-2 w-2">
@@ -102,7 +121,7 @@ export const Projects = () => {
                       rel="noopener noreferrer"
                       className={`${mono.className} text-xs text-white border border-neutral-600 px-4 py-2 rounded-full hover:border-neutral-400 transition-colors`}
                     >
-                      View Live Deployment &nbsp;→
+                      View Live Deployment <motion.span variants={arrowVariants} className="inline-block">→</motion.span>
                     </a>
                   )}
                   <a
@@ -111,7 +130,7 @@ export const Projects = () => {
                     rel="noopener noreferrer"
                     className={`${mono.className} text-xs text-neutral-400 hover:text-white transition-colors`}
                   >
-                    View Architecture &nbsp;→
+                    View Architecture <motion.span variants={arrowVariants} className="inline-block">→</motion.span>
                   </a>
                 </div>
               </motion.article>
