@@ -35,17 +35,23 @@ let _categoryCache: CategoryFilter[] | null = null;
 function buildMetadataCache(): ArticleMetadata[] {
   if (_metadataCache) return _metadataCache;
 
-  _metadataCache = Object.entries(articlesData).map(([slug, article], index) => ({
-    slug,
-    id: String(index + 1),
-    title: article.title,
-    subtitle: article.subtitle,
-    date: article.date,
-    readTime: article.readTime,
-    category: article.category,
-    description: article.description,
-    difficulty: calculateDifficulty(article.readTime),
-  }));
+  _metadataCache = Object.entries(articlesData)
+    .map(([slug, article], index) => ({
+      slug,
+      id: String(index + 1),
+      title: article.title,
+      subtitle: article.subtitle,
+      date: article.date,
+      readTime: article.readTime,
+      category: article.category,
+      description: article.description,
+      difficulty: calculateDifficulty(article.readTime),
+    }))
+    .sort((first, second) => {
+      const firstDate = new Date(first.date).getTime();
+      const secondDate = new Date(second.date).getTime();
+      return secondDate - firstDate;
+    });
 
   return _metadataCache;
 }
