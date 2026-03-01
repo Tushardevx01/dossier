@@ -96,16 +96,17 @@ export async function processContactSubmission(
   }
 
   // 5. Render and send email
-  const htmlContent = await renderContactEmail({
+  const htmlContent = renderContactEmail({
     userName: formData.senderName,
     contactReason: formData.reasonToContact,
     userMessage: formData.senderMsg,
+    requestId,
   });
 
   const emailResult = await sendEmail(
     {
       to: { name: formData.senderName, address: formData.senderEmail },
-      subject: "Your message has landed! 🚀 We'll get back to you shortly",
+      subject: "Request Received - Tushar Kanti Dey",
       html: htmlContent,
     },
     { from: config.emailFrom, password: config.emailPassword }
