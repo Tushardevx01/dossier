@@ -1,82 +1,174 @@
-# Tushardevx01 Portfolio
+# Tushar Kanti Dey — Portfolio
 
-Modern personal portfolio built with Next.js 16, TypeScript, and Tailwind CSS.
+Production-grade personal portfolio built with Next.js 16, TypeScript, and Tailwind CSS.
 
-## Features
+## Architecture
 
-- Responsive single-page experience with dedicated pages for resume and engineering notes.
-- Contact API endpoint with validation, sanitization, and rate-limiting.
-- SEO support via metadata, sitemap, robots, and structured data.
-- Lightweight rendering strategy with lazy-loaded sections and reduced client overhead.
+```
+┌─────────────────────────────────────────────────────────────┐
+│                        Next.js 16                           │
+│                       App Router                            │
+├─────────────────────────────────────────────────────────────┤
+│  Routes          │  Services           │  Infrastructure    │
+│  ───────         │  ────────           │  ──────────────    │
+│  /               │  contact/           │  errors.ts         │
+│  /resume         │    ├─ schema        │  logger.ts         │
+│  /engineering-   │    ├─ service       │  env.server.ts     │
+│    notes         │    └─ rateLimit     │  rateLimit.ts      │
+│  /api/send       │  email/             │                    │
+│  /api/health     │    ├─ transport     │                    │
+│  /api/version    │    ├─ templates     │                    │
+│                  │    └─ verification  │                    │
+├─────────────────────────────────────────────────────────────┤
+│              Upstash Redis │ Zod │ Nodemailer               │
+└─────────────────────────────────────────────────────────────┘
+```
 
 ## Tech Stack
 
-- Next.js 16 (App Router)
-- TypeScript
-- Tailwind CSS
-- Motion
-- Nodemailer + React Email
-- Validator.js
+| Layer | Technology |
+|-------|------------|
+| Framework | Next.js 16 (App Router) |
+| Language | TypeScript (strict mode) |
+| Styling | Tailwind CSS |
+| Animation | Motion (Framer Motion) |
+| Validation | Zod v4 |
+| Rate Limiting | Upstash Redis (distributed) |
+| Email | Nodemailer |
+| Syntax Highlighting | Prism.js |
 
-## Getting Started
+## Features
 
-1. Clone and install dependencies:
+**Frontend**
+- Responsive single-page portfolio with dedicated routes for resume and engineering notes
+- Dynamic imports for code splitting
+- SEO: metadata, sitemap, robots.txt, structured data (JSON-LD)
 
-   ```bash
-   git clone https://github.com/yourusername/tushardevx01.git
-   cd tushardevx01
-   npm install
-   ```
+**Backend**
+- Service layer architecture (business logic isolated from routes)
+- Zod schema validation with type inference
+- Distributed rate limiting via Upstash Redis (fallback to in-memory)
+- Email verification via Quick Email Verification API
+- Structured logging with request correlation IDs
 
-2. Create `.env.local` in the project root:
-
-   ```env
-   QEV_API_KEY=your_qev_api_key
-   email_from=your_email@gmail.com
-   email_password=your_app_password
-   NEXT_PUBLIC_GITHUB_COMMIT_GRAPH_URL=
-   ```
-
-3. Start development:
-
-   ```bash
-   npm run dev
-   ```
-
-4. Open `http://localhost:3000`.
-
-## Scripts
-
-- `npm run dev` — start development server
-- `npm run build` — build for production
-- `npm run start` — run production server
-- `npm run lint` — run lint checks
+**Production**
+- Fail-fast startup validation (`instrumentation.ts`)
+- Global and route-level error boundaries
+- Health check endpoint (`/api/health`)
+- Version endpoint (`/api/version`)
+- CI/CD pipeline (`.github/workflows/ci.yml`)
 
 ## Project Structure
 
-```text
+```
 src/
-├── app/                 # Routes, metadata, sitemap, robots, API
-├── components/          # UI, common, cards, sections
-├── constant/            # Static profile/content constants
-├── data/                # Engineering note content
-├── hooks/               # Client hooks
-├── lib/                 # Utilities, env handling, loaders
-└── types/               # Type definitions
+├── app/                    # Routes and API endpoints
+│   ├── api/
+│   │   ├── send/           # Contact form submission
+│   │   ├── health/         # Health check endpoint
+│   │   └── version/        # Build info endpoint
+│   ├── engineering-notes/  # Technical articles
+│   ├── resume/             # Resume page
+│   ├── error.tsx           # Route error boundary
+│   └── global-error.tsx    # Root error boundary
+├── components/             # UI components
+│   ├── sections/           # Page sections (Hero, About, etc.)
+│   ├── Cards/              # Card components
+│   ├── common/             # Shared components (Navbar, Footer)
+│   └── ui/                 # Primitives (Button, Badge, Card)
+├── services/               # Business logic layer
+│   ├── contact/            # Contact form processing
+│   │   ├── contact.schema.ts
+│   │   ├── contact.service.ts
+│   │   └── contact.rateLimit.ts
+│   └── email/              # Email infrastructure
+│       ├── email.transport.ts
+│       ├── email.templates.ts
+│       ├── email.verification.ts
+│       └── templates/
+├── lib/                    # Utilities and infrastructure
+│   ├── errors.ts           # Error classes and factory
+│   ├── logger.ts           # Structured logging
+│   ├── env.server.ts       # Environment validation
+│   └── rateLimit.ts        # Rate limit utilities
+├── constant/               # Static data (projects, skills, etc.)
+├── data/                   # Engineering note content
+├── hooks/                  # React hooks
+├── types/                  # Type definitions
+└── instrumentation.ts      # Startup validation
 ```
 
-## Performance Notes
+## Development
 
-- Background rendering is static (no unnecessary client-side listeners).
-- Home sections are dynamically imported to keep initial payload smaller.
-- Global client runtime is minimized by mounting toast UI only where needed.
-- Font payload is trimmed to practical weights.
+```bash
+npm run dev
+```
 
-## Security Notes
+## Production Build
 
-- Never commit real secrets.
-- Rotate keys immediately if any secret is exposed.
-- Keep sensitive values only in local/private environment files.
+```bash
+npm run build
+npm run start
+```
+
+## API Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/send` | POST | Contact form submission |
+| `/api/health` | GET | Health check (status, uptime, dependency checks) |
+| `/api/version` | GET | Build info (version, environment, git commit) |
+
+### Health Check Response
+
+```json
+{
+  "status": "healthy",
+  "timestamp": "2026-03-02T10:00:00.000Z",
+  "uptime": 3600,
+  "checks": {
+    "env": { "status": "pass" },
+    "redis": { "status": "pass" }
+  }
+}
+```
+
+## Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm run start` | Run production server |
+| `npm run lint` | Run ESLint |
+
+## CI/CD
+
+GitHub Actions workflow (`.github/workflows/ci.yml`):
+
+1. **Quality** — TypeScript check, ESLint
+2. **Build** — Production build verification
+3. **Security** — npm audit
+4. **Deploy Preview** — Vercel preview deployment (PRs)
+5. **Deploy Production** — Vercel production deployment (main branch)
+6. **Health Check** — Post-deployment verification
+
+## Security
+
+- Input validation via Zod schemas
+- XSS prevention in email templates (HTML escaping)
+- Rate limiting (5 requests/minute per IP)
+- Honeypot field for bot detection
+- Origin validation (CSRF protection)
+- Environment variables validated at startup
+
+## Performance
+
+- Static generation for content pages
+- Dynamic imports for code splitting
+- Edge runtime for health/version endpoints
+- Optimized CSS via Critters
+- Minimal client-side JavaScript
 
 ## License
 
