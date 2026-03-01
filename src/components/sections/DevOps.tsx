@@ -5,26 +5,43 @@ import { useRef } from "react";
 import { mono, nasalization } from "@/app/fonts";
 
 const metrics = [
-    { key: "uptime", label: "Uptime SLA", value: "99.97%", badge: "STABLE" },
-    { key: "deploys", label: "Deployments", value: "CI/CD", badge: "AUTOMATED" },
-    { key: "rollback", label: "Rollback Time", value: "< 30s", badge: "FAST" },
+    { key: "uptime", label: "Service Uptime", value: "99.97%", note: "Last 30 days" },
+    { key: "latency", label: "P95 Latency", value: "182ms", note: "API gateway" },
+    { key: "rollback", label: "Rollback Window", value: "26s", note: "Blue/green" },
+    { key: "deploys", label: "Deploy Frequency", value: "14/day", note: "Automated" },
 ];
 
-const pipelineSteps = [
-    { name: "git push", status: "done" },
-    { name: "build", status: "done" },
-    { name: "test", status: "done" },
-    { name: "containerize", status: "done" },
-    { name: "deploy", status: "live" },
+const deploymentStages = [
+    { name: "Commit", status: "done" },
+    { name: "Build", status: "done" },
+    { name: "Tests", status: "done" },
+    { name: "Deploy", status: "active" },
+    { name: "Verify", status: "pending" },
 ];
+
+type LogLevel = "INFO" | "SUCCESS" | "WARN" | "ERROR";
 
 const logLines = [
-    { time: "21:04:01", level: "INFO", msg: "Build started — commit a1f3d9c" },
-    { time: "21:04:08", level: "INFO", msg: "Docker image built successfully" },
-    { time: "21:04:12", level: "INFO", msg: "Health check passed — /api/health 200" },
-    { time: "21:04:14", level: "SUCC", msg: "Deployed to production ✓" },
-    { time: "21:04:15", level: "INFO", msg: "Monitoring active · 0 alerts" },
-];
+    { time: "23:14:01", level: "INFO", msg: "Release train #482 initialized" },
+    { time: "23:14:06", level: "SUCCESS", msg: "Container image published (sha256:fa91...)" },
+    { time: "23:14:10", level: "WARN", msg: "Read replica lag spiked to 190ms" },
+    { time: "23:14:13", level: "INFO", msg: "Health probes stable across 6 regions" },
+    { time: "23:14:15", level: "ERROR", msg: "Canary error rate crossed 1.2% threshold" },
+    { time: "23:14:19", level: "SUCCESS", msg: "Auto-rollback completed · traffic normalized" },
+] as Array<{ time: string; level: LogLevel; msg: string }>;
+
+const levelClasses: Record<LogLevel, string> = {
+    INFO: "text-blue-300 border-blue-400/25 bg-blue-500/10",
+    SUCCESS: "text-emerald-300 border-emerald-400/25 bg-emerald-500/10",
+    WARN: "text-amber-300 border-amber-400/25 bg-amber-500/10",
+    ERROR: "text-rose-300 border-rose-400/25 bg-rose-500/10",
+};
+
+const stageClasses: Record<"done" | "active" | "pending", string> = {
+    done: "text-emerald-300 border-emerald-400/30 bg-emerald-500/10",
+    active: "text-sky-300 border-sky-400/30 bg-sky-500/10",
+    pending: "text-neutral-400 border-neutral-700 bg-neutral-800/40",
+};
 
 export const DevOps = () => {
     const ref = useRef(null);
@@ -44,168 +61,160 @@ export const DevOps = () => {
                         className={`${nasalization.className} text-3xl sm:text-4xl md:text-5xl font-bold`}
                         style={{ color: "hsl(var(--foreground))" }}
                     >
-                        Infrastructure that{" "}
+                        Production Control{" "}
                         <span style={{ color: "hsl(var(--primary) / 0.85)" }}>
-                            doesn't sleep.
+                            Center.
                         </span>
                     </h2>
                     <p
                         className={`${mono.className} text-sm`}
                         style={{ color: "hsl(var(--foreground) / 0.45)" }}
                     >
-                        Reliability isn't an afterthought. It's the foundation.
+                        Live deployment telemetry, resilient rollout control, and system-state visibility.
                     </p>
                 </motion.div>
 
-                {/* Metrics row */}
+                {/* Control center */}
                 <motion.div
-                    className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                    transition={{ duration: 0.6, delay: 0.15 }}
+                    className="relative rounded-2xl border border-white/10 bg-neutral-950/60 backdrop-blur-sm p-4 sm:p-5 lg:p-6"
+                    style={{
+                        boxShadow:
+                            "0 0 0 1px hsl(var(--glass-border) / 0.28), 0 0 36px hsl(var(--accent) / 0.08)",
+                    }}
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+                    transition={{ duration: 0.65, delay: 0.15, ease: "easeOut" }}
                 >
-                    {metrics.map((m) => (
-                        <div
-                            key={m.key}
-                            className="tech-grid-card flex items-center justify-between"
+                    <div className="grid grid-cols-1 xl:grid-cols-[0.95fr_1.35fr] gap-5 lg:gap-6">
+                        {/* Left column: metrics + health */}
+                        <motion.div
+                            initial={{ opacity: 0, x: -16 }}
+                            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -16 }}
+                            transition={{ duration: 0.55, delay: 0.25 }}
+                            className="space-y-4"
                         >
-                            <div>
-                                <p
-                                    className={`${mono.className} text-xs mb-1`}
-                                    style={{ color: "hsl(var(--foreground) / 0.38)" }}
-                                >
-                                    {m.label}
-                                </p>
-                                <p
-                                    className={`${nasalization.className} text-2xl font-bold`}
-                                    style={{ color: "hsl(var(--foreground))" }}
-                                >
-                                    {m.value}
-                                </p>
-                            </div>
-                            <span
-                                className={`${mono.className} text-[0.6rem] px-2 py-1 rounded-full font-medium tracking-wide`}
-                                style={{
-                                    background: "hsl(145 60% 30% / 0.15)",
-                                    border: "1px solid hsl(145 50% 35% / 0.4)",
-                                    color: "hsl(145 60% 55%)",
-                                }}
-                            >
-                                {m.badge}
-                            </span>
-                        </div>
-                    ))}
-                </motion.div>
+                            <div className="rounded-xl border border-neutral-800 bg-neutral-900/60 p-4 sm:p-5">
+                                <div className="flex items-start justify-between gap-4">
+                                    <div>
+                                        <p className={`${mono.className} text-[11px] uppercase tracking-wider text-neutral-400`}>
+                                            Fleet Status
+                                        </p>
+                                        <p className={`${nasalization.className} text-2xl sm:text-3xl text-white mt-2`}>
+                                            Operational
+                                        </p>
+                                        <p className={`${mono.className} text-xs text-neutral-500 mt-2`}>
+                                            Global uptime across production regions
+                                        </p>
+                                    </div>
 
-                {/* Dashboard mockup */}
-                <motion.div
-                    className="devops-container"
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-                    transition={{ duration: 0.7, delay: 0.25 }}
-                >
-                    {/* Top bar */}
-                    <div
-                        className="flex flex-wrap items-center justify-between gap-3 px-4 sm:px-5 py-3 border-b"
-                        style={{ borderColor: "hsl(210 25% 15% / 0.6)" }}
-                    >
-                        <div className="flex items-center gap-2">
-                            <div className="flex gap-1.5">
-                                <div className="w-3 h-3 rounded-full" style={{ background: "hsl(0 60% 45% / 0.7)" }} />
-                                <div className="w-3 h-3 rounded-full" style={{ background: "hsl(40 60% 45% / 0.7)" }} />
-                                <div className="w-3 h-3 rounded-full" style={{ background: "hsl(145 60% 40% / 0.7)" }} />
-                            </div>
-                            <p
-                                className={`${mono.className} text-xs ml-3`}
-                                style={{ color: "hsl(var(--foreground) / 0.35)" }}
-                            >
-                                deployment-pipeline · production
-                            </p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <span
-                                className="w-2 h-2 rounded-full animate-pulse"
-                                style={{ background: "hsl(145 60% 55%)" }}
-                            />
-                            <p
-                                className={`${mono.className} text-xs`}
-                                style={{ color: "hsl(145 60% 55%)" }}
-                            >
-                                LIVE
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* Pipeline steps */}
-                    <div
-                        className="px-4 sm:px-5 py-4 border-b flex flex-wrap gap-3 items-center"
-                        style={{ borderColor: "hsl(210 25% 15% / 0.6)" }}
-                    >
-                        {pipelineSteps.map((step, i) => (
-                            <div key={step.name} className="flex items-center gap-2">
-                                <div
-                                    className={`flex items-center gap-1.5 px-3 py-1 rounded-md ${mono.className} text-xs`}
-                                    style={{
-                                        background:
-                                            step.status === "live"
-                                                ? "hsl(145 60% 30% / 0.15)"
-                                                : "hsl(210 40% 20% / 0.2)",
-                                        border:
-                                            step.status === "live"
-                                                ? "1px solid hsl(145 50% 35% / 0.4)"
-                                                : "1px solid hsl(210 25% 22% / 0.5)",
-                                        color:
-                                            step.status === "live"
-                                                ? "hsl(145 60% 55%)"
-                                                : "hsl(var(--foreground) / 0.55)",
-                                    }}
-                                >
-                                    {step.status === "done" ? "✓" : "▶"} {step.name}
+                                    <div className="relative mt-1">
+                                        <span className="absolute inset-0 rounded-full bg-emerald-400/30 animate-ping" />
+                                        <span className="relative block h-3 w-3 rounded-full bg-emerald-400" />
+                                    </div>
                                 </div>
-                                {i < pipelineSteps.length - 1 && (
-                                    <span style={{ color: "hsl(210 30% 30% / 0.5)" }}>→</span>
-                                )}
                             </div>
-                        ))}
-                    </div>
 
-                    {/* Log output */}
-                    <div className="px-4 sm:px-5 py-4 space-y-2">
-                        {logLines.map((line, i) => (
-                            <motion.div
-                                key={i}
-                                className={`${mono.className} text-xs flex items-start gap-3`}
-                                initial={{ opacity: 0 }}
-                                animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-                                transition={{ duration: 0.3, delay: 0.4 + i * 0.08 }}
-                            >
-                                <span style={{ color: "hsl(var(--foreground) / 0.25)", flexShrink: 0 }}>
-                                    {line.time}
-                                </span>
-                                <span
-                                    className="px-1.5 rounded text-[0.6rem] flex-shrink-0 font-medium"
-                                    style={{
-                                        background:
-                                            line.level === "SUCC"
-                                                ? "hsl(145 60% 30% / 0.2)"
-                                                : "hsl(220 40% 25% / 0.2)",
-                                        color:
-                                            line.level === "SUCC"
-                                                ? "hsl(145 60% 55%)"
-                                                : "hsl(220 60% 70%)",
-                                        border:
-                                            line.level === "SUCC"
-                                                ? "1px solid hsl(145 40% 30% / 0.4)"
-                                                : "1px solid hsl(220 40% 30% / 0.3)",
-                                    }}
-                                >
-                                    {line.level}
-                                </span>
-                                <span style={{ color: "hsl(var(--foreground) / 0.55)" }}>
-                                    {line.msg}
-                                </span>
-                            </motion.div>
-                        ))}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                {metrics.map((metric) => (
+                                    <div key={metric.key} className="rounded-lg border border-neutral-800 bg-neutral-900/40 p-3.5">
+                                        <p className={`${mono.className} text-[10px] uppercase tracking-wider text-neutral-500`}>
+                                            {metric.label}
+                                        </p>
+                                        <p className={`${nasalization.className} text-xl text-white mt-1.5`}>
+                                            {metric.value}
+                                        </p>
+                                        <p className={`${mono.className} text-[11px] text-neutral-500 mt-1`}>
+                                            {metric.note}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="rounded-xl border border-neutral-800 bg-neutral-900/30 p-3.5">
+                                <p className={`${mono.className} text-[10px] uppercase tracking-wider text-neutral-500 mb-3`}>
+                                    Status Classifier
+                                </p>
+                                <div className="flex flex-wrap gap-2">
+                                    {(Object.keys(levelClasses) as LogLevel[]).map((level) => (
+                                        <span
+                                            key={level}
+                                            className={`${mono.className} text-[10px] px-2.5 py-1 rounded border font-medium tracking-wide ${levelClasses[level]}`}
+                                        >
+                                            {level}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        </motion.div>
+
+                        {/* Right column: deployment monitor */}
+                        <motion.div
+                            initial={{ opacity: 0, x: 16 }}
+                            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 16 }}
+                            transition={{ duration: 0.55, delay: 0.32 }}
+                            className="rounded-xl border border-neutral-800 bg-neutral-950/75 overflow-hidden"
+                        >
+                            <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-neutral-800">
+                                <div className="flex items-center gap-2">
+                                    <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                                    <p className={`${mono.className} text-[11px] uppercase tracking-wider text-neutral-300`}>
+                                        Live Deployment Monitor
+                                    </p>
+                                </div>
+                                <p className={`${mono.className} text-[11px] text-neutral-500`}>prod-eu-west-1</p>
+                            </div>
+
+                            <div className="px-4 py-4 border-b border-neutral-800">
+                                <p className={`${mono.className} text-[10px] uppercase tracking-wider text-neutral-500 mb-3`}>
+                                    Pipeline
+                                </p>
+
+                                <div className="flex flex-col md:flex-row md:items-center md:flex-wrap gap-2">
+                                    {deploymentStages.map((stage, index) => (
+                                        <div key={stage.name} className="flex items-center gap-2">
+                                            <span
+                                                className={`${mono.className} text-[10px] px-2.5 py-1 rounded-md border ${stageClasses[stage.status as "done" | "active" | "pending"]}`}
+                                            >
+                                                {stage.status === "done" ? "✓" : stage.status === "active" ? "▶" : "…"} {stage.name}
+                                            </span>
+
+                                            {index < deploymentStages.length - 1 && (
+                                                <>
+                                                    <span className="hidden md:block h-px w-6 bg-neutral-700" />
+                                                    <span className="md:hidden block h-4 w-px bg-neutral-700 ml-3" />
+                                                </>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="px-4 py-4 bg-black/40">
+                                <p className={`${mono.className} text-[10px] uppercase tracking-wider text-neutral-500 mb-3`}>
+                                    Runtime Logs
+                                </p>
+                                <div className="rounded-lg border border-neutral-800 bg-black/70 p-3 space-y-2.5">
+                                    {logLines.map((line, index) => (
+                                        <motion.div
+                                            key={`${line.time}-${line.level}-${index}`}
+                                            className={`${mono.className} text-[11px] flex items-start gap-2.5`}
+                                            initial={{ opacity: 0, y: 6 }}
+                                            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 6 }}
+                                            transition={{ duration: 0.25, delay: 0.42 + index * 0.06 }}
+                                        >
+                                            <span className="text-neutral-500 shrink-0">{line.time}</span>
+                                            <span className="text-neutral-600 shrink-0">›</span>
+                                            <span
+                                                className={`${mono.className} text-[10px] px-2 py-0.5 rounded border shrink-0 ${levelClasses[line.level]}`}
+                                            >
+                                                {line.level}
+                                            </span>
+                                            <span className="text-neutral-300 leading-relaxed">{line.msg}</span>
+                                        </motion.div>
+                                    ))}
+                                </div>
+                            </div>
+                        </motion.div>
                     </div>
                 </motion.div>
             </div>
