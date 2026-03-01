@@ -82,12 +82,12 @@ export function TableOfContents({
   }
 
   return (
-    <aside className="hidden 2xl:block fixed right-10 top-40 w-64 text-sm">
-      <div className="text-xs uppercase tracking-widest text-neutral-500 mb-4 font-semibold">
+    <aside className="hidden xl:block fixed right-8 2xl:right-12 top-20 w-52 text-[10px]">
+      <div className="text-[9px] uppercase tracking-[0.18em] text-neutral-500 mb-2.5 font-semibold">
         On This Page
       </div>
       <nav aria-label="Table of contents">
-        <ul className="space-y-3">
+        <ul className="space-y-2">
           {headings.map((heading) => (
             <li key={heading.id} style={{ marginLeft: `${(heading.level - 3) * 1}rem` }}>
               <a
@@ -96,7 +96,7 @@ export function TableOfContents({
                   transition-colors duration-200
                   ${
                     activeHeading === heading.id
-                      ? "text-white font-semibold"
+                      ? "text-white font-medium"
                       : "text-neutral-400 hover:text-neutral-300"
                   }
                 `}

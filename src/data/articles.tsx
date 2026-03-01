@@ -1148,6 +1148,44 @@ Validation + Error Classification + Structured Output`}</code>
           commands. They do not execute extraction logic directly, which avoids
           coupling transport concerns to source behavior.
         </p>
+        <pre>
+          <code className="language-typescript">{`// app/api/extract/route.ts
+import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
+
+const extractRequestSchema = z.object({
+  url: z.string().url(),
+  profile: z.enum(["summary", "product", "article"]),
+  timeoutMs: z.number().min(2000).max(30000).default(12000),
+});
+
+export async function POST(request: NextRequest) {
+  const correlationId = crypto.randomUUID();
+
+  try {
+    const payload = extractRequestSchema.parse(await request.json());
+
+    const job = await extractionService.enqueue({
+      ...payload,
+      correlationId,
+    });
+
+    return NextResponse.json(
+      { jobId: job.id, correlationId, status: "queued" },
+      { status: 202 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      {
+        correlationId,
+        error: "INVALID_REQUEST",
+        message: "Request payload failed validation",
+      },
+      { status: 400 }
+    );
+  }
+}`}</code>
+        </pre>
 
         <h3 id="service-layer-webscope">Service Layer</h3>
         <p>
@@ -1216,6 +1254,27 @@ Validation + Error Classification + Structured Output`}</code>
           worker-pool limits. Unbounded parallelism can improve short benchmark
           runs but usually destabilizes production under bursty traffic.
         </p>
+        <pre>
+          <code className="language-typescript">{`// services/extraction-worker.ts
+const WORKER_CONCURRENCY = 6;
+const queue = new PQueue({ concurrency: WORKER_CONCURRENCY });
+
+export async function processExtractionJob(job: ExtractionJob) {
+  return queue.add(async () => {
+    const budget = createExecutionBudget(job.timeoutMs);
+
+    const result = await extractionOrchestrator.run({
+      url: job.url,
+      profile: job.profile,
+      budget,
+      correlationId: job.correlationId,
+    });
+
+    await extractionRepository.saveResult(job.id, result);
+    return result;
+  });
+}`}</code>
+        </pre>
 
         <h3 id="efficient-data-processing">Efficient Data Processing</h3>
         <p>
@@ -1256,6 +1315,30 @@ Validation + Error Classification + Structured Output`}</code>
             policies downstream.
           </li>
         </ul>
+        <pre>
+          <code className="language-typescript">{`// lib/retryPolicy.ts
+export async function withAdaptiveRetry<T>(
+  operation: () => Promise<T>,
+  maxAttempts = 4
+): Promise<T> {
+  let attempt = 1;
+
+  while (true) {
+    try {
+      return await operation();
+    } catch (error) {
+      if (attempt >= maxAttempts || !isRetryable(error)) {
+        throw error;
+      }
+
+      const backoffMs = Math.min(1500 * 2 ** (attempt - 1), 8000);
+      const jitterMs = Math.floor(Math.random() * 250);
+      await sleep(backoffMs + jitterMs);
+      attempt += 1;
+    }
+  }
+}`}</code>
+        </pre>
 
         <h3 id="deployment-strategy">Deployment Strategy</h3>
         <p>
@@ -1271,6 +1354,21 @@ Validation + Error Classification + Structured Output`}</code>
           fail fast. Runtime discovery of missing configuration creates
           non-deterministic failures that are expensive to debug.
         </p>
+        <pre>
+          <code className="language-typescript">{`// lib/env.server.ts
+import { z } from "zod";
+
+const envSchema = z.object({
+  NODE_ENV: z.enum(["development", "production", "test"]),
+  SCRAPER_API_KEY: z.string().min(1),
+  EXTRACT_TIMEOUT_MS: z.coerce.number().min(2000).max(30000),
+  MAX_RETRIES: z.coerce.number().min(0).max(6),
+  REDIS_URL: z.string().url(),
+});
+
+export const env = envSchema.parse(process.env);
+`}</code>
+        </pre>
 
         <h3 id="production-deployment">Production Deployment</h3>
         <p>
