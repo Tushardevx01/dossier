@@ -36,14 +36,14 @@ export const projectsData = [
     role: "Realtime Platform",
   },
   {
-    name: "PopcornPlay",
-    description:
-      "Discovery experience for trending and curated media with fast search. Built for performance and a clean browsing flow.",
-    github_link: "https://github.com/Tusharxhub/PopcornPlay",
-    demo: "https://popcornplay-gamma.vercel.app",
-    tech: ["JavaScript", "TMDB API", "CSS"],
-    role: "Frontend + API",
-  },
+  name: "WebScope",
+  description:
+    "A full-stack web analysis platform that extracts, processes, and structures data from dynamic web sources. Designed with clean separation of concerns, efficient request handling, and production-ready deployment patterns.",
+  github_link: "https://github.com/Tusharxhub/webscope",
+  demo: "https://webscope-three.vercel.app",
+  tech: ["Next.js", "Node.js", "Web Scraping", "API Integration"],
+  role: "Full-Stack Development & System Architecture",
+},
    {
     name: "Subscription Tracker",
     description:
