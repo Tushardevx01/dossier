@@ -15,7 +15,7 @@ import {
 
 export const metadata: Metadata = {
   applicationName: "Tushar Kanti Dey",
-  title: "Tushar Kanti Dey | Full Stack Developer & AI Engineer",
+  title: "Tushar Kanti Dey | Full Stack Developer & DevOps Engineer",
   description:
     "Tushar Kanti Dey is a student developer passionate about building modern web apps with Next.js, React, and open-source tools. Explore his projects, experiments, and developer portfolio.",
   authors: [
