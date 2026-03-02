@@ -166,7 +166,7 @@ GitHub Actions workflow (`.github/workflows/ci.yml`):
 
 - Static generation for content pages
 - Dynamic imports for code splitting
-- Edge runtime for health/version endpoints
+- Node.js serverless for API endpoints
 - Optimized CSS via Critters
 - Minimal client-side JavaScript
 

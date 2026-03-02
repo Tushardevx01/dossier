@@ -10,7 +10,7 @@
 import { NextResponse } from "next/server";
 import packageJson from "../../../../package.json";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 interface VersionInfo {
