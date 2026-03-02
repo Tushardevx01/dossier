@@ -27,7 +27,9 @@ const nextConfig = {
 
   compress: true,
   poweredByHeader: false,
-  output: "standalone",
+
+  // Docker standalone build (disabled on Vercel)
+  ...(process.env.VERCEL ? {} : { output: "standalone" as const }),
 
   experimental: {
     optimizeCss: true,
