@@ -28,8 +28,8 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
 
-  // Docker standalone build (disabled on Vercel)
-  ...(process.env.VERCEL ? {} : { output: "standalone" as const }),
+  // Standalone output for Docker (set STANDALONE=true when building Docker image)
+  ...(process.env.STANDALONE === "true" ? { output: "standalone" as const } : {}),
 
   experimental: {
     optimizeCss: true,

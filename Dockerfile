@@ -21,6 +21,7 @@ COPY . .
 # Build-time environment
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV STANDALONE=true
 
 RUN npm run build
 
