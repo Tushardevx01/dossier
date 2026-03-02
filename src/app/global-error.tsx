@@ -14,9 +14,27 @@ interface GlobalErrorProps {
   reset: () => void;
 }
 
+// Client-side error reporting for global errors
+function reportGlobalError(error: Error & { digest?: string }) {
+  try {
+    const errorReport = {
+      type: "global",
+      name: error.name,
+      message: error.message,
+      digest: error.digest,
+      timestamp: new Date().toISOString(),
+      url: typeof window !== "undefined" ? window.location.href : "unknown",
+    };
+    
+    console.error("[Global Error]", JSON.stringify(errorReport));
+  } catch {
+    console.error("Failed to report global error:", error.message);
+  }
+}
+
 export default function GlobalError({ error, reset }: GlobalErrorProps) {
   useEffect(() => {
-    console.error("Global error:", error);
+    reportGlobalError(error);
   }, [error]);
 
   return (

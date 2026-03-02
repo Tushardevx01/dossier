@@ -8,6 +8,7 @@
  */
 
 import { NextResponse } from "next/server";
+import { checkMonitoringHealth } from "@/lib/monitoring";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -16,12 +17,12 @@ interface HealthStatus {
   status: "healthy" | "degraded" | "unhealthy";
   timestamp: string;
   uptime: number;
-  checks: Record<string, { status: "pass" | "fail"; message?: string }>;
+  checks: Record<string, { status: "pass" | "warn" | "fail"; message?: string }>;
 }
 
 const startTime = Date.now();
 
-async function checkRedis(): Promise<{ status: "pass" | "fail"; message?: string }> {
+async function checkRedis(): Promise<{ status: "pass" | "warn" | "fail"; message?: string }> {
   const url = process.env.UPSTASH_REDIS_REST_URL;
   const token = process.env.UPSTASH_REDIS_REST_TOKEN;
 
@@ -44,7 +45,7 @@ async function checkRedis(): Promise<{ status: "pass" | "fail"; message?: string
   }
 }
 
-function checkEnv(): { status: "pass" | "fail"; message?: string } {
+function checkEnv(): { status: "pass" | "warn" | "fail"; message?: string } {
   const required = ["QEV_API_KEY", "email_from", "email_password"];
   const missing = required.filter((key) => !process.env[key]);
 
@@ -55,9 +56,15 @@ function checkEnv(): { status: "pass" | "fail"; message?: string } {
 }
 
 export async function GET() {
+  const [redisCheck, monitoringCheck] = await Promise.all([
+    checkRedis(),
+    checkMonitoringHealth(),
+  ]);
+
   const checks: HealthStatus["checks"] = {
     env: checkEnv(),
-    redis: await checkRedis(),
+    redis: redisCheck,
+    monitoring: monitoringCheck,
   };
 
   const allPassing = Object.values(checks).every((c) => c.status === "pass");

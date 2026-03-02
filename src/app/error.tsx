@@ -15,10 +15,37 @@ interface ErrorProps {
   reset: () => void;
 }
 
+// Client-side error reporting (sends to API endpoint for server-side processing)
+async function reportError(error: Error & { digest?: string }) {
+  try {
+    // In production, could POST to an error collection endpoint
+    // For now, structured console logging
+    const errorReport = {
+      name: error.name,
+      message: error.message,
+      digest: error.digest,
+      timestamp: new Date().toISOString(),
+      url: typeof window !== "undefined" ? window.location.href : "unknown",
+      userAgent: typeof navigator !== "undefined" ? navigator.userAgent : "unknown",
+    };
+    
+    console.error("[Error Boundary]", JSON.stringify(errorReport));
+    
+    // Optional: Send to backend error collection
+    // await fetch("/api/errors", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify(errorReport),
+    // });
+  } catch {
+    // Silently fail - don't cause more errors
+    console.error("Failed to report error:", error.message);
+  }
+}
+
 export default function Error({ error, reset }: ErrorProps) {
   useEffect(() => {
-    // Log error to console in development, send to monitoring in production
-    console.error("Unhandled error:", error);
+    reportError(error);
   }, [error]);
 
   return (
