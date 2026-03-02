@@ -2,33 +2,43 @@
 
 Production-grade personal portfolio built with Next.js 16, TypeScript, and Tailwind CSS.
 
+[![Deploy](https://img.shields.io/badge/deploy-Vercel-black?logo=vercel)](https://tushardevx01.tech)
+[![Docker](https://img.shields.io/badge/docker-ready-blue?logo=docker)](./Dockerfile)
+
 ## Architecture
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                        Next.js 16                           │
-│                       App Router                            │
-├─────────────────────────────────────────────────────────────┤
-│  Routes          │  Services           │  Infrastructure    │
-│  ───────         │  ────────           │  ──────────────    │
-│  /               │  contact/           │  errors.ts         │
-│  /resume         │    ├─ schema        │  logger.ts         │
-│  /engineering-   │    ├─ service       │  env.server.ts     │
-│    notes         │    └─ rateLimit     │  rateLimit.ts      │
-│  /api/send       │  email/             │                    │
-│  /api/health     │    ├─ transport     │                    │
-│  /api/version    │    ├─ templates     │                    │
-│                  │    └─ verification  │                    │
-├─────────────────────────────────────────────────────────────┤
-│              Upstash Redis │ Zod │ Nodemailer               │
-└─────────────────────────────────────────────────────────────┘
+```text
+┌─────────────────────────────────────────────────────────────────┐
+│                         Next.js 16                              │
+│                    App Router + Turbopack                       │
+├─────────────────────────────────────────────────────────────────┤
+│  Routes            │  Services           │  Infrastructure      │
+│  ───────           │  ────────           │  ──────────────      │
+│  /                 │  contact/           │  errors.ts           │
+│  /resume           │    ├─ schema        │  logger.ts           │
+│  /engineering-     │    ├─ service       │  monitoring.ts       │
+│    notes           │    └─ rateLimit     │  env.server.ts       │
+│  /api/send         │  email/             │  rateLimit.ts        │
+│  /api/health       │    ├─ transport     │                      │
+│  /api/version      │    ├─ templates     │                      │
+│                    │    └─ verification  │                      │
+├─────────────────────────────────────────────────────────────────┤
+│           Upstash Redis │ Zod │ Nodemailer │ Motion             │
+└─────────────────────────────────────────────────────────────────┘
+
+DEPLOYMENT TARGETS:
+┌──────────────────┐     ┌──────────────────┐
+│     Vercel       │     │     Docker       │
+│   (Serverless)   │     │  (Standalone)    │
+│   Default build  │     │ DOCKER_BUILD=true│
+└──────────────────┘     └──────────────────┘
 ```
 
 ## Tech Stack
 
 | Layer | Technology |
-|-------|------------|
-| Framework | Next.js 16 (App Router) |
+| ----- | ---------- |
+| Framework | Next.js 16 (App Router, Turbopack) |
 | Language | TypeScript (strict mode) |
 | Styling | Tailwind CSS |
 | Animation | Motion (Framer Motion) |
@@ -36,32 +46,46 @@ Production-grade personal portfolio built with Next.js 16, TypeScript, and Tailw
 | Rate Limiting | Upstash Redis (distributed) |
 | Email | Nodemailer |
 | Syntax Highlighting | Prism.js |
+| Containerization | Docker (multi-stage build) |
 
 ## Features
 
-**Frontend**
+### Frontend
+
 - Responsive single-page portfolio with dedicated routes for resume and engineering notes
 - Dynamic imports for code splitting
 - SEO: metadata, sitemap, robots.txt, structured data (JSON-LD)
+- Loading states with Suspense boundaries
 
-**Backend**
+### Backend
+
 - Service layer architecture (business logic isolated from routes)
 - Zod schema validation with type inference
 - Distributed rate limiting via Upstash Redis (fallback to in-memory)
 - Email verification via Quick Email Verification API
-- Structured logging with request correlation IDs
+- Structured JSON logging with request correlation IDs
 
-**Production**
+### Production
+
 - Fail-fast startup validation (`instrumentation.ts`)
 - Global and route-level error boundaries
-- Health check endpoint (`/api/health`)
-- Version endpoint (`/api/version`)
+- Health check endpoint (`/api/health`) with dependency checks
+- Version endpoint (`/api/version`) with git info
+- Monitoring module for error tracking
 - CI/CD pipeline (`.github/workflows/ci.yml`)
+- Docker support with multi-stage builds
 
-## Project Structure
+### Security
 
-```
-src/
+- Comprehensive CSP headers
+- HSTS with preload
+- X-Frame-Options, COOP, CORP
+- Permissions-Policy
+- Input validation via Zod schemas
+- XSS prevention in email templates
+- Rate limiting (5 requests/minute per IP)
+- Honeypot field for bot detection
+- Origin validation (CSRF protection)
 ├── app/                    # Routes and API endpoints
 │   ├── api/
 │   │   ├── send/           # Contact form submission
