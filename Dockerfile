@@ -21,8 +21,9 @@ COPY . .
 # Build-time environment
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
-ENV STANDALONE=true
+ENV DOCKER_BUILD=true
 
+# Build with standalone output enabled
 RUN npm run build
 
 # Stage 3: Runner

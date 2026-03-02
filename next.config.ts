@@ -29,8 +29,9 @@ const nextConfig: NextConfig = {
   compress: true,
   poweredByHeader: false,
 
-  // Standalone output for Docker (set STANDALONE=true when building Docker image)
-  ...(process.env.STANDALONE === "true" ? { output: "standalone" } : {}),
+  // Standalone output for Docker only (set DOCKER_BUILD=true when building Docker image)
+  // Vercel uses default serverless output - do NOT enable standalone for Vercel
+  ...(process.env.DOCKER_BUILD === "true" ? { output: "standalone" } : {}),
 
   experimental: {
     optimizeCss: true,
