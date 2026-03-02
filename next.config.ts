@@ -33,9 +33,7 @@ const nextConfig: NextConfig = {
   // Vercel uses default serverless output - do NOT enable standalone for Vercel
   ...(process.env.DOCKER_BUILD === "true" ? { output: "standalone" } : {}),
 
-  experimental: {
-    optimizeCss: true,
-  },
+  // No experimental features for deployment stability
 
   async headers() {
     const contentSecurityPolicy = [
