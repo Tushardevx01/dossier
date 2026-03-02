@@ -25,7 +25,7 @@ export async function GET(
   { params }: { params: Promise<{ path?: string[] }> }
 ) {
   const { path } = await params;
-  return notFoundResponse("GET", `/${path?.join("/") || ""}`);
+  return notFoundResponse("GET", `/${path?.join("/") ?? ""}`);
 }
 
 export async function POST(
@@ -33,7 +33,7 @@ export async function POST(
   { params }: { params: Promise<{ path?: string[] }> }
 ) {
   const { path } = await params;
-  return notFoundResponse("POST", `/${path?.join("/") || ""}`);
+  return notFoundResponse("POST", `/${path?.join("/") ?? ""}`);
 }
 
 export async function PUT(
@@ -41,7 +41,7 @@ export async function PUT(
   { params }: { params: Promise<{ path?: string[] }> }
 ) {
   const { path } = await params;
-  return notFoundResponse("PUT", `/${path?.join("/") || ""}`);
+  return notFoundResponse("PUT", `/${path?.join("/") ?? ""}`);
 }
 
 export async function DELETE(
@@ -49,7 +49,7 @@ export async function DELETE(
   { params }: { params: Promise<{ path?: string[] }> }
 ) {
   const { path } = await params;
-  return notFoundResponse("DELETE", `/${path?.join("/") || ""}`);
+  return notFoundResponse("DELETE", `/${path?.join("/") ?? ""}`);
 }
 
 export async function PATCH(
@@ -57,5 +57,5 @@ export async function PATCH(
   { params }: { params: Promise<{ path?: string[] }> }
 ) {
   const { path } = await params;
-  return notFoundResponse("PATCH", `/${path?.join("/") || ""}`);
+  return notFoundResponse("PATCH", `/${path?.join("/") ?? ""}`);
 }
