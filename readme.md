@@ -26,7 +26,7 @@ Production-grade personal portfolio built with Next.js 16, TypeScript, and Tailw
 │           Upstash Redis │ Zod │ Nodemailer │ Motion             │
 └─────────────────────────────────────────────────────────────────┘
 
-DEPLOYMENT TARGETS:
+DEPLOYMENT TARGETS
 ┌──────────────────┐     ┌──────────────────┐
 │     Vercel       │     │     Docker       │
 │   (Serverless)   │     │  (Standalone)    │
@@ -86,6 +86,11 @@ DEPLOYMENT TARGETS:
 - Rate limiting (5 requests/minute per IP)
 - Honeypot field for bot detection
 - Origin validation (CSRF protection)
+
+## Project Structure
+
+```text
+src/
 ├── app/                    # Routes and API endpoints
 │   ├── api/
 │   │   ├── send/           # Contact form submission
@@ -94,7 +99,8 @@ DEPLOYMENT TARGETS:
 │   ├── engineering-notes/  # Technical articles
 │   ├── resume/             # Resume page
 │   ├── error.tsx           # Route error boundary
-│   └── global-error.tsx    # Root error boundary
+│   ├── global-error.tsx    # Root error boundary
+│   └── loading.tsx         # Suspense fallback
 ├── components/             # UI components
 │   ├── sections/           # Page sections (Hero, About, etc.)
 │   ├── Cards/              # Card components
@@ -102,17 +108,11 @@ DEPLOYMENT TARGETS:
 │   └── ui/                 # Primitives (Button, Badge, Card)
 ├── services/               # Business logic layer
 │   ├── contact/            # Contact form processing
-│   │   ├── contact.schema.ts
-│   │   ├── contact.service.ts
-│   │   └── contact.rateLimit.ts
 │   └── email/              # Email infrastructure
-│       ├── email.transport.ts
-│       ├── email.templates.ts
-│       ├── email.verification.ts
-│       └── templates/
 ├── lib/                    # Utilities and infrastructure
 │   ├── errors.ts           # Error classes and factory
-│   ├── logger.ts           # Structured logging
+│   ├── logger.ts           # Structured JSON logging
+│   ├── monitoring.ts       # Error tracking and performance
 │   ├── env.server.ts       # Environment validation
 │   └── rateLimit.ts        # Rate limit utilities
 ├── constant/               # Static data (projects, skills, etc.)
@@ -130,15 +130,29 @@ npm run dev
 
 ## Production Build
 
+### Vercel (Serverless)
+
 ```bash
 npm run build
-npm run start
+```
+
+### Docker (Standalone)
+
+```bash
+docker build -t tushardevx01 .
+docker run -p 3000:3000 --env-file .env tushardevx01
+```
+
+Or with Docker Compose:
+
+```bash
+docker-compose up -d
 ```
 
 ## API Endpoints
 
 | Endpoint | Method | Description |
-|----------|--------|-------------|
+| -------- | ------ | ----------- |
 | `/api/send` | POST | Contact form submission |
 | `/api/health` | GET | Health check (status, uptime, dependency checks) |
 | `/api/version` | GET | Build info (version, environment, git commit) |
@@ -152,7 +166,8 @@ npm run start
   "uptime": 3600,
   "checks": {
     "env": { "status": "pass" },
-    "redis": { "status": "pass" }
+    "redis": { "status": "pass" },
+    "monitoring": { "status": "pass" }
   }
 }
 ```
@@ -160,7 +175,7 @@ npm run start
 ## Scripts
 
 | Command | Description |
-|---------|-------------|
+| ------- | ----------- |
 | `npm run dev` | Start development server |
 | `npm run build` | Build for production |
 | `npm run start` | Run production server |
@@ -177,21 +192,22 @@ GitHub Actions workflow (`.github/workflows/ci.yml`):
 5. **Deploy Production** — Vercel production deployment (main branch)
 6. **Health Check** — Post-deployment verification
 
-## Security
+## Environment Variables
 
-- Input validation via Zod schemas
-- XSS prevention in email templates (HTML escaping)
-- Rate limiting (5 requests/minute per IP)
-- Honeypot field for bot detection
-- Origin validation (CSRF protection)
-- Environment variables validated at startup
+| Variable | Required | Description |
+| -------- | -------- | ----------- |
+| `QEV_API_KEY` | Yes | QuickEmailVerification API key |
+| `email_from` | Yes | Email sender address |
+| `email_password` | Yes | Email app password |
+| `UPSTASH_REDIS_REST_URL` | No | Upstash Redis URL (rate limiting) |
+| `UPSTASH_REDIS_REST_TOKEN` | No | Upstash Redis token |
+| `DOCKER_BUILD` | No | Set to `true` for Docker builds |
 
 ## Performance
 
 - Static generation for content pages
 - Dynamic imports for code splitting
 - Node.js serverless for API endpoints
-- Optimized CSS via Critters
 - Minimal client-side JavaScript
 
 ## License
