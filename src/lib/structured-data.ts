@@ -8,10 +8,19 @@ export function generatePersonStructuredData() {
   return {
     "@context": "https://schema.org",
     "@type": "Person",
+    "@id": "https://tushardevx01.tech/#person",
     name: selfData.name,
     givenName: selfData.first_name,
+    additionalName: selfData.middle_name,
     familyName: selfData.last_name,
+    alternateName: ["Tushar Dey", "tushardevx01", "TusharDevX"],
     jobTitle: selfData.jobTitle,
+    image: {
+      "@type": "ImageObject",
+      url: "https://tushardevx01.tech/images/profile.jpg",
+      width: 400,
+      height: 400,
+    },
     worksFor: {
       "@type": "Organization",
       name: selfData.workFor,
@@ -20,7 +29,11 @@ export function generatePersonStructuredData() {
       "@type": "CollegeOrUniversity",
       name: "Adamas University",
     },
-    email: selfData.email,
+    email: `mailto:${selfData.email}`,
+    nationality: {
+      "@type": "Country",
+      name: "India",
+    },
     address: {
       "@type": "PostalAddress",
       addressLocality: selfData.current_location.city,
@@ -154,8 +167,8 @@ export function generateResumeStructuredData() {
     },
     dateModified: new Date().toISOString(),
     fileFormat: "application/pdf",
-    contentUrl: "https://tushardevx01.tech/docs/MyResume.pdf",
-    downloadUrl: "https://tushardevx01.tech/docs/MyResume.pdf",
+    contentUrl: "https://tushardevx01.tech/docs/Resume.pdf",
+    downloadUrl: "https://tushardevx01.tech/docs/Resume.pdf",
     keywords: [
       "Software Developer",
       "Full Stack Developer",

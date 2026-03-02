@@ -92,10 +92,18 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "Tushar Kanti Dey | Full Stack Developer",
-    description: "Student developer passionate about building modern web apps with Next.js, React, and open-source tools.",
+    title: "Tushar Kanti Dey | Full Stack Developer & DevOps Engineer",
+    description: "Tushar Kanti Dey - Student developer passionate about building modern web apps with Next.js, React, and open-source tools.",
+    site: "@tushardevX01",
     creator: "@tushardevX01",
-    images: ["https://tushardevx01.tech/"],
+    images: [
+      {
+        url: "https://tushardevx01.tech/images/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Tushar Kanti Dey - Full Stack Developer Portfolio",
+      },
+    ],
   },
 
   openGraph: {
