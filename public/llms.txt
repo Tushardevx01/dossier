@@ -6,15 +6,16 @@
 
 Tushar Kanti Dey is a Full Stack Developer and DevOps Engineer based in Kolkata, India. He builds production-grade web applications with modern JavaScript frameworks and scalable cloud infrastructure.
 
-## About Tushar Kanti Dey
+## Engineering Philosophy
 
-Tushar Kanti Dey approaches software as a complete system, not a collection of features. From user interface to cloud infrastructure, every layer is intentional, predictable, and built to scale.
+- **Systems Thinking**: Software is a complete system, not a collection of features. From user interface to cloud infrastructure, every layer must be intentional, predictable, and built to scale.
 
-As a Full Stack Developer specializing in Next.js and React, Tushar builds performant web applications with TypeScript, Node.js, and modern JavaScript frameworks that serve real users in production.
+- **Production-First Mindset**: Build performant web applications designed for real users and real production environments. Design CI/CD pipelines and containerized deployments that prioritize reliability, monitoring, and controlled rollouts.
 
-On the DevOps side, Tushar Kanti Dey designs CI/CD pipelines, containerized deployments with Docker and Kubernetes, and implements observability solutions to ensure systems remain reliable under load.
+- **Clarity Over Cleverness**: Explicit architecture over hidden complexity. Long-term maintainability over short-term hacks. Code should scale with traffic, teams, and time.
 
-Currently studying at Adamas University in Kolkata, India, Tushar balances academics with building open-source projects and contributing to the developer community.
+- **Continuous Improvement**: Balance learning with building serious projects, experimenting with infrastructure, and continuously refining engineering standards.
+
 
 ## Technical Skills
 

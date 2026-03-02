@@ -11,9 +11,9 @@ export const selfData = {
     country: "India",
   },
   DOB: {
-    dd: 9,
-    mm: 8,
-    yyyy: 2004,
+    dd: 29,
+    mm: 3,
+    yyyy: 2005,
   },
   email: "thetushardev0@gmail.com",
   roles: [
@@ -25,13 +25,36 @@ export const selfData = {
     "Open Source Contributor",
   ],
   desc: "I design and build tools that live on the internet.",
-  bio: "Tushar Kanti Dey is a Full Stack Developer and DevOps Engineer building production-grade web applications with Next.js, React, Node.js, and modern cloud infrastructure.",
+  bio: "I am a Full Stack Developer and DevOps Engineer building production-grade web applications with Next.js, React, Node.js, and modern cloud infrastructure.",
   about: [
-    "Tushar Kanti Dey approaches software as a complete system, not a collection of features. From user interface to cloud infrastructure, every layer is intentional, predictable, and built to scale.",
-    "As a Full Stack Developer specializing in Next.js and React, Tushar builds performant web applications with TypeScript, Node.js, and modern JavaScript frameworks that serve real users in production.",
-    "On the DevOps side, Tushar designs CI/CD pipelines, containerized deployments with Docker and Kubernetes, and implements observability solutions to ensure systems remain reliable under load.",
-    "Tushar Kanti Dey values clarity over cleverness, explicit architecture over hidden complexity, and reliability over quick fixes. Code should scale with both traffic and time.",
-    "Currently studying at Adamas University in Kolkata, India, Tushar balances academics with building open-source projects and contributing to the developer community."
+  "I approach software as a complete system, not a collection of features. From user interface to cloud infrastructure, every layer must be intentional, predictable, and built to scale.",
+
+  "As a Full Stack Developer specializing in Next.js, React, TypeScript, and Node.js, I build performant web applications designed for real users and real production environments.",
+
+  "On the DevOps side, I design CI/CD pipelines, containerized deployments with Docker, and production workflows that prioritize reliability, monitoring, and controlled rollouts.",
+
+  "I value clarity over cleverness, explicit architecture over hidden complexity, and long-term maintainability over short-term hacks. Code should scale with traffic, teams, and time.",
+
+  "Currently studying at Adamas University in Kolkata, I balance academics with building serious projects, experimenting with infrastructure, and continuously refining my engineering standards."
+],
+
+  engineeringPhilosophy: [
+    {
+      title: "Systems Thinking",
+      description: "Software is a complete system, not a collection of features. Every layer must be intentional, predictable, and built to scale."
+    },
+    {
+      title: "Production-First",
+      description: "Build for real users and real environments. Prioritize reliability, monitoring, and controlled rollouts."
+    },
+    {
+      title: "Clarity Over Cleverness",
+      description: "Explicit architecture over hidden complexity. Code should scale with traffic, teams, and time."
+    },
+    {
+      title: "Continuous Improvement",
+      description: "Balance learning with building, experimenting with infrastructure, and refining engineering standards."
+    }
   ],
 
   socials_username: {
