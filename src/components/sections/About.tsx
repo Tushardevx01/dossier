@@ -23,6 +23,32 @@ export const About = () => {
       className="py-24 max-w-6xl mx-auto relative overflow-hidden"
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 overflow-x-hidden">
+        {/* Title Section */}
+        <motion.div
+          className="mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{
+            duration: 0.6,
+            delay: 0.2,
+            ease: "easeOut",
+          }}
+        >
+          <h2
+            className={`${nasalization.className} text-3xl sm:text-4xl md:text-5xl font-bold relative`}
+            style={{ color: "hsl(var(--primary))" }}
+          >
+            Systems That Endure{" "}
+            <span style={{ color: "hsl(var(--foreground) / 0.5)" }}>Center.</span>
+          </h2>
+          <p
+            className="mt-3 text-sm sm:text-base"
+            style={{ color: "hsl(var(--foreground) / 0.5)" }}
+          >
+            End-to-End Engineering from Interface to Infrastructure
+          </p>
+        </motion.div>
+
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <motion.div
             className="flex justify-center md:justify-start"
@@ -73,7 +99,7 @@ export const About = () => {
           </motion.div>
 
           <motion.div
-            className="space-y-8"
+            className="space-y-6"
             initial={{ opacity: 0, x: 60 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 60 }}
             transition={{
@@ -82,23 +108,6 @@ export const About = () => {
               ease: [0.25, 0.46, 0.45, 0.94],
             }}
           >
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{
-                duration: 0.6,
-                delay: 0.4,
-                ease: "easeOut",
-              }}
-            >
-              <h2
-                className={`${nasalization.className} text-3xl sm:text-4xl md:text-5xl font-bold relative`}
-                style={{ color: "hsl(var(--primary))" }}
-              >
-                {`Engineering Philosophy`}
-              </h2>
-            </motion.div>
-
             <motion.div
               className="space-y-6 leading-relaxed"
               style={{ color: "hsl(var(--foreground) / 0.8)" }}
