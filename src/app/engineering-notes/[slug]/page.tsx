@@ -21,28 +21,34 @@ export async function generateMetadata(
     };
   }
 
-  const baseUrl = "https://tushardevx01.dev";
+  const baseUrl = "https://tushardevx01.tech";
   const articleUrl = `${baseUrl}/engineering-notes/${slug}`;
 
   return {
-    title: `${article.title} — Tushar DevX`,
+    title: `${article.title} | Tushar Kanti Dey`,
     description: article.description,
-    authors: [{ name: "Tushar DevX" }],
+    authors: [{ name: "Tushar Kanti Dey", url: baseUrl }],
+    creator: "Tushar Kanti Dey",
+    alternates: {
+      canonical: articleUrl,
+    },
     openGraph: {
-      title: article.title,
+      title: `${article.title} | Tushar Kanti Dey`,
       description: article.description,
       type: "article",
       url: articleUrl,
       publishedTime: article.date,
-      authors: ["Tushar DevX"],
-      tags: [article.category],
+      authors: ["Tushar Kanti Dey"],
+      tags: [article.category, "engineering", "software development"],
+      siteName: "Tushar Kanti Dey - Portfolio",
     },
     twitter: {
       card: "summary_large_image",
       title: article.title,
       description: article.description,
+      creator: "@tushardevX01",
     },
-    keywords: [article.category, "engineering", "software development"],
+    keywords: [article.category, "engineering", "software development", "Tushar Kanti Dey"],
   };
 }
 
