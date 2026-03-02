@@ -1,0 +1,39 @@
+# Dependencies
+node_modules
+npm-debug.log*
+
+# Build outputs
+.next
+out
+dist
+build
+
+# Environment files (never include secrets)
+.env
+.env.*
+!.env.example
+
+# Version control
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage
+.nyc_output
+
+# Misc
+*.md
+!readme.md
+LICENSE
+.eslintcache
+*.log

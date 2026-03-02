@@ -1,6 +1,5 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 60 * 60 * 24 * 30,
@@ -28,6 +27,7 @@ const nextConfig: NextConfig = {
 
   compress: true,
   poweredByHeader: false,
+  output: "standalone",
 
   experimental: {
     optimizeCss: true,
@@ -53,63 +53,21 @@ const nextConfig: NextConfig = {
       {
         source: "/(.*)",
         headers: [
-          {
-            key: "X-Frame-Options",
-            value: "SAMEORIGIN",
-          },
-          {
-            key: "X-Content-Type-Options",
-            value: "nosniff",
-          },
-          {
-            key: "Referrer-Policy",
-            value: "origin-when-cross-origin",
-          },
-          {
-            key: "Strict-Transport-Security",
-            value: "max-age=31536000; includeSubDomains; preload",
-          },
-          {
-            key: "X-DNS-Prefetch-Control",
-            value: "off",
-          },
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Referrer-Policy", value: "origin-when-cross-origin" },
+          { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains; preload" },
+          { key: "X-DNS-Prefetch-Control", value: "off" },
           {
             key: "Permissions-Policy",
-            value:
-              "camera=(), microphone=(), geolocation=(), payment=(), usb=(), accelerometer=(), gyroscope=()",
+            value: "camera=(), microphone=(), geolocation=(), payment=(), usb=(), accelerometer=(), gyroscope=()",
           },
-          {
-            key: "Cross-Origin-Opener-Policy",
-            value: "same-origin",
-          },
-          {
-            key: "Cross-Origin-Resource-Policy",
-            value: "same-origin",
-          },
-          {
-            key: "Content-Security-Policy",
-            value: contentSecurityPolicy,
-          },
+          { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+          { key: "Cross-Origin-Resource-Policy", value: "same-origin" },
+          { key: "Content-Security-Policy", value: contentSecurityPolicy },
           {
             key: "X-Robots-Tag",
             value: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
-          },
-        ],
-      },
-      {
-        source: "/docs/:path*",
-        headers: [
-          {
-            key: "X-Frame-Options",
-            value: "SAMEORIGIN",
-          },
-          {
-            key: "Content-Type",
-            value: "application/pdf",
-          },
-          {
-            key: "Content-Disposition",
-            value: "inline",
           },
         ],
       },
@@ -118,44 +76,15 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
-      // Legacy /blog → /engineering-notes (SEO-safe permanent redirects)
-      {
-        source: "/blog",
-        destination: "/engineering-notes",
-        permanent: true,
-      },
-      {
-        source: "/blog/:slug",
-        destination: "/engineering-notes/:slug",
-        permanent: true,
-      },
-      {
-        source: "/home",
-        destination: "/",
-        permanent: true,
-      },
-      {
-        source: "/email",
-        destination: "mailto:Tushar.Dey@gmail.com",
-        permanent: true,
-      },
-      {
-        source: "/directresume",
-        destination: "/docs/Resume.pdf",
-        permanent: true,
-      },
-      {
-        source: "/direct-resume",
-        destination: "/docs/Resume.pdf",
-        permanent: true,
-      },
-      {
-        source: "/github",
-        destination: "https://www.github.com/Tusharxhub",
-        permanent: true,
-      },
+      { source: "/blog", destination: "/engineering-notes", permanent: true },
+      { source: "/blog/:slug", destination: "/engineering-notes/:slug", permanent: true },
+      { source: "/home", destination: "/", permanent: true },
+      { source: "/email", destination: "mailto:Tushar.Dey@gmail.com", permanent: true },
+      { source: "/directresume", destination: "/docs/Resume.pdf", permanent: true },
+      { source: "/direct-resume", destination: "/docs/Resume.pdf", permanent: true },
+      { source: "/github", destination: "https://www.github.com/Tusharxhub", permanent: true },
     ];
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
