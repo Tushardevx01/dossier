@@ -90,13 +90,27 @@ export const metadata: Metadata = {
   },
   manifest: "/manifest.json",
 
+  twitter: {
+    card: "summary_large_image",
+    title: "Tushar Kanti Dey | Full Stack Developer",
+    description: "Student developer passionate about building modern web apps with Next.js, React, and open-source tools.",
+    creator: "@tushardevX01",
+    images: ["https://tushardevx01.tech/"],
+  },
+
   openGraph: {
-    title: "Tushar Kanti Dey",
+    title: "Tushar Kanti Dey | Full Stack Developer & DevOps Engineer",
     description:
-      "Explore Tushar Kanti Dey’s portfolio featuring projects in React, Next.js, AI, and developer tools. Discover a world of creative web applications and open-source experiments.",
+      "Tushar Kanti Dey is a student developer building modern web applications with Next.js, React, TypeScript, and cloud technologies. Explore projects, engineering notes, and open-source work.",
     url: "https://tushardevx01.tech",
-    siteName: "Tushar Kanti Dey",
+    siteName: "Tushar Kanti Dey - Portfolio",
     images: [
+      {
+        url: "https://tushardevx01.tech/images/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Tushar Kanti Dey - Full Stack Developer Portfolio",
+      },
     ],
     locale: "Kolkata",
     type: "website",

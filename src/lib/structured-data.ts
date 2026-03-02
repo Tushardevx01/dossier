@@ -67,21 +67,60 @@ export function generateWebsiteStructuredData() {
 export function generateOrganizationStructuredData() {
   return {
     "@context": "https://schema.org",
-    "@type": "Organization",
-    name: selfData.name,
+    "@type": "ProfilePage",
+    name: "Tushar Kanti Dey - Developer Portfolio",
     url: "https://tushardevx01.tech",
-    logo: "https://tushardevx01.tech/images/logo.png",
     description: selfData.bio,
-    founder: {
+    mainEntity: {
       "@type": "Person",
       name: selfData.name,
+      givenName: selfData.first_name,
+      familyName: selfData.last_name,
+      url: "https://tushardevx01.tech",
+      image: "https://tushardevx01.tech/images/profile.jpg",
+      sameAs: [
+        `https://github.com/${selfData.socials_username.github}`,
+        `https://linkedin.com/in/${selfData.socials_username.linkedin}`,
+        `https://twitter.com/${selfData.socials_username.twitter}`,
+        `https://instagram.com/${selfData.socials_username.instagram}`,
+      ],
     },
-    sameAs: [
-      `https://github.com/${selfData.socials_username.github}`,
-      `https://linkedin.com/in/${selfData.socials_username.linkedin}`,
-      `https://twitter.com/${selfData.socials_username.twitter}`,
-      `https://instagram.com/${selfData.socials_username.instagram}`,
-    ],
+    dateCreated: "2024-01-01",
+    dateModified: new Date().toISOString(),
+  };
+}
+
+export interface ArticleMetadata {
+  title: string;
+  description: string;
+  slug: string;
+  publishedAt: string;
+  updatedAt?: string;
+}
+
+export function generateArticleStructuredData(article: ArticleMetadata) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    headline: article.title,
+    description: article.description,
+    url: `https://tushardevx01.tech/engineering-notes/${article.slug}`,
+    datePublished: article.publishedAt,
+    dateModified: article.updatedAt || article.publishedAt,
+    author: {
+      "@type": "Person",
+      name: selfData.name,
+      url: "https://tushardevx01.tech",
+    },
+    publisher: {
+      "@type": "Person",
+      name: selfData.name,
+      url: "https://tushardevx01.tech",
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://tushardevx01.tech/engineering-notes/${article.slug}`,
+    },
   };
 }
 
