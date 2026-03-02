@@ -1,26 +1,73 @@
-# Tushar Kanti Dey - Full Stack Developer and & DevOps Engineer
+# Tushar Kanti Dey - Full Stack Developer & DevOps Engineer
 
+> Personal portfolio and engineering blog of Tushar Kanti Dey
 
 ## Introduction
 
-## About
-Tushar Kanti Dey is a Full Stack Developer and DevOps Engineer based in Kolkata, India. He specializes in Full-Stack Web Development, primarily using the React and Next.js ecosystem.
+Tushar Kanti Dey is a Full Stack Developer and DevOps Engineer based in Kolkata, India. He builds production-grade web applications with modern JavaScript frameworks and scalable cloud infrastructure.
 
-## Skills
-- **Languages**: JavaScript, TypeScript, Python, Java, C/C++, SQL
-- **Frameworks**: Next.js, React, Express.js, Tailwind CSS
-- **Tools**: Git, GitHub, Vercel, Firebase, MongoDB
+## About Tushar Kanti Dey
 
-## Projects
-- **Portfolio**: This website, showcasing his work and skills.
-- **Various Open Source Experiments**: Available on GitHub.
+Tushar Kanti Dey approaches software as a complete system, not a collection of features. From user interface to cloud infrastructure, every layer is intentional, predictable, and built to scale.
 
-## Contact
+As a Full Stack Developer specializing in Next.js and React, Tushar builds performant web applications with TypeScript, Node.js, and modern JavaScript frameworks that serve real users in production.
+
+On the DevOps side, Tushar Kanti Dey designs CI/CD pipelines, containerized deployments with Docker and Kubernetes, and implements observability solutions to ensure systems remain reliable under load.
+
+Currently studying at Adamas University in Kolkata, India, Tushar balances academics with building open-source projects and contributing to the developer community.
+
+## Technical Skills
+
+### Frontend Development
+- **Frameworks**: Next.js 15+, React 19, Vue.js
+- **Languages**: TypeScript, JavaScript (ES6+)
+- **Styling**: Tailwind CSS, CSS-in-JS, Framer Motion
+- **State Management**: Redux Toolkit, Zustand, React Query
+
+### Backend Development
+- **Runtime**: Node.js, Bun
+- **Frameworks**: Express.js, Fastify, NestJS
+- **Databases**: PostgreSQL, MongoDB, Redis, Supabase
+- **ORMs**: Prisma, Drizzle, Mongoose
+
+### DevOps & Infrastructure
+- **Containerization**: Docker, Kubernetes
+- **CI/CD**: GitHub Actions, GitLab CI, Jenkins
+- **Cloud Platforms**: AWS, Google Cloud, Vercel, Railway
+- **Monitoring**: Prometheus, Grafana, Datadog
+
+### Tools & Practices
+- **Version Control**: Git, GitHub
+- **Testing**: Jest, Vitest, Playwright, Cypress
+- **API Design**: REST, GraphQL, tRPC
+- **Documentation**: OpenAPI, Swagger
+
+## Projects by Tushar Kanti Dey
+
+### Portfolio Website
+This website showcasing projects, engineering notes, and professional experience. Built with Next.js 16, TypeScript, Tailwind CSS, and deployed on Vercel.
+
+### Engineering Notes
+Technical articles covering systems architecture, DevOps practices, full-stack development, and production engineering lessons learned.
+
+### Open Source Contributions
+Various experiments and tools available on GitHub: https://github.com/Tusharxhub
+
+## Contact Tushar Kanti Dey
+
 - **Email**: thetushardev0@gmail.com
 - **GitHub**: https://github.com/Tusharxhub
 - **LinkedIn**: https://linkedin.com/in/tushardevx01
 - **Twitter**: https://twitter.com/tushardevx01
+- **Website**: https://tushardevx01.tech
 
-## Content Structure
-- `/`: Main landing page with Hero, About, Skills, Experience, Projects, and Contact sections.
-- `/resume`: Direct link to view/download resume.
+## Site Structure
+
+- `/` - Main landing page with Hero, About Tushar Kanti Dey, Skills, Experience, Projects, and Contact sections
+- `/engineering-notes` - Technical articles and engineering blog posts by Tushar Kanti Dey
+- `/resume` - Professional resume with downloadable PDF
+- `/sitemap.xml` - XML sitemap for search engines
+
+## Keywords
+
+Tushar Kanti Dey, Full Stack Developer, DevOps Engineer, Next.js Developer, React Developer, Node.js Developer, TypeScript, JavaScript, Kolkata Developer, Indian Developer, Web Developer Portfolio, Software Engineer, Cloud Infrastructure, CI/CD, Docker, Kubernetes, Adamas University

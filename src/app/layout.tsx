@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   applicationName: "Tushar Kanti Dey",
   title: "Tushar Kanti Dey | Full Stack Developer & DevOps Engineer",
   description:
-    "Tushar Kanti Dey is a student developer passionate about building modern web apps with Next.js, React, and open-source tools. Explore his projects, experiments, and developer portfolio.",
+    "Tushar Kanti Dey - Full Stack Developer & DevOps Engineer building scalable web apps with Next.js, React, Node.js. View projects & engineering portfolio.",
   authors: [
     {
       name: "Tushar Kanti Dey",
@@ -93,7 +93,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Tushar Kanti Dey | Full Stack Developer & DevOps Engineer",
-    description: "Tushar Kanti Dey - Student developer passionate about building modern web apps with Next.js, React, and open-source tools.",
+    description: "Full Stack Developer & DevOps Engineer building scalable web apps with Next.js, React, Node.js, and cloud infrastructure.",
     site: "@tushardevX01",
     creator: "@tushardevX01",
     images: [
@@ -109,7 +109,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Tushar Kanti Dey | Full Stack Developer & DevOps Engineer",
     description:
-      "Tushar Kanti Dey is a student developer building modern web applications with Next.js, React, TypeScript, and cloud technologies. Explore projects, engineering notes, and open-source work.",
+      "Tushar Kanti Dey - Full Stack Developer & DevOps Engineer specializing in Next.js, React, Node.js, and scalable cloud infrastructure. Explore projects and engineering portfolio.",
     url: "https://tushardevx01.tech",
     siteName: "Tushar Kanti Dey - Portfolio",
     images: [
@@ -120,7 +120,7 @@ export const metadata: Metadata = {
         alt: "Tushar Kanti Dey - Full Stack Developer Portfolio",
       },
     ],
-    locale: "Kolkata",
+    locale: "en_US",
     type: "website",
   },
 };

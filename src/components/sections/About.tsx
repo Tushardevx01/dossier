@@ -59,7 +59,7 @@ export const About = () => {
                 >
                   <Image
                     src="/images/me.png"
-                    alt="Profile Picture"
+                    alt="Tushar Kanti Dey - Full Stack Developer and DevOps Engineer"
                     fill
                     loading="lazy"
                     sizes="(max-width: 768px) 100vw, 448px"
@@ -95,8 +95,14 @@ export const About = () => {
                 className={`${nasalization.className} text-3xl sm:text-4xl md:text-5xl font-bold relative`}
                 style={{ color: "hsl(var(--primary))" }}
               >
-                Engineering Philosophy
+                About {selfData.name}
               </h2>
+              <p
+                className="mt-2 text-sm"
+                style={{ color: "hsl(var(--foreground) / 0.5)" }}
+              >
+                Full Stack Developer & DevOps Engineer
+              </p>
             </motion.div>
 
             <motion.div
@@ -109,7 +115,7 @@ export const About = () => {
               {selfData.about.map((paragraph, index) => (
                 <motion.p
                   key={index}
-                  className="text-sm sm:text-xs"
+                  className="text-sm sm:text-base leading-relaxed"
                   initial={{ opacity: 0, y: 15 }}
                   animate={
                     isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }

@@ -3,7 +3,7 @@ export const selfData = {
   first_name: "Tushar",
   middle_name: "Kanti",
   last_name: "Dey",
-  jobTitle: "Student Developer",
+  jobTitle: "Full Stack Developer & DevOps Engineer",
   workFor: "Adamas University",
   current_location: {
     city: "Kolkata",
@@ -17,22 +17,21 @@ export const selfData = {
   },
   email: "thetushardev0@gmail.com",
   roles: [
-    "Chief Problem Solver",
-    "Idea Mechanic",
-    "Possibility Pilot",
-    "Chaos Coordinator",
-    "Chief Tinkerer",
-    "Glitch Gladiator",
-    "Solution Sorcerer",
-    "Joyful Juggler",
+    "Full Stack Developer",
+    "DevOps Engineer",
+    "Systems Architect",
+    "Product Builder",
+    "Infrastructure Specialist",
+    "Open Source Contributor",
   ],
   desc: "I design and build tools that live on the internet.",
-  bio: "I'm a student developer passionate about crafting digital experiences. I love building intuitive web apps, exploring new technologies, and turning creative ideas into accessible tools.",
+  bio: "Tushar Kanti Dey is a Full Stack Developer and DevOps Engineer building production-grade web applications with Next.js, React, Node.js, and modern cloud infrastructure.",
   about: [
-    "I approach software as a complete system, not a collection of features. From interface to infrastructure, every layer should be intentional, predictable, and built to last.",
-    "I value clarity over cleverness, explicit architecture over hidden complexity, and reliability over quick fixes. Code should scale with both traffic and time.",
-    "Shipping is only the beginning. I believe in deploying responsibly, observing behavior in production, and refining continuously.",
-    "Good engineering is not just about making things work, it is about making them dependable."
+    "Tushar Kanti Dey approaches software as a complete system, not a collection of features. From user interface to cloud infrastructure, every layer is intentional, predictable, and built to scale.",
+    "As a Full Stack Developer specializing in Next.js and React, Tushar builds performant web applications with TypeScript, Node.js, and modern JavaScript frameworks that serve real users in production.",
+    "On the DevOps side, Tushar designs CI/CD pipelines, containerized deployments with Docker and Kubernetes, and implements observability solutions to ensure systems remain reliable under load.",
+    "Tushar Kanti Dey values clarity over cleverness, explicit architecture over hidden complexity, and reliability over quick fixes. Code should scale with both traffic and time.",
+    "Currently studying at Adamas University in Kolkata, India, Tushar balances academics with building open-source projects and contributing to the developer community."
   ],
 
   socials_username: {

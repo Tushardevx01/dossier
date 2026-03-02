@@ -16,6 +16,7 @@ export const Hero = () => {
   return (
     <section
       ref={ref}
+      aria-label="Introduction to Tushar Kanti Dey"
       className="min-h-screen flex items-center justify-start px-4 sm:px-6 lg:px-8 relative"
     >
       <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />

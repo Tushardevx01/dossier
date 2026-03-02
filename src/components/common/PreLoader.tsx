@@ -6,21 +6,24 @@ import { motion, AnimatePresence } from "motion/react";
 import { FC, useState, useEffect } from "react";
 import { Background } from "./Background";
 
-interface H1ComponentProps {
-  name: string;
+interface LoaderTextProps {
+  text: string;
   y_initialValue: number;
 }
 
-const H1_Component: FC<H1ComponentProps> = ({ name, y_initialValue }) => {
+/** Decorative loading text - using span to preserve single h1 on page */
+const LoaderText: FC<LoaderTextProps> = ({ text, y_initialValue }) => {
   return (
-    <motion.h1
+    <motion.span
+      role="presentation"
+      aria-hidden="true"
       initial={{ y: y_initialValue, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 1 }}
       className={`text-slate-200 text-4xl ${nasalization.className}`}
     >
-      {name}
-    </motion.h1>
+      {text}
+    </motion.span>
   );
 };
 
@@ -50,13 +53,16 @@ export const PreLoader = () => {
 
             <motion.div
               className="flex justify-center items-center tracking-widest mx-auto container text-2xl text-slate-400"
+              role="status"
+              aria-label="Loading portfolio"
               initial={{ opacity: 1 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <H1_Component name="TusharDev" y_initialValue={100} />
+              <LoaderText text="TusharDev" y_initialValue={100} />
               <motion.span
+                aria-hidden="true"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -65,7 +71,7 @@ export const PreLoader = () => {
               >
                 /
               </motion.span>
-              <H1_Component name="X01" y_initialValue={-100} />
+              <LoaderText text="X01" y_initialValue={-100} />
             </motion.div>
           </div>
         </motion.div>
