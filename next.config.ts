@@ -1,5 +1,6 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 60 * 60 * 24 * 30,
@@ -29,7 +30,7 @@ const nextConfig = {
   poweredByHeader: false,
 
   // Standalone output for Docker (set STANDALONE=true when building Docker image)
-  ...(process.env.STANDALONE === "true" ? { output: "standalone" as const } : {}),
+  ...(process.env.STANDALONE === "true" ? { output: "standalone" } : {}),
 
   experimental: {
     optimizeCss: true,
@@ -89,4 +90,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;
