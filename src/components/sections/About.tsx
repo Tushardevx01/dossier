@@ -95,14 +95,8 @@ export const About = () => {
                 className={`${nasalization.className} text-3xl sm:text-4xl md:text-5xl font-bold relative`}
                 style={{ color: "hsl(var(--primary))" }}
               >
-                About {selfData.name}
+                {`Engineering Philosophy`}
               </h2>
-              <p
-                className="mt-2 text-sm"
-                style={{ color: "hsl(var(--foreground) / 0.5)" }}
-              >
-                Full Stack Developer & DevOps Engineer
-              </p>
             </motion.div>
 
             <motion.div

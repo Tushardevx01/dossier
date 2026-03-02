@@ -27,35 +27,16 @@ export const selfData = {
   desc: "I design and build tools that live on the internet.",
   bio: "I am a Full Stack Developer and DevOps Engineer building production-grade web applications with Next.js, React, Node.js, and modern cloud infrastructure.",
   about: [
-  "I approach software as a complete system, not a collection of features. From user interface to cloud infrastructure, every layer must be intentional, predictable, and built to scale.",
+  "I design systems end-to-end—from React interfaces to Node.js services to cloud infrastructure. Every architectural decision accounts for scale, failure modes, and long-term maintainability.",
 
-  "As a Full Stack Developer specializing in Next.js, React, TypeScript, and Node.js, I build performant web applications designed for real users and real production environments.",
+  "My stack centers on Next.js, TypeScript, and Node.js for application development, with Docker, CI/CD pipelines, and observability tooling for production operations. I build what I deploy and own what I ship.",
 
-  "On the DevOps side, I design CI/CD pipelines, containerized deployments with Docker, and production workflows that prioritize reliability, monitoring, and controlled rollouts.",
+  "I think in trade-offs: latency vs. consistency, flexibility vs. complexity, speed-to-ship vs. technical debt. No solution is perfect—the goal is making constraints explicit and choosing deliberately.",
 
-  "I value clarity over cleverness, explicit architecture over hidden complexity, and long-term maintainability over short-term hacks. Code should scale with traffic, teams, and time.",
+  "Production readiness is non-negotiable. Structured logging, health checks, graceful degradation, and rollback strategies are part of the initial design, not afterthoughts when things break.",
 
-  "Currently studying at Adamas University in Kolkata, I balance academics with building serious projects, experimenting with infrastructure, and continuously refining my engineering standards."
+  "Based in Kolkata and studying at Adamas University, I focus on building systems that work under real conditions—not demos that impress, but infrastructure that holds."
 ],
-
-  engineeringPhilosophy: [
-    {
-      title: "Systems Thinking",
-      description: "Software is a complete system, not a collection of features. Every layer must be intentional, predictable, and built to scale."
-    },
-    {
-      title: "Production-First",
-      description: "Build for real users and real environments. Prioritize reliability, monitoring, and controlled rollouts."
-    },
-    {
-      title: "Clarity Over Cleverness",
-      description: "Explicit architecture over hidden complexity. Code should scale with traffic, teams, and time."
-    },
-    {
-      title: "Continuous Improvement",
-      description: "Balance learning with building, experimenting with infrastructure, and refining engineering standards."
-    }
-  ],
 
   socials_username: {
     github: "Tusharxhub",
