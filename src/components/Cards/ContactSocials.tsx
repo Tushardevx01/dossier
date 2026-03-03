@@ -41,33 +41,39 @@ export const ContactSocials = () => {
       Icon: FaGithub,
       link: `https://github.com/${selfData.socials_username.github}`,
       initial: -10,
+      name: "GitHub",
     },
     {
       Icon: FaLinkedinIn,
-      link: `https://www.linkedin.com/in/${selfData.socials_username.linkedin}`,
+      link: `https://www.linkedin.com/${selfData.socials_username.linkedin}`,
       initial: 10,
+      name: "LinkedIn",
     },
 
     {
       Icon: FaTwitter,
       link: `https://twitter.com/${selfData.socials_username.twitter}`,
       initial: 10,
+      name: "Twitter",
     },
 
     {
       Icon: FaDiscord,
       link: `https://discord.com/users/${selfData.socials_username.discord}`,
       initial: 10,
+      name: "Discord",
     },
     {
       Icon: FaWhatsapp,
       link: `https://wa.me/${selfData.socials_username.whatsapp.replace(/[\s+]/g, '')}`,
       initial: -10,
+      name: "WhatsApp",
     },
     {
       Icon: GDGIcon as IconType,
       link: `https://developers.google.com/profile/u/${selfData.socials_username.gdg}`,
       initial: 10,
+      name: "Google Developer Profile",
     },
   ];
 
@@ -79,6 +85,7 @@ export const ContactSocials = () => {
           Icon={social.Icon}
           link={social.link}
           initial={social.initial}
+          name={social.name}
         />
       ))}
     </ul>
@@ -89,10 +96,12 @@ const ContactSocialItem = ({
   Icon,
   link,
   initial,
+  name,
 }: {
   Icon: IconType;
   link: string;
   initial: number;
+  name: string;
 }) => {
   // Brand colors for each social platform
   const getBrandColor = () => {
@@ -124,6 +133,7 @@ const ContactSocialItem = ({
         target="_blank"
         rel="noopener noreferrer"
         className="flex items-center group"
+        aria-label={`Visit ${name}`}
       >
         <motion.div
           whileHover={{
@@ -136,8 +146,8 @@ const ContactSocialItem = ({
         >
           <Icon
             className={`w-5 h-5 transition-all duration-300 ${isGoogle
-                ? 'opacity-70 [filter:brightness(0)_invert(1)] group-hover:[filter:none] group-hover:opacity-100'
-                : 'text-slate-400 group-hover:text-white'
+              ? 'opacity-70 [filter:brightness(0)_invert(1)] group-hover:[filter:none] group-hover:opacity-100'
+              : 'text-slate-400 group-hover:text-white'
               }`}
             style={{
               color: isGoogle ? undefined : 'inherit',

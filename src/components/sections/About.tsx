@@ -160,6 +160,7 @@ export const About = () => {
                   href={`https://www.google.com/maps/place/${selfData.current_location.city}+${selfData.current_location.state}+${selfData.current_location.country}`}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label="View Location on Google Maps"
                   className="flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-2.5 sm:py-3 rounded-full border border-primary/20 hover:border-primary/50 group transition-all duration-300"
                 >
                   <motion.div

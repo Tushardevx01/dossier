@@ -11,14 +11,12 @@ export const Navbar = () => {
   return (
     <nav
       aria-label="Primary"
-      className={`fixed top-4 left-0 right-0 z-50 transition-all duration-300 ease-out ${
-        isScrolled ? "pt-0 px-2 sm:px-4" : "px-2 sm:px-3"
-      } ${isVisible ? "translate-y-0" : "-translate-y-full"}`}
+      className={`fixed top-4 left-0 right-0 z-50 transition-all duration-300 ease-out ${isScrolled ? "pt-0 px-2 sm:px-4" : "px-2 sm:px-3"
+        } ${isVisible ? "translate-y-0" : "-translate-y-full"}`}
     >
       <div
-        className={`floating-nav rounded-2xl px-3 sm:px-6 py-2.5 sm:py-3 bg-glass-bg transition-all duration-300 max-w-7xl mx-auto ${
-          isScrolled ? "shadow-xl" : "shadow-lg"
-        }`}
+        className={`floating-nav rounded-2xl px-3 sm:px-6 py-2.5 sm:py-3 bg-glass-bg transition-all duration-300 max-w-7xl mx-auto ${isScrolled ? "shadow-xl" : "shadow-lg"
+          }`}
       >
         <div className="flex items-center justify-between">
           <Link
@@ -29,7 +27,7 @@ export const Navbar = () => {
             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-glass-bg flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
               <Image
                 src="/images/logo.svg"
-                alt="logo"
+                alt="Tushar Kanti Dey Logo"
                 width={40}
                 height={40}
                 priority
@@ -45,6 +43,7 @@ export const Navbar = () => {
             <Link
               href="/engineering-notes"
               className="px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-xl border border-white/20 hover:border-white/45 text-white transition-colors duration-200 font-medium text-xs sm:text-sm whitespace-nowrap"
+              aria-label="Read Engineering Notes"
             >
               Engineering Notes
             </Link>

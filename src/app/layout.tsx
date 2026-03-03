@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   applicationName: "Tushar Kanti Dey",
   title: "Tushar Kanti Dey | Full Stack Developer & DevOps Engineer",
   description:
-    "Portfolio of Tushar Kanti Dey. Full Stack Developer & DevOps Engineer specializing in building scalable web apps with React, Java, and automated CI/CD pipelines.",
+    "Portfolio of Tushar Kanti Dey, 3rd-year B.Tech CSE student at Adamas University. Full Stack Developer & DevOps Engineer specializing in full-stack engineering, scalable web apps, and DevOps automation.",
   authors: [
     {
       name: "Tushar Kanti Dey",
@@ -109,7 +109,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Tushar Kanti Dey | Full Stack & DevOps Expert",
     description:
-      "Bridging the gap between development and operations. Check out my latest full-stack projects and DevOps workflows.",
+      "Bridging the gap between development and operations. 3rd-year B.Tech CSE student at Adamas University focusing on automated CI/CD and full-stack systems.",
     url: "https://www.tushardevx01.tech/",
     siteName: "Tushar Kanti Dey - Portfolio",
     images: [

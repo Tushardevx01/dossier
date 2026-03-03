@@ -127,7 +127,7 @@ const ContactItem: React.FC<ContactItemProps> = ({
 
   if (href) {
     return (
-      <Link href={href} className="block">
+      <Link href={href} className="block" aria-label={label}>
         {content}
       </Link>
     );
