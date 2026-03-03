@@ -6,9 +6,8 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api", "/private"],
       },
     ],
-    sitemap: "https://tushardevx01.tech/sitemap.xml",
+    sitemap: "https://www.tushardevx01.tech/sitemap.xml",
   };
 }

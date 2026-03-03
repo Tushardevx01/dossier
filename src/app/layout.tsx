@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   applicationName: "Tushar Kanti Dey",
   title: "Tushar Kanti Dey | Full Stack Developer & DevOps Engineer",
   description:
-    "Tushar Kanti Dey - Full Stack Developer & DevOps Engineer building scalable web apps with Next.js, React, Node.js. View projects & engineering portfolio.",
+    "Portfolio of Tushar Kanti Dey. Full Stack Developer & DevOps Engineer specializing in building scalable web apps with React, Java, and automated CI/CD pipelines.",
   authors: [
     {
       name: "Tushar Kanti Dey",
@@ -28,8 +28,8 @@ export const metadata: Metadata = {
   referrer: "origin-when-cross-origin",
   category: "Portfolio",
   classification: "Software Development",
-  keywords: Keywords,
-  metadataBase: new URL("https://tushardevx01.tech"),
+  keywords: ["Tushar Kanti Dey", "Tushar Dev", "Full Stack Developer", "DevOps Engineer", "Cloud Engineering", "CI/CD", "React", "Java", "Docker", "Kubernetes", "Adamas University"],
+  metadataBase: new URL("https://www.tushardevx01.tech"),
 
 
   alternates: {
@@ -92,13 +92,13 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "Tushar Kanti Dey | Full Stack Developer & DevOps Engineer",
+    title: "Tushar Kanti Dey | Full Stack & DevOps Engineer",
     description: "Full Stack Developer & DevOps Engineer building scalable web apps with Next.js, React, Node.js, and cloud infrastructure.",
     site: "@tushardevX01",
     creator: "@tushardevX01",
     images: [
       {
-        url: "https://tushardevx01.tech/images/og-image.png",
+        url: "https://www.tushardevx01.tech/assets/devops-portfolio-preview.png",
         width: 1200,
         height: 630,
         alt: "Tushar Kanti Dey - Full Stack Developer Portfolio",
@@ -107,14 +107,14 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "Tushar Kanti Dey | Full Stack Developer & DevOps Engineer",
+    title: "Tushar Kanti Dey | Full Stack & DevOps Expert",
     description:
-      "Tushar Kanti Dey - Full Stack Developer & DevOps Engineer specializing in Next.js, React, Node.js, and scalable cloud infrastructure. Explore projects and engineering portfolio.",
-    url: "https://tushardevx01.tech",
+      "Bridging the gap between development and operations. Check out my latest full-stack projects and DevOps workflows.",
+    url: "https://www.tushardevx01.tech/",
     siteName: "Tushar Kanti Dey - Portfolio",
     images: [
       {
-        url: "https://tushardevx01.tech/images/og-image.png",
+        url: "https://www.tushardevx01.tech/assets/devops-portfolio-preview.png",
         width: 1200,
         height: 630,
         alt: "Tushar Kanti Dey - Full Stack Developer Portfolio",

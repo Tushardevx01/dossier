@@ -2,8 +2,8 @@ import { MetadataRoute } from "next";
 import { generateArticleStaticParams } from "@/lib/articleLoader";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://tushardevx01.tech";
-  const lastModified = new Date();
+  const baseUrl = "https://www.tushardevx01.tech";
+  const lastModified = new Date("2026-03-03");
   const engineeringNotesSlugs = generateArticleStaticParams();
 
   return [
@@ -11,7 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     {
       url: baseUrl,
       lastModified,
-      changeFrequency: "weekly" as const,
+      changeFrequency: "monthly" as const,
       priority: 1.0,
     },
     // Engineering Notes index

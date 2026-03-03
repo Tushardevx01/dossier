@@ -62,6 +62,8 @@ const SkillBadge = ({
               fontSize: iconSizes[size],
               flexShrink: 0,
             }}
+            aria-label={`${title} icon`}
+            role="img"
           />
         )}
         <span className="font-medium">{title}</span>

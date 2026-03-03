@@ -6,49 +6,32 @@ export function generatePersonStructuredData() {
   );
 
   return {
-    "@context": "https://schema.org",
+    "@context": "https://schema.org/",
     "@type": "Person",
-    "@id": "https://tushardevx01.tech/#person",
-    name: selfData.name,
-    givenName: selfData.first_name,
-    additionalName: selfData.middle_name,
-    familyName: selfData.last_name,
-    alternateName: ["Tushar Dey", "tushardevx01", "TusharDevX"],
-    jobTitle: selfData.jobTitle,
-    image: {
-      "@type": "ImageObject",
-      url: "https://tushardevx01.tech/images/profile.jpg",
-      width: 400,
-      height: 400,
-    },
-    worksFor: {
-      "@type": "Organization",
-      name: selfData.workFor,
-    },
+    name: "Tushar Kanti Dey",
+    alternateName: "Tushar Dev",
+    url: "https://www.tushardevx01.tech/",
+    image: "https://www.tushardevx01.tech/public/images/me.png",
+    jobTitle: "Full Stack Developer & DevOps Engineer",
     alumniOf: {
       "@type": "CollegeOrUniversity",
       name: "Adamas University",
     },
-    email: `mailto:${selfData.email}`,
-    nationality: {
-      "@type": "Country",
-      name: "India",
-    },
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: selfData.current_location.city,
-      addressRegion: selfData.current_location.state,
-      addressCountry: selfData.current_location.country,
-    },
     sameAs: [
-      `https://github.com/${selfData.socials_username.github}`,
-      `https://linkedin.com/in/${selfData.socials_username.linkedin}`,
-      `https://twitter.com/${selfData.socials_username.twitter}`,
-      `https://instagram.com/${selfData.socials_username.instagram}`,
+      "https://github.com/tusharxhub",
+      "https://linkedin.com/in/tushar-kanti-dey",
     ],
-    url: "https://tushardevx01.tech",
-    description: selfData.bio,
-    knowsAbout: skills,
+    knowsAbout: [
+      "Full Stack Development",
+      "DevOps",
+      "CI/CD Pipelines",
+      "Docker & Containerization",
+      "Cloud Computing",
+      "Java",
+      "Python",
+      "React",
+      "TypeScript",
+    ],
   };
 }
 
