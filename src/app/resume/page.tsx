@@ -97,7 +97,7 @@ export default function Resume() {
           transition={{ duration: 0.6 }}
         >
           <div className="text-center md:text-left">
-            <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-purple-500 to-secondary mb-2">
+            <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-blue-500 to-secondary mb-2">
               Resume
             </h1>
             <p className="text-muted-foreground">
