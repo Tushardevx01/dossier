@@ -36,18 +36,18 @@ export const experienceData = [
     ],
     url: "https://cycoder-au.vercel.app/",
   },
-  // {
-  //   role: "Full Stack Developer",
-  //   year: "June'25 - Jan'26",
-  //   description: [
-  //     "Assisted in developing responsive web applications using React and Tailwind CSS.",
-  //     "Participated in code reviews and contributed to improving code quality.",
-  //     "Gained experience with version control systems and agile development practices.",
-  //   ],
-  //   company: "Namespace.",
-  //   technologies: ["React", "Tailwind CSS", "Git", "Docker"],
-  //   url: "https://www.namespace.world/",
-  // },
+    {
+  role: "Graphics Designer",
+  year: "Mar 2025 - Present",
+  company: "Namespace",
+  description: [
+    "Designed visual assets for digital platforms including social media creatives, web banners, and promotional materials.",
+    "Collaborated with developers and team members to create consistent and engaging visual designs.",
+    "Created UI graphics, icons, and layouts for web interfaces while maintaining brand consistency."
+  ],
+  technologies: ["Figma", "GIMP", "Inkscape", "Krita"],
+  url: "https://www.namespace.world/"
+  },
   {
     role: "Full Stack web developer",
     year: "June'24 - present",
