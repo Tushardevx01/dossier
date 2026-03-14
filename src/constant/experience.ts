@@ -1,31 +1,24 @@
 export const experienceData = [
   {
     role: "Full Stack web developer",
-    year: "Feb'26 - Present",
+    year: "June'24 - present",
     description: [
-      "Building and maintaining web applications using Next.js, React, and Node.js.",
-      "Collaborating with cross-functional teams to design and implement new features.",
-      "Optimizing applications for maximum speed and scalability.",
+      "Designed intuitive, user-focused interfaces for web and mobile.",
+      "Created wireframes, prototypes, and scalable design systems.",
+      "Collaborated with developers for clean, consistent implementation."
     ],
-
-    company: "0day Tech Community",
-    technologies: [
-      "TypeScript",
-      "Node.js",
-      "supabase",
-      "Git",
-      "Vercel",
-    ],
-    url: "https://0day-iota.vercel.app/",
+    company: "azmth",
+    technologies: ["Next.js", "Tailwind CSS", "Supabase", "Git", "Vercel"],
+    url: "https://crm.azmth.in/"
   },
-{
+  {
     role: "Full Stack web developer",
     year: "Feb'25 - Present",
     description: [
-  "The official Computer Science Club of Adamas University, built by sharp minds and passionate hackers.",
-  "Empowering students to design, build, and scale impactful technology through collaboration and innovation.",
-  "Driving technical excellence via projects, hackathons, open-source contributions, and continuous learning."
-],
+      "The official Computer Science Club of Adamas University, built by sharp minds and passionate hackers.",
+      "Empowering students to design, build, and scale impactful technology through collaboration and innovation.",
+      "Driving technical excellence via projects, hackathons, open-source contributions, and continuous learning."
+    ],
     company: "CYCODERS",
     technologies: [
       "TypeScript",
@@ -36,28 +29,34 @@ export const experienceData = [
     ],
     url: "https://cycoder-au.vercel.app/",
   },
-    {
-  role: "Graphics Designer",
-  year: "Mar 2025 - Present",
-  company: "Namespace",
-  description: [
-    "Designed visual assets for digital platforms including social media creatives, web banners, and promotional materials.",
-    "Collaborated with developers and team members to create consistent and engaging visual designs.",
-    "Created UI graphics, icons, and layouts for web interfaces while maintaining brand consistency."
-  ],
-  technologies: ["Figma", "GIMP", "Inkscape", "Krita"],
-  url: "https://www.namespace.world/"
+  {
+    role: "Graphics Designer",
+    year: "Mar 2025 - Present",
+    company: "Namespace",
+    description: [
+      "Designed visual assets for digital platforms including social media creatives, web banners, and promotional materials.",
+      "Collaborated with developers and team members to create consistent and engaging visual designs.",
+      "Created UI graphics, icons, and layouts for web interfaces while maintaining brand consistency."
+    ],
+    technologies: ["Figma", "GIMP", "Inkscape", "Krita"],
+    url: "https://www.namespace.world/"
   },
   {
     role: "Full Stack web developer",
-    year: "June'24 - present",
+    year: "Feb'26 - Present",
     description: [
-      "Designed intuitive, user-focused interfaces for web and mobile.",
-    "Created wireframes, prototypes, and scalable design systems.",
-    "Collaborated with developers for clean, consistent implementation."
+      "Building and maintaining web applications using Next.js, React, and Node.js.",
+      "Collaborating with cross-functional teams to design and implement new features.",
+      "Optimizing applications for maximum speed and scalability.",
     ],
-    company: "azmth",
-    technologies: ["Next.js", "Tailwind CSS", "Supabase", "Git", "Vercel"],
-    url: "https://crm.azmth.in/"
+    company: "0day Tech Community",
+    technologies: [
+      "TypeScript",
+      "Node.js",
+      "supabase",
+      "Git",
+      "Vercel",
+    ],
+    url: "https://0day-iota.vercel.app/",
   },
 ];
