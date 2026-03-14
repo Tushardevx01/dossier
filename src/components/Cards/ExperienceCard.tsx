@@ -175,7 +175,7 @@ export const ExperienceCard: FC<ExperienceCardProps> = ({
                     duration: 0.3,
                     delay: index * 0.1 + 0.5 + techIndex * 0.05,
                     type: "spring" as const,
-                    stiffness: 300,
+                    stiffness: 400,
                   }}
                   whileHover={{ scale: 1.05 }}
                 >
