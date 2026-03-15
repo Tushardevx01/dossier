@@ -7,12 +7,9 @@ Production-ready personal portfolio built with Next.js 16, TypeScript, and Tailw
 
 ## Overview
 
-This project includes:
-
-- A modern portfolio frontend (`/`, `/resume`, `/engineering-notes`)
-- Contact form backend with validation, rate limiting, email verification, and email delivery
-- SEO analyzer API (`/api/analyze`) that audits HTTPS pages
-- Production-focused operations: health/version endpoints, structured logging, CI/CD, and Docker support
+- Portfolio frontend: `/`, `/resume`, `/engineering-notes`
+- APIs: contact form, SEO analyzer, health, and version
+- Deployment: Vercel and Docker
 
 ## Tech Stack
 
@@ -28,49 +25,12 @@ This project includes:
 | HTML Parsing | Cheerio |
 | Deployment | Vercel, Docker |
 
-## Key Features
+## Features
 
-- Responsive portfolio UI with dedicated resume and notes routes
-- SEO foundations: sitemap, robots, Open Graph image routes, structured data
-- Contact API with schema validation, anti-spam checks, and request tracing
-- Health endpoint (`/api/health`) with env/redis/monitoring checks
-- Version endpoint (`/api/version`) with build and git metadata
-- Security headers via `next.config.ts` (CSP, HSTS, COOP, CORP, permissions policy)
-- CI pipeline for lint, type-check, build, audit, deploy, and post-deploy health checks
-
-## Project Structure
-
-```text
-src/
-  app/
-    api/
-      analyze/
-      health/
-      send/
-      version/
-    engineering-notes/
-    resume/
-    (main)/
-  components/
-    Cards/
-    common/
-    sections/
-    ui/
-  services/
-    contact/
-    email/
-  lib/
-    seo-analyzer/
-    env.server.ts
-    logger.ts
-    monitoring.ts
-    rateLimit.ts
-  hooks/
-  data/
-  constant/
-  types/
-  instrumentation.ts
-```
+- Contact form validation + anti-spam + email delivery
+- Security headers (CSP, HSTS, COOP, CORP)
+- Health and version endpoints
+- CI pipeline for lint, type-check, build, audit, and deploy
 
 ## Local Development
 
@@ -80,7 +40,7 @@ src/
 npm ci
 ```
 
-2. Create `/.env.local` with required keys:
+2. Create `/.env.local`:
 
 ```env
 QEV_API_KEY=your_quickemailverification_api_key
@@ -126,10 +86,7 @@ Or use Compose:
 docker-compose up -d
 ```
 
-Notes:
-
-- Docker build sets `DOCKER_BUILD=true` and enables Next.js standalone output.
-- If Open Graph image builds fail in containers, avoid emoji in `ImageResponse` JSX and use local badges/shapes.
+Note: Docker build sets `DOCKER_BUILD=true` for standalone output.
 
 ## API Endpoints
 
@@ -142,14 +99,7 @@ Notes:
 
 ## CI/CD
 
-Workflow: `.github/workflows/ci.yml`
-
-1. Code quality checks (`npm run lint`, `tsc --noEmit`)
-2. Production build (`npm run build`)
-3. Security audit (`npm audit --audit-level=high`)
-4. Vercel preview deploy for pull requests
-5. Vercel production deploy on `main`
-6. Post-deploy checks for `/api/health` and `/api/version`
+Workflow: `.github/workflows/ci.yml` with quality checks, build, security audit, Vercel deploy, and health verification.
 
 ## Environment Variables
 
