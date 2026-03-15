@@ -1,175 +1,105 @@
-# Tushar Kanti Dey — Portfolio
+# Tushar Kanti Dey Portfolio
 
-Production-grade personal portfolio built with Next.js 16, TypeScript, and Tailwind CSS.
+Production-ready personal portfolio built with Next.js 16, TypeScript, and Tailwind CSS.
 
 [![Deploy](https://img.shields.io/badge/deploy-Vercel-black?logo=vercel)](https://tushardevx01.tech)
 [![Docker](https://img.shields.io/badge/docker-ready-blue?logo=docker)](./Dockerfile)
 
-## Architecture
+## Overview
 
-```text
-┌─────────────────────────────────────────────────────────────────┐
-│                         Next.js 16                              │
-│                    App Router + Turbopack                       │
-├─────────────────────────────────────────────────────────────────┤
-│  Routes            │  Services           │  Infrastructure      │
-│  ───────           │  ────────           │  ──────────────      │
-│  /                 │  contact/           │  errors.ts           │
-│  /resume           │    ├─ schema        │  logger.ts           │
-│  /engineering-     │    ├─ service       │  monitoring.ts       │
-│    notes           │    └─ rateLimit     │  env.server.ts       │
-│  /api/send         │  email/             │  rateLimit.ts        │
-│  /api/health       │    ├─ transport     │                      │
-│  /api/version      │    ├─ templates     │                      │
-│                    │    └─ verification  │                      │
-├─────────────────────────────────────────────────────────────────┤
-│           Upstash Redis │ Zod │ Nodemailer │ Motion             │
-└─────────────────────────────────────────────────────────────────┘
+This project includes:
 
-DEPLOYMENT TARGETS
-┌──────────────────┐     ┌──────────────────┐
-│     Vercel       │     │     Docker       │
-│   (Serverless)   │     │  (Standalone)    │
-│   Default build  │     │ DOCKER_BUILD=true│
-└──────────────────┘     └──────────────────┘
-```
+- A modern portfolio frontend (`/`, `/resume`, `/engineering-notes`)
+- Contact form backend with validation, rate limiting, email verification, and email delivery
+- SEO analyzer API (`/api/analyze`) that audits HTTPS pages
+- Production-focused operations: health/version endpoints, structured logging, CI/CD, and Docker support
 
 ## Tech Stack
 
 | Layer | Technology |
 | ----- | ---------- |
-| Framework | Next.js 16 (App Router, Turbopack) |
-| Language | TypeScript (strict mode) |
+| Framework | Next.js 16 (App Router) |
+| Language | TypeScript |
 | Styling | Tailwind CSS |
-| Animation | Motion (Framer Motion) |
-| Validation | Zod v4 |
-| Rate Limiting | Upstash Redis (distributed) |
-| Email | Nodemailer |
-| Syntax Highlighting | Prism.js |
-| Containerization | Docker (multi-stage build) |
+| Animation | Motion |
+| Validation | Zod |
+| Email | Nodemailer + React Email |
+| Rate Limiting | Upstash Redis (with fallback paths in code) |
+| HTML Parsing | Cheerio |
+| Deployment | Vercel, Docker |
 
-## Features
+## Key Features
 
-### Frontend
-
-- Responsive single-page portfolio with dedicated routes for resume and engineering notes
-- Dynamic imports for code splitting
-- SEO: metadata, sitemap, robots.txt, structured data (JSON-LD)
-- Loading states with Suspense boundaries
-
-### Backend
-
-- Service layer architecture (business logic isolated from routes)
-- Zod schema validation with type inference
-- Distributed rate limiting via Upstash Redis (fallback to in-memory)
-- Email verification via Quick Email Verification API
-- Structured JSON logging with request correlation IDs
-
-### Production
-
-- Fail-fast startup validation (`instrumentation.ts`)
-- Global and route-level error boundaries
-- Health check endpoint (`/api/health`) with dependency checks
-- Version endpoint (`/api/version`) with git info
-- Monitoring module for error tracking
-- CI/CD pipeline (`.github/workflows/ci.yml`)
-- Docker support with multi-stage builds
-
-### Security
-
-- Comprehensive CSP headers
-- HSTS with preload
-- X-Frame-Options, COOP, CORP
-- Permissions-Policy
-- Input validation via Zod schemas
-- XSS prevention in email templates
-- Rate limiting (5 requests/minute per IP)
-- Honeypot field for bot detection
-- Origin validation (CSRF protection)
+- Responsive portfolio UI with dedicated resume and notes routes
+- SEO foundations: sitemap, robots, Open Graph image routes, structured data
+- Contact API with schema validation, anti-spam checks, and request tracing
+- Health endpoint (`/api/health`) with env/redis/monitoring checks
+- Version endpoint (`/api/version`) with build and git metadata
+- Security headers via `next.config.ts` (CSP, HSTS, COOP, CORP, permissions policy)
+- CI pipeline for lint, type-check, build, audit, deploy, and post-deploy health checks
 
 ## Project Structure
 
 ```text
 src/
-├── app/                    # Routes and API endpoints
-│   ├── api/
-│   │   ├── send/           # Contact form submission
-│   │   ├── health/         # Health check endpoint
-│   │   └── version/        # Build info endpoint
-│   ├── engineering-notes/  # Technical articles
-│   ├── resume/             # Resume page
-│   ├── error.tsx           # Route error boundary
-│   ├── global-error.tsx    # Root error boundary
-│   └── loading.tsx         # Suspense fallback
-├── components/             # UI components
-│   ├── sections/           # Page sections (Hero, About, etc.)
-│   ├── Cards/              # Card components
-│   ├── common/             # Shared components (Navbar, Footer)
-│   └── ui/                 # Primitives (Button, Badge, Card)
-├── services/               # Business logic layer
-│   ├── contact/            # Contact form processing
-│   └── email/              # Email infrastructure
-├── lib/                    # Utilities and infrastructure
-│   ├── errors.ts           # Error classes and factory
-│   ├── logger.ts           # Structured JSON logging
-│   ├── monitoring.ts       # Error tracking and performance
-│   ├── env.server.ts       # Environment validation
-│   └── rateLimit.ts        # Rate limit utilities
-├── constant/               # Static data (projects, skills, etc.)
-├── data/                   # Engineering note content
-├── hooks/                  # React hooks
-├── types/                  # Type definitions
-└── instrumentation.ts      # Startup validation
+  app/
+    api/
+      analyze/
+      health/
+      send/
+      version/
+    engineering-notes/
+    resume/
+    (main)/
+  components/
+    Cards/
+    common/
+    sections/
+    ui/
+  services/
+    contact/
+    email/
+  lib/
+    seo-analyzer/
+    env.server.ts
+    logger.ts
+    monitoring.ts
+    rateLimit.ts
+  hooks/
+  data/
+  constant/
+  types/
+  instrumentation.ts
 ```
 
-## Development
+## Local Development
+
+1. Install dependencies:
+
+```bash
+npm ci
+```
+
+2. Create `/.env.local` with required keys:
+
+```env
+QEV_API_KEY=your_quickemailverification_api_key
+email_from=your_sender_email
+email_password=your_email_password
+```
+
+Optional:
+
+```env
+UPSTASH_REDIS_REST_URL=your_upstash_url
+UPSTASH_REDIS_REST_TOKEN=your_upstash_token
+LOG_LEVEL=info
+```
+
+3. Start dev server:
 
 ```bash
 npm run dev
-```
-
-## Production Build
-
-### Vercel (Serverless)
-
-```bash
-npm run build
-```
-
-### Docker (Standalone)
-
-```bash
-docker build -t tushardevx01 .
-docker run -p 3000:3000 --env-file .env tushardevx01
-```
-
-Or with Docker Compose:
-
-```bash
-docker-compose up -d
-```
-
-## API Endpoints
-
-| Endpoint | Method | Description |
-| -------- | ------ | ----------- |
-| `/api/send` | POST | Contact form submission |
-| `/api/health` | GET | Health check (status, uptime, dependency checks) |
-| `/api/version` | GET | Build info (version, environment, git commit) |
-
-### Health Check Response
-
-```json
-{
-  "status": "healthy",
-  "timestamp": "2026-03-02T10:00:00.000Z",
-  "uptime": 3600,
-  "checks": {
-    "env": { "status": "pass" },
-    "redis": { "status": "pass" },
-    "monitoring": { "status": "pass" }
-  }
-}
 ```
 
 ## Scripts
@@ -177,38 +107,61 @@ docker-compose up -d
 | Command | Description |
 | ------- | ----------- |
 | `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm run start` | Run production server |
+| `npm run build` | Create production build |
+| `npm run start` | Start production server |
 | `npm run lint` | Run ESLint |
+
+## Docker
+
+Build and run:
+
+```bash
+docker build -t tushardevx01 .
+docker run -p 3000:3000 --env-file .env.local tushardevx01
+```
+
+Or use Compose:
+
+```bash
+docker-compose up -d
+```
+
+Notes:
+
+- Docker build sets `DOCKER_BUILD=true` and enables Next.js standalone output.
+- If Open Graph image builds fail in containers, avoid emoji in `ImageResponse` JSX and use local badges/shapes.
+
+## API Endpoints
+
+| Endpoint | Method | Description |
+| -------- | ------ | ----------- |
+| `/api/send` | POST | Contact form submission |
+| `/api/analyze` | POST | SEO analysis for a provided HTTPS URL |
+| `/api/health` | GET | Runtime health status and dependency checks |
+| `/api/version` | GET | App version, environment, and build metadata |
 
 ## CI/CD
 
-GitHub Actions workflow (`.github/workflows/ci.yml`):
+Workflow: `.github/workflows/ci.yml`
 
-1. **Quality** — TypeScript check, ESLint
-2. **Build** — Production build verification
-3. **Security** — npm audit
-4. **Deploy Preview** — Vercel preview deployment (PRs)
-5. **Deploy Production** — Vercel production deployment (main branch)
-6. **Health Check** — Post-deployment verification
+1. Code quality checks (`npm run lint`, `tsc --noEmit`)
+2. Production build (`npm run build`)
+3. Security audit (`npm audit --audit-level=high`)
+4. Vercel preview deploy for pull requests
+5. Vercel production deploy on `main`
+6. Post-deploy checks for `/api/health` and `/api/version`
 
 ## Environment Variables
 
 | Variable | Required | Description |
 | -------- | -------- | ----------- |
 | `QEV_API_KEY` | Yes | QuickEmailVerification API key |
-| `email_from` | Yes | Email sender address |
-| `email_password` | Yes | Email app password |
-| `UPSTASH_REDIS_REST_URL` | No | Upstash Redis URL (rate limiting) |
-| `UPSTASH_REDIS_REST_TOKEN` | No | Upstash Redis token |
-| `DOCKER_BUILD` | No | Set to `true` for Docker builds |
-
-## Performance
-
-- Static generation for content pages
-- Dynamic imports for code splitting
-- Node.js serverless for API endpoints
-- Minimal client-side JavaScript
+| `email_from` | Yes | Sender email used by contact flow |
+| `email_password` | Yes | SMTP app password or email password |
+| `UPSTASH_REDIS_REST_URL` | No | Upstash REST URL |
+| `UPSTASH_REDIS_REST_TOKEN` | No | Upstash REST token |
+| `LOG_LEVEL` | No | Logger level (`debug`, `info`, `warn`, `error`) |
+| `DOCKER_BUILD` | Build only | Enables standalone output in Docker builds |
 
 ## License
 
