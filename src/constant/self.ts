@@ -40,7 +40,7 @@ export const selfData = {
 
   socials_username: {
     github: "Tusharxhub",
-    instagram: "Tushardevx01",
+    instagram: "tushardevx01",
     linkedin: "tushardevx01",
     twitter: "tushardevX01",
     discord: "tushardevx01",

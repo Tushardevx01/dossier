@@ -2,7 +2,7 @@ import Link from "next/link";
 import { IconType } from "react-icons";
 import { motion } from "motion/react";
 
-import { FaGithub, FaLinkedinIn, FaTwitter, FaDiscord, FaWhatsapp } from "react-icons/fa6";
+import { FaDiscord, FaGithub, FaInstagram, FaLinkedinIn, FaTwitter, FaWhatsapp } from "react-icons/fa6";
 
 import { selfData } from "@/constant";
 
@@ -48,6 +48,12 @@ export const ContactSocials = () => {
       link: `https://www.linkedin.com/${selfData.socials_username.linkedin}`,
       initial: 10,
       name: "LinkedIn",
+    },
+    {
+      Icon: FaInstagram,
+      link: `https://instagram.com/${selfData.socials_username.instagram}`,
+      initial: -10,
+      name: "Instagram",
     },
 
     {
@@ -107,6 +113,7 @@ const ContactSocialItem = ({
   const getBrandColor = () => {
     if (link.includes('github')) return '#ffffff';
     if (link.includes('linkedin')) return '#0A66C2';
+    if (link.includes('instagram')) return '#E4405F';
     if (link.includes('twitter')) return '#1DA1F2';
     if (link.includes('discord')) return '#5865F2';
     if (link.includes('whatsapp') || link.includes('wa.me')) return '#25D366';
