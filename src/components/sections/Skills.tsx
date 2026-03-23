@@ -7,27 +7,42 @@ import { primaryStack, supportingStack, additionalStack } from "@/constant";
 import type { Skill, SkillsCategory } from "@/constant/skillsTiers";
 import React from "react";
 
-interface SkillBadgeProps {
-  title: string;
+const techDescriptions: Record<string, string> = {
+  "Next.js": "React framework for production-grade apps",
+  "TypeScript": "Typed JavaScript for scalable codebases",
+  "Node.js": "Backend runtime for server-side applications",
+  "Docker": "Containerization for consistent environments",
+  "Redis": "In-memory caching for high performance",
+  "Supabase": "Backend-as-a-service with real-time features",
+  "Git": "Version control for collaborative development",
+  "Vercel": "Deployment platform for frontend apps",
+};
+
+const getTechDescription = (name: string) => {
+  return techDescriptions[name] ?? `${name} in the production engineering stack`;
+};
+
+interface TechBadgeProps {
+  name: string;
   logoComponent: React.ElementType;
   color?: string;
-  tooltip: string;
   size?: "sm" | "md" | "lg";
   delay?: number;
 }
 
 /**
- * SkillBadge Component
+ * TechBadge Component
  * Reusable badge for individual skills with hover effects
  */
-const SkillBadge = ({
-  title,
+export const TechBadge = ({
+  name,
   logoComponent: Icon,
   color = "currentColor",
-  tooltip,
   size = "md",
   delay = 0,
-}: SkillBadgeProps) => {
+}: TechBadgeProps) => {
+  const description = getTechDescription(name);
+
   const sizeClasses = {
     sm: "px-2.5 py-1.5 text-xs",
     md: "px-3 py-2 text-sm",
@@ -55,6 +70,7 @@ const SkillBadge = ({
       className="group relative"
     >
       <div
+        aria-label={`${name}: ${description}`}
         className={`inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/35 ${sizeClasses[size]} group-hover:shadow-lg group-hover:border-primary/45 transition-all`}
       >
         {Icon && (
@@ -64,14 +80,18 @@ const SkillBadge = ({
               fontSize: iconSizes[size],
               flexShrink: 0,
             }}
-            aria-label={`${title} icon`}
+            aria-label={`${name} icon`}
             role="img"
           />
         )}
-        <span className="font-medium">{title}</span>
+        <span className="font-medium">{name}</span>
       </div>
-      <div className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md border border-white/15 bg-black/85 px-2 py-1 text-[10px] text-white/80 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-        {tooltip}
+      <div
+        className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 w-max max-w-[220px] -translate-x-1/2 rounded-md border border-white/20 bg-black/90 px-2.5 py-1.5 text-[10px] text-white/80 shadow-[0_0_14px_rgba(255,255,255,0.08)] opacity-0 translate-y-1 transition-all duration-200 ease-out group-hover:opacity-100 group-hover:translate-y-0"
+        role="tooltip"
+        aria-hidden="true"
+      >
+        {description}
       </div>
     </motion.div>
   );
@@ -108,10 +128,11 @@ const SkillCategory = ({
       </p>
       <div className="flex flex-wrap gap-2.5">
         {skills.map((skill, idx) => (
-          <SkillBadge
+          <TechBadge
             key={skill.title}
-            {...skill}
-            tooltip={`Integrated in ${title.toLowerCase()} workflows`}
+            name={skill.title}
+            logoComponent={skill.logoComponent}
+            color={skill.color}
             size={size}
             delay={categoryDelay + idx * 0.02}
           />
