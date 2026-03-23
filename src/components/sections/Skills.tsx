@@ -8,24 +8,85 @@ import type { Skill, SkillsCategory } from "@/constant/skillsTiers";
 import React from "react";
 
 const techDescriptions: Record<string, string> = {
-  "Next.js": "React framework for production-grade apps",
-  "TypeScript": "Typed JavaScript for scalable codebases",
-  "Node.js": "Backend runtime for server-side applications",
-  "Docker": "Containerization for consistent environments",
-  "Redis": "In-memory caching for high performance",
+  "TypeScript": "Typed JavaScript for scalable applications",
+  "React": "Component-driven UI library for interactive frontends",
+  "Next.js": "React framework optimized for production and SEO",
+  "Node.js": "Backend runtime for building APIs and services",
+  "Express.js": "Minimal web framework for backend routing and APIs",
   "Supabase": "Backend-as-a-service with real-time features",
+  "Docker": "Containerization for consistent environments",
   "Git": "Version control for collaborative development",
+  "Tailwind CSS": "Utility-first CSS framework for rapid UI styling",
+  "JavaScript": "Core language for modern web application logic",
+  "HTML5": "Semantic markup standard for structured web content",
+  "CSS3": "Styling language for responsive visual presentation",
+  "SASS": "CSS preprocessor for maintainable design systems",
+  "React Native": "Framework for cross-platform native mobile apps",
+  "Radix UI": "Accessible unstyled primitives for custom UI systems",
+  "Framer Motion": "Animation library for fluid React interactions",
+  "Webpack": "Module bundler for optimized frontend assets",
+  "NestJS": "Scalable Node.js framework for enterprise backends",
+  "JWT / OAuth": "Authentication and authorization standards for secure access",
+  "WebSockets": "Real-time bidirectional communication for live systems",
+  "NPM": "Package manager for JavaScript ecosystem tooling",
+  "Nodemon": "Development utility for automatic server restarts",
+  "MySQL": "Relational database for structured transactional data",
+  "MongoDB": "Document database for flexible schema design",
+  "Appwrite": "Open-source backend platform for app services",
+  "Redis": "In-memory store for caching and performance",
+  "Prisma": "Type-safe ORM and schema tooling for databases",
+  "Google Cloud": "Cloud platform for compute, storage, and services",
+  "Netlify": "Frontend deployment and hosting for web projects",
   "Vercel": "Deployment platform for frontend apps",
+  "Render": "Cloud hosting platform for full-stack services",
+  "GitHub": "Code collaboration platform for repositories and CI",
+  "Postman": "API testing and collaboration workspace",
+  "ESLint": "Static analysis tool for consistent JavaScript quality",
+  "Linux(Fedora)": "Linux development environment for engineering workflows",
+  "OpenAPI": "Specification standard for documented REST APIs",
+  "C": "Low-level systems programming language",
+  "C++": "Performance-oriented language for complex systems",
+  "Java": "Object-oriented language for enterprise-scale software",
+  "Shell (Bash)": "Command-line scripting for automation workflows",
+  "Python": "General-purpose language for scripting and data workflows",
+  "Figma": "Collaborative interface design and prototyping platform",
+  "Canva": "Fast visual design tool for branded assets",
+  "Photoshop": "Raster editing tool for advanced visual composition",
+  "Illustrator": "Vector graphics tool for scalable design assets",
+  "XD": "UI/UX prototyping tool for interactive design flows",
 };
 
-const getTechDescription = (name: string) => {
-  return techDescriptions[name] ?? `${name} in the production engineering stack`;
+type TechStackItem = {
+  name: string;
+  icon: React.ElementType;
+  description: string;
+  color?: string;
+};
+
+const techStack: TechStackItem[] = [...primaryStack, ...supportingStack, ...additionalStack]
+  .flatMap((category) => category.skills)
+  .map((skill) => ({
+    name: skill.title,
+    icon: skill.logoComponent,
+    color: skill.color,
+    description: techDescriptions[skill.title] ?? `${skill.title} for modern engineering workflows`,
+  }));
+
+const techStackMap = new Map(techStack.map((tech) => [tech.name, tech]));
+
+const toTechItem = (skill: Skill): TechStackItem => {
+  return (
+    techStackMap.get(skill.title) ?? {
+      name: skill.title,
+      icon: skill.logoComponent,
+      color: skill.color,
+      description: `${skill.title} for modern engineering workflows`,
+    }
+  );
 };
 
 interface TechBadgeProps {
-  name: string;
-  logoComponent: React.ElementType;
-  color?: string;
+  tech: TechStackItem;
   size?: "sm" | "md" | "lg";
   delay?: number;
 }
@@ -35,24 +96,24 @@ interface TechBadgeProps {
  * Reusable badge for individual skills with hover effects
  */
 export const TechBadge = ({
-  name,
-  logoComponent: Icon,
-  color = "currentColor",
+  tech,
   size = "md",
   delay = 0,
 }: TechBadgeProps) => {
-  const description = getTechDescription(name);
+  const Icon = tech.icon;
+  const iconColor = tech.color ?? "currentColor";
+  const description = tech.description;
 
   const sizeClasses = {
-    sm: "px-2.5 py-1.5 text-xs",
-    md: "px-3 py-2 text-sm",
-    lg: "px-4 py-2.5 text-base",
+    sm: "px-3 py-1.5 text-sm",
+    md: "px-3 py-1.5 text-sm",
+    lg: "px-3.5 py-2 text-sm",
   };
 
   const iconSizes = {
-    sm: "0.75rem",
-    md: "0.9rem",
-    lg: "1.1rem",
+    sm: "0.9rem",
+    md: "0.95rem",
+    lg: "1rem",
   };
 
   return (
@@ -69,25 +130,27 @@ export const TechBadge = ({
       viewport={{ once: true, margin: "-50px" }}
       className="group relative"
     >
-      <div
-        aria-label={`${name}: ${description}`}
-        className={`inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/35 ${sizeClasses[size]} group-hover:shadow-lg group-hover:border-primary/45 transition-all`}
+      <button
+        type="button"
+        aria-label={`${tech.name}: ${description}`}
+        className={`inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 ${sizeClasses[size]} text-white/75 transition-all duration-150 ease-out hover:bg-white/10 hover:border-primary/40 focus-visible:bg-white/10 focus-visible:border-primary/40 focus-visible:outline-none`}
       >
         {Icon && (
           <Icon
             style={{
-              color: color,
+              color: iconColor,
               fontSize: iconSizes[size],
               flexShrink: 0,
             }}
-            aria-label={`${name} icon`}
+            className="opacity-80"
+            aria-label={`${tech.name} icon`}
             role="img"
           />
         )}
-        <span className="font-medium">{name}</span>
-      </div>
+        <span className="font-medium">{tech.name}</span>
+      </button>
       <div
-        className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 w-max max-w-[220px] -translate-x-1/2 rounded-md border border-white/20 bg-black/90 px-2.5 py-1.5 text-[10px] text-white/80 shadow-[0_0_14px_rgba(255,255,255,0.08)] opacity-0 translate-y-1 transition-all duration-200 ease-out group-hover:opacity-100 group-hover:translate-y-0"
+        className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 w-max max-w-[240px] -translate-x-1/2 rounded-md border border-white/10 bg-black/90 px-2 py-1 text-xs text-white/80 shadow-[0_6px_18px_rgba(0,0,0,0.45),0_0_14px_rgba(255,255,255,0.06)] opacity-0 translate-y-1 transition-all duration-150 ease-out group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:translate-y-0"
         role="tooltip"
         aria-hidden="true"
       >
@@ -130,9 +193,7 @@ const SkillCategory = ({
         {skills.map((skill, idx) => (
           <TechBadge
             key={skill.title}
-            name={skill.title}
-            logoComponent={skill.logoComponent}
-            color={skill.color}
+            tech={toTechItem(skill)}
             size={size}
             delay={categoryDelay + idx * 0.02}
           />
