@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useInView, AnimatePresence } from "motion/react";
-import { useRef, useState, useMemo } from "react";
+import { useRef, useState } from "react";
 import { mono, nasalization } from "@/app/fonts";
 import { primaryStack, supportingStack, additionalStack } from "@/constant";
 import type { Skill, SkillsCategory } from "@/constant/skillsTiers";
@@ -11,6 +11,7 @@ interface SkillBadgeProps {
   title: string;
   logoComponent: React.ElementType;
   color?: string;
+  tooltip: string;
   size?: "sm" | "md" | "lg";
   delay?: number;
 }
@@ -23,6 +24,7 @@ const SkillBadge = ({
   title,
   logoComponent: Icon,
   color = "currentColor",
+  tooltip,
   size = "md",
   delay = 0,
 }: SkillBadgeProps) => {
@@ -53,7 +55,7 @@ const SkillBadge = ({
       className="group relative"
     >
       <div
-        className={`inline-flex items-center gap-2 skill-badge ${sizeClasses[size]} group-hover:shadow-lg transition-all`}
+        className={`inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/35 ${sizeClasses[size]} group-hover:shadow-lg group-hover:border-primary/45 transition-all`}
       >
         {Icon && (
           <Icon
@@ -67,6 +69,9 @@ const SkillBadge = ({
           />
         )}
         <span className="font-medium">{title}</span>
+      </div>
+      <div className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md border border-white/15 bg-black/85 px-2 py-1 text-[10px] text-white/80 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+        {tooltip}
       </div>
     </motion.div>
   );
@@ -93,7 +98,7 @@ const SkillCategory = ({
       whileInView={{ opacity: 1 }}
       transition={{ delay: categoryDelay }}
       viewport={{ once: true, margin: "-50px" }}
-      className="space-y-3"
+      className="panel-shell space-y-3 p-4 sm:p-5"
     >
       <p
         className={`${mono.className} text-xs font-semibold uppercase tracking-wider`}
@@ -101,11 +106,12 @@ const SkillCategory = ({
       >
         {title}
       </p>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2.5">
         {skills.map((skill, idx) => (
           <SkillBadge
             key={skill.title}
             {...skill}
+            tooltip={`Integrated in ${title.toLowerCase()} workflows`}
             size={size}
             delay={categoryDelay + idx * 0.02}
           />
@@ -158,7 +164,7 @@ const SkillTier = ({
       </div>
 
       <motion.div
-        className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8"
+        className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-5"
         layout
       >
         {categories.map((category, idx) => (
@@ -183,13 +189,8 @@ export const Skills = () => {
   const isInView = useInView(ref, { once: true, margin: "-80px", amount: 0.1 });
   const [showAdditional, setShowAdditional] = useState(false);
 
-  const tierVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
-  };
-
   return (
-    <section id="tech" ref={ref} className="py-24 relative overflow-hidden">
+    <section id="tech" ref={ref} className="py-24 relative overflow-hidden control-grid">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Heading */}
         <motion.div
@@ -202,22 +203,21 @@ export const Skills = () => {
             className={`${nasalization.className} text-4xl md:text-5xl lg:text-6xl font-bold`}
             style={{ color: "hsl(var(--foreground))" }}
           >
-            Built with the{" "}
+            Technology{" "}
             <span style={{ color: "hsl(var(--primary) / 0.85)" }}>
-              right tools.
+              Matrix.
             </span>
           </h2>
           <p
             className="text-base text-muted-foreground max-w-2xl"
             style={{ color: "hsl(var(--foreground) / 0.6)" }}
           >
-            A focused full-stack engineer with devops ownership, specializing in modern web
-            infrastructure.
+            Grouped system modules for modern web infrastructure and production operations.
           </p>
         </motion.div>
 
         {/* Skills Content */}
-        <div className="space-y-20">
+        <div className="space-y-16">
           {/* PRIMARY STACK */}
           <SkillTier
             label="Primary Stack"
@@ -250,8 +250,8 @@ export const Skills = () => {
               whileTap={{ scale: 0.98 }}
               className="group inline-flex items-center gap-2 px-5 py-3 rounded-lg transition-all"
               style={{
-                background: "hsl(245 30% 8% / 0.8)",
-                border: "1px solid hsl(210 30% 25% / 0.5)",
+                background: "hsl(240 25% 8% / 0.78)",
+                border: "1px solid hsl(var(--glass-border))",
                 color: "hsl(var(--foreground) / 0.8)",
               }}
             >
@@ -299,15 +299,6 @@ export const Skills = () => {
         </div>
       </div>
 
-      {/* Ambient background effects */}
-      <div
-        className="absolute top-32 left-0 w-64 h-64 sm:w-96 sm:h-96 bg-gradient-to-r from-purple-500/5 to-transparent rounded-full blur-3xl pointer-events-none"
-        style={{ transform: "translateX(-50%)" }}
-      />
-      <div
-        className="absolute bottom-20 right-0 w-64 h-64 sm:w-96 sm:h-96 bg-gradient-to-l from-blue-500/5 to-transparent rounded-full blur-3xl pointer-events-none"
-        style={{ transform: "translateX(50%)" }}
-      />
     </section>
   );
 };

@@ -34,7 +34,7 @@ canvas {
 @layer base {
   :root {
 
-    --background: 240 15% 2%;
+    --background: 0 0% 0%;
     --foreground: 220 8% 94%;
 
     /* Card & Surface Colors - Deep charcoal with luxury undertones */

@@ -19,8 +19,6 @@ export const Hero = () => {
       aria-label="Introduction to Tushar Kanti Dey"
       className="min-h-screen flex items-center justify-start px-4 sm:px-6 lg:px-8 relative"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
-
       <div className="max-w-full sm:max-w-7xl mx-auto w-full relative z-10">
         <motion.div
           className="max-w-4xl space-y-9"

@@ -1,223 +1,262 @@
 "use client";
 
 import { motion, useInView } from "motion/react";
-import { useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+
 import { mono, nasalization } from "@/app/fonts";
 
-const metrics = [
-    { key: "uptime", label: "Service Uptime", value: "99.97%", note: "Last 30 days" },
-    { key: "latency", label: "P95 Latency", value: "182ms", note: "API gateway" },
-    { key: "rollback", label: "Rollback Window", value: "26s", note: "Blue/green" },
-    { key: "deploys", label: "Deploy Frequency", value: "14/day", note: "Automated" },
-];
-
-const deploymentStages = [
-    { name: "Commit", status: "done" },
-    { name: "Build", status: "done" },
-    { name: "Tests", status: "done" },
-    { name: "Deploy", status: "active" },
-    { name: "Verify", status: "pending" },
-];
-
+type HealthStatus = "ONLINE" | "DEGRADED" | "OFFLINE";
 type LogLevel = "INFO" | "SUCCESS" | "WARN" | "ERROR";
 
-const logLines = [
-    { time: "23:14:01", level: "INFO", msg: "Release train #482 initialized" },
-    { time: "23:14:06", level: "SUCCESS", msg: "Container image published (sha256:fa91...)" },
-    { time: "23:14:10", level: "WARN", msg: "Read replica lag spiked to 190ms" },
-    { time: "23:14:13", level: "INFO", msg: "Health probes stable across 6 regions" },
-    { time: "23:14:15", level: "ERROR", msg: "Canary error rate crossed 1.2% threshold" },
-    { time: "23:14:19", level: "SUCCESS", msg: "Auto-rollback completed · traffic normalized" },
-] as Array<{ time: string; level: LogLevel; msg: string }>;
-
 const levelClasses: Record<LogLevel, string> = {
-    INFO: "text-blue-300 border-blue-400/25 bg-blue-500/10",
-    SUCCESS: "text-emerald-300 border-emerald-400/25 bg-emerald-500/10",
-    WARN: "text-amber-300 border-amber-400/25 bg-amber-500/10",
-    ERROR: "text-rose-300 border-rose-400/25 bg-rose-500/10",
+  INFO: "text-sky-300 border-sky-400/30 bg-sky-500/10",
+  SUCCESS: "text-emerald-300 border-emerald-400/30 bg-emerald-500/10",
+  WARN: "text-amber-300 border-amber-400/30 bg-amber-500/10",
+  ERROR: "text-rose-300 border-rose-400/30 bg-rose-500/10",
 };
 
-const stageClasses: Record<"done" | "active" | "pending", string> = {
-    done: "text-emerald-300 border-emerald-400/30 bg-emerald-500/10",
-    active: "text-sky-300 border-sky-400/30 bg-sky-500/10",
-    pending: "text-neutral-400 border-neutral-700 bg-neutral-800/40",
+const telemetrySeed = [
+  { uptime: 99.6, rps: 1420, errorRate: 0.9, latency: 190 },
+  { uptime: 99.8, rps: 1680, errorRate: 0.6, latency: 174 },
+  { uptime: 99.9, rps: 1820, errorRate: 0.4, latency: 160 },
+  { uptime: 99.97, rps: 1975, errorRate: 0.3, latency: 148 },
+] as const;
+
+const logSeed = [
+  { level: "INFO", msg: "edge-router: health probes stable across regions" },
+  { level: "SUCCESS", msg: "deploy-bot: canary rollout reached 20% traffic" },
+  { level: "WARN", msg: "db-replica: write lag crossed 160ms threshold" },
+  { level: "INFO", msg: "autoscaler: added 2 workers for burst traffic" },
+  { level: "ERROR", msg: "api-gateway: transient 502 on service checkout" },
+  { level: "SUCCESS", msg: "recovery: retries normalized within SLO" },
+] as Array<{ level: LogLevel; msg: string }>;
+
+const healthTiles: Array<{ label: string; status: HealthStatus; note: string }> = [
+  { label: "API", status: "ONLINE", note: "Gateway healthy" },
+  { label: "Database", status: "DEGRADED", note: "Replica lag spike" },
+  { label: "Queue", status: "ONLINE", note: "Consumers stable" },
+  { label: "CDN", status: "ONLINE", note: "Global cache warm" },
+  { label: "Billing", status: "ONLINE", note: "Webhooks processing" },
+  { label: "Search", status: "OFFLINE", note: "Maintenance window" },
+];
+
+const statusClassByState: Record<HealthStatus, string> = {
+  ONLINE: "text-emerald-300",
+  DEGRADED: "text-amber-300",
+  OFFLINE: "text-rose-300",
 };
+
+const dotClassByState: Record<HealthStatus, string> = {
+  ONLINE: "bg-emerald-400",
+  DEGRADED: "bg-amber-400",
+  OFFLINE: "bg-rose-400",
+};
+
+const formatTime = () =>
+  new Date().toLocaleTimeString("en-US", {
+    hour12: false,
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
 
 export const DevOps = () => {
-    const ref = useRef(null);
-    const isInView = useInView(ref, { once: true, margin: "-80px", amount: 0.15 });
+  const ref = useRef(null);
+  const logsRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px", amount: 0.15 });
 
-    return (
-        <section id="devops" ref={ref} className="py-24 relative overflow-hidden">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                {/* Heading */}
-                <motion.div
-                    className="mb-12 space-y-2"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                    transition={{ duration: 0.6 }}
-                >
-                    <h2
-                        className={`${nasalization.className} text-3xl sm:text-4xl md:text-5xl font-bold`}
-                        style={{ color: "hsl(var(--foreground))" }}
-                    >
-                        Production Control{" "}
-                        <span style={{ color: "hsl(var(--primary) / 0.85)" }}>
-                            Center.
-                        </span>
-                    </h2>
-                    <p
-                        className={`${mono.className} text-sm`}
-                        style={{ color: "hsl(var(--foreground) / 0.45)" }}
-                    >
-                        Live deployment telemetry, resilient rollout control, and system-state visibility.
-                    </p>
-                </motion.div>
+  const [telemetryIndex, setTelemetryIndex] = useState(0);
+  const [logs, setLogs] = useState(
+    logSeed.slice(0, 4).map((line) => ({ ...line, time: formatTime() }))
+  );
 
-                {/* Control center */}
-                <motion.div
-                    className="relative rounded-2xl border border-white/10 bg-neutral-950/60 backdrop-blur-sm p-4 sm:p-5 lg:p-6"
-                    style={{
-                        boxShadow:
-                            "0 0 0 1px hsl(var(--glass-border) / 0.28), 0 0 36px hsl(var(--accent) / 0.08)",
-                    }}
-                    initial={{ opacity: 0, y: 24 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
-                    transition={{ duration: 0.65, delay: 0.15, ease: "easeOut" }}
-                >
-                    <div className="grid grid-cols-1 xl:grid-cols-[0.95fr_1.35fr] gap-5 lg:gap-6">
-                        {/* Left column: metrics + health */}
-                        <motion.div
-                            initial={{ opacity: 0, x: -16 }}
-                            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -16 }}
-                            transition={{ duration: 0.55, delay: 0.25 }}
-                            className="space-y-4"
-                        >
-                            <div className="rounded-xl border border-neutral-800 bg-neutral-900/60 p-4 sm:p-5">
-                                <div className="flex items-start justify-between gap-4">
-                                    <div>
-                                        <p className={`${mono.className} text-[11px] uppercase tracking-wider text-neutral-400`}>
-                                            Fleet Status
-                                        </p>
-                                        <p className={`${nasalization.className} text-2xl sm:text-3xl text-white mt-2`}>
-                                            Operational
-                                        </p>
-                                        <p className={`${mono.className} text-xs text-neutral-500 mt-2`}>
-                                            Global uptime across production regions
-                                        </p>
-                                    </div>
+  const telemetry = telemetrySeed[telemetryIndex];
 
-                                    <div className="relative mt-1">
-                                        <span className="absolute inset-0 rounded-full bg-emerald-400/30 animate-ping" />
-                                        <span className="relative block h-3 w-3 rounded-full bg-emerald-400" />
-                                    </div>
-                                </div>
-                            </div>
+  const latencyPoints = useMemo(() => [
+    [8, 72],
+    [52, 64],
+    [96, 68],
+    [140, 42],
+    [184, 52],
+    [228, 36],
+    [272, 45],
+    [316, 24],
+  ], []);
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                {metrics.map((metric) => (
-                                    <div key={metric.key} className="rounded-lg border border-neutral-800 bg-neutral-900/40 p-3.5">
-                                        <p className={`${mono.className} text-[10px] uppercase tracking-wider text-neutral-500`}>
-                                            {metric.label}
-                                        </p>
-                                        <p className={`${nasalization.className} text-xl text-white mt-1.5`}>
-                                            {metric.value}
-                                        </p>
-                                        <p className={`${mono.className} text-[11px] text-neutral-500 mt-1`}>
-                                            {metric.note}
-                                        </p>
-                                    </div>
-                                ))}
-                            </div>
+  useEffect(() => {
+    const telemetryTimer = setInterval(() => {
+      setTelemetryIndex((prev) => (prev + 1) % telemetrySeed.length);
+    }, 2400);
 
-                            <div className="rounded-xl border border-neutral-800 bg-neutral-900/30 p-3.5">
-                                <p className={`${mono.className} text-[10px] uppercase tracking-wider text-neutral-500 mb-3`}>
-                                    Status Classifier
-                                </p>
-                                <div className="flex flex-wrap gap-2">
-                                    {(Object.keys(levelClasses) as LogLevel[]).map((level) => (
-                                        <span
-                                            key={level}
-                                            className={`${mono.className} text-[10px] px-2.5 py-1 rounded border font-medium tracking-wide ${levelClasses[level]}`}
-                                        >
-                                            {level}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-                        </motion.div>
+    return () => clearInterval(telemetryTimer);
+  }, []);
 
-                        {/* Right column: deployment monitor */}
-                        <motion.div
-                            initial={{ opacity: 0, x: 16 }}
-                            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 16 }}
-                            transition={{ duration: 0.55, delay: 0.32 }}
-                            className="rounded-xl border border-neutral-800 bg-neutral-950/75 overflow-hidden"
-                        >
-                            <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-neutral-800">
-                                <div className="flex items-center gap-2">
-                                    <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse" />
-                                    <p className={`${mono.className} text-[11px] uppercase tracking-wider text-neutral-300`}>
-                                        Live Deployment Monitor
-                                    </p>
-                                </div>
-                                <p className={`${mono.className} text-[11px] text-neutral-500`}>prod-eu-west-1</p>
-                            </div>
+  useEffect(() => {
+    const logTimer = setInterval(() => {
+      const next = logSeed[Math.floor(Math.random() * logSeed.length)];
+      setLogs((prev) => [...prev.slice(-11), { ...next, time: formatTime() }]);
+    }, 1400);
 
-                            <div className="px-4 py-4 border-b border-neutral-800">
-                                <p className={`${mono.className} text-[10px] uppercase tracking-wider text-neutral-500 mb-3`}>
-                                    Pipeline
-                                </p>
+    return () => clearInterval(logTimer);
+  }, []);
 
-                                <div className="flex flex-col md:flex-row md:items-center md:flex-wrap gap-2">
-                                    {deploymentStages.map((stage, index) => (
-                                        <div key={stage.name} className="flex items-center gap-2">
-                                            <span
-                                                className={`${mono.className} text-[10px] px-2.5 py-1 rounded-md border ${stageClasses[stage.status as "done" | "active" | "pending"]}`}
-                                            >
-                                                {stage.status === "done" ? "✓" : stage.status === "active" ? "▶" : "…"} {stage.name}
-                                            </span>
+  useEffect(() => {
+    if (!logsRef.current) return;
+    logsRef.current.scrollTo({ top: logsRef.current.scrollHeight, behavior: "smooth" });
+  }, [logs]);
 
-                                            {index < deploymentStages.length - 1 && (
-                                                <>
-                                                    <span className="hidden md:block h-px w-6 bg-neutral-700" />
-                                                    <span className="md:hidden block h-4 w-px bg-neutral-700 ml-3" />
-                                                </>
-                                            )}
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
+  return (
+    <section id="devops" ref={ref} className="py-24 relative overflow-hidden control-grid">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <motion.div
+          className="mb-12 space-y-2"
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6 }}
+        >
+          <h2
+            className={`${nasalization.className} text-3xl sm:text-4xl md:text-5xl font-bold`}
+            style={{ color: "hsl(var(--foreground))" }}
+          >
+            Production Control <span style={{ color: "hsl(var(--primary) / 0.85)" }}>Center.</span>
+          </h2>
+          <p className={`${mono.className} text-sm`} style={{ color: "hsl(var(--foreground) / 0.45)" }}>
+            Live System Dashboard • deployment telemetry, incident traces, and service-state visibility.
+          </p>
+        </motion.div>
 
-                            <div className="px-4 py-4 bg-black/40">
-                                <p className={`${mono.className} text-[10px] uppercase tracking-wider text-neutral-500 mb-3`}>
-                                    Runtime Logs
-                                </p>
-                                <div className="rounded-lg border border-neutral-800 bg-black/70 p-3 space-y-2.5">
-                                    {logLines.map((line, index) => (
-                                        <motion.div
-                                            key={`${line.time}-${line.level}-${index}`}
-                                            className={`${mono.className} text-[11px] flex items-start gap-2.5`}
-                                            initial={{ opacity: 0, y: 6 }}
-                                            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 6 }}
-                                            transition={{ duration: 0.25, delay: 0.42 + index * 0.06 }}
-                                        >
-                                            <span className="text-neutral-500 shrink-0">{line.time}</span>
-                                            <span className="text-neutral-600 shrink-0">›</span>
-                                            <span
-                                                className={`${mono.className} text-[10px] px-2 py-0.5 rounded border shrink-0 ${levelClasses[line.level]}`}
-                                            >
-                                                {line.level}
-                                            </span>
-                                            <span className="text-neutral-300 leading-relaxed">{line.msg}</span>
-                                        </motion.div>
-                                    ))}
-                                </div>
-                            </div>
-                        </motion.div>
-                    </div>
-                </motion.div>
+        <motion.div
+          className="panel-shell rounded-2xl p-4 sm:p-5 lg:p-6"
+          initial={{ opacity: 0, y: 24 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+          transition={{ duration: 0.65, delay: 0.15, ease: "easeOut" }}
+        >
+          <div className="grid grid-cols-1 xl:grid-cols-[1.02fr_1.18fr] gap-5 lg:gap-6">
+            <div className="space-y-4">
+              <div className="rounded-xl border border-white/10 bg-black/35 p-4 sm:p-5">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <p className="system-label">Cluster State</p>
+                    <p className={`${nasalization.className} text-2xl sm:text-3xl text-white mt-2`}>Operational</p>
+                    <p className={`${mono.className} text-xs text-white/45 mt-2`}>global-control-plane / v1.3.8</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="status-dot bg-emerald-400 animate-pulse" />
+                    <span className={`${mono.className} text-xs text-emerald-300`}>ONLINE</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div className="rounded-lg border border-white/10 bg-black/30 p-3.5">
+                  <p className="system-label">Uptime %</p>
+                  <motion.p key={telemetry.uptime} initial={{ opacity: 0.6 }} animate={{ opacity: 1 }} className={`${nasalization.className} text-xl text-emerald-300 mt-2`}>
+                    {telemetry.uptime.toFixed(2)}%
+                  </motion.p>
+                </div>
+                <div className="rounded-lg border border-white/10 bg-black/30 p-3.5">
+                  <p className="system-label">Requests/sec</p>
+                  <motion.p key={telemetry.rps} initial={{ opacity: 0.6 }} animate={{ opacity: 1 }} className={`${nasalization.className} text-xl text-sky-300 mt-2`}>
+                    {telemetry.rps}
+                  </motion.p>
+                </div>
+                <div className="rounded-lg border border-white/10 bg-black/30 p-3.5">
+                  <p className="system-label">Error Rate</p>
+                  <motion.p key={telemetry.errorRate} initial={{ opacity: 0.6 }} animate={{ opacity: 1 }} className={`${nasalization.className} text-xl text-amber-300 mt-2`}>
+                    {telemetry.errorRate.toFixed(1)}%
+                  </motion.p>
+                </div>
+                <div className="rounded-lg border border-white/10 bg-black/30 p-3.5">
+                  <p className="system-label">Latency</p>
+                  <motion.p key={telemetry.latency} initial={{ opacity: 0.6 }} animate={{ opacity: 1 }} className={`${nasalization.className} text-xl text-violet-300 mt-2`}>
+                    {telemetry.latency}ms
+                  </motion.p>
+                </div>
+              </div>
+
+              <div className="rounded-xl border border-white/10 bg-black/30 p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="system-label">Latency Graph</p>
+                  <span className={`${mono.className} text-[11px] text-white/45`}>last 5m</span>
+                </div>
+                <svg viewBox="0 0 324 84" className="w-full h-[90px]">
+                  <polyline
+                    points={latencyPoints.map((point) => point.join(",")).join(" ")}
+                    fill="none"
+                    stroke="hsl(var(--secondary))"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    opacity="0.9"
+                  />
+                  <motion.polyline
+                    points={latencyPoints.map((point) => point.join(",")).join(" ")}
+                    fill="none"
+                    stroke="hsl(var(--primary))"
+                    strokeWidth="2.4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    initial={{ pathLength: 0.05, opacity: 0.35 }}
+                    animate={{ pathLength: 1, opacity: 1 }}
+                    transition={{ duration: 2, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
+                  />
+                  <text x="136" y="18" className={`${mono.className} fill-amber-200 text-[8px]`}>
+                    activity spike
+                  </text>
+                  <text x="246" y="20" className={`${mono.className} fill-sky-200 text-[8px]`}>
+                    deployment phase
+                  </text>
+                </svg>
+              </div>
             </div>
-        </section>
-    );
+
+            <div className="rounded-xl border border-white/10 bg-black/45 overflow-hidden">
+              <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-white/10">
+                <div className="flex items-center gap-2">
+                  <span className="status-dot bg-emerald-400 animate-pulse" />
+                  <p className={`${mono.className} text-[11px] uppercase tracking-wider text-white/80`}>Live Runtime Logs</p>
+                </div>
+                <p className={`${mono.className} text-[11px] text-white/45`}>prod-eu-west-1</p>
+              </div>
+
+              <div className="px-4 py-4 border-b border-white/10">
+                <p className="system-label mb-3">Service Indicators</p>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                  {healthTiles.map((tile) => (
+                    <div key={tile.label} className="rounded-lg border border-white/10 bg-black/30 p-2.5">
+                      <div className="flex items-center gap-2">
+                        <span className={`status-dot ${dotClassByState[tile.status]} h-2.5 w-2.5`} />
+                        <span className={`${mono.className} text-xs text-white/80`}>{tile.label}</span>
+                      </div>
+                      <p className={`${mono.className} text-[10px] mt-1.5 ${statusClassByState[tile.status]}`}>{tile.status}</p>
+                      <p className={`${mono.className} text-[10px] text-white/45 mt-1`}>{tile.note}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div ref={logsRef} className="max-h-[320px] overflow-y-auto px-4 py-4 space-y-2.5 bg-black/40">
+                {logs.map((line, index) => (
+                  <motion.div
+                    key={`${line.time}-${line.level}-${index}`}
+                    className={`${mono.className} text-[11px] flex items-start gap-2.5`}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.22 }}
+                  >
+                    <span className="text-white/45 shrink-0">{line.time}</span>
+                    <span className="text-white/30 shrink-0">›</span>
+                    <span className={`${mono.className} text-[10px] px-2 py-0.5 rounded border shrink-0 ${levelClasses[line.level]}`}>
+                      {line.level}
+                    </span>
+                    <span className="text-white/75 leading-relaxed">{line.msg}</span>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
 };
