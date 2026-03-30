@@ -19,24 +19,24 @@ export const selfData = {
   roles: [
     "Full Stack & Infrastructure Engineer",
     "Systems Architect",
-    "Product Builder",
+    "Product Engineer",
     "DevOps Engineer",
     "Infrastructure Specialist",
     "Open Source Contributor",
   ],
   desc: "Designing systems that hold — from interfaces to infrastructure.",
-  bio: "Full Stack & Infrastructure Engineer building production-grade web systems with Next.js, TypeScript, Node.js, and modern cloud infrastructure. I build what I deploy and own what I ship.",
+  bio: "I design, build, deploy, and own systems end-to-end. Full stack applications, cloud infrastructure, and everything in between.",
   about: [
-  "I design systems end-to-end — from React interfaces to Node.js services to cloud infrastructure. Every architectural decision accounts for scale, failure modes, and long-term maintainability.",
+    "I work across the full stack — from React interfaces to Node.js services to cloud infrastructure. Every architectural decision I make accounts for scale, failure modes, and what happens six months after deployment.",
 
-  "My stack centers on Next.js, TypeScript, and Node.js for application development, with Docker, CI/CD pipelines, and observability tooling for production operations. Build → Deploy → Own.",
+    "My core stack is Next.js, TypeScript, and Node.js for application development, paired with Docker, CI/CD pipelines, and observability tooling for production operations. I don't hand off what I build — I deploy it and keep it running.",
 
-  "I think in trade-offs: latency vs. consistency, flexibility vs. complexity, speed-to-ship vs. technical debt. No solution is perfect — the goal is making constraints explicit and choosing deliberately.",
+    "I think in trade-offs. Latency vs. consistency. Flexibility vs. complexity. Speed-to-ship vs. accumulated debt. There's no perfect solution — the goal is making constraints explicit and choosing deliberately.",
 
-  "Production readiness is non-negotiable. Structured logging, health checks, graceful degradation, and rollback strategies are part of the initial design — not afterthoughts when things break.",
+    "Production readiness isn't a phase. Structured logging, health endpoints, graceful degradation, and rollback paths belong in the first design, not after the first outage.",
 
-  "Based in Kolkata and studying at Adamas University. Focused on building systems that work under real conditions — not demos that impress, but infrastructure that holds."
-],
+    "Based in Kolkata. Studying Computer Science at Adamas University. Building systems that hold under real conditions — not demos that impress, but infrastructure that survives.",
+  ],
 
   socials_username: {
     github: "Tusharxhub",

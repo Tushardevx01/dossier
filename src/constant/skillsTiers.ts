@@ -72,13 +72,12 @@ export interface SkillsTier {
 }
 
 /**
- * PRIMARY STACK (Core Identity)
- * 10-12 production-level technologies representing core specialization
- * Visually emphasized with larger cards/icons
+ * PRIMARY STACK
+ * Technologies I build production systems with daily.
  */
 export const primaryStack: SkillsCategory[] = [
   {
-    title: "Languages & Frameworks",
+    title: "Application Layer",
     skills: [
       { title: "TypeScript", logoComponent: SiTypescript, color: "#3178C6" },
       { title: "React", logoComponent: FaReact, color: "#61DAFB" },
@@ -88,7 +87,7 @@ export const primaryStack: SkillsCategory[] = [
     ],
   },
   {
-    title: "Data & Infrastructure",
+    title: "Data & Deployment",
     skills: [
       { title: "Supabase", logoComponent: SiSupabase, color: "#3ECF8E" },
       { title: "Docker", logoComponent: FaDocker, color: "#2496ED" },
@@ -96,7 +95,7 @@ export const primaryStack: SkillsCategory[] = [
     ],
   },
   {
-    title: "Styling & UI",
+    title: "Interface Layer",
     skills: [
       { title: "Tailwind CSS", logoComponent: SiTailwindcss, color: "#06B6D4" },
       { title: "JavaScript", logoComponent: SiJavascript, color: "#F7DF1E" },
@@ -105,12 +104,12 @@ export const primaryStack: SkillsCategory[] = [
 ];
 
 /**
- * SUPPORTING TOOLS (Operational Layer)
- * Medium emphasis tools used regularly in workflow, deployment, and architecture
+ * SUPPORTING TOOLS
+ * Regular tools for deployment, architecture, and operational workflow.
  */
 export const supportingStack: SkillsCategory[] = [
   {
-    title: "Frontend Ecosystem",
+    title: "Frontend & Motion",
     skills: [
       { title: "HTML5", logoComponent: FaHtml5, color: "#E34F26" },
       { title: "CSS3", logoComponent: FaCss3, color: "#1572B6" },
@@ -122,7 +121,7 @@ export const supportingStack: SkillsCategory[] = [
     ],
   },
   {
-    title: "Backend & APIs",
+    title: "Backend & Services",
     skills: [
       { title: "NestJS", logoComponent: SiNestjs, color: "#E0234E" },
       { title: "JWT / OAuth", logoComponent: SiJsonwebtokens, color: "#000000" },
@@ -132,7 +131,7 @@ export const supportingStack: SkillsCategory[] = [
     ],
   },
   {
-    title: "Databases & Libraries",
+    title: "Data & Persistence",
     skills: [
       { title: "MySQL", logoComponent: SiMysql, color: "#4479A1" },
       { title: "MongoDB", logoComponent: SiMongodb, color: "#47A248" },
@@ -142,7 +141,7 @@ export const supportingStack: SkillsCategory[] = [
     ],
   },
   {
-    title: "Cloud & Deployment",
+    title: "Cloud & Edge",
     skills: [
       { title: "Google Cloud", logoComponent: SiGooglecloud, color: "#4285F4" },
       { title: "Netlify", logoComponent: SiNetlify, color: "#00C7B7" },
@@ -151,7 +150,7 @@ export const supportingStack: SkillsCategory[] = [
     ],
   },
   {
-    title: "DevOps & Tools",
+    title: "Tooling & Operations",
     skills: [
       { title: "GitHub", logoComponent: FaGithub, color: "#181717" },
       { title: "Postman", logoComponent: SiPostman, color: "#FF6C37" },
@@ -163,12 +162,12 @@ export const supportingStack: SkillsCategory[] = [
 ];
 
 /**
- * ADDITIONAL TECHNOLOGIES (Exploration Layer)
- * Collapsible section for broader experience and emerging interests
+ * ADDITIONAL TECHNOLOGIES
+ * Broader experience from systems programming and design work.
  */
 export const additionalStack: SkillsCategory[] = [
   {
-    title: "Programming Languages",
+    title: "Systems & Scripting",
     skills: [
       { title: "C", logoComponent: SiC, color: "#A8B9CC" },
       { title: "C++", logoComponent: TbBrandCpp, color: "#00599C" },
@@ -179,7 +178,7 @@ export const additionalStack: SkillsCategory[] = [
     ],
   },
   {
-    title: "UI/UX & Design",
+    title: "Design & Specification",
     skills: [
       { title: "Figma", logoComponent: SiFigma, color: "#F24E1E" },
       { title: "Canva", logoComponent: SiCanva, color: "#00C4CC" },
