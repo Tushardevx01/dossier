@@ -1,24 +1,24 @@
 export const experienceData = [
   {
-    role: "Full Stack Web Developer",
+    role: "Full Stack Engineer",
     year: "Jun 2024 - Present",
     company: "AZMTH",
     description: [
-      "Developed and maintained scalable full stack web applications using modern technologies.",
-      "Designed intuitive and user-focused interfaces for responsive web platforms.",
-      "Collaborated with cross-functional teams to deliver clean, efficient, and production-ready code."
+      "Architected and shipped production web applications serving real users across the platform's core product surfaces.",
+      "Owned frontend-to-backend delivery using Next.js, Supabase, and Vercel — from schema design to deployment pipeline.",
+      "Established component architecture and code quality standards adopted across the engineering team."
     ],
     technologies: ["Next.js", "Tailwind CSS", "Supabase", "Git", "Vercel"],
     url: "https://crm.azmth.in/"
   },
   {
-    role: "Full Stack Web Developer",
+    role: "Full Stack Engineer",
     year: "Feb 2025 - Present",
     company: "CYCODERS",
     description: [
-      "Contributed to the official Computer Science Club platform of Adamas University.",
-      "Built scalable web features and collaborated on student-driven technical initiatives.",
-      "Participated in projects, hackathons, and open-source development within the community."
+      "Built scalable features for the Computer Science Club platform at Adamas University, serving the student developer community.",
+      "Delivered end-to-end feature work — API design, data modeling, and frontend integration with TypeScript and Supabase.",
+      "Contributed to open-source initiatives and technical projects within the club's engineering ecosystem."
     ],
     technologies: [
       "TypeScript",
@@ -34,9 +34,9 @@ export const experienceData = [
     year: "Mar 2025 - Present",
     company: "Namespace",
     description: [
-      "Designed digital assets including social media creatives, web banners, and promotional materials.",
-      "Created UI graphics, icons, and layouts for modern web interfaces.",
-      "Collaborated with developers to translate design concepts into responsive and consistent UI components."
+      "Owned the design-to-code pipeline — created UI systems, digital assets, and web layouts that shipped directly to production.",
+      "Built responsive component libraries with consistent design tokens across web interfaces.",
+      "Bridged design and engineering workflows using Figma, TypeScript, and containerized deployment infrastructure."
     ],
     technologies: [
       "Figma",
@@ -49,22 +49,4 @@ export const experienceData = [
     ],
     url: "https://www.namespace.world/"
   },
-  {
-    role: "Full Stack Web Developer",
-    year: "Feb 2026 - Present",
-    company: "0day Tech Community",
-    description: [
-      "Building and maintaining modern web applications using Next.js and Node.js.",
-      "Collaborating with developers to design and implement scalable platform features.",
-      "Optimizing performance, security, and overall application scalability."
-    ],
-    technologies: [
-      "TypeScript",
-      "Node.js",
-      "Supabase",
-      "Git",
-      "Vercel"
-    ],
-    url: "https://0day-iota.vercel.app/"
-  }
 ];

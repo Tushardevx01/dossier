@@ -37,7 +37,8 @@ export function Experience() {
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            Experience
+            Engineering{" "}
+            <span className="text-primary/85">Track Record.</span>
           </motion.h2>
           <motion.p
             className="text-xs text-muted-foreground max-w-2xl mx-auto mt-4"
@@ -45,7 +46,7 @@ export function Experience() {
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            My professional journey and key experiences
+            Roles where I owned delivery from architecture to deployment.
           </motion.p>
         </motion.div>
 

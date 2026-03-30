@@ -47,14 +47,29 @@ export default async function Image() {
             zIndex: 10,
           }}
         >
-          {/* Icon */}
+          {/* Local text badge avoids remote emoji fetches during build */}
           <div
             style={{
-              fontSize: "64px",
+              width: "96px",
+              height: "96px",
+              borderRadius: "24px",
               marginBottom: "24px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              background: "linear-gradient(135deg, #4ade80 0%, #22c55e 100%)",
             }}
           >
-            📄
+            <span
+              style={{
+                fontSize: "38px",
+                fontWeight: 800,
+                color: "#0a0a0a",
+                letterSpacing: "-1px",
+              }}
+            >
+              CV
+            </span>
           </div>
 
           {/* Title */}

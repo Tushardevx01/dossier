@@ -33,9 +33,9 @@ export const Hero = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.12 }}
             >
-              Engineering • Product • Infrastructure
+              Systems • Infrastructure • Product
             </motion.p>
-            <h1 className="sr-only">Tushar Kanti Dey | Full Stack Developer & DevOps Engineer</h1>
+            <h1 className="sr-only">Tushar Kanti Dey | Full Stack & Infrastructure Engineer</h1>
             <motion.h2
               className={`${quentine.className} text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.95] break-words`}
               style={{ color: "hsl(var(--primary))" }}

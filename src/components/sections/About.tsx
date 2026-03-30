@@ -38,14 +38,14 @@ export const About = () => {
             className={`${nasalization.className} text-3xl sm:text-4xl md:text-5xl font-bold relative`}
             style={{ color: "hsl(var(--primary))" }}
           >
-            Systems That Endure{" "}
-            <span style={{ color: "hsl(var(--foreground) / 0.5)" }}>Center.</span>
+            Systems That{" "}
+            <span style={{ color: "hsl(var(--foreground) / 0.5)" }}>Endure.</span>
           </h2>
           <p
             className="mt-3 text-sm sm:text-base"
             style={{ color: "hsl(var(--foreground) / 0.5)" }}
           >
-            End-to-End Engineering from Interface to Infrastructure
+            End-to-end engineering — from interface to infrastructure.
           </p>
         </motion.div>
 
@@ -85,7 +85,7 @@ export const About = () => {
                 >
                   <Image
                     src="/images/me.png"
-                    alt="Tushar Kanti Dey - Full Stack Developer and DevOps Engineer"
+                    alt="Tushar Kanti Dey — Full Stack & Infrastructure Engineer"
                     fill
                     loading="lazy"
                     sizes="(max-width: 768px) 100vw, 448px"

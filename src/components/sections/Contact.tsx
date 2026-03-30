@@ -34,7 +34,8 @@ export const Contact = () => {
             transition={{ duration: 0.7, delay: 0.1 }}
             style={{ color: "hsl(var(--primary))" }}
           >
-            Let&apos;s Build Something That Ships
+            Open{" "}
+            <span style={{ color: "hsl(var(--foreground) / 0.5)" }}>Channel.</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 10 }}
@@ -42,7 +43,7 @@ export const Contact = () => {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="text-base md:text-lg text-white/60 max-w-2xl mx-auto leading-relaxed"
           >
-            Open to full-stack product engineering and infrastructure ownership roles.
+            Open to engineering roles, product systems, and production-focused collaborations.
           </motion.p>
         </motion.div>
 

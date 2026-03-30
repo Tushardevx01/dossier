@@ -19,7 +19,8 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV DOCKER_BUILD=true
 
-RUN npm run build
+# Use webpack in Docker to avoid Turbopack font resolver issues on musl-based images.
+RUN npm run build -- --webpack
 
 FROM node:20-alpine AS runner
 WORKDIR /app

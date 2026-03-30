@@ -2,7 +2,7 @@ export const projectsData = [
   {
     name: "SimpUI",
     description:
-      "A curated library of refined UI components built for production teams. Focused on motion, consistency, and systems-level reuse across large product surfaces.",
+      "Production UI component system with motion primitives, design tokens, and systems-level reuse patterns. Built for teams shipping at scale across large product surfaces.",
     github_link: "https://github.com/AbhishekS04/SimpyUI",
     demo: "https://simpyui.vercel.app/",
     tech: ["Next.js", "Tailwind CSS", "Framer Motion"],
@@ -11,7 +11,7 @@ export const projectsData = [
   {
     name: "Signifiya",
     description:
-      "Event operations platform for schedules, registration, and live updates. Built to handle peak traffic and real-time coordination across teams and attendees.",
+      "Event operations platform handling schedules, registration, and live coordination. Designed for peak traffic resilience and real-time state management across distributed teams.",
     github_link: "https://github.com/AbhishekS04/signifiyaAppFinal",
     demo: "https://signifiya.in",
     tech: ["Next.js", "Expo", "Supabase"],
@@ -20,7 +20,7 @@ export const projectsData = [
   {
     name: "CarePulse",
     description:
-      "Healthcare operations platform for clinics and hospitals with secure workflows. Focused on reliability, integrations, and production-grade UX.",
+      "Healthcare operations platform for clinics and hospitals — secure provider workflows, third-party integrations, and production-grade UX with strict data handling requirements.",
     github_link: "https://github.com/Tusharxhub/carepulse",
     demo: "https://carepulse-brown-omega.vercel.app/",
     tech: ["TypeScript", "Appwrite", "Next.js"],
@@ -29,16 +29,16 @@ export const projectsData = [
   {
     name: "Fenix",
     description:
-      "Real-time video platform with low-latency audio/video and secure authentication. Optimized for stable sessions and consistent call quality.",
+      "Real-time video platform with sub-second latency, end-to-end encryption, and session stability guarantees. Optimized for consistent call quality under variable network conditions.",
     github_link: "https://github.com/Tusharxhub/Fenix",
     demo: "https://fenix-ecru.vercel.app/",
     tech: ["Next.js", "Clerk", "LiveKit"],
-    role: "Realtime Platform",
+    role: "Realtime Infrastructure",
   },
   {
     name: "WebScope",
     description:
-      "A full-stack web analysis platform that extracts, processes, and structures data from dynamic web sources with clean separation of concerns.",
+      "Web intelligence platform that extracts, processes, and structures data from dynamic sources. Clean service boundaries, failure-aware extraction logic, and production deployment discipline.",
     github_link: "https://github.com/Tusharxhub/webscope",
     demo: "https://webscope-three.vercel.app",
     tech: ["Next.js", "Node.js", "API Integration"],
@@ -47,7 +47,7 @@ export const projectsData = [
   {
     name: "Subscription Tracker",
     description:
-      "Subscription management API with tracking, reminders, and cost controls. Built to keep financial operations predictable and auditable.",
+      "Subscription management API with lifecycle tracking, automated reminders, and cost controls. Built for predictable, auditable financial operations at scale.",
     github_link: "https://github.com/Tusharxhub/subscription-tracker",
     demo: "https://subscription-tracker-jet.vercel.app/",
     tech: ["Node.js", "Express", "MongoDB"],

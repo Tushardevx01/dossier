@@ -1,21 +1,15 @@
-import { Inter, JetBrains_Mono } from "next/font/google";
 import localFont from "next/font/local";
 
-// Inter for all paragraph text and body content
-export const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  display: "swap",
-});
+// Keep font exports stable without remote Google font fetches during builds.
+export const inter = {
+  className: "",
+  variable: "",
+} as const;
 
-// JetBrains Mono for subheadings, code, and dashboard aesthetics
-export const mono = JetBrains_Mono({
-  weight: ["300", "400", "500", "600"],
-  variable: "--font-mono",
-  subsets: ["latin"],
-  display: "swap",
-});
+export const mono = {
+  className: "",
+  variable: "",
+} as const;
 
 // Nasalization for all main headings
 export const nasalization = localFont({

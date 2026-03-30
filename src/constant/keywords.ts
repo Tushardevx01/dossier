@@ -1,28 +1,27 @@
 const names = [
   "Tushar Kanti Dey",
   "Tushar Kanti Dey Portfolio",
-  "Tushar",
+  "Tushar Kanti Dey Engineer",
   "Tushar Kanti Dey Adamas University",
   "Tushar Kanti Dey Kolkata",
 ];
 
 const roles = [
-  "Software Engineer",
-  "Full Stack Developer",
+  "Full Stack Engineer",
+  "Infrastructure Engineer",
+  "Systems Engineer",
   "Next.js Developer",
   "Frontend Engineer",
-  "Backend Developer",
-  "Generative AI Engineer",
-  "Technical Content Engineer",
-  "Problem Setter",
-  "Student Developer",
-  "Creative Developer",
-  "UI/UX Engineer"
+  "Backend Engineer",
+  "DevOps Engineer",
+  "Platform Engineer",
+  "Software Engineer",
+  "Product Engineer",
 ];
 
 const skills = [
   // Web Frameworks & Libraries
-  "Next.js 15",
+  "Next.js",
   "React.js",
   "React Server Components",
   "TypeScript",
@@ -43,36 +42,28 @@ const skills = [
   "Serverless Functions",
   "Edge Runtime",
 
-  // AI & Systems
-  "Machine Learning",
-  "LLM Integration",
-  "Ollama",
-  "RAG Pipelines",
-  "LangChain",
-  "Vector Databases",
-  "C++ Optimization",
-  "Python Automation",
+  // Infrastructure & Systems
   "Docker",
   "Kubernetes",
   "CI/CD Pipelines",
-  "Git & GitHub"
+  "Git",
+  "GitHub Actions",
+  "Cloud Infrastructure",
+  "Production Systems",
+  "System Architecture",
 ];
 
 const projects = [
-  "CppTestGenAI",
-  "Orphia Music Generator",
-  "Algo Visualizer Next.js",
-  "Bhagavad Gita API",
-  "Sorting Algorithm Visualizer",
-  "Portfolio Website Next.js",
-  "AI Powered Application"
+  "WebScope",
+  "SimpUI",
+  "Signifiya",
+  "CarePulse",
+  "Fenix",
+  "Subscription Tracker",
 ];
 
 const locations = [
   "India",
-  "Delhi",
-  "NCR",
-  "Delhi",
   "Kolkata",
   "Bangalore",
   "Remote",
@@ -80,16 +71,16 @@ const locations = [
 ];
 
 const longTail = [
-  "Hire Next.js Developer in India",
-  "Best Full Stack Developer Portfolio",
-  "React Developer for startup",
-  "Software Engineer Intern opportunities",
-  "Next.js 15 Portfolio Template",
-  "Generative AI Projects Showcase",
-  "Frontend Developer with AI skills",
-  "Freelance Web Developer India",
-  "Collaborate on Open Source",
-  "Technical Writer and Developer",
+  "Hire Full Stack Engineer India",
+  "Infrastructure Engineer Portfolio",
+  "Production Systems Engineer",
+  "Next.js Engineer for hire",
+  "DevOps Engineer Portfolio",
+  "Systems Engineer India",
+  "Full Stack Developer with DevOps",
+  "TypeScript Engineer India",
+  "Node.js Infrastructure Engineer",
+  "React Engineer with Systems Background",
 ];
 
 export const Keywords = [
@@ -101,7 +92,6 @@ export const Keywords = [
   ...longTail,
 
   ...roles.flatMap((role) => locations.map((loc) => `${role} in ${loc}`)),
-  ...skills.map((skill) => `${skill} Developer`),
-  ...skills.map((skill) => `${skill} Expert`),
-  ...skills.map((skill) => `Hire ${skill} Developer`),
+  ...skills.map((skill) => `${skill} Engineer`),
+  ...skills.map((skill) => `Hire ${skill} Engineer`),
 ];
