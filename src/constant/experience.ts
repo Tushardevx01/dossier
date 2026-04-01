@@ -12,7 +12,7 @@ export const experienceData = [
     url: "https://crm.azmth.in/",
   },
   {
-    role: "Full Stack Engineer",
+    role: "Cycoder Co-Tech Lead",
     year: "Feb 2025 - Present",
     company: "CYCODERS",
     description: [
