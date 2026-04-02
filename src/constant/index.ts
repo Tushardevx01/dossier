@@ -5,6 +5,8 @@ import { projectsData } from "./projects";
 import { selfData } from "./self";
 import { skillsData } from "./skillsData";
 import { primaryStack, supportingStack, additionalStack } from "./skillsTiers";
+import { techDefinitions } from "./tech-definitions";
+import { techIcons } from "./tech-icons";
 
 export {
   experienceData,
@@ -16,6 +18,8 @@ export {
   primaryStack,
   supportingStack,
   additionalStack,
+  techDefinitions,
+  techIcons,
 };
 
 export type { Skill, SkillsCategory, SkillsTier } from "./skillsTiers";

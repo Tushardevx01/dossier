@@ -6,15 +6,6 @@ import { useRef } from "react";
 import { mono, nasalization } from "@/app/fonts";
 import { projectsData } from "@/constant/projects";
 
-type Project = {
-  name: string;
-  description: string;
-  github_link: string;
-  demo?: string;
-  tech: string[];
-  role: string;
-};
-
 const cardVariants = {
   rest: { y: 0 },
   hover: { y: -6 },
@@ -31,7 +22,7 @@ const arrowVariants = {
 };
 
 export const Projects = () => {
-  const projects = projectsData as unknown as Project[];
+  const projects = projectsData;
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-80px", amount: 0.1 });
 

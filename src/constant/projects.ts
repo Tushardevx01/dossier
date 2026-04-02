@@ -1,3 +1,5 @@
+import type { Project } from "@/types/project";
+
 export const projectsData = [
   {
     name: "SimpUI",
@@ -53,4 +55,4 @@ export const projectsData = [
     tech: ["Node.js", "Express", "MongoDB"],
     role: "Backend API",
   },
-];
+] satisfies Project[];

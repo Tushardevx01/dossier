@@ -1,10 +1,10 @@
-import type React from "react";
+import type { IconType } from "react-icons";
 
 export type TechBadgeSize = "sm" | "md" | "lg";
 
-export interface TechStackItem {
+export interface TechVisual {
   name: string;
-  icon: React.ElementType;
+  icon: IconType;
   description: string;
   color?: string;
 }

@@ -38,7 +38,7 @@ export const SkillCategoryCard = ({
       <div className="flex flex-wrap gap-2.5">
         {skills.map((skill, idx) => (
           <TechBadge
-            key={skill.title}
+            key={skill.techKey}
             tech={resolveTechStackItem(skill)}
             size={size}
             delay={categoryDelay + idx * 0.02}
