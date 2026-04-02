@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-import { telemetrySeed, runtimeLogSeed } from "@/constants/system";
+import { telemetrySeed, runtimeLogSeed } from "@/constant/system";
 import type { RuntimeLogLine } from "@/types/system";
 
 const TELEMETRY_UPDATE_MS = 2400;

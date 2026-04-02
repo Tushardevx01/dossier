@@ -61,37 +61,3 @@ export function useScrollProgress(): number {
   return progress;
 }
 
-/**
- * Alternative: Debounced version for expensive operations
- * Use this if scroll tracking causes performance issues
- */
-export function useDebouncedScrollProgress(delayMs = 100): number {
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-
-    const handleScroll = () => {
-      // Clear previous timeout
-      clearTimeout(timeoutId);
-
-      // Set new debounced timeout
-      timeoutId = setTimeout(() => {
-        const scrollHeight =
-          document.documentElement.scrollHeight - window.innerHeight;
-        const scrolled = window.scrollY;
-        const percentage = scrollHeight > 0 ? (scrolled / scrollHeight) * 100 : 0;
-        setProgress(Math.min(percentage, 100));
-      }, delayMs);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      clearTimeout(timeoutId);
-    };
-  }, [delayMs]);
-
-  return progress;
-}

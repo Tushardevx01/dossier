@@ -3,7 +3,7 @@
 import { motion } from "motion/react";
 
 import { mono, nasalization } from "@/app/fonts";
-import { latencyPoints } from "@/constants/system";
+import { latencyPoints } from "@/constant/system";
 import type { TelemetryItem } from "@/types/system";
 
 interface DevopsMetricsProps {

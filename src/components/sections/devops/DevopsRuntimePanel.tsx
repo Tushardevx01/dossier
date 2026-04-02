@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 import { useEffect, useRef } from "react";
 
 import { mono } from "@/app/fonts";
-import { dotClassByState, levelClasses, serviceHealthTiles, statusClassByState } from "@/constants/system";
+import { dotClassByState, levelClasses, serviceHealthTiles, statusClassByState } from "@/constant/system";
 import type { RuntimeLogLine } from "@/types/system";
 
 interface DevopsRuntimePanelProps {

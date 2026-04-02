@@ -2,7 +2,7 @@
 
 import { motion, useInView } from "motion/react";
 import { useRef } from "react";
-import { experienceData } from "@/constants/experience";
+import { experienceData } from "@/constant/experience";
 import { ExperienceCard } from "../Cards";
 import { nasalization } from "@/app/fonts";
 

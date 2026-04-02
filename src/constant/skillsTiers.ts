@@ -101,7 +101,6 @@ export const primaryStack: SkillsCategory[] = [
     skills: [
       { title: "Supabase", logoComponent: SiSupabase, color: "#3ECF8E" },
       { title: "MySQL", logoComponent: SiMysql, color: "#4479A1" },
-      { title: "Redis", logoComponent: SiRedis, color: "#DC382D" },
       { title: "Prisma", logoComponent: SiPrisma, color: "#2D3748" },
       { title: "MongoDB", logoComponent: SiMongodb, color: "#47A248" },
     ],
