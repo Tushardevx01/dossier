@@ -16,18 +16,14 @@ export const dynamic = "force-dynamic";
 interface VersionInfo {
   name: string;
   version: string;
-  environment: string;
-  buildTime: string;
-  commit?: string;
-  branch?: string;
+  buildTime?: string;
 }
 
 export async function GET() {
   const versionInfo: VersionInfo = {
     name: packageJson.name || "tushardevx01-portfolio",
     version: packageJson.version || "1.0.0",
-    environment: process.env.NODE_ENV || "development",
-    buildTime: process.env.BUILD_TIME || new Date().toISOString(),
+    buildTime: process.env.BUILD_TIME,
   };
 
   // Remove undefined values
@@ -37,7 +33,8 @@ export async function GET() {
 
   return NextResponse.json(cleanInfo, {
     headers: {
-      "Cache-Control": "public, max-age=60",
+      "Cache-Control": "no-store",
+      "X-Robots-Tag": "noindex, nofollow",
     },
   });
 }

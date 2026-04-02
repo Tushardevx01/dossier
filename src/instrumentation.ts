@@ -25,8 +25,8 @@ function validateEnvironment(): EnvValidationResult {
   // Required environment variables
   const requiredEnv = [
     { key: "QEV_API_KEY", description: "QuickEmailVerification API Key" },
-    { key: "EMAIL_FROM", description: "Email sender address", legacyKey: "email_from" },
-    { key: "EMAIL_PASSWORD", description: "Email password/app password", legacyKey: "email_password" },
+    { key: "EMAIL_FROM", description: "Email sender address" },
+    { key: "EMAIL_PASSWORD", description: "Email password/app password" },
   ];
 
   // Optional but recommended environment variables
@@ -36,8 +36,8 @@ function validateEnvironment(): EnvValidationResult {
     { key: "LOG_LEVEL", description: "Logging level (debug|info|warn|error)" },
   ];
 
-  for (const { key, description, legacyKey } of requiredEnv) {
-    if (!process.env[key] && !(legacyKey && process.env[legacyKey])) {
+  for (const { key, description } of requiredEnv) {
+    if (!process.env[key]) {
       result.valid = false;
       result.missing.push(`${key} - ${description}`);
     }

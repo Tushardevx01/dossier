@@ -50,35 +50,29 @@ const nextConfig: NextConfig = {
       "upgrade-insecure-requests",
     ].join("; ");
 
+    const commonSecurityHeaders = [
+      { key: "X-Frame-Options", value: "DENY" },
+      { key: "X-Content-Type-Options", value: "nosniff" },
+      { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+      { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains; preload" },
+      { key: "X-DNS-Prefetch-Control", value: "off" },
+      { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=(), usb=(), accelerometer=(), gyroscope=()" },
+      { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+      { key: "Cross-Origin-Resource-Policy", value: "same-origin" },
+      { key: "Content-Security-Policy", value: contentSecurityPolicy },
+    ];
+
     return [
       {
         source: "/api/:path*",
         headers: [
-          { key: "X-Frame-Options", value: "DENY" },
-          { key: "X-Content-Type-Options", value: "nosniff" },
-          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-          { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains; preload" },
-          { key: "X-DNS-Prefetch-Control", value: "off" },
-          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=(), usb=(), accelerometer=(), gyroscope=()" },
-          { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
-          { key: "Cross-Origin-Resource-Policy", value: "same-origin" },
-          { key: "Content-Security-Policy", value: contentSecurityPolicy },
+          ...commonSecurityHeaders,
           { key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" },
         ],
       },
       {
         source: "/(.*)",
-        headers: [
-          { key: "X-Frame-Options", value: "DENY" },
-          { key: "X-Content-Type-Options", value: "nosniff" },
-          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-          { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains; preload" },
-          { key: "X-DNS-Prefetch-Control", value: "off" },
-          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=(), usb=(), accelerometer=(), gyroscope=()" },
-          { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
-          { key: "Cross-Origin-Resource-Policy", value: "same-origin" },
-          { key: "Content-Security-Policy", value: contentSecurityPolicy },
-        ],
+        headers: commonSecurityHeaders,
       },
     ];
   },

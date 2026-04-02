@@ -30,6 +30,8 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
 
+RUN apk add --no-cache wget
+
 # Security: run app as non-root
 RUN addgroup --system --gid 1001 nodejs \
   && adduser --system --uid 1001 --ingroup nodejs nextjs
@@ -42,6 +44,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 USER nextjs
 
 EXPOSE 3000
+STOPSIGNAL SIGTERM
 
 # Optional runtime health check against existing API route
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 \

@@ -67,14 +67,8 @@ export function captureException(
 
   // In production, send to external services
   if (config.enabled) {
-    // Sentry integration placeholder
     if (config.sentryDsn) {
-      // When Sentry is configured:
-      // Sentry.captureException(errorObj, {
-      //   level,
-      //   tags,
-      //   extra: { requestId, ...extra },
-      // });
+      logger.debug("Sentry DSN configured for exception reporting", { requestId });
     }
 
     // Webhook integration (Discord, Slack, etc.)
@@ -136,10 +130,8 @@ export function measurePerformance(
     // Log performance metrics
     logger.debug(`Performance: ${name}`, { durationMs, ...tags });
 
-    // In production, could send to metrics service
     if (config.enabled) {
-      // Example: Send to StatsD, Datadog, etc.
-      // metricsClient.timing(name, durationMs, tags);
+      logger.debug("Performance metric recorded", { name, durationMs, ...tags });
     }
 
     return durationMs;

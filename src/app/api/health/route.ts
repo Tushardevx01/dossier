@@ -27,7 +27,7 @@ async function checkRedis(): Promise<{ status: "pass" | "warn" | "fail"; message
   const token = process.env.UPSTASH_REDIS_REST_TOKEN;
 
   if (!url || !token) {
-    return { status: "pass", message: "Not configured (using in-memory fallback)" };
+    return { status: "pass", message: "Redis not configured" };
   }
 
   try {
@@ -46,13 +46,8 @@ async function checkRedis(): Promise<{ status: "pass" | "warn" | "fail"; message
 }
 
 function checkEnv(): { status: "pass" | "warn" | "fail"; message?: string } {
-  const required = [
-    { key: "QEV_API_KEY", legacyKey: undefined },
-    { key: "EMAIL_FROM", legacyKey: "email_from" },
-    { key: "EMAIL_PASSWORD", legacyKey: "email_password" },
-  ] as const;
-
-  const missing = required.filter(({ key, legacyKey }) => !process.env[key] && !(legacyKey && process.env[legacyKey]));
+  const required = ["QEV_API_KEY", "EMAIL_FROM", "EMAIL_PASSWORD"] as const;
+  const missing = required.filter((key) => !process.env[key]);
 
   if (missing.length === 0) {
     return { status: "pass" };
@@ -67,8 +62,8 @@ export async function GET() {
   ]);
 
   const checks: HealthStatus["checks"] = {
-    env: checkEnv(),
-    redis: redisCheck,
+    env: { status: checkEnv().status },
+    redis: { status: redisCheck.status },
     monitoring: monitoringCheck,
   };
 

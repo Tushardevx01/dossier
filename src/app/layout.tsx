@@ -134,10 +134,9 @@ export default function RootLayout({
   const organizationStructuredData = generateOrganizationStructuredData();
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <body
         className={`${inter.variable} ${mono.variable} ${nasalization.variable} ${quentine.variable} font-sans`}
-        suppressHydrationWarning
       >
         <script
           type="application/ld+json"

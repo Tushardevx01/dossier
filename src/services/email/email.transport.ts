@@ -9,28 +9,23 @@ import nodemailer from "nodemailer";
 import type { Transporter } from "nodemailer";
 import { logger } from "@/lib/logger";
 
-let transporter: Transporter | null = null;
-
 interface EmailConfig {
   from: string;
   password: string;
 }
 
 /**
- * Get or create email transporter (singleton)
+ * Create a fresh transporter per send operation.
+ * Avoids stale credentials/config across runtime updates.
  */
 function getTransporter(config: EmailConfig): Transporter {
-  if (transporter) return transporter;
-
-  transporter = nodemailer.createTransport({
+  return nodemailer.createTransport({
     service: "gmail",
     auth: {
       user: config.from,
       pass: config.password,
     },
   });
-
-  return transporter;
 }
 
 export interface EmailMessage {

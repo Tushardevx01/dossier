@@ -42,6 +42,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { analyzeSEO, isAnalysisError, validateUrl } from "@/lib/seo-analyzer";
 import { logger } from "@/lib/logger";
+import { checkRateLimit, createRateLimitKey } from "@/lib/security/rateLimit";
 
 // Use Node.js runtime for Cheerio compatibility
 export const runtime = "nodejs";
@@ -54,48 +55,15 @@ const AnalyzeRequestSchema = z.object({
 
 const MAX_BODY_BYTES = 4096;
 
-// Rate limiting - simple in-memory store (use Redis in production cluster)
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 const RATE_LIMIT_MAX = 10; // requests per window
 const RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
 
-/**
- * Simple rate limiting check
- */
-function checkRateLimit(ip: string): { allowed: boolean; remaining: number; resetAt: number } {
-  const now = Date.now();
-  const record = rateLimitMap.get(ip);
-
-  if (!record || now > record.resetAt) {
-    // New window
-    const resetAt = now + RATE_LIMIT_WINDOW_MS;
-    rateLimitMap.set(ip, { count: 1, resetAt });
-    return { allowed: true, remaining: RATE_LIMIT_MAX - 1, resetAt };
-  }
-
-  if (record.count >= RATE_LIMIT_MAX) {
-    return { allowed: false, remaining: 0, resetAt: record.resetAt };
-  }
-
-  record.count++;
-  return { allowed: true, remaining: RATE_LIMIT_MAX - record.count, resetAt: record.resetAt };
-}
-
-/**
- * Clean up expired rate limit records periodically
- */
-function cleanupRateLimits(): void {
-  const now = Date.now();
-  for (const [ip, record] of rateLimitMap.entries()) {
-    if (now > record.resetAt) {
-      rateLimitMap.delete(ip);
-    }
-  }
-}
-
-// Run cleanup every 5 minutes
-if (typeof setInterval !== "undefined") {
-  setInterval(cleanupRateLimits, 5 * 60 * 1000);
+function getClientIdentifier(request: NextRequest): string {
+  return (
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    request.headers.get("x-real-ip") ||
+    "unknown"
+  );
 }
 
 export async function POST(request: NextRequest) {
@@ -129,13 +97,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Get client IP for rate limiting
-    const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() 
-      || request.headers.get("x-real-ip") 
-      || "unknown";
+    const clientIdentifier = getClientIdentifier(request);
+    const key = createRateLimitKey("analyze", clientIdentifier);
 
     // Check rate limit
-    const rateLimit = checkRateLimit(ip);
+    const rateLimit = await checkRateLimit(key, RATE_LIMIT_MAX, RATE_LIMIT_WINDOW_MS);
     if (!rateLimit.allowed) {
+      const retryAfter = Math.max(rateLimit.retryAfterSeconds, 1);
       return NextResponse.json(
         {
           success: false,
@@ -151,8 +119,7 @@ export async function POST(request: NextRequest) {
             "X-Robots-Tag": "noindex, nofollow",
             "X-RateLimit-Limit": String(RATE_LIMIT_MAX),
             "X-RateLimit-Remaining": "0",
-            "X-RateLimit-Reset": String(Math.ceil(rateLimit.resetAt / 1000)),
-            "Retry-After": String(Math.ceil((rateLimit.resetAt - Date.now()) / 1000)),
+            "Retry-After": String(retryAfter),
           },
         }
       );
@@ -302,14 +269,11 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// OPTIONS for CORS preflight
 export async function OPTIONS() {
   return new NextResponse(null, {
     status: 204,
     headers: {
-      "Access-Control-Allow-Methods": "POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type",
-      "Access-Control-Max-Age": "86400",
+      Allow: "POST, OPTIONS",
     },
   });
 }

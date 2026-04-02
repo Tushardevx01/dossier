@@ -1,37 +1,8 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-
 export const Background = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleMouseEnter = () => {
-      // Future: Add mouse interaction animations
-    };
-    const handleMouseLeave = () => {
-      // Future: Add mouse interaction animations
-    };
-
-    const container = containerRef.current;
-    if (container) {
-      container.addEventListener("mouseenter", handleMouseEnter);
-      container.addEventListener("mouseleave", handleMouseLeave);
-    }
-
-    return () => {
-      if (container) {
-        container.removeEventListener("mouseenter", handleMouseEnter);
-        container.removeEventListener("mouseleave", handleMouseLeave);
-      }
-    };
-  }, []);
-
   return (
-    <div
-      ref={containerRef}
-      className="top-0 fixed -z-10 h-full w-full overflow-hidden"
-    >
+    <div className="top-0 fixed -z-10 h-full w-full overflow-hidden">
       {/* SVG Filters */}
       <svg className="absolute inset-0 w-0 h-0">
         <defs>

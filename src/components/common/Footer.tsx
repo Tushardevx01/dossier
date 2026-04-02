@@ -17,6 +17,7 @@ const floatingParticles = [
 export const Footer = () => {
   const [isHeartFilled, setIsHeartFilled] = useState(false);
   const toggleHeart = () => setIsHeartFilled((prev) => !prev);
+  const currentYear = new Date().getFullYear();
 
 
   return (
@@ -44,7 +45,7 @@ export const Footer = () => {
               Tushar
             </a>
           </p>
-          <p className="text-muted-foreground/60">© 2026 All rights reserved</p>
+          <p className="text-muted-foreground/60">© {currentYear} All rights reserved</p>
         </div>
       </div>
 

@@ -1,19 +1,17 @@
-# Tushar Kanti Dey
+# Tushar Kanti Dey Portfolio
 
-Portfolio and engineering showcase built with Next.js, TypeScript, Tailwind CSS, and a server-first architecture.
+Production-focused Next.js portfolio with hardened API routes, centralized security utilities, and deployment-ready defaults.
 
-## Architecture
+## Project Structure
 
-The project is structured as a Next.js App Router application with clear separation between UI, server routes, shared utilities, and data/constants.
+- `src/app/` route segments, metadata handlers, API endpoints
+- `src/components/` UI sections, shared components, primitives
+- `src/lib/` platform helpers (security, logging, analyzer, env, utils)
+- `src/services/` server-side business services (contact, email)
+- `src/constant/` curated content and metadata maps
+- `public/` static assets and downloadable documents
 
-- `src/app/` contains route segments, metadata, and API routes.
-- `src/components/` contains reusable UI, shared primitives, and section-level composition.
-- `src/lib/` contains utilities, validation, structured logging, SEO analysis, and security-sensitive helpers.
-- `src/services/` contains server-side business logic for contact, email, and supporting workflows.
-- `src/constant/` contains content and stack metadata used across the site.
-- `public/` contains static assets, docs, and media.
-
-## Setup
+## Local Setup
 
 ```bash
 npm ci
@@ -23,55 +21,51 @@ npm run dev
 
 ## Environment Variables
 
-Required server-only variables:
+See `.env.example` for all keys.
 
-- `QEV_API_KEY` - QuickEmailVerification API key
-- `EMAIL_FROM` - sender mailbox used for contact mail delivery
-- `EMAIL_PASSWORD` - app password or SMTP password for the sender mailbox
+Required:
 
-Optional variables:
+- `QEV_API_KEY`
+- `EMAIL_FROM`
+- `EMAIL_PASSWORD`
 
-- `UPSTASH_REDIS_REST_URL` - distributed rate limiting backend
-- `UPSTASH_REDIS_REST_TOKEN` - distributed rate limiting backend token
-- `LOG_LEVEL` - logging verbosity (`debug`, `info`, `warn`, `error`)
-- `SENTRY_DSN` - optional error tracking endpoint
-- `ERROR_WEBHOOK_URL` - optional webhook sink for error events
-- `SERVICE_NAME` - monitoring service label
+Optional:
 
-## Production Run
+- `UPSTASH_REDIS_REST_URL`
+- `UPSTASH_REDIS_REST_TOKEN`
+- `LOG_LEVEL`
+- `SENTRY_DSN`
+- `ERROR_WEBHOOK_URL`
+- `SERVICE_NAME`
+- `BUILD_TIME`
 
-Local production-style run:
+## Production Commands
 
 ```bash
+npm run lint
+npm run typecheck
 npm run build
 npm run start
 ```
 
-Docker build and run:
+## Docker
 
 ```bash
 docker build -t tushardevx01-portfolio .
 docker run --rm -p 3000:3000 --env-file .env.local tushardevx01-portfolio
 ```
 
-## Security Notes
+## Security Posture
 
-- Server-only secrets are validated on startup.
-- Public API routes use input validation, payload limits, and no-store caching.
-- Contact submission uses origin checks, content-type validation, honeypot protection, and rate limiting.
-- SEO analysis blocks localhost and private network targets and now validates redirect targets before following them.
-- Public API responses are marked `noindex`.
+- Security headers and CSP are defined in `next.config.ts`.
+- API routes use strict content-type and payload checks.
+- Shared rate limiter lives in `src/lib/security/rateLimit.ts`.
+- API responses are no-store and excluded from indexing.
+- Sensitive env access is centralized in `src/lib/env.server.ts`.
 
-## Deployment Notes
+## API Surface
 
-- Docker uses standalone output and a non-root runtime user.
-- Vercel compatibility is preserved through the standard Next.js App Router build.
-- Security headers are configured in `next.config.ts`.
-- Health and version endpoints are available for orchestration and deployment checks.
-
-## Available Endpoints
-
-- `GET /api/health`
-- `GET /api/version`
-- `POST /api/send`
-- `POST /api/analyze`
+- `POST /api/send` contact workflow
+- `POST /api/analyze` SEO analysis
+- `GET /api/health` runtime health summary
+- `GET /api/version` deployment-safe version metadata
