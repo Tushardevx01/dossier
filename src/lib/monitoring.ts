@@ -35,13 +35,6 @@ interface ErrorContext {
   level?: Severity;
 }
 
-interface PerformanceMetric {
-  name: string;
-  durationMs: number;
-  timestamp: string;
-  tags?: Record<string, string>;
-}
-
 // ─── Configuration ──────────────────────────────────────────────────────────
 
 const config = {
@@ -139,13 +132,6 @@ export function measurePerformance(
 
   return () => {
     const durationMs = Math.round(performance.now() - startTime);
-
-    const metric: PerformanceMetric = {
-      name,
-      durationMs,
-      timestamp: new Date().toISOString(),
-      tags,
-    };
 
     // Log performance metrics
     logger.debug(`Performance: ${name}`, { durationMs, ...tags });

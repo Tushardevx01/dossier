@@ -19,6 +19,8 @@ import {
 
 export const runtime = "nodejs";
 
+const MAX_BODY_BYTES = 12_000;
+
 // ─── Response Helpers ───────────────────────────────────────────────────────
 
 function jsonResponse(
@@ -30,6 +32,7 @@ function jsonResponse(
     status,
     headers: {
       "Cache-Control": "no-store",
+      "X-Robots-Tag": "noindex, nofollow",
       ...headers,
     },
   });
@@ -54,6 +57,11 @@ function errorResponse(error: AppError, requestId: string) {
 export async function POST(request: Request) {
   const requestId = generateRequestId();
 
+  const contentLength = request.headers.get("content-length");
+  if (contentLength && Number(contentLength) > MAX_BODY_BYTES) {
+    return jsonResponse({ error: "Invalid request payload", requestId }, 413, { "X-Robots-Tag": "noindex, nofollow" });
+  }
+
   // Origin check (CSRF protection)
   if (!isOriginAllowed(request.headers)) {
     logger.warn("Forbidden origin", { requestId });
@@ -63,13 +71,13 @@ export async function POST(request: Request) {
   // Content-Type check
   const contentType = request.headers.get("content-type") ?? "";
   if (!contentType.includes("application/json")) {
-    return jsonResponse({ error: "Unsupported content type", requestId }, 415);
+    return jsonResponse({ error: "Unsupported content type", requestId }, 415, { "X-Robots-Tag": "noindex, nofollow" });
   }
 
   // Read and validate body size
   const rawBody = await request.text();
   if (!isValidBodySize(rawBody)) {
-    return jsonResponse({ error: "Invalid request payload", requestId }, 400);
+    return jsonResponse({ error: "Invalid request payload", requestId }, 400, { "X-Robots-Tag": "noindex, nofollow" });
   }
 
   // Parse JSON
@@ -77,11 +85,11 @@ export async function POST(request: Request) {
   try {
     body = JSON.parse(rawBody);
   } catch {
-    return jsonResponse({ error: "Malformed JSON payload", requestId }, 400);
+    return jsonResponse({ error: "Malformed JSON payload", requestId }, 400, { "X-Robots-Tag": "noindex, nofollow" });
   }
 
   if (!body || typeof body !== "object") {
-    return jsonResponse({ error: "Invalid input data", requestId }, 400);
+    return jsonResponse({ error: "Invalid input data", requestId }, 400, { "X-Robots-Tag": "noindex, nofollow" });
   }
 
   // Get config
@@ -95,7 +103,7 @@ export async function POST(request: Request) {
     };
   } catch {
     logger.error("Server configuration error", { requestId });
-    return jsonResponse({ error: "Server configuration error", requestId }, 500);
+    return jsonResponse({ error: "Server configuration error", requestId }, 500, { "X-Robots-Tag": "noindex, nofollow" });
   }
 
   // Process submission through service layer

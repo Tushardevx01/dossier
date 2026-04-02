@@ -12,7 +12,7 @@
 
 import { AppError, Errors } from "@/lib/errors";
 import { logger } from "@/lib/logger";
-import { validateContactForm, type ContactFormInput } from "./contact.schema";
+import { validateContactForm } from "./contact.schema";
 import { checkRateLimit, createRateLimitKey } from "./contact.rateLimit";
 import { sendEmail } from "@/services/email/email.transport";
 import { renderContactEmail } from "@/services/email/email.templates";

@@ -1,7 +1,6 @@
 "use client";
 
 import { nasalization } from "@/app/fonts";
-import { selfData } from "@/constant";
 import { motion, AnimatePresence } from "motion/react";
 import { FC, useState, useEffect } from "react";
 import { Background } from "./Background";

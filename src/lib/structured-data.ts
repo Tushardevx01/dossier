@@ -1,10 +1,6 @@
-import { selfData, skillsData } from "@/constant";
+import { selfData } from "@/constant";
 
 export function generatePersonStructuredData() {
-  const skills = skillsData.flatMap((category) =>
-    category.data.map((skill) => skill.title)
-  );
-
   return {
     "@context": "https://schema.org/",
     "@type": "Person",

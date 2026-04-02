@@ -7,7 +7,7 @@ import Link from "next/link";
 
 import { FaHouse, FaArrowLeft } from "react-icons/fa6";
 
-import { Navbar, Footer, Background } from "@/components/common";
+import { Navbar, Footer } from "@/components/common";
 import { Button } from "@/components/ui/button";
 import { quentine, nasalization } from "@/app/fonts";
 

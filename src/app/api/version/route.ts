@@ -28,9 +28,6 @@ export async function GET() {
     version: packageJson.version || "1.0.0",
     environment: process.env.NODE_ENV || "development",
     buildTime: process.env.BUILD_TIME || new Date().toISOString(),
-    // Git info (set during CI/CD build)
-    commit: process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) || process.env.GIT_COMMIT,
-    branch: process.env.VERCEL_GIT_COMMIT_REF || process.env.GIT_BRANCH,
   };
 
   // Remove undefined values

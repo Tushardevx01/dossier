@@ -57,7 +57,7 @@ export function useContactForm() {
       e.preventDefault();
       setIsSending(true);
 
-      const sendPromise = new Promise<string>(async (resolve, reject) => {
+      const sendPromise = (async () => {
         try {
           const response = await fetch("/api/send", {
             method: "POST",
@@ -70,16 +70,14 @@ export function useContactForm() {
           if (response.ok) {
             setIsSent(true);
             setFormValues(INITIAL_VALUES);
-            resolve(data.message);
-          } else {
-            reject(new Error(data.error || "Failed to send message"));
+            return data.message as string;
           }
-        } catch (error) {
-          reject(error);
+
+          throw new Error(data.error || "Failed to send message");
         } finally {
           setIsSending(false);
         }
-      });
+      })();
 
       toast.promise(sendPromise, {
         loading: "Sending your message...",

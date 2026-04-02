@@ -41,14 +41,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { analyzeSEO, isAnalysisError, validateUrl } from "@/lib/seo-analyzer";
+import { logger } from "@/lib/logger";
 
 // Use Node.js runtime for Cheerio compatibility
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 // Request validation schema
 const AnalyzeRequestSchema = z.object({
   url: z.string().min(1, "URL is required").max(2048, "URL too long"),
 });
+
+const MAX_BODY_BYTES = 4096;
 
 // Rate limiting - simple in-memory store (use Redis in production cluster)
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
@@ -96,6 +100,34 @@ if (typeof setInterval !== "undefined") {
 
 export async function POST(request: NextRequest) {
   try {
+    const contentType = request.headers.get("content-type") ?? "";
+    if (!contentType.includes("application/json")) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            code: "INVALID_REQUEST",
+            message: "Unsupported content type",
+          },
+        },
+        { status: 415, headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" } }
+      );
+    }
+
+    const contentLength = request.headers.get("content-length");
+    if (contentLength && Number(contentLength) > MAX_BODY_BYTES) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            code: "PAYLOAD_TOO_LARGE",
+            message: "Request body is too large",
+          },
+        },
+        { status: 413, headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" } }
+      );
+    }
+
     // Get client IP for rate limiting
     const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() 
       || request.headers.get("x-real-ip") 
@@ -115,6 +147,8 @@ export async function POST(request: NextRequest) {
         {
           status: 429,
           headers: {
+            "Cache-Control": "no-store",
+            "X-Robots-Tag": "noindex, nofollow",
             "X-RateLimit-Limit": String(RATE_LIMIT_MAX),
             "X-RateLimit-Remaining": "0",
             "X-RateLimit-Reset": String(Math.ceil(rateLimit.resetAt / 1000)),
@@ -125,7 +159,36 @@ export async function POST(request: NextRequest) {
     }
 
     // Parse and validate request body
-    const body = await request.json().catch(() => null);
+    const rawBody = await request.text();
+    if (rawBody.length > MAX_BODY_BYTES) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            code: "PAYLOAD_TOO_LARGE",
+            message: "Request body is too large",
+          },
+        },
+        { status: 413, headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" } }
+      );
+    }
+
+    let body: unknown;
+    try {
+      body = rawBody ? JSON.parse(rawBody) : null;
+    } catch {
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            code: "INVALID_REQUEST",
+            message: "Invalid JSON body",
+          },
+        },
+        { status: 400, headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" } }
+      );
+    }
+
     if (!body) {
       return NextResponse.json(
         {
@@ -135,7 +198,20 @@ export async function POST(request: NextRequest) {
             message: "Invalid JSON body",
           },
         },
-        { status: 400 }
+        { status: 400, headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" } }
+      );
+    }
+
+    if (typeof body !== "object" || Array.isArray(body)) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            code: "INVALID_REQUEST",
+            message: "Invalid input data",
+          },
+        },
+        { status: 400, headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" } }
       );
     }
 
@@ -150,7 +226,7 @@ export async function POST(request: NextRequest) {
             message: firstIssue?.message || "Invalid request",
           },
         },
-        { status: 400 }
+        { status: 400, headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" } }
       );
     }
 
@@ -164,7 +240,7 @@ export async function POST(request: NextRequest) {
           success: false,
           error: urlValidation.error,
         },
-        { status: 400 }
+        { status: 400, headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" } }
       );
     }
 
@@ -183,6 +259,8 @@ export async function POST(request: NextRequest) {
         { 
           status: statusCode,
           headers: {
+            "Cache-Control": "no-store",
+            "X-Robots-Tag": "noindex, nofollow",
             "X-RateLimit-Limit": String(RATE_LIMIT_MAX),
             "X-RateLimit-Remaining": String(rateLimit.remaining),
           },
@@ -199,6 +277,7 @@ export async function POST(request: NextRequest) {
       {
         status: 200,
         headers: {
+          "X-Robots-Tag": "noindex, nofollow",
           "X-RateLimit-Limit": String(RATE_LIMIT_MAX),
           "X-RateLimit-Remaining": String(rateLimit.remaining),
           "Cache-Control": "no-store", // Don't cache analysis results
@@ -207,7 +286,9 @@ export async function POST(request: NextRequest) {
     );
   } catch (error) {
     // Unexpected error handling
-    console.error("[SEO Analyzer] Unexpected error:", error);
+    logger.error("[SEO Analyzer] Unexpected error", {
+      error: error instanceof Error ? error.message : String(error),
+    });
     return NextResponse.json(
       {
         success: false,
@@ -216,7 +297,7 @@ export async function POST(request: NextRequest) {
           message: "An unexpected error occurred",
         },
       },
-      { status: 500 }
+      { status: 500, headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" } }
     );
   }
 }

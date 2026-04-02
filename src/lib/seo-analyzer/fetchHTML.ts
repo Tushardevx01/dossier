@@ -12,6 +12,7 @@ const FETCH_TIMEOUT_MS = 10_000;
 
 /** User agent for WebScope bot */
 const USER_AGENT = "Mozilla/5.0 (compatible; WebScopeBot/1.0; +https://tushardevx01.tech)";
+const MAX_REDIRECTS = 5;
 
 /** Blocked hostnames to prevent internal network abuse */
 const BLOCKED_HOSTS = new Set([
@@ -77,6 +78,17 @@ export function validateUrl(urlString: string): { valid: boolean; error?: Analyz
         };
     }
 
+    if (url.username || url.password) {
+        return {
+            valid: false,
+            error: {
+                code: "INVALID_URL",
+                message: "URLs with credentials are not allowed",
+                details: "Embedded username or password is blocked",
+            },
+        };
+    }
+
     // Check for blocked hosts
     const hostname = url.hostname.toLowerCase();
     if (BLOCKED_HOSTS.has(hostname)) {
@@ -130,11 +142,12 @@ export async function fetchHTML(urlString: string): Promise<FetchResult | Analyz
         return validation.error!;
     }
 
-    const url = validation.url!;
+    let url = validation.url!;
     const { controller, clear } = createTimeoutController(FETCH_TIMEOUT_MS);
 
     try {
-        const response = await fetch(url.toString(), {
+        for (let redirectCount = 0; redirectCount < MAX_REDIRECTS; redirectCount += 1) {
+            const response = await fetch(url.toString(), {
             method: "GET",
             headers: {
                 "User-Agent": USER_AGENT,
@@ -145,44 +158,78 @@ export async function fetchHTML(urlString: string): Promise<FetchResult | Analyz
                 "Connection": "keep-alive",
             },
             signal: controller.signal,
-            redirect: "follow", // Handle redirects automatically
+            redirect: "manual",
         });
 
-        clear(); // Clear timeout on successful response
+            if (response.status >= 300 && response.status < 400) {
+                const location = response.headers.get("location");
+                if (!location) {
+                    clear();
+                    return {
+                        code: "FETCH_FAILED",
+                        message: "Redirect response missing location header",
+                        details: `Failed to fetch ${url.toString()}`,
+                    };
+                }
+
+                const nextUrl = new URL(location, url.toString());
+                const nextValidation = validateUrl(nextUrl.toString());
+                if (!nextValidation.valid || !nextValidation.url) {
+                    clear();
+                    return nextValidation.error ?? {
+                        code: "BLOCKED_URL",
+                        message: "Redirect target is not allowed",
+                        details: `Failed to fetch ${url.toString()}`,
+                    };
+                }
+
+                url = nextValidation.url;
+                continue;
+            }
+
+            clear(); // Clear timeout on successful response path
 
         // Check for non-success status codes
-        if (!response.ok) {
+            if (!response.ok) {
+                return {
+                    code: "FETCH_FAILED",
+                    message: `Server returned ${response.status} ${response.statusText}`,
+                    details: `Failed to fetch ${url.toString()}`,
+                };
+            }
+
+            // Verify content type is HTML
+            const contentType = response.headers.get("content-type") || "";
+            if (!contentType.includes("text/html") && !contentType.includes("application/xhtml+xml")) {
+                return {
+                    code: "FETCH_FAILED",
+                    message: "Response is not HTML",
+                    details: `Content-Type: ${contentType}`,
+                };
+            }
+
+            // Read HTML content
+            const html = await response.text();
+
+            // Extract headers we care about
+            const headers: Record<string, string> = {};
+            response.headers.forEach((value, key) => {
+                headers[key.toLowerCase()] = value;
+            });
+
             return {
-                code: "FETCH_FAILED",
-                message: `Server returned ${response.status} ${response.statusText}`,
-                details: `Failed to fetch ${url.toString()}`,
+                html,
+                finalUrl: response.url, // May differ after redirects
+                statusCode: response.status,
+                headers,
             };
         }
 
-        // Verify content type is HTML
-        const contentType = response.headers.get("content-type") || "";
-        if (!contentType.includes("text/html") && !contentType.includes("application/xhtml+xml")) {
-            return {
-                code: "FETCH_FAILED",
-                message: "Response is not HTML",
-                details: `Content-Type: ${contentType}`,
-            };
-        }
-
-        // Read HTML content
-        const html = await response.text();
-
-        // Extract headers we care about
-        const headers: Record<string, string> = {};
-        response.headers.forEach((value, key) => {
-            headers[key.toLowerCase()] = value;
-        });
-
+        clear();
         return {
-            html,
-            finalUrl: response.url, // May differ after redirects
-            statusCode: response.status,
-            headers,
+            code: "FETCH_FAILED",
+            message: "Too many redirects",
+            details: `Failed to fetch ${url.toString()}`,
         };
     } catch (error) {
         clear();

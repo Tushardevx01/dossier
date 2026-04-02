@@ -7,7 +7,7 @@
  * @module seo-analyzer
  */
 
-import { fetchHTML, isFetchError, validateUrl } from "./fetchHTML";
+import { fetchHTML, isFetchError } from "./fetchHTML";
 import { parseContent, isParseError } from "./parseContent";
 import { runChecks, calculateScore, extractMetrics } from "./calculateScore";
 import type { SEOAnalysisResult, AnalyzerError } from "./types";

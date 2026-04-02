@@ -46,13 +46,18 @@ async function checkRedis(): Promise<{ status: "pass" | "warn" | "fail"; message
 }
 
 function checkEnv(): { status: "pass" | "warn" | "fail"; message?: string } {
-  const required = ["QEV_API_KEY", "email_from", "email_password"];
-  const missing = required.filter((key) => !process.env[key]);
+  const required = [
+    { key: "QEV_API_KEY", legacyKey: undefined },
+    { key: "EMAIL_FROM", legacyKey: "email_from" },
+    { key: "EMAIL_PASSWORD", legacyKey: "email_password" },
+  ] as const;
+
+  const missing = required.filter(({ key, legacyKey }) => !process.env[key] && !(legacyKey && process.env[legacyKey]));
 
   if (missing.length === 0) {
     return { status: "pass" };
   }
-  return { status: "fail", message: `Missing: ${missing.join(", ")}` };
+  return { status: "fail", message: "Missing required configuration values" };
 }
 
 export async function GET() {
@@ -92,6 +97,7 @@ export async function GET() {
     status: statusCode,
     headers: {
       "Cache-Control": "no-store, no-cache, must-revalidate",
+      "X-Robots-Tag": "noindex, nofollow",
     },
   });
 }

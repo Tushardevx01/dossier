@@ -6,7 +6,6 @@ import { Toaster } from "sonner";
 
 import { inter, mono, nasalization, quentine } from "./fonts";
 
-import { Keywords } from "@/constant";
 import {
   generatePersonStructuredData,
   generateWebsiteStructuredData,

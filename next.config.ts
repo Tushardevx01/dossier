@@ -39,7 +39,7 @@ const nextConfig: NextConfig = {
     const contentSecurityPolicy = [
       "default-src 'self'",
       "base-uri 'self'",
-      "frame-ancestors 'self'",
+      "frame-ancestors 'none'",
       "object-src 'none'",
       "form-action 'self'",
       "script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com",
@@ -47,30 +47,37 @@ const nextConfig: NextConfig = {
       "img-src 'self' data: blob: https://tushardevx01.tech https://github-readme-activity-graph.vercel.app https://camo.githubusercontent.com",
       "font-src 'self' data:",
       "connect-src 'self' https://vitals.vercel-insights.com",
-      "frame-src 'self'",
       "upgrade-insecure-requests",
     ].join("; ");
 
     return [
       {
-        source: "/(.*)",
+        source: "/api/:path*",
         headers: [
-          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          { key: "X-Frame-Options", value: "DENY" },
           { key: "X-Content-Type-Options", value: "nosniff" },
-          { key: "Referrer-Policy", value: "origin-when-cross-origin" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains; preload" },
           { key: "X-DNS-Prefetch-Control", value: "off" },
-          {
-            key: "Permissions-Policy",
-            value: "camera=(), microphone=(), geolocation=(), payment=(), usb=(), accelerometer=(), gyroscope=()",
-          },
+          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=(), usb=(), accelerometer=(), gyroscope=()" },
           { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
           { key: "Cross-Origin-Resource-Policy", value: "same-origin" },
           { key: "Content-Security-Policy", value: contentSecurityPolicy },
-          {
-            key: "X-Robots-Tag",
-            value: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
-          },
+          { key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" },
+        ],
+      },
+      {
+        source: "/(.*)",
+        headers: [
+          { key: "X-Frame-Options", value: "DENY" },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains; preload" },
+          { key: "X-DNS-Prefetch-Control", value: "off" },
+          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=(), usb=(), accelerometer=(), gyroscope=()" },
+          { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+          { key: "Cross-Origin-Resource-Policy", value: "same-origin" },
+          { key: "Content-Security-Policy", value: contentSecurityPolicy },
         ],
       },
     ];
