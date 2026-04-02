@@ -167,7 +167,6 @@ export const skillsData: SkillsDataProps[] = [
       { title: "GraphQL", logoComponent: SiGraphql, color: "#E10098" },
       { title: "WebSockets", logoComponent: SiSocketdotio, color: "#010101" },
       { title: "Bash Scripts", logoComponent: SiGnubash, color: "#4EAA25" },
-      { title: "JWT / OAuth", logoComponent: SiJsonwebtokens, color: "#000000" },
       { title: "OpenAPI", logoComponent: SiOpenai, color: "#FFFFFF" },
     ],
   },

@@ -26,6 +26,8 @@ export const primaryStack: SkillsCategory[] = [
       { techKey: "TypeScript" },
       { techKey: "React" },
       { techKey: "Next.js" },
+      { techKey: "Framer Motion" },
+      { techKey: "Webpack" },
       { techKey: "Tailwind CSS" },
       { techKey: "JavaScript" },
     ],
@@ -82,16 +84,12 @@ export const supportingStack: SkillsCategory[] = [
       { techKey: "SASS" },
       { techKey: "React Native" },
       { techKey: "Radix UI" },
-      { techKey: "Framer Motion" },
-      { techKey: "Webpack" },
+      
     ],
   },
   {
     title: "Backend & Services",
     skills: [
-      { techKey: "NestJS" },
-      { techKey: "JWT / OAuth" },
-      { techKey: "WebSockets" },
       { techKey: "NPM" },
       { techKey: "Nodemon" },
     ],
