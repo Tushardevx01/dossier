@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { motion } from "motion/react";
 
@@ -23,8 +24,23 @@ export const Footer = () => {
     <footer className="relative border-t border-border/50 overflow-hidden">
       <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-6 py-8 overflow-x-hidden">
         {/* Navigation Links */}
-          
-        
+        <div className="mb-6 flex flex-wrap justify-center gap-4 text-xs text-muted-foreground">
+          <Link href="/engineering-notes" className="hover:text-white transition-colors">
+            Engineering Notes
+          </Link>
+          <Link href="/system-design" className="hover:text-white transition-colors">
+            System Design
+          </Link>
+          <Link href="/build-log" className="hover:text-white transition-colors">
+            Build Log
+          </Link>
+          <Link href="/engineering-philosophy" className="hover:text-white transition-colors">
+            Engineering Philosophy
+          </Link>
+          <Link href="/now" className="hover:text-white transition-colors">
+            Now
+          </Link>
+        </div>
 
         {/* Divider */}
 

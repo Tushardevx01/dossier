@@ -84,6 +84,9 @@ export function getArticle(slug: string): ArticlePost | null {
     content: article.content,
     whatILearned: article.whatILearned,
     improvements: article.improvements,
+    relatedNoteSlugs: article.relatedNoteSlugs,
+    relatedProjectSlug: article.relatedProjectSlug,
+    relatedSystemDesignSlug: article.relatedSystemDesignSlug,
   };
 }
 

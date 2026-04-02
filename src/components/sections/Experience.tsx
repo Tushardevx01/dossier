@@ -66,6 +66,7 @@ export function Experience() {
                 key={`${exp.company}-${index}`}
                 role={exp.role}
                 year={exp.year}
+                impactSummary={exp.impactSummary}
                 description={exp.description}
                 company={exp.company}
                 technologies={exp.technologies}

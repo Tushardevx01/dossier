@@ -7,6 +7,7 @@ import { Badge } from "../ui/badge";
 interface ExperienceCardProps {
   role: string;
   year: string;
+  impactSummary?: string;
   description: Array<string>;
   company: string;
   technologies: Array<string>;
@@ -17,6 +18,7 @@ interface ExperienceCardProps {
 export const ExperienceCard: FC<ExperienceCardProps> = ({
   role,
   year,
+  impactSummary,
   description,
   company,
   technologies,
@@ -133,6 +135,9 @@ export const ExperienceCard: FC<ExperienceCardProps> = ({
               animate={isInView ? { opacity: 1 } : { opacity: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1 + 0.4 }}
             >
+              {impactSummary ? (
+                <li className="text-xs font-semibold text-primary/90 leading-relaxed">{impactSummary}</li>
+              ) : null}
               {description.map((point, pointIndex) => (
                 <motion.li
                   key={pointIndex}

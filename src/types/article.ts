@@ -37,6 +37,9 @@ export interface Article {
   content: React.ReactNode;
   whatILearned: string[];
   improvements: string[];
+  relatedNoteSlugs?: string[];
+  relatedProjectSlug?: string;
+  relatedSystemDesignSlug?: string;
 }
 
 /**
@@ -62,6 +65,9 @@ export interface ArticlePost extends ArticleMetadata {
   content: React.ReactNode;
   whatILearned: string[];
   improvements: string[];
+  relatedNoteSlugs?: string[];
+  relatedProjectSlug?: string;
+  relatedSystemDesignSlug?: string;
 }
 
 /** Difficulty color mapping for UI components */

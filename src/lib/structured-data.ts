@@ -11,7 +11,7 @@ export function generatePersonStructuredData() {
     name: "Tushar Kanti Dey",
     alternateName: "Tushar Dev",
     url: "https://www.tushardevx01.tech/",
-    image: "https://www.tushardevx01.tech/public/images/me.png",
+    image: "https://www.tushardevx01.tech/images/me.png",
     jobTitle: "Full Stack Developer & DevOps Engineer",
     alumniOf: {
       "@type": "CollegeOrUniversity",
@@ -40,7 +40,7 @@ export function generateWebsiteStructuredData() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "Tushar Kanti Dey - Portfolio",
-    url: "https://tushardevx01.tech",
+    url: "https://www.tushardevx01.tech",
     description:
       "Tushar Kanti Dey's portfolio featuring projects in React, Next.js, and modern web development",
     author: {
@@ -65,15 +65,15 @@ export function generateOrganizationStructuredData() {
     "@context": "https://schema.org",
     "@type": "ProfilePage",
     name: "Tushar Kanti Dey - Developer Portfolio",
-    url: "https://tushardevx01.tech",
+    url: "https://www.tushardevx01.tech",
     description: selfData.bio,
     mainEntity: {
       "@type": "Person",
       name: selfData.name,
       givenName: selfData.first_name,
       familyName: selfData.last_name,
-      url: "https://tushardevx01.tech",
-      image: "https://tushardevx01.tech/images/profile.jpg",
+      url: "https://www.tushardevx01.tech",
+      image: "https://www.tushardevx01.tech/images/profile.jpg",
       sameAs: [
         `https://github.com/${selfData.socials_username.github}`,
         `https://linkedin.com/in/${selfData.socials_username.linkedin}`,
@@ -94,28 +94,91 @@ export interface ArticleMetadata {
   updatedAt?: string;
 }
 
+export interface CaseStudyMetadata {
+  title: string;
+  description: string;
+  slug: string;
+}
+
+export interface BuildLogMetadata {
+  title: string;
+  description: string;
+  slug: string;
+  publishedAt: string;
+}
+
 export function generateArticleStructuredData(article: ArticleMetadata) {
   return {
     "@context": "https://schema.org",
     "@type": "TechArticle",
     headline: article.title,
     description: article.description,
-    url: `https://tushardevx01.tech/engineering-notes/${article.slug}`,
+    url: `https://www.tushardevx01.tech/engineering-notes/${article.slug}`,
     datePublished: article.publishedAt,
     dateModified: article.updatedAt || article.publishedAt,
     author: {
       "@type": "Person",
       name: selfData.name,
-      url: "https://tushardevx01.tech",
+      url: "https://www.tushardevx01.tech",
     },
     publisher: {
       "@type": "Person",
       name: selfData.name,
-      url: "https://tushardevx01.tech",
+      url: "https://www.tushardevx01.tech",
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://tushardevx01.tech/engineering-notes/${article.slug}`,
+      "@id": `https://www.tushardevx01.tech/engineering-notes/${article.slug}`,
+    },
+  };
+}
+
+export function generateCaseStudyStructuredData(caseStudy: CaseStudyMetadata) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: `${caseStudy.title} Case Study`,
+    description: caseStudy.description,
+    url: `https://www.tushardevx01.tech/projects/${caseStudy.slug}`,
+    author: {
+      "@type": "Person",
+      name: selfData.name,
+      url: "https://www.tushardevx01.tech",
+    },
+    publisher: {
+      "@type": "Person",
+      name: selfData.name,
+      url: "https://www.tushardevx01.tech",
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://www.tushardevx01.tech/projects/${caseStudy.slug}`,
+    },
+  };
+}
+
+export function generateBuildLogStructuredData(entry: BuildLogMetadata) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: entry.title,
+    description: entry.description,
+    url: `https://www.tushardevx01.tech/build-log/${entry.slug}`,
+    datePublished: entry.publishedAt,
+    dateModified: entry.publishedAt,
+    author: {
+      "@type": "Person",
+      name: selfData.name,
+      url: "https://www.tushardevx01.tech",
+    },
+    publisher: {
+      "@type": "Person",
+      name: selfData.name,
+      url: "https://www.tushardevx01.tech",
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://www.tushardevx01.tech/build-log/${entry.slug}`,
     },
   };
 }
@@ -127,7 +190,7 @@ export function generateResumeStructuredData() {
     name: "Tushar Kanti Dey Resume",
     description:
       "Professional resume of Tushar Kanti Dey - Student Developer specializing in Full-Stack Web Development",
-    url: "https://tushardevx01.tech/resume",
+    url: "https://www.tushardevx01.tech/resume",
     author: {
       "@type": "Person",
       name: selfData.name,
@@ -150,8 +213,8 @@ export function generateResumeStructuredData() {
     },
     dateModified: new Date().toISOString(),
     fileFormat: "application/pdf",
-    contentUrl: "https://tushardevx01.tech/docs/Resume.pdf",
-    downloadUrl: "https://tushardevx01.tech/docs/Resume.pdf",
+    contentUrl: "https://www.tushardevx01.tech/docs/Resume.pdf",
+    downloadUrl: "https://www.tushardevx01.tech/docs/Resume.pdf",
     keywords: [
       "Software Developer",
       "Full Stack Developer",

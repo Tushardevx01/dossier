@@ -43,7 +43,7 @@ export const Contact = () => {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="text-base md:text-lg text-white/60 max-w-2xl mx-auto leading-relaxed"
           >
-            Open to engineering roles, product systems, and production-focused collaborations.
+            Open to full-time engineering roles and focused collaborations where architecture quality, delivery ownership, and production reliability matter.
           </motion.p>
         </motion.div>
 
@@ -154,7 +154,7 @@ const ContactList = () => {
       <ContactItem
         icon={IoMailOutline}
         label="Response Time"
-        value="Typically responds within 24–48 hours"
+        value="Typically responds within 24-48 hours"
       />
     </div>
   );

@@ -82,23 +82,46 @@ export const primaryStack: SkillsCategory[] = [
       { title: "TypeScript", logoComponent: SiTypescript, color: "#3178C6" },
       { title: "React", logoComponent: FaReact, color: "#61DAFB" },
       { title: "Next.js", logoComponent: SiNextdotjs, color: "#000000" },
-      { title: "Node.js", logoComponent: SiNodedotjs, color: "#339933" },
-      { title: "Express.js", logoComponent: SiExpress, color: "#000000" },
-    ],
-  },
-  {
-    title: "Data & Deployment",
-    skills: [
-      { title: "Supabase", logoComponent: SiSupabase, color: "#3ECF8E" },
-      { title: "Docker", logoComponent: FaDocker, color: "#2496ED" },
-      { title: "Git", logoComponent: FaGitAlt, color: "#F05032" },
-    ],
-  },
-  {
-    title: "Interface Layer",
-    skills: [
       { title: "Tailwind CSS", logoComponent: SiTailwindcss, color: "#06B6D4" },
       { title: "JavaScript", logoComponent: SiJavascript, color: "#F7DF1E" },
+    ],
+  },
+  {
+    title: "Backend Services",
+    skills: [
+      { title: "Node.js", logoComponent: SiNodedotjs, color: "#339933" },
+      { title: "Express.js", logoComponent: SiExpress, color: "#000000" },
+      { title: "NestJS", logoComponent: SiNestjs, color: "#E0234E" },
+      { title: "JWT / OAuth", logoComponent: SiJsonwebtokens, color: "#000000" },
+      { title: "WebSockets", logoComponent: SiSocketdotio, color: "#010101" },
+    ],
+  },
+  {
+    title: "Data Layer",
+    skills: [
+      { title: "Supabase", logoComponent: SiSupabase, color: "#3ECF8E" },
+      { title: "MySQL", logoComponent: SiMysql, color: "#4479A1" },
+      { title: "Redis", logoComponent: SiRedis, color: "#DC382D" },
+      { title: "Prisma", logoComponent: SiPrisma, color: "#2D3748" },
+      { title: "MongoDB", logoComponent: SiMongodb, color: "#47A248" },
+    ],
+  },
+  {
+    title: "Infrastructure",
+    skills: [
+      { title: "Docker", logoComponent: FaDocker, color: "#2496ED" },
+      { title: "Google Cloud", logoComponent: SiGooglecloud, color: "#4285F4" },
+      { title: "Vercel", logoComponent: SiVercel, color: "#000000" },
+      { title: "Render", logoComponent: SiRender, color: "#46E3B7" },
+    ],
+  },
+  {
+    title: "Tooling",
+    skills: [
+      { title: "Git", logoComponent: FaGitAlt, color: "#F05032" },
+      { title: "GitHub", logoComponent: FaGithub, color: "#181717" },
+      { title: "Postman", logoComponent: SiPostman, color: "#FF6C37" },
+      { title: "ESLint", logoComponent: SiEslint, color: "#4B32C3" },
     ],
   },
 ];

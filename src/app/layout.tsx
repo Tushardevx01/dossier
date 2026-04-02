@@ -33,9 +33,9 @@ export const metadata: Metadata = {
 
 
   alternates: {
-    canonical: "https://tushardevx01.tech",
+    canonical: "https://www.tushardevx01.tech",
     languages: {
-      "en-US": "https://tushardevx01.tech",
+      "en-US": "https://www.tushardevx01.tech",
     },
   },
   robots: {

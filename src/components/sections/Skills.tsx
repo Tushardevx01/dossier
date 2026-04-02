@@ -28,7 +28,7 @@ export const Skills = () => {
             Technology <span style={{ color: "hsl(var(--primary) / 0.85)" }}>Matrix.</span>
           </h2>
           <p className="text-base text-muted-foreground max-w-2xl" style={{ color: "hsl(var(--foreground) / 0.6)" }}>
-            Grouped system modules for modern web infrastructure and production operations.
+            Technologies grouped by architecture layer, with each tool tied to an operational use case.
           </p>
         </motion.div>
 

@@ -1491,5 +1491,374 @@ export const env = envSchema.parse(process.env);
       "Introduce canary extraction rule rollout before full production adoption",
       "Expand observability to SLO-driven alerting and anomaly-based degradation detection",
     ],
+    relatedNoteSlugs: [
+      "designing-systems-that-hold",
+      "production-readiness-starts-early",
+      "what-i-learned-building-webscope",
+    ],
+    relatedProjectSlug: "webscope",
+    relatedSystemDesignSlug: "web-scraping-pipeline",
+  },
+
+  "designing-systems-that-hold": {
+    title: "Designing Systems That Hold",
+    subtitle: "Engineering for Stress, Not Just Happy Paths",
+    date: "Apr 2, 2026",
+    readTime: 11,
+    category: "Architecture",
+    description:
+      "A practical framework for building software that keeps operating under uncertainty, traffic spikes, and degraded dependencies.",
+    content: (
+      <>
+        <h3 id="context">Context</h3>
+        <p>
+          Systems rarely fail because of one catastrophic event. They fail through
+          compounding small assumptions: an unbounded queue, a missing timeout,
+          or a retry loop without idempotency.
+        </p>
+
+        <h3 id="problem">Problem</h3>
+        <p>
+          Engineering teams often optimize for feature throughput before they
+          establish resilience boundaries. The result is fragile velocity.
+        </p>
+
+        <h3 id="approach">Approach</h3>
+        <ul>
+          <li>Design execution budgets per stage instead of one global timeout.</li>
+          <li>Model failure classes explicitly: transport, validation, domain, dependency.</li>
+          <li>Enforce idempotency in all async retry paths.</li>
+          <li>Keep service boundaries narrow and testable.</li>
+        </ul>
+
+        <h3 id="trade-offs">Trade-offs</h3>
+        <p>
+          Resilience design adds upfront complexity, but it removes expensive
+          ambiguity during incidents. The trade is implementation speed for
+          operational clarity.
+        </p>
+
+        <h3 id="lessons">Lessons</h3>
+        <p>
+          Reliability is not a feature you add. It is a shape you choose while
+          designing every boundary.
+        </p>
+      </>
+    ),
+    whatILearned: [
+      "Failure taxonomy shortens debug loops during incidents",
+      "Bounded execution protects tail latency under noisy dependencies",
+      "Idempotency is mandatory for any production retry mechanism",
+      "Clear service boundaries reduce incident blast radius",
+    ],
+    improvements: [
+      "Add scenario-based resilience test suites for critical flows",
+      "Track budget overruns per stage in dashboards",
+      "Introduce dependency degradation playbooks",
+    ],
+    relatedNoteSlugs: [
+      "production-readiness-starts-early",
+      "why-explicit-architecture-beats-clever-code",
+    ],
+    relatedProjectSlug: "devmatch",
+    relatedSystemDesignSlug: "developer-matching-platform",
+  },
+
+  "production-readiness-starts-early": {
+    title: "Why Production Readiness Starts Early",
+    subtitle: "Shipping Faster by Designing Operationally",
+    date: "Apr 2, 2026",
+    readTime: 10,
+    category: "DevOps",
+    description:
+      "Production readiness is an architecture behavior, not a launch checklist. This note covers practical defaults for day-one reliability.",
+    content: (
+      <>
+        <h3 id="context">Context</h3>
+        <p>
+          Teams usually discover production concerns only after the first incident.
+          By then, reliability work becomes reactive and expensive.
+        </p>
+
+        <h3 id="problem">Problem</h3>
+        <p>
+          If logs are unstructured, health checks are absent, and rollback paths
+          are undefined, even small failures become long outages.
+        </p>
+
+        <h3 id="approach">Approach</h3>
+        <ul>
+          <li>Validate environment variables before app startup.</li>
+          <li>Expose health endpoints for dependencies, not just process uptime.</li>
+          <li>Define rollback conditions before release begins.</li>
+          <li>Instrument request tracing with correlation IDs.</li>
+        </ul>
+
+        <h3 id="trade-offs">Trade-offs</h3>
+        <p>
+          Initial development feels slower, but release confidence improves and
+          recovery time falls significantly after the first issue.
+        </p>
+
+        <h3 id="lessons">Lessons</h3>
+        <p>
+          Production-readiness work is compounding infrastructure. The sooner it
+          exists, the cheaper every future release becomes.
+        </p>
+      </>
+    ),
+    whatILearned: [
+      "Release quality improves when rollback is designed before deploy",
+      "Health checks should reflect dependency state, not process existence",
+      "Structured logs are the foundation for useful observability",
+      "Environment validation prevents avoidable runtime outages",
+    ],
+    improvements: [
+      "Automate release checks with preflight scripts",
+      "Add synthetic monitoring for critical user flows",
+      "Document incident response runbooks per subsystem",
+    ],
+    relatedNoteSlugs: ["fixing-nextjs-docker-for-production", "designing-systems-that-hold"],
+    relatedProjectSlug: "xchangexpert",
+    relatedSystemDesignSlug: "task-marketplace-platform",
+  },
+
+  "frontend-performance-as-system-problem": {
+    title: "How I Think About Frontend Performance",
+    subtitle: "Frontend Performance as a Systems Problem",
+    date: "Apr 2, 2026",
+    readTime: 9,
+    category: "Performance",
+    description:
+      "Frontend speed is an end-to-end systems issue involving rendering strategy, API behavior, caching policy, and asset decisions.",
+    content: (
+      <>
+        <h3 id="context">Context</h3>
+        <p>
+          Many teams treat performance as a bundle-only issue, but user latency
+          is often dominated by backend and network behavior.
+        </p>
+
+        <h3 id="problem">Problem</h3>
+        <p>
+          Optimizing isolated components while API and data-fetch paths remain
+          expensive leads to little real user improvement.
+        </p>
+
+        <h3 id="approach">Approach</h3>
+        <ul>
+          <li>Set route-level budgets for LCP, INP, and total blocking time.</li>
+          <li>Reduce critical-path JavaScript via dynamic imports and boundary splitting.</li>
+          <li>Align API response shapes with above-the-fold rendering needs.</li>
+          <li>Use cache policies based on volatility instead of blanket TTL values.</li>
+        </ul>
+
+        <h3 id="trade-offs">Trade-offs</h3>
+        <p>
+          Aggressive caching can stale important data. The right strategy depends
+          on update frequency and user trust sensitivity.
+        </p>
+
+        <h3 id="lessons">Lessons</h3>
+        <p>
+          Frontend performance gets solved when UI, API, and data teams share
+          one latency budget and one operational metric set.
+        </p>
+      </>
+    ),
+    whatILearned: [
+      "Most latency gains come from cross-layer changes, not local micro-optimizations",
+      "Route-level budgets create clearer engineering priorities",
+      "Caching policy should follow data volatility, not convenience",
+      "Progressive rendering improves perceived speed without hiding bad architecture",
+    ],
+    improvements: [
+      "Add automated performance budget checks in CI",
+      "Track long-task distribution across interaction-heavy routes",
+      "Expand edge caching for stable content fragments",
+    ],
+    relatedNoteSlugs: ["react-performance-optimization", "designing-systems-that-hold"],
+    relatedProjectSlug: "devmatch",
+    relatedSystemDesignSlug: "real-time-chat-platform",
+  },
+
+  "fixing-nextjs-docker-for-production": {
+    title: "Fixing Next.js + Docker for Production",
+    subtitle: "Hardening Build and Runtime Behavior",
+    date: "Apr 2, 2026",
+    readTime: 8,
+    category: "Infrastructure",
+    description:
+      "A focused guide to stabilizing Next.js Docker deployments by reducing environment drift and tightening runtime assumptions.",
+    content: (
+      <>
+        <h3 id="context">Context</h3>
+        <p>
+          Containerized Next.js deployments often fail due to subtle mismatches
+          between build-time assumptions and runtime environment values.
+        </p>
+
+        <h3 id="problem">Problem</h3>
+        <p>
+          Startup loops and missing assets appeared after deployment despite local
+          success, indicating drift across stages.
+        </p>
+
+        <h3 id="approach">Approach</h3>
+        <ul>
+          <li>Use multi-stage builds with minimal runtime image contents.</li>
+          <li>Validate required env variables before server start.</li>
+          <li>Pin runtime dependencies and avoid implicit host assumptions.</li>
+          <li>Add explicit health checks to deployment verification.</li>
+        </ul>
+
+        <h3 id="trade-offs">Trade-offs</h3>
+        <p>
+          Strict startup validation can fail fast in release pipelines, but this
+          is preferable to partial boot and hidden runtime faults.
+        </p>
+
+        <h3 id="lessons">Lessons</h3>
+        <p>
+          Stable containerized deployments come from deterministic runtime
+          contracts, not from trial-and-error image tweaks.
+        </p>
+      </>
+    ),
+    whatILearned: [
+      "Multi-stage images reduce drift and attack surface",
+      "Startup validation is a reliability control",
+      "Health checks should be deployment gates, not observability-only signals",
+      "Production parity needs explicit dependency and env discipline",
+    ],
+    improvements: [
+      "Add container smoke tests in CI before deploy",
+      "Introduce runtime config checksum validation",
+      "Automate rollback trigger on failing health budget",
+    ],
+    relatedNoteSlugs: ["nextjs-production-deployment", "production-readiness-starts-early"],
+    relatedProjectSlug: "webscope",
+    relatedSystemDesignSlug: "web-scraping-pipeline",
+  },
+
+  "why-explicit-architecture-beats-clever-code": {
+    title: "Why Explicit Architecture Beats Clever Code",
+    subtitle: "Clarity as a Scaling Strategy",
+    date: "Apr 2, 2026",
+    readTime: 9,
+    category: "Architecture",
+    description:
+      "Readable boundaries and explicit contracts outperform clever abstractions when systems and teams scale.",
+    content: (
+      <>
+        <h3 id="context">Context</h3>
+        <p>
+          Clever code can be elegant in isolation but expensive in multi-engineer,
+          multi-release environments where change velocity matters.
+        </p>
+
+        <h3 id="problem">Problem</h3>
+        <p>
+          Over-optimized abstraction layers hide system behavior, making debugging
+          and onboarding slower over time.
+        </p>
+
+        <h3 id="approach">Approach</h3>
+        <ul>
+          <li>Make service boundaries explicit and document ownership.</li>
+          <li>Prefer boring control flow over implicit magic in core paths.</li>
+          <li>Keep business rules near domain modules, not scattered across adapters.</li>
+          <li>Choose naming and structure that reduces future interpretation cost.</li>
+        </ul>
+
+        <h3 id="trade-offs">Trade-offs</h3>
+        <p>
+          Explicit architecture can feel verbose, but it lowers long-term risk and
+          makes code review quality materially better.
+        </p>
+
+        <h3 id="lessons">Lessons</h3>
+        <p>
+          Systems are maintained more than they are written. Architecture should
+          optimize for sustained clarity.
+        </p>
+      </>
+    ),
+    whatILearned: [
+      "Clarity compounds as teams and features grow",
+      "Explicit boundaries reduce regression risk during refactors",
+      "Readable systems are faster to debug and safer to extend",
+      "Architecture quality is reflected in operational behavior",
+    ],
+    improvements: [
+      "Formalize architecture decision records for major trade-offs",
+      "Standardize service boundary checklists in code reviews",
+      "Add invariant tests for critical domain rules",
+    ],
+    relatedNoteSlugs: ["designing-systems-that-hold", "what-i-learned-building-webscope"],
+    relatedProjectSlug: "xchangexpert",
+    relatedSystemDesignSlug: "task-marketplace-platform",
+  },
+
+  "what-i-learned-building-webscope": {
+    title: "What I Learned Building WebScope",
+    subtitle: "Operational Lessons from a Volatile Input System",
+    date: "Apr 2, 2026",
+    readTime: 9,
+    category: "Architecture",
+    description:
+      "Lessons from building a production web intelligence pipeline where external dependencies are unstable and failure handling is central.",
+    content: (
+      <>
+        <h3 id="context">Context</h3>
+        <p>
+          WebScope consumes external websites that can change structure without
+          warning. Reliability therefore depends on adaptation strategy, not parser speed.
+        </p>
+
+        <h3 id="problem">Problem</h3>
+        <p>
+          Early extraction logic blended source adapters and orchestration policy,
+          making every website change expensive to absorb.
+        </p>
+
+        <h3 id="approach">Approach</h3>
+        <ul>
+          <li>Separated extraction adapters from orchestration decisions.</li>
+          <li>Added confidence metadata and partial-response contracts.</li>
+          <li>Implemented queue partitioning for noisy source isolation.</li>
+          <li>Tracked stage-level timings with correlation IDs.</li>
+        </ul>
+
+        <h3 id="trade-offs">Trade-offs</h3>
+        <p>
+          Supporting partial output requires downstream consumers to reason about
+          uncertainty, but it keeps systems useful under imperfect conditions.
+        </p>
+
+        <h3 id="lessons">Lessons</h3>
+        <p>
+          In volatile-input systems, architecture quality is measured by recovery
+          behavior and adaptability, not by ideal-case throughput alone.
+        </p>
+      </>
+    ),
+    whatILearned: [
+      "Adapter isolation reduces maintenance drag as sources change",
+      "Queue partitioning prevents noisy workloads from starving critical jobs",
+      "Confidence-aware outputs preserve utility during partial failures",
+      "Operational observability must be designed, not retrofitted",
+    ],
+    improvements: [
+      "Add source volatility scoring and adaptive scheduling",
+      "Introduce canary parser rollout with automatic rollback",
+      "Expand extraction quality dashboards by source family",
+    ],
+    relatedNoteSlugs: [
+      "designing-webscope-scalable-web-intelligence-platform",
+      "fixing-nextjs-docker-for-production",
+    ],
+    relatedProjectSlug: "webscope",
+    relatedSystemDesignSlug: "web-scraping-pipeline",
   },
 };
