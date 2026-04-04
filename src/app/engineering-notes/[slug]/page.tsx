@@ -1,9 +1,11 @@
 import { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { ArticlePage } from "@/components/ArticlePage";
-import { generateArticleStaticParams, getArticle } from "@/lib/articleLoader";
+import { generateArticleStaticParams, getAllArticles, getArticle } from "@/lib/articleLoader";
 import { buildPageMetadata, absoluteUrl } from "@/lib/seo";
+import { generateArticleStructuredData } from "@/lib/structured-data";
 import "prismjs/themes/prism-tomorrow.css";
 
 interface GenerateMetadataParams {
@@ -28,7 +30,7 @@ export async function generateMetadata(
     path: `/engineering-notes/${slug}`,
     type: "article",
     keywords: [article.category, "engineering", "software development", "Tushar Kanti Dey"],
-    image: absoluteUrl("/engineering-notes/opengraph-image"),
+    image: absoluteUrl(`/engineering-notes/${slug}/opengraph-image`),
   });
 }
 
@@ -48,5 +50,37 @@ export default async function EngineeringNotesArticlePage({
     notFound();
   }
 
-  return <ArticlePage post={article} slug={slug} />;
+  const allArticles = getAllArticles();
+  const relatedArticles = allArticles.filter((item) => item.slug !== slug).slice(0, 2);
+
+  const articleStructuredData = generateArticleStructuredData({
+    title: article.title,
+    description: article.description,
+    slug,
+    publishedAt: new Date(article.date).toISOString(),
+  });
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(articleStructuredData),
+        }}
+      />
+      <ArticlePage post={article} slug={slug} />
+      <nav aria-label="Related engineering notes" className="sr-only">
+        <ul>
+          {relatedArticles.map((item) => (
+            <li key={item.slug}>
+              <Link href={`/engineering-notes/${item.slug}`}>{item.title}</Link>
+            </li>
+          ))}
+          <li>
+            <Link href="/projects">Projects</Link>
+          </li>
+        </ul>
+      </nav>
+    </>
+  );
 }

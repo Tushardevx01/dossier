@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { motion, useInView } from "motion/react";
 import { useRef } from "react";
 
@@ -73,11 +74,13 @@ export const Projects = () => {
                     <p className={`${mono.className} text-[11px] uppercase tracking-widest text-neutral-500`}>
                       {project.role}
                     </p>
-                    <motion.h3 
+                    <motion.h3
                       variants={titleVariants}
                       className="mt-2 text-xl font-semibold text-white"
                     >
-                      {project.name}
+                      <Link href={`/projects/${project.slug}`} className="hover:text-white transition-colors">
+                        {project.name}
+                      </Link>
                     </motion.h3>
                   </div>
                   <div className="flex items-center gap-1.5">

@@ -2,6 +2,7 @@ import type { Project } from "@/types/project";
 
 export const projectsData = [
   {
+    slug: "simpui",
     name: "SimpUI",
     description:
       "Component system with motion primitives, design tokens, and reuse patterns. Built for teams that need consistency across large product surfaces without sacrificing velocity.",
@@ -11,6 +12,7 @@ export const projectsData = [
     role: "Frontend Systems",
   },
   {
+    slug: "signifiya",
     name: "Signifiya",
     description:
       "Event operations platform — schedules, registration, live coordination. Handles peak traffic with real-time state sync across distributed teams and attendees.",
@@ -20,6 +22,7 @@ export const projectsData = [
     role: "Full-Stack Platform",
   },
   {
+    slug: "carepulse",
     name: "CarePulse",
     description:
       "Healthcare platform for clinics — appointment workflows, provider integrations, patient data handling. Built with strict security constraints and production-grade error boundaries.",
@@ -29,6 +32,7 @@ export const projectsData = [
     role: "Full-Stack + Integrations",
   },
   {
+    slug: "fenix",
     name: "Fenix",
     description:
       "Real-time video platform with low-latency media, secure auth, and session stability under variable network conditions. Focused on connection reliability over feature count.",
@@ -38,6 +42,7 @@ export const projectsData = [
     role: "Realtime Infrastructure",
   },
   {
+    slug: "webscope",
     name: "WebScope",
     description:
       "Web intelligence platform — extraction, processing, and structured output from dynamic sources. Clean service boundaries with failure-aware retry logic and rate-limited crawling.",
@@ -47,6 +52,7 @@ export const projectsData = [
     role: "System Architecture",
   },
   {
+    slug: "subscription-tracker",
     name: "Subscription Tracker",
     description:
       "REST API for subscription lifecycle management — tracking, automated reminders, cost projections. Designed for predictable financial operations with auditable state transitions.",

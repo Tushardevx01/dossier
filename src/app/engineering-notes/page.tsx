@@ -10,7 +10,7 @@ export const metadata: Metadata = buildPageMetadata({
   description:
     "Technical articles by Tushar Kanti Dey covering systems architecture, full stack development, deployment strategy, and production engineering decisions.",
   path: "/engineering-notes",
-  keywords: ["Full Stack Developer and DevOps Engineer ", "Next.js Developer India", "Portfolio of Full Stack Developer"],
+  keywords: ["Full Stack Developer and DevOps Engineer", "Next.js Developer India", "Portfolio of Full Stack Developer"],
 });
 
 export default function EngineeringNotesPage() {

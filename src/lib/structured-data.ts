@@ -1,15 +1,21 @@
 import { selfData } from "@/constant";
 import { SITE_URL, siteConfig } from "@/lib/site";
+import type { Project } from "@/types/project";
+
+const PERSON_ID = `${SITE_URL}#person`;
+const WEBSITE_ID = `${SITE_URL}#website`;
+const PROFILE_PAGE_ID = `${SITE_URL}#profile-page`;
 
 export function generatePersonStructuredData() {
   return {
     "@context": "https://schema.org/",
     "@type": "Person",
+    "@id": PERSON_ID,
     name: siteConfig.name,
     alternateName: "Tushar Kanti Dey",
     url: SITE_URL,
     image: `${SITE_URL}/images/me.png`,
-    jobTitle: "Full Stack Developer",
+    jobTitle: "Full Stack Developer and DevOps Engineer",
     description: siteConfig.description,
     alumniOf: {
       "@type": "CollegeOrUniversity",
@@ -38,16 +44,15 @@ export function generateWebsiteStructuredData() {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": WEBSITE_ID,
     name: `${siteConfig.name} Portfolio`,
     url: SITE_URL,
     description: siteConfig.description,
     author: {
-      "@type": "Person",
-      name: siteConfig.name,
+      "@id": PERSON_ID,
     },
     publisher: {
-      "@type": "Person",
-      name: siteConfig.name,
+      "@id": PERSON_ID,
     },
     inLanguage: "en-US",
     potentialAction: {
@@ -67,25 +72,53 @@ export function generateOrganizationStructuredData() {
   return {
     "@context": "https://schema.org",
     "@type": "ProfilePage",
+    "@id": PROFILE_PAGE_ID,
     name: `${siteConfig.name} - Developer Portfolio`,
     url: SITE_URL,
     description: selfData.bio,
     mainEntity: {
-      "@type": "Person",
-      name: siteConfig.name,
-      givenName: selfData.first_name,
-      familyName: selfData.last_name,
-      url: SITE_URL,
-      image: `${SITE_URL}/images/profile.jpg`,
-      sameAs: [
-        siteConfig.social.github,
-        siteConfig.social.linkedin,
-        siteConfig.social.twitter,
-        siteConfig.social.instagram,
-      ],
+      "@id": PERSON_ID,
     },
     dateCreated: "2024-01-01",
     dateModified: new Date().toISOString(),
+  };
+}
+
+export function generateEngineeringNotesItemListStructuredData(
+  notes: Array<{ slug: string; title: string; description: string }>
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "@id": `${SITE_URL}#engineering-notes-item-list`,
+    name: "Engineering Notes",
+    itemListOrder: "http://schema.org/ItemListOrderDescending",
+    numberOfItems: notes.length,
+    itemListElement: notes.map((note, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: note.title,
+      description: note.description,
+      url: `${SITE_URL}/engineering-notes/${note.slug}`,
+    })),
+  };
+}
+
+export function generateSoftwareApplicationStructuredData(project: Project) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "@id": `${SITE_URL}/projects/${project.slug}#software-application`,
+    name: project.name,
+    description: project.description,
+    applicationCategory: "WebApplication",
+    operatingSystem: "Web",
+    creator: {
+      "@id": PERSON_ID,
+    },
+    url: `${SITE_URL}/projects/${project.slug}`,
+    sameAs: [project.github_link, ...(project.demo ? [project.demo] : [])],
+    keywords: project.tech.join(", "),
   };
 }
 
