@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 export const runtime = "nodejs";
 
-export const alt = "Tushar Kanti Dey - Full Stack Developer & DevOps Engineer";
+export const alt = "Tushar Kanti Dey - Full Stack Developer in Kolkata";
 export const size = {
   width: 1200,
   height: 630,
@@ -105,7 +105,7 @@ export default async function Image() {
               textTransform: "uppercase",
             }}
           >
-            Full Stack Developer & DevOps Engineer
+            Full Stack Developer in Kolkata
           </p>
 
           {/* Brief tagline */}

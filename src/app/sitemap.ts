@@ -1,8 +1,9 @@
 import { MetadataRoute } from "next";
 import { generateArticleStaticParams } from "@/lib/articleLoader";
+import { SITE_URL } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://www.tushardevx01.tech";
+  const baseUrl = SITE_URL;
   const lastModified = new Date("2026-03-03");
   const engineeringNotesSlugs = generateArticleStaticParams();
 
@@ -34,6 +35,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
       changeFrequency: "monthly" as const,
       priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/contact`,
+      lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
     },
   ];
 }

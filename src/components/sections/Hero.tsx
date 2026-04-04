@@ -35,8 +35,8 @@ export const Hero = () => {
             >
               Systems • Infrastructure • Product
             </motion.p>
-            <h1 className="sr-only">Tushar Kanti Dey | Full Stack & Infrastructure Engineer</h1>
-            <motion.h2
+            <p className="sr-only">Tushar Kanti Dey | Full Stack & Infrastructure Engineer</p>
+            <motion.h1
               className={`${quentine.className} text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.95] break-words`}
               style={{ color: "hsl(var(--primary))" }}
               initial={{ opacity: 0, y: 30 }}
@@ -52,7 +52,7 @@ export const Hero = () => {
               }}
             >
               {selfData.name}
-            </motion.h2>
+            </motion.h1>
 
             <motion.p
               className={`${mono.className} text-sm sm:text-base md:text-lg tracking-wide`}

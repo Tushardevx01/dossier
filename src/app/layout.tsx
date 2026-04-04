@@ -11,30 +11,38 @@ import {
   generateWebsiteStructuredData,
   generateOrganizationStructuredData,
 } from "@/lib/structured-data";
+import { SITE_URL, siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
-  applicationName: "Tushar Kanti Dey",
-  title: "Tushar Kanti Dey | Full Stack Developer & DevOps Engineer",
-  description:
-    "Portfolio of Tushar Kanti Dey, 3rd-year B.Tech CSE student at Adamas University. Full Stack Developer & DevOps Engineer specializing in full-stack engineering, scalable web apps, and DevOps automation.",
+  metadataBase: new URL(SITE_URL),
+  applicationName: siteConfig.name,
+  title: siteConfig.title,
+  description: siteConfig.description,
   authors: [
     {
-      name: "Tushar Kanti Dey",
-      url: "https://tushardevx01.tech",
+      name: siteConfig.name,
+      url: SITE_URL,
     },
   ],
-  creator: "Tushar Kanti Dey",
+  creator: siteConfig.name,
   referrer: "origin-when-cross-origin",
   category: "Portfolio",
   classification: "Software Development",
-  keywords: ["Tushar Kanti Dey", "Tushar Dev", "Full Stack Developer", "DevOps Engineer", "Cloud Engineering", "CI/CD", "React", "Java", "Docker", "Kubernetes", "Adamas University"],
-  metadataBase: new URL("https://www.tushardevx01.tech"),
+  keywords: [
+    "Full Stack Developer in Kolkata",
+    "Next.js Developer India",
+    "Freelance Web Developer India",
+    "JavaScript Developer Portfolio",
+    "Real-Time App Developer",
+    "Portfolio of Full Stack Developer",
+    siteConfig.name,
+  ],
 
 
   alternates: {
-    canonical: "https://www.tushardevx01.tech",
+    canonical: SITE_URL,
     languages: {
-      "en-US": "https://www.tushardevx01.tech",
+      "en-US": SITE_URL,
     },
   },
   robots: {
@@ -53,7 +61,7 @@ export const metadata: Metadata = {
   },
   appleWebApp: {
     capable: true,
-    title: "Tushar Kanti Dey",
+    title: siteConfig.name,
     statusBarStyle: "black-translucent",
   },
   formatDetection: {
@@ -91,32 +99,31 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "Tushar Kanti Dey | Full Stack & DevOps Engineer",
-    description: "Full Stack Developer & DevOps Engineer building scalable web apps with Next.js, React, Node.js, and cloud infrastructure.",
+    title: siteConfig.title,
+    description: siteConfig.description,
     site: "@tushardevX01",
     creator: "@tushardevX01",
     images: [
       {
-        url: "https://www.tushardevx01.tech/assets/devops-portfolio-preview.png",
+        url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: "Tushar Kanti Dey - Full Stack Developer Portfolio",
+        alt: `${siteConfig.name} - Full Stack Developer Portfolio`,
       },
     ],
   },
 
   openGraph: {
-    title: "Tushar Kanti Dey | Full Stack & DevOps Expert",
-    description:
-      "Bridging the gap between development and operations. 3rd-year B.Tech CSE student at Adamas University focusing on automated CI/CD and full-stack systems.",
-    url: "https://www.tushardevx01.tech/",
-    siteName: "Tushar Kanti Dey - Portfolio",
+    title: siteConfig.title,
+    description: siteConfig.description,
+    url: SITE_URL,
+    siteName: `${siteConfig.name} Portfolio`,
     images: [
       {
-        url: "https://www.tushardevx01.tech/assets/devops-portfolio-preview.png",
+        url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: "Tushar Kanti Dey - Full Stack Developer Portfolio",
+        alt: `${siteConfig.name} - Full Stack Developer Portfolio`,
       },
     ],
     locale: "en_US",

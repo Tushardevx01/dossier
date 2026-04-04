@@ -1,32 +1,35 @@
 import { selfData } from "@/constant";
+import { SITE_URL, siteConfig } from "@/lib/site";
 
 export function generatePersonStructuredData() {
   return {
     "@context": "https://schema.org/",
     "@type": "Person",
-    name: "Tushar Kanti Dey",
-    alternateName: "Tushar Dev",
-    url: "https://www.tushardevx01.tech/",
-    image: "https://www.tushardevx01.tech/images/me.png",
-    jobTitle: "Full Stack Developer & DevOps Engineer",
+    name: siteConfig.name,
+    alternateName: "Tushar Kanti Dey",
+    url: SITE_URL,
+    image: `${SITE_URL}/images/me.png`,
+    jobTitle: "Full Stack Developer",
+    description: siteConfig.description,
     alumniOf: {
       "@type": "CollegeOrUniversity",
       name: "Adamas University",
     },
     sameAs: [
-      "https://github.com/tusharxhub",
-      "https://linkedin.com/in/tushar-kanti-dey",
+      siteConfig.social.github,
+      siteConfig.social.linkedin,
+      siteConfig.social.instagram,
+      siteConfig.social.twitter,
     ],
     knowsAbout: [
       "Full Stack Development",
-      "DevOps",
-      "CI/CD Pipelines",
-      "Docker & Containerization",
-      "Cloud Computing",
-      "Java",
-      "Python",
-      "React",
+      "Next.js",
       "TypeScript",
+      "Real-time application architecture",
+      "Scalable web application development",
+      "UI/UX focused engineering",
+      "Developer tools",
+      "AI-powered web products",
     ],
   };
 }
@@ -35,23 +38,27 @@ export function generateWebsiteStructuredData() {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "Tushar Kanti Dey - Portfolio",
-    url: "https://www.tushardevx01.tech",
-    description:
-      "Tushar Kanti Dey's portfolio featuring projects in React, Next.js, and modern web development",
+    name: `${siteConfig.name} Portfolio`,
+    url: SITE_URL,
+    description: siteConfig.description,
     author: {
       "@type": "Person",
-      name: selfData.name,
+      name: siteConfig.name,
     },
     publisher: {
       "@type": "Person",
-      name: selfData.name,
+      name: siteConfig.name,
     },
     inLanguage: "en-US",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: `${SITE_URL}/engineering-notes?query={search_term_string}`,
+      "query-input": "required name=search_term_string",
+    },
     copyrightYear: new Date().getFullYear(),
     copyrightHolder: {
       "@type": "Person",
-      name: selfData.name,
+      name: siteConfig.name,
     },
   };
 }
@@ -60,21 +67,21 @@ export function generateOrganizationStructuredData() {
   return {
     "@context": "https://schema.org",
     "@type": "ProfilePage",
-    name: "Tushar Kanti Dey - Developer Portfolio",
-    url: "https://www.tushardevx01.tech",
+    name: `${siteConfig.name} - Developer Portfolio`,
+    url: SITE_URL,
     description: selfData.bio,
     mainEntity: {
       "@type": "Person",
-      name: selfData.name,
+      name: siteConfig.name,
       givenName: selfData.first_name,
       familyName: selfData.last_name,
-      url: "https://www.tushardevx01.tech",
-      image: "https://www.tushardevx01.tech/images/profile.jpg",
+      url: SITE_URL,
+      image: `${SITE_URL}/images/profile.jpg`,
       sameAs: [
-        `https://github.com/${selfData.socials_username.github}`,
-        `https://linkedin.com/in/${selfData.socials_username.linkedin}`,
-        `https://twitter.com/${selfData.socials_username.twitter}`,
-        `https://instagram.com/${selfData.socials_username.instagram}`,
+        siteConfig.social.github,
+        siteConfig.social.linkedin,
+        siteConfig.social.twitter,
+        siteConfig.social.instagram,
       ],
     },
     dateCreated: "2024-01-01",
@@ -109,22 +116,22 @@ export function generateArticleStructuredData(article: ArticleMetadata) {
     "@type": "TechArticle",
     headline: article.title,
     description: article.description,
-    url: `https://www.tushardevx01.tech/engineering-notes/${article.slug}`,
+    url: `${SITE_URL}/engineering-notes/${article.slug}`,
     datePublished: article.publishedAt,
     dateModified: article.updatedAt || article.publishedAt,
     author: {
       "@type": "Person",
-      name: selfData.name,
-      url: "https://www.tushardevx01.tech",
+      name: siteConfig.name,
+      url: SITE_URL,
     },
     publisher: {
       "@type": "Person",
-      name: selfData.name,
-      url: "https://www.tushardevx01.tech",
+      name: siteConfig.name,
+      url: SITE_URL,
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://www.tushardevx01.tech/engineering-notes/${article.slug}`,
+      "@id": `${SITE_URL}/engineering-notes/${article.slug}`,
     },
   };
 }
@@ -135,20 +142,20 @@ export function generateCaseStudyStructuredData(caseStudy: CaseStudyMetadata) {
     "@type": "Article",
     headline: `${caseStudy.title} Case Study`,
     description: caseStudy.description,
-    url: `https://www.tushardevx01.tech/projects/${caseStudy.slug}`,
+    url: `${SITE_URL}/projects/${caseStudy.slug}`,
     author: {
       "@type": "Person",
-      name: selfData.name,
-      url: "https://www.tushardevx01.tech",
+      name: siteConfig.name,
+      url: SITE_URL,
     },
     publisher: {
       "@type": "Person",
-      name: selfData.name,
-      url: "https://www.tushardevx01.tech",
+      name: siteConfig.name,
+      url: SITE_URL,
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://www.tushardevx01.tech/projects/${caseStudy.slug}`,
+      "@id": `${SITE_URL}/projects/${caseStudy.slug}`,
     },
   };
 }
@@ -159,22 +166,22 @@ export function generateBuildLogStructuredData(entry: BuildLogMetadata) {
     "@type": "BlogPosting",
     headline: entry.title,
     description: entry.description,
-    url: `https://www.tushardevx01.tech/build-log/${entry.slug}`,
+    url: `${SITE_URL}/build-log/${entry.slug}`,
     datePublished: entry.publishedAt,
     dateModified: entry.publishedAt,
     author: {
       "@type": "Person",
-      name: selfData.name,
-      url: "https://www.tushardevx01.tech",
+      name: siteConfig.name,
+      url: SITE_URL,
     },
     publisher: {
       "@type": "Person",
-      name: selfData.name,
-      url: "https://www.tushardevx01.tech",
+      name: siteConfig.name,
+      url: SITE_URL,
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://www.tushardevx01.tech/build-log/${entry.slug}`,
+      "@id": `${SITE_URL}/build-log/${entry.slug}`,
     },
   };
 }
@@ -183,13 +190,13 @@ export function generateResumeStructuredData() {
   return {
     "@context": "https://schema.org",
     "@type": "DigitalDocument",
-    name: "Tushar Kanti Dey Resume",
+    name: `${siteConfig.name} Resume`,
     description:
-      "Professional resume of Tushar Kanti Dey - Student Developer specializing in Full-Stack Web Development",
-    url: "https://www.tushardevx01.tech/resume",
+      "Professional resume of Tushar Kanti Dey, a full stack developer specializing in scalable Next.js apps and product engineering.",
+    url: `${SITE_URL}/resume`,
     author: {
       "@type": "Person",
-      name: selfData.name,
+      name: siteConfig.name,
       email: selfData.email,
       jobTitle: selfData.jobTitle,
       worksFor: {
@@ -203,14 +210,14 @@ export function generateResumeStructuredData() {
         addressCountry: selfData.current_location.country,
       },
       sameAs: [
-        `https://github.com/${selfData.socials_username.github}`,
-        `https://linkedin.com/in/${selfData.socials_username.linkedin}`,
+        siteConfig.social.github,
+        siteConfig.social.linkedin,
       ],
     },
     dateModified: new Date().toISOString(),
     fileFormat: "application/pdf",
-    contentUrl: "https://www.tushardevx01.tech/docs/Resume.pdf",
-    downloadUrl: "https://www.tushardevx01.tech/docs/Resume.pdf",
+    contentUrl: `${SITE_URL}/docs/Resume.pdf`,
+    downloadUrl: `${SITE_URL}/docs/Resume.pdf`,
     keywords: [
       "Software Developer",
       "Full Stack Developer",

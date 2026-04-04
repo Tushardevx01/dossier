@@ -85,7 +85,7 @@ export const About = () => {
                 >
                   <Image
                     src="/images/me.png"
-                    alt="Tushar Kanti Dey — Full Stack & Infrastructure Engineer"
+                    alt="Tushar Kanti Dey, full stack developer in Kolkata"
                     fill
                     loading="lazy"
                     sizes="(max-width: 768px) 100vw, 448px"

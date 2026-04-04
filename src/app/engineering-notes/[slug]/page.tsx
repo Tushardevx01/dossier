@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import { ArticlePage } from "@/components/ArticlePage";
 import { generateArticleStaticParams, getArticle } from "@/lib/articleLoader";
+import { buildPageMetadata, absoluteUrl } from "@/lib/seo";
 import "prismjs/themes/prism-tomorrow.css";
 
 interface GenerateMetadataParams {
@@ -21,35 +22,14 @@ export async function generateMetadata(
     };
   }
 
-  const baseUrl = "https://tushardevx01.tech";
-  const articleUrl = `${baseUrl}/engineering-notes/${slug}`;
-
-  return {
+  return buildPageMetadata({
     title: `${article.title} | Tushar Kanti Dey`,
     description: article.description,
-    authors: [{ name: "Tushar Kanti Dey", url: baseUrl }],
-    creator: "Tushar Kanti Dey",
-    alternates: {
-      canonical: articleUrl,
-    },
-    openGraph: {
-      title: `${article.title} | Tushar Kanti Dey`,
-      description: article.description,
-      type: "article",
-      url: articleUrl,
-      publishedTime: article.date,
-      authors: ["Tushar Kanti Dey"],
-      tags: [article.category, "engineering", "software development"],
-      siteName: "Tushar Kanti Dey - Portfolio",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: article.title,
-      description: article.description,
-      creator: "@tushardevX01",
-    },
+    path: `/engineering-notes/${slug}`,
+    type: "article",
     keywords: [article.category, "engineering", "software development", "Tushar Kanti Dey"],
-  };
+    image: absoluteUrl("/engineering-notes/opengraph-image"),
+  });
 }
 
 export function generateStaticParams() {

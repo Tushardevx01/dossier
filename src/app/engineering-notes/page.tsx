@@ -1,6 +1,17 @@
+import type { Metadata } from "next";
+
 import { nasalization } from "@/app/fonts";
 import { NotesListClient } from "@/components/NotesListClient";
 import { getAllArticles, getArticleCategories } from "@/lib/articleLoader";
+import { buildPageMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = buildPageMetadata({
+  title: "Engineering Notes | Tushar Kanti Dey",
+  description:
+    "Technical articles by Tushar Kanti Dey covering systems architecture, full stack development, deployment strategy, and production engineering lessons.",
+  path: "/engineering-notes",
+  keywords: ["Full Stack Developer in Kolkata", "Next.js Developer India", "Portfolio of Full Stack Developer"],
+});
 
 export default function EngineeringNotesPage() {
   const posts = getAllArticles();
