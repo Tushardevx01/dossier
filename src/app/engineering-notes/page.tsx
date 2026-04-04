@@ -8,7 +8,7 @@ import { buildPageMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildPageMetadata({
   title: "Engineering Notes | Tushar Kanti Dey",
   description:
-    "Technical articles by Tushar Kanti Dey covering systems architecture, full stack development, deployment strategy, and production engineering lessons.",
+    "Technical articles by Tushar Kanti Dey covering systems architecture, full stack development, deployment strategy, and production engineering decisions.",
   path: "/engineering-notes",
   keywords: ["Full Stack Developer in Kolkata", "Next.js Developer India", "Portfolio of Full Stack Developer"],
 });
@@ -26,7 +26,7 @@ export default function EngineeringNotesPage() {
           Engineering Notes
         </h1>
         <p className="text-base sm:text-lg text-neutral-400 max-w-2xl leading-relaxed">
-          Writing about systems, architecture, and production lessons.
+          Articles on architecture choices, production trade-offs, and the systems behind web products that stay reliable after launch.
         </p>
       </section>
 

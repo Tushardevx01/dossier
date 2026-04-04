@@ -3,7 +3,7 @@ export const selfData = {
   first_name: "Tushar",
   middle_name: "Kanti",
   last_name: "Dey",
-  jobTitle: "Full Stack & Infrastructure Engineer",
+  jobTitle: "Full Stack Developer",
   workFor: "Adamas University",
   current_location: {
     city: "Kolkata",
@@ -17,25 +17,25 @@ export const selfData = {
   },
   email: "thetushardev0@gmail.com",
   roles: [
-    "Full Stack & Infrastructure Engineer",
-    "Systems Architect",
+    "Full Stack Developer in Kolkata",
+    "Next.js Developer",
     "Product Engineer",
-    "DevOps Engineer",
-    "Infrastructure Specialist",
+    "Real-Time App Developer",
+    "UI/UX-Focused Builder",
     "Open Source Contributor",
   ],
-  desc: "Designing systems that hold — from interfaces to infrastructure.",
-  bio: "I design, build, deploy, and own systems end-to-end. Full stack applications, cloud infrastructure, and everything in between.",
+  desc: "Building premium web products with Next.js, TypeScript, and production-first thinking.",
+  bio: "I build scalable full stack products end-to-end, with a focus on Next.js, TypeScript, real-time experiences, and interfaces that convert under real traffic.",
   about: [
-    "I work across the full stack — from React interfaces to Node.js services to cloud infrastructure. Every architectural decision I make accounts for scale, failure modes, and what happens six months after deployment.",
+    "I work across the full stack from React interfaces to Node.js services and deployment workflows. Every decision I make is shaped by scale, maintainability, and how the product behaves after launch.",
 
-    "My core stack is Next.js, TypeScript, and Node.js for application development, paired with Docker, CI/CD pipelines, and observability tooling for production operations. I don't hand off what I build — I deploy it and keep it running.",
+    "My core stack is Next.js, TypeScript, and Node.js for application development, paired with Docker, CI/CD pipelines, and observability tooling for production operations. I do not stop at implementation; I ship, monitor, and iterate on what I build.",
 
-    "I think in trade-offs. Latency vs. consistency. Flexibility vs. complexity. Speed-to-ship vs. accumulated debt. There's no perfect solution — the goal is making constraints explicit and choosing deliberately.",
+    "I think in trade-offs: latency versus consistency, flexibility versus complexity, and speed to ship versus accumulated debt. Good engineering is making those constraints explicit and choosing deliberately.",
 
-    "Production readiness isn't a phase. Structured logging, health endpoints, graceful degradation, and rollback paths belong in the first design, not after the first outage.",
+    "Production readiness is part of the design, not a cleanup task. Structured logging, health endpoints, graceful degradation, and rollback paths belong in the first version of the system.",
 
-    "Based in Kolkata. Studying Computer Science at Adamas University. Building systems that hold under real conditions — not demos that impress, but infrastructure that survives.",
+    "Based in Kolkata and studying Computer Science at Adamas University. I build systems that survive real conditions, not demos that only look good in a portfolio.",
   ],
 
   socials_username: {

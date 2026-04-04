@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   ...buildPageMetadata({
     title: "Resume | Tushar Kanti Dey",
     description:
-      "View and download Tushar Kanti Dey's professional resume. Full stack developer focused on scalable Next.js apps, modern UI engineering, and product delivery.",
+      "View and download Tushar Kanti Dey's professional resume. Full stack developer focused on scalable Next.js apps, product engineering, and premium UI delivery.",
     path: "/resume",
     keywords: resumeKeywords,
     image: "/resume/opengraph-image",

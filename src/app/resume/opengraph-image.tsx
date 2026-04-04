@@ -108,7 +108,7 @@ export default async function Image() {
               letterSpacing: "2px",
             }}
           >
-            Full Stack Developer & DevOps Engineer
+            Full Stack Developer in Kolkata
           </p>
 
           {/* Description */}
@@ -121,7 +121,7 @@ export default async function Image() {
               maxWidth: "600px",
             }}
           >
-            View and download professional resume
+            Resume for a product-focused full stack developer
           </p>
 
           {/* Website */}

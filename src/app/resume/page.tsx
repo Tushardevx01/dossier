@@ -101,7 +101,7 @@ export default function Resume() {
               Resume
             </h1>
             <p className="text-muted-foreground">
-              View or download my resume
+              A concise view of my experience, stack, and the product work I ship
             </p>
           </div>
 

@@ -27,7 +27,7 @@ export const Navbar = () => {
             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-glass-bg flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
               <Image
                 src="/images/logo.svg"
-                alt="Tushar Kanti Dey logo"
+                alt="Tushar Dev logo"
                 width={40}
                 height={40}
                 priority

@@ -100,7 +100,7 @@ export function generateContactConfirmationEmail(
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="padding-top: 24px;">
                 <tr>
                   <td>
-                    <p style="margin: 0 0 4px 0; font-size: 16px; font-weight: 600; color: #f1f5f9;">Tushar Kanti Dey</p>
+                    <p style="margin: 0 0 4px 0; font-size: 16px; font-weight: 600; color: #f1f5f9;">Tushar Dev</p>
                     <p style="margin: 0 0 4px 0; font-size: 14px; color: #94a3b8;">Full-Stack & DevOps Engineer</p>
                     <p style="margin: 0 0 24px 0; font-size: 13px; color: #64748b;">Infrastructure &middot; Production Systems &middot; Performance</p>
                   </td>
@@ -221,7 +221,7 @@ export function generateContactConfirmationEmail(
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="padding-top: 24px;">
                 <tr>
                   <td align="center">
-                    <p style="margin: 0 0 4px 0; font-size: 13px; color: #64748b;">&copy; 2026 Tushar Kanti Dey</p>
+                    <p style="margin: 0 0 4px 0; font-size: 13px; color: #64748b;">&copy; 2026 Tushar Dev</p>
                     <p style="margin: 0 0 8px 0; font-size: 12px; color: #475569;">Kolkata, India</p>
                     <a href="https://www.tushardevx01.tech/" style="font-size: 12px; color: #4ade80; text-decoration: none;">tushardevx01.tech</a>
                   </td>

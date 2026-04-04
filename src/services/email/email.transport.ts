@@ -54,7 +54,7 @@ export async function sendEmail(
 
   try {
     const info = await transport.sendMail({
-      from: `"Tushar Kanti Dey - Contact Team" <${config.from}>`,
+      from: `"Tushar Dev - Contact Team" <${config.from}>`,
       to: message.to,
       subject: message.subject,
       html: message.html,

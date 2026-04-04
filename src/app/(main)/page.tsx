@@ -13,7 +13,7 @@ import { buildPageMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildPageMetadata({
   title: "Tushar Kanti Dey | Full Stack Developer in Kolkata",
   description:
-    "Portfolio of Tushar Kanti Dey, a full stack developer in Kolkata building scalable Next.js apps, real-time systems, and premium web experiences.",
+    "Portfolio of Tushar Kanti Dey, a full stack developer in Kolkata building scalable Next.js apps, real-time systems, and product-ready web experiences.",
   path: "/",
   keywords: [
     "Full Stack Developer in Kolkata",

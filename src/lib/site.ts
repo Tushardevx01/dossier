@@ -7,7 +7,7 @@ export const siteConfig = {
   email: "thetushardev0@gmail.com",
   title: "Tushar Kanti Dey | Full Stack Developer in Kolkata",
   description:
-    "Portfolio of Tushar Kanti Dey, a full stack developer in Kolkata building scalable Next.js apps, real-time systems, and premium web experiences.",
+    "Portfolio of Tushar Kanti Dey, a full stack developer in Kolkata building scalable Next.js apps, real-time systems, and product-ready web experiences.",
   social: {
     github: "https://github.com/Tusharxhub",
     linkedin: "https://linkedin.com/in/tushardevx01",

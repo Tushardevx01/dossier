@@ -8,7 +8,6 @@ export const resumeKeywords = [
   "Frontend Developer",
   "Backend Developer",
   "Web Developer",
-  "Student Developer",
   "Junior Developer",
   "Entry Level Developer",
   "Computer Science Graduate",

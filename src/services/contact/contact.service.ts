@@ -106,7 +106,7 @@ export async function processContactSubmission(
   const emailResult = await sendEmail(
     {
       to: { name: formData.senderName, address: formData.senderEmail },
-      subject: "Request Received - Tushar Kanti Dey",
+      subject: "Request Received - Tushar Dev",
       html: htmlContent,
     },
     { from: config.emailFrom, password: config.emailPassword }
