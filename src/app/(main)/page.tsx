@@ -11,12 +11,12 @@ import { HomePageShell } from "@/components/HomePageShell";
 import { buildPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "Tushar Kanti Dey | Full Stack Developer in Kolkata",
+  title: "Tushar Kanti Dey | Full Stack Developer and DevOps Engineer ",
   description:
-    "Portfolio of Tushar Kanti Dey, a full stack developer in Kolkata building scalable Next.js apps, real-time systems, and product-ready web experiences.",
+    "Portfolio of Tushar Kanti Dey, a Full Stack Developer and DevOps Engineer  building scalable Next.js apps, real-time systems, and product-ready web experiences.",
   path: "/",
   keywords: [
-    "Full Stack Developer in Kolkata",
+    "Full Stack Developer and DevOps Engineer ",
     "Next.js Developer India",
     "Real-Time App Developer",
   ],

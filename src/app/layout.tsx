@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   category: "Portfolio",
   classification: "Software Development",
   keywords: [
-    "Full Stack Developer in Kolkata",
+    "Full Stack Developer and DevOps Engineer ",
     "Next.js Developer India",
     "Freelance Web Developer India",
     "JavaScript Developer Portfolio",

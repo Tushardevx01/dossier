@@ -35,7 +35,7 @@ export const Hero = () => {
             >
               Systems • Infrastructure • Product
             </motion.p>
-            <p className="sr-only">Tushar Kanti Dey | Full Stack Developer in Kolkata</p>
+            <p className="sr-only">Tushar Kanti Dey | Full Stack Developer and DevOps Engineer </p>
             <motion.h1
               className={`${quentine.className} text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.95] break-words`}
               style={{ color: "hsl(var(--primary))" }}

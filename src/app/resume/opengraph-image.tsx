@@ -108,7 +108,7 @@ export default async function Image() {
               letterSpacing: "2px",
             }}
           >
-            Full Stack Developer in Kolkata
+            Full Stack Developer and DevOps Engineer 
           </p>
 
           {/* Description */}
