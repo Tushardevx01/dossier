@@ -68,7 +68,7 @@ export function EmailTemplate({
                 />
               </Column>
               <Column style={{ paddingLeft: "16px" }}>
-                <Text style={portfolioTitle}>Tushar Dev</Text>
+                <Text style={portfolioTitle}>Tushar Kanti Dey</Text>
                 <Text style={portfolioSubtitle}>Full-Stack & DevOps Engineer</Text>
               </Column>
             </Row>
@@ -148,7 +148,7 @@ export function EmailTemplate({
           {/* Footer */}
           <Section style={footerSection}>
             <Text style={footerText}>
-              © {currentYear} Tushar Dev. All rights reserved.
+              © {currentYear} Tushar Kanti Dey. All rights reserved.
             </Text>
             <Text style={footerSubtext}>
               You received this email because you submitted the contact form on my portfolio.

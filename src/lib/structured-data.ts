@@ -6,7 +6,7 @@ export function generatePersonStructuredData() {
     "@context": "https://schema.org/",
     "@type": "Person",
     name: siteConfig.name,
-    alternateName: "Tushar Dev",
+    alternateName: "Tushar Kanti Dey",
     url: SITE_URL,
     image: `${SITE_URL}/images/me.png`,
     jobTitle: "Full Stack Developer",
@@ -192,7 +192,7 @@ export function generateResumeStructuredData() {
     "@type": "DigitalDocument",
     name: `${siteConfig.name} Resume`,
     description:
-      "Professional resume of Tushar Dev, a full stack developer specializing in scalable Next.js apps and product engineering.",
+      "Professional resume of Tushar Kanti Dey, a full stack developer specializing in scalable Next.js apps and product engineering.",
     url: `${SITE_URL}/resume`,
     author: {
       "@type": "Person",
