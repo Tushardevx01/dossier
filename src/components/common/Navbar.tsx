@@ -6,13 +6,13 @@ import Link from "next/link";
 import { useHideOnScroll } from "@/hooks/useHideOnScroll";
 
 export const Navbar = () => {
-  const { isVisible, isScrolled } = useHideOnScroll();
+  const { isScrolled } = useHideOnScroll();
 
   return (
     <nav
       aria-label="Primary"
       className={`fixed top-4 left-0 right-0 z-50 transition-all duration-300 ease-out ${isScrolled ? "pt-0 px-2 sm:px-4" : "px-2 sm:px-3"
-        } ${isVisible ? "translate-y-0" : "-translate-y-full"}`}
+        }`}
     >
       <div
         className={`floating-nav rounded-2xl px-3 sm:px-6 py-2.5 sm:py-3 bg-glass-bg transition-all duration-300 max-w-7xl mx-auto ${isScrolled ? "shadow-xl" : "shadow-lg"
