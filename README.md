@@ -51,9 +51,26 @@ npm run start
 ## Docker
 
 ```bash
-docker build -t tushardevx01-portfolio .
-docker run --rm -p 3000:3000 --env-file .env.local tushardevx01-portfolio
+# Build with the agreed image name
+docker build -t tushardevx01 .
+
+# Run app on host port 9999 -> container port 3000
+docker run --rm --name tushardevx01 -p 9999:3000 --env-file .env.local tushardevx01
+
+# Optional: push to Docker Hub
+docker tag tushardevx01 tushardevx01/tushardevx01:latest
+docker push tushardevx01/tushardevx01:latest
 ```
+
+The container listens on port `3000` internally. Use `9999:3000` to expose it on host port `9999`.
+
+For Docker Compose, use:
+
+```bash
+docker compose up --build
+```
+
+Current compose config maps host `3000` to container `3000`.
 
 ## Security Posture
 
