@@ -1,4 +1,5 @@
 import type { IconType } from "react-icons";
+import { MdBrush, MdDesignServices, MdPhoto } from "react-icons/md";
 
 import {
   FaCss3,
@@ -45,9 +46,6 @@ import {
   SiJavascript,
   SiC,
   SiNodemon,
-  SiAdobephotoshop,
-  SiAdobeillustrator,
-  SiAdobexd,
 } from "react-icons/si";
 
 import { TbBrandCpp } from "react-icons/tb";
@@ -95,9 +93,9 @@ export const techIcons = {
   Python: FaPython,
   Figma: SiFigma,
   Canva: SiCanva,
-  Photoshop: SiAdobephotoshop,
-  Illustrator: SiAdobeillustrator,
-  XD: SiAdobexd,
+  Photoshop: MdPhoto,
+  Illustrator: MdBrush,
+  XD: MdDesignServices,
   Netlify: SiNetlify,
 } as const satisfies Record<string, IconType>;
 

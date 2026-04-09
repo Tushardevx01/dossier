@@ -1,5 +1,5 @@
 import React from "react";
-import { MdApi } from "react-icons/md";
+import { MdApi, MdBrush, MdDesignServices, MdPhoto } from "react-icons/md";
 
 import {
   FaCss3,
@@ -11,6 +11,7 @@ import {
   FaReact,
   FaBootstrap,
   FaDocker,
+  FaAws,
 } from "react-icons/fa6";
 
 import {
@@ -30,7 +31,6 @@ import {
   SiPrisma,
   SiCloudflare,
   SiGooglecloud,
-  SiAmazon,
   SiRender,
   SiAppwrite,
   SiWeb3Dotjs,
@@ -42,9 +42,6 @@ import {
   SiC,
   SiFigma,
   SiCanva,
-  SiAdobephotoshop,
-  SiAdobeillustrator,
-  SiAdobexd,
   SiSass,
   SiWebpack,
   SiRadixui,
@@ -123,7 +120,7 @@ export const skillsData: SkillsDataProps[] = [
   {
     title: "Cloud & Deployment",
     data: [
-      { title: "AWS", logoComponent: SiAmazon, color: "#FF9900" },
+      { title: "AWS", logoComponent: FaAws, color: "#FF9900" },
       { title: "Google Cloud", logoComponent: SiGooglecloud, color: "#4285F4" },
       { title: "Firebase", logoComponent: SiFirebase, color: "#FFCA28" },
       { title: "Cloudflare", logoComponent: SiCloudflare, color: "#F38020" },
@@ -155,9 +152,9 @@ export const skillsData: SkillsDataProps[] = [
     data: [
       { title: "Figma", logoComponent: SiFigma, color: "#F24E1E" },
       { title: "Canva", logoComponent: SiCanva, color: "#00C4CC" },
-      { title: "Photoshop", logoComponent: SiAdobephotoshop, color: "#31A8FF" },
-      { title: "Illustrator", logoComponent: SiAdobeillustrator, color: "#FF9A00" },
-      { title: "XD", logoComponent: SiAdobexd, color: "#FF61F6" },
+      { title: "Photoshop", logoComponent: MdPhoto, color: "#31A8FF" },
+      { title: "Illustrator", logoComponent: MdBrush, color: "#FF9A00" },
+      { title: "XD", logoComponent: MdDesignServices, color: "#FF61F6" },
     ],
   },
   {
