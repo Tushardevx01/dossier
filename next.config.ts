@@ -36,13 +36,21 @@ const nextConfig: NextConfig = {
   // No experimental features for deployment stability
 
   async headers() {
+    const isDev = process.env.NODE_ENV !== "production";
+    const scriptSrc = [
+      "'self'",
+      "'unsafe-inline'",
+      "https://va.vercel-scripts.com",
+      ...(isDev ? ["'unsafe-eval'"] : []),
+    ].join(" ");
+
     const contentSecurityPolicy = [
       "default-src 'self'",
       "base-uri 'self'",
       "frame-ancestors 'none'",
       "object-src 'none'",
       "form-action 'self'",
-      "script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com",
+      `script-src ${scriptSrc}`,
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https://tushardevx01.tech https://github-readme-activity-graph.vercel.app https://camo.githubusercontent.com",
       "font-src 'self' data:",
