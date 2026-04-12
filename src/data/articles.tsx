@@ -1879,6 +1879,12 @@ export const env = envSchema.parse(process.env);
           contracts, ambiguous ownership, and schema drift over time. A scalable
           API is one that remains predictable after many teams and many releases.
         </p>
+        <p>
+          The design target should be boring reliability: clients know what they
+          can send, what they will get back, and how failures are represented.
+          When contracts stay stable, teams can ship independently without
+          creating hidden coupling between services and consumers.
+        </p>
 
         <h3 id="core-principles">Core principles</h3>
         <ul>
@@ -1899,6 +1905,11 @@ export const env = envSchema.parse(process.env);
             endpoint sensitivity, not a single global threshold.
           </li>
         </ul>
+        <p>
+          These principles prevent the most expensive class of regressions:
+          changes that look harmless in one service but break downstream
+          consumers weeks later. API scale is mostly about preserving trust.
+        </p>
 
         <h3 id="real-world-mistakes">Real-world mistakes</h3>
         <ul>
@@ -1906,6 +1917,7 @@ export const env = envSchema.parse(process.env);
           <li>Shipping breaking response changes without deprecation windows.</li>
           <li>Mixing permission checks deep inside service methods.</li>
           <li>Using IP-only limiting for authenticated workloads.</li>
+          <li>Using one generic 500 response for both validation and policy errors.</li>
         </ul>
 
         <h3 id="recommended-patterns">Recommended patterns</h3>
@@ -1926,12 +1938,31 @@ export async function POST(request: NextRequest) {
   return NextResponse.json({ data: result }, { status: 201 });
 }`}</code>
         </pre>
+        <p>
+          Keep error contracts versioned too. A stable error envelope with
+          machine-readable codes lets clients handle failures deterministically
+          and avoids fragile string matching in frontend code.
+        </p>
+        <pre>
+          <code className="language-typescript">{`type ApiError = {
+  code: "VALIDATION_ERROR" | "FORBIDDEN" | "RATE_LIMITED" | "INTERNAL_ERROR";
+  message: string;
+  requestId: string;
+  details?: Record<string, unknown>;
+};`}</code>
+        </pre>
 
         <h3 id="production-mindset">Production mindset</h3>
         <p>
           Think in backward compatibility budgets. Every public response field
           becomes a contract. Versioning, changelogs, and deprecation timelines
           are operational tools, not documentation extras.
+        </p>
+        <p>
+          In practice, this means every endpoint change should answer three
+          questions before release: is this backward compatible, what clients are
+          affected, and what rollback path exists if adoption behaves differently
+          than expected?
         </p>
 
         <h3 id="final-takeaway">Final takeaway</h3>
@@ -1975,6 +2006,11 @@ export async function POST(request: NextRequest) {
           system is behaving as designed. Without observability, incidents become
           guesswork and recovery time expands unnecessarily.
         </p>
+        <p>
+          Teams that instrument early do not just recover faster. They plan
+          better, because they can see real workload shape, failure hotspots,
+          and latency patterns before those become customer-facing incidents.
+        </p>
 
         <h3 id="core-principles">Core principles</h3>
         <ul>
@@ -1995,6 +2031,11 @@ export async function POST(request: NextRequest) {
             noisy low-value events.
           </li>
         </ul>
+        <p>
+          A practical baseline is simple: every request gets a correlation ID,
+          every critical path emits duration metrics, and every alert has an
+          owner plus a runbook reference.
+        </p>
 
         <h3 id="real-world-mistakes">Real-world mistakes</h3>
         <ul>
@@ -2002,6 +2043,7 @@ export async function POST(request: NextRequest) {
           <li>Alerting on every exception instead of error budgets.</li>
           <li>Tracking averages while ignoring p95 and p99 latency.</li>
           <li>Adding dashboards after first outage instead of before launch.</li>
+          <li>Collecting logs without retention, indexing, or search conventions.</li>
         </ul>
 
         <h3 id="recommended-patterns">Recommended patterns</h3>
@@ -2023,11 +2065,21 @@ try {
   end();
 }`}</code>
         </pre>
+        <p>
+          Keep metric names and dimensions consistent across services. Inconsistent
+          naming creates blind spots and makes cross-system dashboards hard to
+          trust during incidents.
+        </p>
 
         <h3 id="production-mindset">Production mindset</h3>
         <p>
           You cannot improve what you cannot measure. Logging, metrics, tracing,
           and uptime checks should be treated as release requirements on day one.
+        </p>
+        <p>
+          Good monitoring is also a product quality tool: it reveals slow user
+          journeys, degraded dependencies, and rollout side effects long before
+          support channels begin reporting pain.
         </p>
 
         <h3 id="final-takeaway">Final takeaway</h3>
@@ -2071,6 +2123,11 @@ try {
           Interfaces feel fast when response is immediate, transitions are stable,
           and loading behavior is predictable.
         </p>
+        <p>
+          This is why perceived performance belongs in architecture decisions.
+          Rendering order, data-fetch strategy, and transition timing all shape
+          whether an interface feels responsive under real network conditions.
+        </p>
 
         <h3 id="core-principles">Core principles</h3>
         <ul>
@@ -2091,6 +2148,11 @@ try {
             consistent to avoid sluggish perception.
           </li>
         </ul>
+        <p>
+          A useful rule of thumb: instant feedback under 100ms, clear progress
+          feedback by 300ms, and meaningful content visible as early as possible.
+          Users tolerate latency better when the interface communicates state.
+        </p>
 
         <h3 id="real-world-mistakes">Real-world mistakes</h3>
         <ul>
@@ -2098,6 +2160,7 @@ try {
           <li>Using full-page loaders for partial async updates.</li>
           <li>Animating every element with long durations.</li>
           <li>Skipping cache headers for stable API and asset paths.</li>
+          <li>Hydrating large client components when static rendering would work.</li>
         </ul>
 
         <h3 id="recommended-patterns">Recommended patterns</h3>
@@ -2119,11 +2182,21 @@ export default function DashboardPage() {
   );
 }`}</code>
         </pre>
+  <p>
+    Combine this with cache segmentation: cache stable fragments
+    aggressively, revalidate volatile data narrowly, and keep interactive
+    islands focused so hydration cost stays proportional to user intent.
+  </p>
 
         <h3 id="production-mindset">Production mindset</h3>
         <p>
           Define latency budgets for key interactions and enforce them in CI.
           Perceived performance must be treated like any other reliability target.
+        </p>
+        <p>
+          The strongest teams review performance regressions like functional bugs.
+          If an interaction crosses its budget, it blocks release until the
+          regression is understood and intentionally accepted or fixed.
         </p>
 
         <h3 id="final-takeaway">Final takeaway</h3>
@@ -2167,6 +2240,11 @@ export default function DashboardPage() {
           extend or harder to reason about. Good architecture lowers cognitive
           load and keeps delivery velocity stable as scope grows.
         </p>
+        <p>
+          The goal is not perfect abstraction. The goal is predictable change.
+          A new engineer should be able to locate responsibility quickly and
+          modify one area without accidentally changing unrelated behavior.
+        </p>
 
         <h3 id="core-principles">Core principles</h3>
         <ul>
@@ -2187,6 +2265,11 @@ export default function DashboardPage() {
             party integrations should be behind stable service interfaces.
           </li>
         </ul>
+        <p>
+          Treat folder layout as architecture documentation. If ownership and
+          boundaries are obvious from the tree, reviews get faster and incidents
+          are easier to triage.
+        </p>
 
         <h3 id="real-world-mistakes">Real-world mistakes</h3>
         <ul>
@@ -2194,6 +2277,7 @@ export default function DashboardPage() {
           <li>Repeating env access in many files without validation.</li>
           <li>Growing shared utility files into unbounded catch-all modules.</li>
           <li>Using folder structure that reflects history, not architecture.</li>
+          <li>Co-locating mutable business rules with presentation components.</li>
         </ul>
 
         <h3 id="recommended-patterns">Recommended patterns</h3>
@@ -2217,12 +2301,22 @@ const envSchema = z.object({
 
 export const env = envSchema.parse(process.env);`}</code>
         </pre>
+  <p>
+    Add thin service interfaces for external dependencies (mail, storage,
+    queue, analytics). This makes testing straightforward and gives you a
+    safe migration path when providers change.
+  </p>
 
         <h3 id="production-mindset">Production mindset</h3>
         <p>
           Architecture is a reliability control. Clear module boundaries, strong
           typing, and configuration discipline reduce regressions and speed up
           incident recovery.
+        </p>
+        <p>
+          The practical test is simple: can you run targeted tests, deploy small
+          changes confidently, and trace ownership when something fails? If not,
+          structure needs to improve before feature velocity increases.
         </p>
 
         <h3 id="final-takeaway">Final takeaway</h3>

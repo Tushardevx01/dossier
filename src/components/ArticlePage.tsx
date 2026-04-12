@@ -25,6 +25,194 @@ interface ArticlePageProps {
   slug: string;
 }
 
+type DepthGuide = {
+  intro: string;
+  coreConcepts: string[];
+  mistakes: string[];
+  patterns: string[];
+  tradeoffs: string[];
+  production: string[];
+  takeaway: string;
+};
+
+const DEPTH_GUIDES: Record<ArticlePost["category"], DepthGuide> = {
+  Architecture: {
+    intro:
+      "Architecture decisions become expensive only after the system succeeds. That is why unclear boundaries, implicit contracts, and mixed responsibilities feel acceptable early and painful later.",
+    coreConcepts: [
+      "Define explicit module ownership so each boundary has one clear maintainer.",
+      "Model contracts as first-class artifacts: request schema, response schema, and failure semantics.",
+      "Keep high-churn code isolated from foundational platform paths.",
+      "Prefer deterministic behavior over clever abstraction in critical request paths.",
+    ],
+    mistakes: [
+      "Embedding domain rules in adapters and transport handlers.",
+      "Using shared utility files as hidden dependency hubs.",
+      "Relying on convention-only contracts without automated validation.",
+      "Skipping architecture review for seemingly small service changes.",
+    ],
+    patterns: [
+      "Use service interfaces for domain operations and keep route handlers thin.",
+      "Keep architecture decision records for high-impact design trade-offs.",
+      "Enforce schema validation at ingress and invariant checks in domain services.",
+      "Instrument boundaries with request IDs to make call flow traceable.",
+    ],
+    tradeoffs: [
+      "Layered design increases initial wiring cost but lowers long-term regression risk.",
+      "Strict boundaries can slow prototyping but materially improve maintainability.",
+      "Explicit contracts require discipline yet reduce integration breakage between teams.",
+    ],
+    production: [
+      "Reliability improves when dependency failures are classified rather than treated as a generic 500.",
+      "Security posture improves when auth and policy are separated from business rules.",
+      "Performance work becomes predictable when latency budgets are applied per boundary.",
+      "Maintainability compounds when architecture encodes ownership and review expectations.",
+    ],
+    takeaway:
+      "Strong architecture is not about complexity. It is about reducing ambiguity under pressure so systems remain understandable, debuggable, and safe to change.",
+  },
+  DevOps: {
+    intro:
+      "Operational quality is decided before launch. Teams that delay observability, rollback strategy, and deployment discipline eventually spend release velocity on avoidable incidents.",
+    coreConcepts: [
+      "Treat deployment as a repeatable system, not a sequence of manual steps.",
+      "Validate configuration at startup so failure happens early and visibly.",
+      "Collect logs, metrics, and traces with consistent naming and ownership.",
+      "Define health checks that represent dependency readiness, not process existence.",
+    ],
+    mistakes: [
+      "Shipping with no rollback conditions or release gates.",
+      "Alerting on noise rather than user-impacting SLO conditions.",
+      "Using mutable runtime assumptions that differ across environments.",
+      "Relying on ad hoc incident handling with no runbooks.",
+    ],
+    patterns: [
+      "Use pre-deploy checklists with automation for schema, env, and service readiness.",
+      "Adopt immutable builds and environment-specific runtime configuration.",
+      "Use request correlation IDs across logs and traces for triage speed.",
+      "Implement canary rollout plus fast rollback paths for high-risk changes.",
+    ],
+    tradeoffs: [
+      "More deployment controls increase process overhead but reduce outage frequency.",
+      "Tighter alerting thresholds can increase pager volume if not tuned to business impact.",
+      "High observability depth has tooling cost but pays back during every incident.",
+    ],
+    production: [
+      "Reliability improves when releases are gated by measurable health conditions.",
+      "Security improves when secrets and config handling are centralized and validated.",
+      "Performance regressions are easier to catch with release-time baseline comparisons.",
+      "Maintainability improves when incident learnings feed into deployment policy updates.",
+    ],
+    takeaway:
+      "DevOps maturity is the ability to change systems quickly without sacrificing confidence, auditability, or recovery speed.",
+  },
+  "Full-Stack": {
+    intro:
+      "Full-stack quality is mostly about boundary management. Systems become fragile when frontend, API, and infrastructure concerns blur into one change surface.",
+    coreConcepts: [
+      "Separate transport, domain, and integration layers to keep responsibilities clear.",
+      "Use shared types for contracts, not shared implementation logic.",
+      "Design async flows to be idempotent and observable.",
+      "Keep environment strategy explicit across local, CI, and production.",
+    ],
+    mistakes: [
+      "Putting business logic in page components or route handlers.",
+      "Duplicating validation rules between client and server with drift over time.",
+      "Treating external providers as hardcoded implementation details.",
+      "Skipping failure-path testing for async workflows.",
+    ],
+    patterns: [
+      "Use thin route handlers that delegate to service modules.",
+      "Keep schema validation in dedicated modules consumed by server boundaries.",
+      "Wrap third-party integrations with internal interfaces for replaceability.",
+      "Use queue-backed flows when user-facing latency and reliability conflict.",
+    ],
+    tradeoffs: [
+      "Shared contracts improve consistency but require stronger type governance.",
+      "Service abstraction adds indirection but drastically simplifies testing and migrations.",
+      "Queue-backed processing increases system complexity while improving reliability.",
+    ],
+    production: [
+      "Reliability requires explicit ownership for every cross-layer contract.",
+      "Security improves when validation and policy checks happen before service execution.",
+      "Performance improves when the UI only hydrates what the user needs immediately.",
+      "Maintainability improves when folder structure reflects architectural intent.",
+    ],
+    takeaway:
+      "Strong full-stack systems are built by reducing coupling between layers while keeping contracts explicit, typed, and observable.",
+  },
+  Performance: {
+    intro:
+      "Performance is a systems property, not a UI micro-optimization exercise. Most regressions come from cross-layer behavior: rendering strategy, network waterfalls, and cache policy drift.",
+    coreConcepts: [
+      "Profile first: use route-level metrics and interaction timing before making changes.",
+      "Prioritize perceived speed through immediate feedback and stable loading states.",
+      "Optimize critical rendering path before touching secondary interactions.",
+      "Align data shape with above-the-fold UI requirements.",
+    ],
+    mistakes: [
+      "Optimizing component re-renders while backend latency dominates user wait time.",
+      "Hydrating large client trees where static rendering would be sufficient.",
+      "Using animation-heavy transitions that increase perceived sluggishness.",
+      "Applying one global cache strategy for data with different volatility.",
+    ],
+    patterns: [
+      "Define performance budgets per route and enforce in CI.",
+      "Use dynamic import and suspense boundaries for non-critical UI modules.",
+      "Implement skeleton states that preserve layout continuity.",
+      "Use cache segmentation with explicit revalidation policy per data class.",
+    ],
+    tradeoffs: [
+      "Aggressive caching improves speed but can risk stale critical data.",
+      "More client interactivity increases bundle and hydration cost.",
+      "Fine-grained splitting improves load time but can increase complexity in dependency management.",
+    ],
+    production: [
+      "Reliability improves when performance budgets are treated as release gates.",
+      "Observability should include p95/p99 interaction latency, not just averages.",
+      "Security and performance must be balanced when introducing third-party scripts.",
+      "Maintainability depends on keeping performance decisions documented and measurable.",
+    ],
+    takeaway:
+      "Fast products are engineered, not hoped for. Measurement discipline plus deliberate rendering and caching strategy creates durable performance gains.",
+  },
+  Infrastructure: {
+    intro:
+      "Infrastructure choices define operational behavior long after features ship. Small setup shortcuts often become recurring incident patterns at scale.",
+    coreConcepts: [
+      "Prefer deterministic, versioned infrastructure definitions over manual operations.",
+      "Treat runtime configuration and secrets as controlled system inputs.",
+      "Build with immutable artifacts and explicit runtime assumptions.",
+      "Define health and readiness semantics as deployment gates.",
+    ],
+    mistakes: [
+      "Unpinned dependencies and mutable runtime environments.",
+      "Missing health checks or checks that do not reflect dependency readiness.",
+      "Treating container images as build outputs without security hardening.",
+      "No disaster-recovery drills for stateful infrastructure changes.",
+    ],
+    patterns: [
+      "Use multi-stage builds and least-privilege runtime users.",
+      "Keep infra changes in version control with review and plan/apply discipline.",
+      "Validate startup config and fail fast on invalid critical settings.",
+      "Add smoke tests and post-deploy verification for critical routes.",
+    ],
+    tradeoffs: [
+      "Hardening and deterministic builds increase setup effort but reduce runtime risk.",
+      "Strict startup checks can fail releases early, which is preferable to partial boot failures.",
+      "Operational controls can slow iteration slightly while dramatically improving reliability.",
+    ],
+    production: [
+      "Reliability improves when every deploy has explicit rollback criteria.",
+      "Security improves with smaller images, non-root runtime, and secret hygiene.",
+      "Performance stability depends on resource limits and health-driven orchestration.",
+      "Maintainability improves when infrastructure behavior is testable and documented.",
+    ],
+    takeaway:
+      "Infrastructure quality is the discipline of making runtime behavior predictable, secure, and recoverable under change.",
+  },
+};
+
 /**
  * Article Renderer
  * Displays the full article with all interactive features
@@ -102,12 +290,55 @@ function ArticleHeader({ post }: { post: ArticlePost }) {
  * Includes content, takeaways, and improvements sections
  */
 function ArticleContent({ post }: { post: ArticlePost }) {
+  const depthGuide = DEPTH_GUIDES[post.category];
+
   return (
     <div className="py-8 sm:py-10">
       <div className="max-w-[640px] mx-auto px-4 sm:px-6">
         {/* Main article prose section */}
         <div className="article-content prose prose-invert prose-neutral max-w-none prose-headings:scroll-mt-24 prose-headings:tracking-tight prose-h2:text-[1.7rem] sm:prose-h2:text-[2rem] prose-h2:mt-12 prose-h2:mb-4 prose-h3:text-[0.95rem] sm:prose-h3:text-[0.98rem] prose-h3:font-semibold prose-h3:text-neutral-200 prose-h3:mt-6 prose-h3:mb-2 prose-p:text-[12.5px] sm:prose-p:text-[13px] prose-p:leading-[1.72] prose-p:text-neutral-300 prose-strong:text-neutral-100 prose-a:text-neutral-200 prose-a:no-underline hover:prose-a:text-white prose-li:text-[12.5px] sm:prose-li:text-[13px] prose-li:leading-[1.72] prose-li:text-neutral-300 prose-li:marker:text-neutral-500 prose-ul:my-4 prose-code:text-[0.86em] prose-code:text-neutral-200 prose-pre:my-4 prose-pre:rounded-none prose-pre:border prose-pre:border-neutral-700 prose-pre:bg-neutral-800/65 prose-pre:px-3.5 prose-pre:py-3 prose-pre:leading-[1.42] prose-pre:text-[12px] space-y-4">
           {post.content}
+
+          <h3 id="expanded-introduction">Why This Topic Matters in Production</h3>
+          <p>{depthGuide.intro}</p>
+
+          <h3 id="expanded-core-concepts">Core Concepts</h3>
+          <ul>
+            {depthGuide.coreConcepts.map((concept, index) => (
+              <li key={`${post.slug}-concept-${index}`}>{concept}</li>
+            ))}
+          </ul>
+
+          <h3 id="expanded-real-world-mistakes">Real-World Mistakes</h3>
+          <ul>
+            {depthGuide.mistakes.map((mistake, index) => (
+              <li key={`${post.slug}-mistake-${index}`}>{mistake}</li>
+            ))}
+          </ul>
+
+          <h3 id="expanded-recommended-patterns">Recommended Patterns</h3>
+          <ul>
+            {depthGuide.patterns.map((pattern, index) => (
+              <li key={`${post.slug}-pattern-${index}`}>{pattern}</li>
+            ))}
+          </ul>
+
+          <h3 id="expanded-trade-offs">Trade-offs</h3>
+          <ul>
+            {depthGuide.tradeoffs.map((tradeoff, index) => (
+              <li key={`${post.slug}-tradeoff-${index}`}>{tradeoff}</li>
+            ))}
+          </ul>
+
+          <h3 id="expanded-production-perspective">Production Perspective</h3>
+          <ul>
+            {depthGuide.production.map((point, index) => (
+              <li key={`${post.slug}-production-${index}`}>{point}</li>
+            ))}
+          </ul>
+
+          <h3 id="expanded-final-takeaway">Final Takeaway</h3>
+          <p>{depthGuide.takeaway}</p>
         </div>
 
         {/* Divider */}
