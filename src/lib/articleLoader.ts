@@ -45,7 +45,7 @@ function buildMetadataCache(): ArticleMetadata[] {
       readTime: article.readTime,
       category: article.category,
       description: article.description,
-      difficulty: calculateDifficulty(article.readTime),
+      difficulty: article.difficulty ?? calculateDifficulty(article.readTime),
     }))
     .sort((first, second) => {
       const firstDate = new Date(first.date).getTime();
@@ -80,7 +80,7 @@ export function getArticle(slug: string): ArticlePost | null {
     readTime: article.readTime,
     category: article.category,
     description: article.description,
-    difficulty: calculateDifficulty(article.readTime),
+    difficulty: article.difficulty ?? calculateDifficulty(article.readTime),
     content: article.content,
     whatILearned: article.whatILearned,
     improvements: article.improvements,

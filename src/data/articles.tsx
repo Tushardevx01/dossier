@@ -1861,4 +1861,391 @@ export const env = envSchema.parse(process.env);
     relatedProjectSlug: "webscope",
     relatedSystemDesignSlug: "web-scraping-pipeline",
   },
+
+  "designing-apis-that-scale": {
+    title: "Designing APIs That Scale",
+    subtitle: "Contracts, Boundaries, and Long-Term Reliability",
+    date: "Apr 12, 2026",
+    readTime: 10,
+    difficulty: "Intermediate",
+    category: "Architecture",
+    description:
+      "How to design maintainable APIs using versioning, validation, auth boundaries, rate limiting, and long-term contracts.",
+    content: (
+      <>
+        <h3 id="introduction">Introduction</h3>
+        <p>
+          Most API failures are not caused by throughput. They come from weak
+          contracts, ambiguous ownership, and schema drift over time. A scalable
+          API is one that remains predictable after many teams and many releases.
+        </p>
+
+        <h3 id="core-principles">Core principles</h3>
+        <ul>
+          <li>
+            <strong>Version deliberately:</strong> Introduce version boundaries
+            when response semantics change, not for cosmetic refactors.
+          </li>
+          <li>
+            <strong>Validate at the boundary:</strong> Parse and normalize all
+            input before business logic executes.
+          </li>
+          <li>
+            <strong>Separate auth from domain logic:</strong> Identity and policy
+            checks should be resolved before service execution.
+          </li>
+          <li>
+            <strong>Rate limit by intent:</strong> Apply limits per actor and
+            endpoint sensitivity, not a single global threshold.
+          </li>
+        </ul>
+
+        <h3 id="real-world-mistakes">Real-world mistakes</h3>
+        <ul>
+          <li>Returning untyped, ad hoc error payloads across routes.</li>
+          <li>Shipping breaking response changes without deprecation windows.</li>
+          <li>Mixing permission checks deep inside service methods.</li>
+          <li>Using IP-only limiting for authenticated workloads.</li>
+        </ul>
+
+        <h3 id="recommended-patterns">Recommended patterns</h3>
+        <pre>
+          <code className="language-typescript">{`// Keep transport validation and service contracts explicit
+const CreateOrderSchema = z.object({
+  customerId: z.string().uuid(),
+  items: z.array(z.object({ sku: z.string(), quantity: z.number().int().positive() })).min(1),
+});
+
+export async function POST(request: NextRequest) {
+  const actor = await requireActor(request); // auth boundary
+  const payload = CreateOrderSchema.parse(await request.json());
+
+  await enforceRateLimit({ scope: "orders:create", actorId: actor.id });
+
+  const result = await orderService.create(payload, actor);
+  return NextResponse.json({ data: result }, { status: 201 });
+}`}</code>
+        </pre>
+
+        <h3 id="production-mindset">Production mindset</h3>
+        <p>
+          Think in backward compatibility budgets. Every public response field
+          becomes a contract. Versioning, changelogs, and deprecation timelines
+          are operational tools, not documentation extras.
+        </p>
+
+        <h3 id="final-takeaway">Final takeaway</h3>
+        <p>
+          APIs scale when contracts are stable, boundaries are explicit, and
+          behavior stays deterministic under load and change.
+        </p>
+      </>
+    ),
+    whatILearned: [
+      "API scalability is mostly contract design, not endpoint count",
+      "Versioning should be tied to semantic change, not team preference",
+      "Boundary validation removes whole classes of runtime bugs",
+      "Auth and rate limiting must be policy layers, not scattered checks",
+    ],
+    improvements: [
+      "Add machine-readable API deprecation headers",
+      "Publish schema snapshots for each released version",
+      "Track per-endpoint error budget and compatibility regressions",
+    ],
+    relatedNoteSlugs: [
+      "designing-systems-that-hold",
+      "why-explicit-architecture-beats-clever-code",
+    ],
+  },
+
+  "why-monitoring-is-part-of-development": {
+    title: "Why Monitoring Is Part of Development",
+    subtitle: "Observability Before Launch Day",
+    date: "Apr 12, 2026",
+    readTime: 9,
+    difficulty: "Intermediate",
+    category: "DevOps",
+    description:
+      "Logs, metrics, tracing, uptime alerts, and why observability should exist before launch day.",
+    content: (
+      <>
+        <h3 id="introduction">Introduction</h3>
+        <p>
+          Monitoring is not a post-release feature. It is how you prove that a
+          system is behaving as designed. Without observability, incidents become
+          guesswork and recovery time expands unnecessarily.
+        </p>
+
+        <h3 id="core-principles">Core principles</h3>
+        <ul>
+          <li>
+            <strong>Structured logs:</strong> Emit machine-parseable events with
+            request IDs and stable fields.
+          </li>
+          <li>
+            <strong>Meaningful metrics:</strong> Track latency, error rate,
+            throughput, and saturation by service boundary.
+          </li>
+          <li>
+            <strong>Tracing by default:</strong> Correlate spans across API,
+            service, and dependency calls.
+          </li>
+          <li>
+            <strong>Actionable alerts:</strong> Alert on SLO violations, not
+            noisy low-value events.
+          </li>
+        </ul>
+
+        <h3 id="real-world-mistakes">Real-world mistakes</h3>
+        <ul>
+          <li>Logging raw strings without context or correlation IDs.</li>
+          <li>Alerting on every exception instead of error budgets.</li>
+          <li>Tracking averages while ignoring p95 and p99 latency.</li>
+          <li>Adding dashboards after first outage instead of before launch.</li>
+        </ul>
+
+        <h3 id="recommended-patterns">Recommended patterns</h3>
+        <pre>
+          <code className="language-typescript">{`// Minimal observability baseline per request
+const requestId = crypto.randomUUID();
+logger.info("api.request.start", { requestId, route: "/api/send" });
+
+const end = measurePerformance("api.send", { route: "/api/send" });
+try {
+  const result = await contactService.send(payload);
+  metrics.increment("contact.send.success");
+  return result;
+} catch (error) {
+  metrics.increment("contact.send.failure");
+  captureException(error, { requestId, tags: { route: "/api/send" } });
+  throw error;
+} finally {
+  end();
+}`}</code>
+        </pre>
+
+        <h3 id="production-mindset">Production mindset</h3>
+        <p>
+          You cannot improve what you cannot measure. Logging, metrics, tracing,
+          and uptime checks should be treated as release requirements on day one.
+        </p>
+
+        <h3 id="final-takeaway">Final takeaway</h3>
+        <p>
+          Monitoring is development work. Teams that instrument early ship faster
+          because diagnosis and rollback decisions become objective.
+        </p>
+      </>
+    ),
+    whatILearned: [
+      "Observability shortens incident triage loops significantly",
+      "Request correlation IDs are foundational for debugging distributed paths",
+      "Latency percentiles matter more than simple averages",
+      "Alert quality is more important than alert quantity",
+    ],
+    improvements: [
+      "Define SLOs per critical route and service",
+      "Add synthetic checks for top user journeys",
+      "Automate alert routing by subsystem ownership",
+    ],
+    relatedNoteSlugs: [
+      "production-readiness-starts-early",
+      "nextjs-production-deployment",
+    ],
+  },
+
+  "building-ui-that-feels-fast": {
+    title: "Building UI That Feels Fast",
+    subtitle: "Perceived Speed as a Product Requirement",
+    date: "Apr 12, 2026",
+    readTime: 8,
+    difficulty: "Intermediate",
+    category: "Performance",
+    description:
+      "Perceived speed, skeleton states, lazy loading, caching, motion timing, and frontend responsiveness.",
+    content: (
+      <>
+        <h3 id="introduction">Introduction</h3>
+        <p>
+          Users evaluate speed by feedback quality, not raw benchmark numbers.
+          Interfaces feel fast when response is immediate, transitions are stable,
+          and loading behavior is predictable.
+        </p>
+
+        <h3 id="core-principles">Core principles</h3>
+        <ul>
+          <li>
+            <strong>Render critical intent first:</strong> Prioritize visible
+            content and defer secondary UI blocks.
+          </li>
+          <li>
+            <strong>Use skeletons, not spinners:</strong> Preserve layout
+            structure while data hydrates.
+          </li>
+          <li>
+            <strong>Lazy-load with intent:</strong> Split non-critical bundles by
+            route and interaction.
+          </li>
+          <li>
+            <strong>Constrain motion timing:</strong> Keep animations brief and
+            consistent to avoid sluggish perception.
+          </li>
+        </ul>
+
+        <h3 id="real-world-mistakes">Real-world mistakes</h3>
+        <ul>
+          <li>Blocking initial paint on below-the-fold components.</li>
+          <li>Using full-page loaders for partial async updates.</li>
+          <li>Animating every element with long durations.</li>
+          <li>Skipping cache headers for stable API and asset paths.</li>
+        </ul>
+
+        <h3 id="recommended-patterns">Recommended patterns</h3>
+        <pre>
+          <code className="language-typescript">{`// Route-level UI responsiveness pattern
+const ChartPanel = dynamic(() => import("@/components/ChartPanel"), {
+  loading: () => <ChartSkeleton />,
+});
+
+export default function DashboardPage() {
+  return (
+    <main>
+      <HeroStats />
+      <Suspense fallback={<ActivitySkeleton />}>
+        <RecentActivity />
+      </Suspense>
+      <ChartPanel />
+    </main>
+  );
+}`}</code>
+        </pre>
+
+        <h3 id="production-mindset">Production mindset</h3>
+        <p>
+          Define latency budgets for key interactions and enforce them in CI.
+          Perceived performance must be treated like any other reliability target.
+        </p>
+
+        <h3 id="final-takeaway">Final takeaway</h3>
+        <p>
+          Fast-feeling UI comes from architecture decisions: rendering strategy,
+          loading UX, caching policy, and disciplined motion.
+        </p>
+      </>
+    ),
+    whatILearned: [
+      "Perceived speed is shaped more by feedback loops than raw compute speed",
+      "Skeletons reduce visual jitter and improve trust during loading",
+      "Bundle splitting should follow user journeys, not arbitrary component size",
+      "Motion timing can either reinforce or damage performance perception",
+    ],
+    improvements: [
+      "Set route-level performance budgets in Lighthouse CI",
+      "Add interaction telemetry for key conversion flows",
+      "Tune cache policies per data volatility class",
+    ],
+    relatedNoteSlugs: [
+      "frontend-performance-as-system-problem",
+      "react-performance-optimization",
+    ],
+  },
+
+  "how-i-structure-real-projects": {
+    title: "How I Structure Real Projects",
+    subtitle: "Modular Architecture for Long-Term Maintainability",
+    date: "Apr 12, 2026",
+    readTime: 11,
+    difficulty: "Intermediate",
+    category: "Full-Stack",
+    description:
+      "Folder systems, modular architecture, reusable components, env strategy, scalable maintainable projects.",
+    content: (
+      <>
+        <h3 id="introduction">Introduction</h3>
+        <p>
+          Real projects age. Structure determines whether they become safer to
+          extend or harder to reason about. Good architecture lowers cognitive
+          load and keeps delivery velocity stable as scope grows.
+        </p>
+
+        <h3 id="core-principles">Core principles</h3>
+        <ul>
+          <li>
+            <strong>Organize by responsibility:</strong> Keep app routes, UI,
+            domain services, and shared libraries clearly separated.
+          </li>
+          <li>
+            <strong>Prefer small focused modules:</strong> Files should do one
+            thing and compose cleanly.
+          </li>
+          <li>
+            <strong>Centralize configuration:</strong> Environment parsing and
+            feature toggles must have a single source of truth.
+          </li>
+          <li>
+            <strong>Design for replaceability:</strong> Infrastructure and third-
+            party integrations should be behind stable service interfaces.
+          </li>
+        </ul>
+
+        <h3 id="real-world-mistakes">Real-world mistakes</h3>
+        <ul>
+          <li>Keeping business logic inside route handlers and UI components.</li>
+          <li>Repeating env access in many files without validation.</li>
+          <li>Growing shared utility files into unbounded catch-all modules.</li>
+          <li>Using folder structure that reflects history, not architecture.</li>
+        </ul>
+
+        <h3 id="recommended-patterns">Recommended patterns</h3>
+        <pre>
+          <code className="language-text">{`src/
+  app/              # Routing and page composition
+  components/       # UI primitives, sections, shared components
+  server/           # Server actions, services, guards
+  lib/              # Security, validation, seo, utilities
+  hooks/            # Client behavior hooks
+  types/            # Shared contracts
+  data/             # Static content sources`}</code>
+        </pre>
+        <pre>
+          <code className="language-typescript">{`// Keep environment rules in one place
+const envSchema = z.object({
+  EMAIL_FROM: z.string().email(),
+  EMAIL_PASSWORD: z.string().min(1),
+  QEV_API_KEY: z.string().min(1),
+});
+
+export const env = envSchema.parse(process.env);`}</code>
+        </pre>
+
+        <h3 id="production-mindset">Production mindset</h3>
+        <p>
+          Architecture is a reliability control. Clear module boundaries, strong
+          typing, and configuration discipline reduce regressions and speed up
+          incident recovery.
+        </p>
+
+        <h3 id="final-takeaway">Final takeaway</h3>
+        <p>
+          Project structure is not cosmetic. It is an operational decision that
+          determines how safely a system can evolve.
+        </p>
+      </>
+    ),
+    whatILearned: [
+      "Folder structure should encode ownership and responsibilities",
+      "Small modules reduce review friction and regression risk",
+      "Centralized env validation prevents cross-module configuration drift",
+      "Separation of UI and domain logic improves long-term maintainability",
+    ],
+    improvements: [
+      "Add architecture decision records for major structural changes",
+      "Introduce boundary tests for server and client modules",
+      "Track module size and import-coupling trends over time",
+    ],
+    relatedNoteSlugs: [
+      "structuring-scalable-fullstack",
+      "why-explicit-architecture-beats-clever-code",
+    ],
+  },
 };

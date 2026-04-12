@@ -32,6 +32,7 @@ export interface Article {
   subtitle: string;
   date: string;
   readTime: number;
+  difficulty?: ArticleDifficulty;
   category: ArticleCategory;
   description: string;
   content: React.ReactNode;
