@@ -55,6 +55,10 @@ export function useContactForm() {
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
+      if (isSending) {
+        return;
+      }
+
       setIsSending(true);
 
       const sendPromise = (async () => {
@@ -90,7 +94,7 @@ export function useContactForm() {
         },
       });
     },
-    [formValues]
+    [formValues, isSending]
   );
 
   return {

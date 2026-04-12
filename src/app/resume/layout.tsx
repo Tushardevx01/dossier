@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/shared/JsonLd";
 import { resumeKeywords } from "@/constant";
 import { generateResumeStructuredData } from "@/lib/structured-data";
 import { buildPageMetadata } from "@/lib/seo";
@@ -30,12 +31,7 @@ export default function ResumeLayout({
         type="application/pdf"
         crossOrigin="anonymous"
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(resumeStructuredData),
-        }}
-      />
+      <JsonLd data={resumeStructuredData} />
       {children}
     </>
   );

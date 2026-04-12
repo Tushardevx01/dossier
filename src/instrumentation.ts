@@ -7,6 +7,7 @@
  * @see https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation
  */
 
+import { getServerEnv } from "./lib/env.server";
 import { logger } from "./lib/logger";
 
 interface EnvValidationResult {
@@ -71,19 +72,16 @@ export async function register() {
     });
   }
 
+  const isBuildPhase = process.env.NEXT_PHASE === "phase-production-build";
+
+  if (process.env.NODE_ENV === "production" && !isBuildPhase) {
+    getServerEnv();
+  }
+
   if (!envValidation.valid) {
     logger.error("Missing required environment variables", {
       missing: envValidation.missing,
     });
-
-    // Only fail in production runtime (not during Vercel build)
-    // NEXT_PHASE is set during build, runtime has different indicators
-    const isBuildPhase = process.env.NEXT_PHASE === "phase-production-build";
-    
-    if (process.env.NODE_ENV === "production" && !isBuildPhase) {
-      // Log but don't crash - let the API routes handle missing env gracefully
-      logger.warn("Application started with missing required environment variables");
-    }
   }
 
   const bootTime = Date.now() - startTime;

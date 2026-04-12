@@ -43,6 +43,7 @@ import { z } from "zod";
 import { analyzeSEO, isAnalysisError, validateUrl } from "@/lib/seo-analyzer";
 import { logger } from "@/lib/logger";
 import { checkRateLimit, createRateLimitKey } from "@/lib/security/rateLimit";
+import { extractClientIdentifier } from "@/lib/security/request";
 
 // Use Node.js runtime for Cheerio compatibility
 export const runtime = "nodejs";
@@ -57,14 +58,6 @@ const MAX_BODY_BYTES = 4096;
 
 const RATE_LIMIT_MAX = 10; // requests per window
 const RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
-
-function getClientIdentifier(request: NextRequest): string {
-  return (
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    request.headers.get("x-real-ip") ||
-    "unknown"
-  );
-}
 
 export async function POST(request: NextRequest) {
   try {
@@ -97,7 +90,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get client IP for rate limiting
-    const clientIdentifier = getClientIdentifier(request);
+    const clientIdentifier = extractClientIdentifier(request);
     const key = createRateLimitKey("analyze", clientIdentifier);
 
     // Check rate limit

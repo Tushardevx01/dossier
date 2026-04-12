@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { Toaster } from "sonner";
 
+import { JsonLd } from "@/components/shared/JsonLd";
 import { inter, mono, nasalization, quentine } from "./fonts";
 
 import {
@@ -147,24 +148,9 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${mono.variable} ${nasalization.variable} ${quentine.variable} font-sans`}
       >
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(personStructuredData),
-          }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(websiteStructuredData),
-          }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(organizationStructuredData),
-          }}
-        />
+        <JsonLd data={personStructuredData} />
+        <JsonLd data={websiteStructuredData} />
+        <JsonLd data={organizationStructuredData} />
         {children}
         <Toaster position="bottom-right" richColors closeButton />
         <Analytics />

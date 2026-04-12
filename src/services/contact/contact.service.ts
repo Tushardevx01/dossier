@@ -12,6 +12,7 @@
 
 import { AppError, Errors } from "@/lib/errors";
 import { logger } from "@/lib/logger";
+import { extractClientIdentifier as getRequestClientIdentifier, isTrustedOrigin } from "@/lib/security/request";
 import { validateContactForm } from "./contact.schema";
 import { checkRateLimit, createRateLimitKey } from "./contact.rateLimit";
 import { sendEmail } from "@/services/email/email.transport";
@@ -132,30 +133,15 @@ export function isValidBodySize(body: string): boolean {
 }
 
 /**
- * Extract client identifier from request headers
+ * Extract client identifier from request metadata
  */
-export function extractClientIdentifier(headers: Headers): string {
-  const forwardedFor = headers.get("x-forwarded-for");
-  if (forwardedFor) {
-    return forwardedFor.split(",")[0].trim();
-  }
-  return headers.get("x-real-ip") ?? "unknown";
+export function extractClientIdentifier(request: { headers: Headers; ip?: string | null }): string {
+  return getRequestClientIdentifier(request);
 }
 
 /**
  * Validate origin header matches host
  */
 export function isOriginAllowed(headers: Headers): boolean {
-  const originHeader = headers.get("origin");
-  if (!originHeader) return true;
-
-  const host = headers.get("x-forwarded-host") ?? headers.get("host");
-  if (!host) return false;
-
-  try {
-    const origin = new URL(originHeader);
-    return origin.host === host;
-  } catch {
-    return false;
-  }
+  return isTrustedOrigin(headers);
 }

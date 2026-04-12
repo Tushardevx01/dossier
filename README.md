@@ -76,13 +76,28 @@ Current compose config maps host `3000` to container `3000`.
 
 - Security headers and CSP are defined in `next.config.ts`.
 - API routes use strict content-type and payload checks.
-- Shared rate limiter lives in `src/lib/security/rateLimit.ts`.
+- Shared rate limiter lives in `src/lib/security/rateLimit.ts` and prefers Redis in production.
 - API responses are no-store and excluded from indexing.
-- Sensitive env access is centralized in `src/lib/env.server.ts`.
+- Sensitive env access is centralized in `src/lib/env.server.ts` and validated through `src/instrumentation.ts`.
+- Public request origin checks for the contact form are same-origin only.
+
+## Deployment Notes
+
+- The Docker image runs as a non-root user.
+- Docker builds force webpack for Next.js stability on Alpine.
+- `/api/health` is intentionally minimal and does not expose internal dependency state in production.
+- `/api/version` is public but noindex and cache-disabled.
+
+## Threat Model
+
+- Public APIs are rate-limited and size-limited.
+- Contact submissions use same-origin validation plus honeypot protection.
+- JSON-LD serialization is centralized to avoid unsafe ad hoc script rendering.
+- User-facing errors should remain generic; detailed traces stay in logs.
 
 ## API Surface
 
 - `POST /api/send` contact workflow
 - `POST /api/analyze` SEO analysis
-- `GET /api/health` runtime health summary
+- `GET /api/health` runtime readiness summary
 - `GET /api/version` deployment-safe version metadata

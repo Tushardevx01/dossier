@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { JsonLd } from "@/components/shared/JsonLd";
 import { projectsData } from "@/constant/projects";
 import { getAllArticles } from "@/lib/articleLoader";
 import { buildPageMetadata } from "@/lib/seo";
@@ -53,18 +54,8 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
 
   return (
     <main className="min-h-screen bg-black">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(projectSchema),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(softwareSchema),
-        }}
-      />
+      <JsonLd data={projectSchema} />
+      <JsonLd data={softwareSchema} />
       <section className="max-w-5xl mx-auto px-4 sm:px-6 pt-24 sm:pt-32 pb-16">
         <h1 className="text-4xl sm:text-6xl font-semibold text-white tracking-tight">{project.name}</h1>
         <p className="mt-5 text-base sm:text-lg text-neutral-400 max-w-3xl leading-relaxed">{project.description}</p>

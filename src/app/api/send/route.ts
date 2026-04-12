@@ -6,6 +6,7 @@
  */
 
 import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 import { generateRequestId, logger } from "@/lib/logger";
 import { getServerEnv } from "@/lib/env.server";
@@ -54,7 +55,7 @@ function errorResponse(error: AppError, requestId: string) {
 
 // ─── Route Handler ──────────────────────────────────────────────────────────
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   const requestId = generateRequestId();
 
   const contentLength = request.headers.get("content-length");
@@ -110,7 +111,7 @@ export async function POST(request: Request) {
   const result = await processContactSubmission(
     {
       body,
-      clientIdentifier: extractClientIdentifier(request.headers),
+      clientIdentifier: extractClientIdentifier(request),
       requestId,
     },
     config

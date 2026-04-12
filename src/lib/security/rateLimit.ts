@@ -72,7 +72,15 @@ async function checkRedisRateLimit(
   windowMs: number
 ): Promise<RateLimitResult> {
   const redis = getRedisClient();
-  if (!redis) return checkMemoryRateLimit(key, maxRequests, windowMs);
+  if (!redis) {
+    if (process.env.NODE_ENV === "production") {
+      logger.warn("Redis rate limiting unavailable in production; using process-local fallback", {
+        key,
+      });
+    }
+
+    return checkMemoryRateLimit(key, maxRequests, windowMs);
+  }
 
   const windowSeconds = Math.ceil(windowMs / 1000);
   const redisKey = `ratelimit:${key}`;
@@ -101,6 +109,15 @@ async function checkRedisRateLimit(
       key,
       error: error instanceof Error ? error.message : String(error),
     });
+
+    if (process.env.NODE_ENV === "production") {
+      return {
+        allowed: false,
+        remaining: 0,
+        retryAfterSeconds: Math.ceil(windowMs / 1000),
+      };
+    }
+
     return checkMemoryRateLimit(key, maxRequests, windowMs);
   }
 }

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { ArticlePage } from "@/components/ArticlePage";
+import { JsonLd } from "@/components/shared/JsonLd";
 import { generateArticleStaticParams, getAllArticles, getArticle } from "@/lib/articleLoader";
 import { buildPageMetadata, absoluteUrl } from "@/lib/seo";
 import { generateArticleStructuredData } from "@/lib/structured-data";
@@ -62,12 +63,7 @@ export default async function EngineeringNotesArticlePage({
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(articleStructuredData),
-        }}
-      />
+      <JsonLd data={articleStructuredData} />
       <ArticlePage post={article} slug={slug} />
       <nav aria-label="Related engineering notes" className="sr-only">
         <ul>

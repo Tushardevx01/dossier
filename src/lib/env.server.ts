@@ -1,28 +1,34 @@
-type RequiredServerEnvKey = "QEV_API_KEY" | "EMAIL_FROM" | "EMAIL_PASSWORD";
+import { z } from "zod";
 
-type ServerEnv = {
-  QEV_API_KEY: string;
-  EMAIL_FROM: string;
-  EMAIL_PASSWORD: string;
-};
+const serverEnvSchema = z.object({
+  QEV_API_KEY: z.string().min(1, "QEV_API_KEY is required"),
+  EMAIL_FROM: z.string().email("EMAIL_FROM must be a valid email address"),
+  EMAIL_PASSWORD: z.string().min(1, "EMAIL_PASSWORD is required"),
+});
 
-function getRequiredEnv(key: RequiredServerEnvKey): string {
+export type ServerEnv = z.infer<typeof serverEnvSchema>;
+
+let cachedServerEnv: ServerEnv | null = null;
+
+export function getServerEnv(): ServerEnv {
   if (typeof window !== "undefined") {
     throw new Error("Server environment variables cannot be accessed in the browser.");
   }
 
-  const value = process.env[key];
-  if (!value) {
-    throw new Error(`Missing required server environment variable: ${key}`);
+  if (cachedServerEnv) {
+    return cachedServerEnv;
   }
 
-  return value;
+  const result = serverEnvSchema.safeParse(process.env);
+  if (!result.success) {
+    const invalidKeys = result.error.issues.map((issue) => issue.path.join(".")).join(", ");
+    throw new Error(`Missing or invalid required server environment variables: ${invalidKeys}`);
+  }
+
+  cachedServerEnv = result.data;
+  return cachedServerEnv;
 }
 
-export function getServerEnv(): ServerEnv {
-  return {
-    QEV_API_KEY: getRequiredEnv("QEV_API_KEY"),
-    EMAIL_FROM: getRequiredEnv("EMAIL_FROM"),
-    EMAIL_PASSWORD: getRequiredEnv("EMAIL_PASSWORD"),
-  };
+export function hasRequiredServerEnv(): boolean {
+  return serverEnvSchema.safeParse(process.env).success;
 }

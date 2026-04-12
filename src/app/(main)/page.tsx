@@ -8,6 +8,7 @@
 import type { Metadata } from "next";
 
 import { HomePageShell } from "@/components/HomePageShell";
+import { JsonLd } from "@/components/shared/JsonLd";
 import { projectsData } from "@/constant/projects";
 import { getAllArticles } from "@/lib/articleLoader";
 import { buildPageMetadata } from "@/lib/seo";
@@ -46,13 +47,7 @@ export default function Home() {
   return (
     <>
       {homepageSchemas.map((schema, index) => (
-        <script
-          key={index}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(schema),
-          }}
-        />
+        <JsonLd key={index} data={schema} />
       ))}
       <HomePageShell />
     </>
