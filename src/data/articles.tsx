@@ -2342,4 +2342,949 @@ export const env = envSchema.parse(process.env);`}</code>
       "why-explicit-architecture-beats-clever-code",
     ],
   },
+
+  "designing-systems-that-hold-under-load": {
+    title: "Designing Systems That Hold Under Load",
+    subtitle: "Resilience Engineering for Real Traffic",
+    date: "Apr 13, 2026",
+    readTime: 8,
+    difficulty: "Advanced",
+    category: "Architecture",
+    description:
+      "How resilient systems are designed for spikes, bottlenecks, and unpredictable production traffic.",
+    content: (
+      <>
+        <h3 id="why-it-matters">Why It Matters</h3>
+        <p>
+          Systems rarely fail at average load. They fail at boundaries: sudden
+          queue growth, dependency saturation, noisy tenants, and retry storms.
+          A system that looks healthy at p50 can collapse at p99 when one
+          shared bottleneck gets amplified across services.
+        </p>
+        <p>
+          Designing for load means choosing explicit limits, predictable
+          degradation, and measurable recovery behavior. Reliability under
+          pressure is not about heroic optimization after incidents. It is the
+          outcome of architecture decisions made before traffic arrives.
+        </p>
+
+        <h3 id="key-principles">Key Principles</h3>
+        <ul>
+          <li>
+            Define end-to-end execution budgets and split them by stage so one
+            slow dependency cannot consume the full request lifetime.
+          </li>
+          <li>
+            Cap concurrency at every boundary: worker pools, outbound calls,
+            queue consumers, and background processors. Unbounded parallelism is
+            usually a hidden failure multiplier.
+          </li>
+          <li>
+            Design idempotent retry paths with jittered backoff and explicit
+            stop conditions. Retries should improve success rates, not create
+            synchronized traffic spikes.
+          </li>
+          <li>
+            Favor graceful degradation over binary failure. Return partial
+            results, stale-but-safe data, or deferred processing states with
+            clear quality signals.
+          </li>
+          <li>
+            Track load-specific telemetry: queue age, saturation, timeout
+            distribution, retry outcomes, and shed-rate. Without these signals,
+            you are debugging intuition, not system behavior.
+          </li>
+        </ul>
+
+        <h3 id="common-failures">Common Failures</h3>
+        <ul>
+          <li>
+            Global timeout without stage budgets, causing unpredictable tail
+            latency and hard-to-diagnose cancellations.
+          </li>
+          <li>
+            Aggressive retries without idempotency keys, producing duplicate
+            writes and cascading dependency pressure.
+          </li>
+          <li>
+            Unlimited queue growth with no admission control, which converts a
+            temporary spike into prolonged instability.
+          </li>
+          <li>
+            Missing saturation alerts, so teams detect capacity collapse only
+            after user-facing error rates are already high.
+          </li>
+        </ul>
+
+        <h3 id="final-takeaway">Final Takeaway</h3>
+        <p>
+          Load resilience is designed, not discovered. Systems hold when limits,
+          fallbacks, and recovery rules are explicit before peak traffic tests
+          them.
+        </p>
+      </>
+    ),
+    whatILearned: [
+      "Saturation metrics are more actionable than average latency",
+      "Bounded concurrency protects stability better than burst throughput",
+      "Retries need idempotency and jitter to avoid amplification",
+      "Graceful degradation preserves trust during pressure events",
+    ],
+    improvements: [
+      "Add admission-control policies per high-risk endpoint",
+      "Track queue age SLOs alongside success/error rates",
+      "Introduce load-shedding drills in staging",
+      "Expand runbooks for saturation recovery",
+    ],
+    relatedNoteSlugs: [
+      "designing-systems-that-hold",
+      "what-i-learned-building-webscope",
+    ],
+  },
+
+  "why-latency-becomes-a-product-problem": {
+    title: "Why Latency Becomes a Product Problem",
+    subtitle: "Speed, Trust, and Conversion Dynamics",
+    date: "Apr 13, 2026",
+    readTime: 7,
+    difficulty: "Advanced",
+    category: "Performance",
+    description:
+      "Speed affects trust, conversions, retention, and user confidence more than teams realize.",
+    content: (
+      <>
+        <h3 id="why-it-matters">Why It Matters</h3>
+        <p>
+          Latency is not only a technical metric. It changes user behavior.
+          Delays reduce form completion, weaken purchase confidence, and make
+          error states feel more severe than they are. When response time is
+          inconsistent, users interpret the product as unreliable.
+        </p>
+        <p>
+          Teams often optimize isolated components while missing end-to-end
+          latency sources: dependency chains, cache misses, chatty APIs, and
+          oversized payloads. Product quality is experienced as time-to-trust,
+          not as internal architecture elegance.
+        </p>
+
+        <h3 id="key-principles">Key Principles</h3>
+        <ul>
+          <li>
+            Set route-level latency budgets for p50, p95, and interaction
+            response, then treat budget regressions as release-blocking defects.
+          </li>
+          <li>
+            Optimize critical user journeys first: sign-up, checkout, search,
+            and primary dashboards. Global averages hide expensive local pain.
+          </li>
+          <li>
+            Reduce round trips through response shaping, server-side joining,
+            and protocol-level batching where data dependencies are predictable.
+          </li>
+          <li>
+            Use caching by volatility class, not one blanket TTL. Stable
+            content should be aggressively cached while sensitive data remains
+            fresh with narrow revalidation windows.
+          </li>
+          <li>
+            Instrument perceived latency, not just backend duration. Include
+            client timings, long tasks, and hydration delay for realistic user
+            impact analysis.
+          </li>
+        </ul>
+
+        <h3 id="common-failures">Common Failures</h3>
+        <ul>
+          <li>
+            Optimizing render micro-costs while API fan-out dominates the
+            critical path.
+          </li>
+          <li>
+            Tracking only averages, which masks p95/p99 outliers that drive
+            abandonment and support tickets.
+          </li>
+          <li>
+            Using loading spinners without progressive content, increasing
+            perceived wait and reducing trust.
+          </li>
+          <li>
+            Shipping performance changes without user-journey telemetry to
+            confirm real conversion impact.
+          </li>
+        </ul>
+
+        <h3 id="final-takeaway">Final Takeaway</h3>
+        <p>
+          Latency is product behavior. Teams that manage speed as a trust metric
+          build systems users believe in and return to.
+        </p>
+      </>
+    ),
+    whatILearned: [
+      "User trust declines faster with variance than with steady slowness",
+      "Journey-level budgets drive clearer prioritization than global averages",
+      "Backend and frontend timings must be correlated",
+      "Perceived speed requires deliberate UX states",
+    ],
+    improvements: [
+      "Add p95 budget checks to CI for critical routes",
+      "Instrument conversion drop-off against latency buckets",
+      "Split API payload contracts by above-the-fold needs",
+      "Expand edge caching for stable response fragments",
+    ],
+    relatedNoteSlugs: [
+      "frontend-performance-as-system-problem",
+      "building-ui-that-feels-fast",
+    ],
+  },
+
+  "api-boundaries-that-age-well": {
+    title: "API Boundaries That Age Well",
+    subtitle: "Contracts Over Convenience",
+    date: "Apr 13, 2026",
+    readTime: 9,
+    difficulty: "Advanced",
+    category: "Architecture",
+    description:
+      "Versioning, ownership, contracts, and maintainable interfaces for long-term backend systems.",
+    content: (
+      <>
+        <h3 id="why-it-matters">Why It Matters</h3>
+        <p>
+          Most API failures are compatibility failures, not throughput failures.
+          Weak ownership, ambiguous schemas, and undocumented semantics create
+          downstream breakage that appears weeks after a release. The incident
+          cost lands on multiple teams, not only the service author.
+        </p>
+        <p>
+          Well-aged API boundaries preserve delivery speed over time. They let
+          teams evolve internals without forcing synchronized client upgrades.
+          Strong contracts reduce regression blast radius and make changes
+          reviewable in terms of compatibility risk.
+        </p>
+
+        <h3 id="key-principles">Key Principles</h3>
+        <ul>
+          <li>
+            Treat every public field as a contract with explicit lifecycle:
+            introduced, stable, deprecated, and removed under defined policy.
+          </li>
+          <li>
+            Separate transport validation, authorization, and domain execution.
+            Mixing these concerns in handlers produces fragile error semantics.
+          </li>
+          <li>
+            Version only on semantic breaks, and publish compatibility notes
+            with migration guidance for each affected consumer group.
+          </li>
+          <li>
+            Standardize machine-readable error envelopes with stable codes,
+            request IDs, and actionable details for client-side recovery logic.
+          </li>
+          <li>
+            Assign clear endpoint ownership so schema changes, deprecations, and
+            rollback decisions have accountable decision makers.
+          </li>
+        </ul>
+
+        <h3 id="common-failures">Common Failures</h3>
+        <ul>
+          <li>
+            Silent response shape changes that pass internal tests but break
+            consumer parsing logic in production.
+          </li>
+          <li>
+            Generic 500 responses for validation and policy issues, preventing
+            deterministic client behavior.
+          </li>
+          <li>
+            No deprecation headers or sunset timeline, forcing emergency client
+            updates when removals ship.
+          </li>
+          <li>
+            Endpoint ownership spread across teams, creating delay during
+            incidents and unclear rollback authority.
+          </li>
+        </ul>
+
+        <h3 id="final-takeaway">Final Takeaway</h3>
+        <p>
+          APIs age well when contracts are explicit and ownership is clear.
+          Stability is an architecture discipline, not a documentation afterthought.
+        </p>
+      </>
+    ),
+    whatILearned: [
+      "Contract clarity prevents cross-team regression loops",
+      "Error schema quality is as important as success schema quality",
+      "Ownership boundaries accelerate incident response",
+      "Versioning discipline preserves long-term velocity",
+    ],
+    improvements: [
+      "Add compatibility scorecards for major API changes",
+      "Publish deprecation headers with removal timelines",
+      "Automate schema diff checks in CI",
+      "Document endpoint ownership in runbooks",
+    ],
+    relatedNoteSlugs: [
+      "designing-apis-that-scale",
+      "why-explicit-architecture-beats-clever-code",
+    ],
+  },
+
+  "production-readiness-is-a-design-decision": {
+    title: "Production Readiness Is a Design Decision",
+    subtitle: "Operational Guarantees Start in Architecture",
+    date: "Apr 13, 2026",
+    readTime: 8,
+    difficulty: "Advanced",
+    category: "DevOps",
+    description:
+      "Health checks, rollback plans, logging, monitoring, and safe releases begin during architecture.",
+    content: (
+      <>
+        <h3 id="why-it-matters">Why It Matters</h3>
+        <p>
+          Production issues are often created during design, not during deploy.
+          Missing dependency health checks, weak rollout controls, and unowned
+          alerts are architecture choices that surface later as incidents.
+          Release day only exposes what system design already allowed.
+        </p>
+        <p>
+          Teams that design for operations early ship with fewer surprises and
+          recover faster when failures happen. Reliability is cumulative: every
+          preflight check, rollback guardrail, and observability convention
+          reduces uncertainty before customer impact grows.
+        </p>
+
+        <h3 id="key-principles">Key Principles</h3>
+        <ul>
+          <li>
+            Enforce startup validation for required configuration and dependency
+            credentials so misconfiguration fails fast, not mid-traffic.
+          </li>
+          <li>
+            Treat health checks as dependency-aware contracts: process uptime,
+            datastore reachability, queue health, and critical downstreams.
+          </li>
+          <li>
+            Define rollback triggers before deploy: error budget burn, latency
+            breach, queue backlog growth, and business KPI regression.
+          </li>
+          <li>
+            Use progressive delivery with blast-radius control: canaries,
+            percentage rollouts, and quick disable paths for risky changes.
+          </li>
+          <li>
+            Align release observability with ownership. Every alert should map
+            to a team, a runbook, and a clear first action.
+          </li>
+        </ul>
+
+        <h3 id="common-failures">Common Failures</h3>
+        <ul>
+          <li>
+            Declaring systems healthy based only on process liveness while core
+            dependencies are degraded or unavailable.
+          </li>
+          <li>
+            No explicit rollback criteria, causing prolonged debate during live
+            degradation instead of fast operational decisions.
+          </li>
+          <li>
+            Releasing without correlation IDs and structured logs, making root
+            cause analysis slow and expensive.
+          </li>
+          <li>
+            Treating monitoring as a post-launch task and discovering blind
+            spots only after customer-facing incidents.
+          </li>
+        </ul>
+
+        <h3 id="final-takeaway">Final Takeaway</h3>
+        <p>
+          Production readiness is not a checklist at the end. It is an early
+          design commitment that determines release confidence and recovery speed.
+        </p>
+      </>
+    ),
+    whatILearned: [
+      "Rollback design is as important as rollout design",
+      "Dependency-aware health checks prevent false confidence",
+      "Observability ownership reduces incident ambiguity",
+      "Fail-fast config validation prevents runtime chaos",
+    ],
+    improvements: [
+      "Add release gates based on error budget burn",
+      "Automate dependency health verification in preflight",
+      "Link every alert to an owner and runbook",
+      "Standardize canary checks across services",
+    ],
+    relatedNoteSlugs: [
+      "production-readiness-starts-early",
+      "why-monitoring-is-part-of-development",
+    ],
+  },
+
+  "scaling-nextjs-beyond-small-projects": {
+    title: "Scaling Next.js Beyond Small Projects",
+    subtitle: "Boundaries, Ownership, and Sustainable Growth",
+    date: "Apr 13, 2026",
+    readTime: 10,
+    difficulty: "Advanced",
+    category: "Full-Stack",
+    description:
+      "How to structure large Next.js apps with clean boundaries, reusable modules, and stable growth.",
+    content: (
+      <>
+        <h3 id="why-it-matters">Why It Matters</h3>
+        <p>
+          Small Next.js apps scale quickly until they accumulate mixed concerns:
+          route logic with business rules, shared components with hidden side
+          effects, and duplicated data-fetch policies across pages. Velocity can
+          look high while architectural risk compounds behind the scenes.
+        </p>
+        <p>
+          Growth requires explicit module boundaries and ownership. As teams and
+          features expand, predictable structure matters more than individual
+          coding style. The goal is safe parallel development without frequent
+          regressions in rendering, data contracts, or deployment behavior.
+        </p>
+
+        <h3 id="key-principles">Key Principles</h3>
+        <ul>
+          <li>
+            Separate composition from domain logic. Keep routes focused on
+            orchestration while services own validation, policy, and invariants.
+          </li>
+          <li>
+            Define clear server/client boundaries. Avoid accidental client
+            imports of server-only modules by enforcing folder-level contracts.
+          </li>
+          <li>
+            Standardize data access and cache semantics. Mixed fetch patterns
+            across routes create stale data bugs and difficult performance drift.
+          </li>
+          <li>
+            Build reusable UI primitives with strict APIs, then compose feature
+            sections instead of duplicating page-level variants.
+          </li>
+          <li>
+            Treat observability and error states as first-class route behavior,
+            including request IDs, typed failures, and fallback UI contracts.
+          </li>
+        </ul>
+
+        <h3 id="common-failures">Common Failures</h3>
+        <ul>
+          <li>
+            Business rules spread across route handlers, hooks, and components,
+            making refactors high risk and test coverage misleading.
+          </li>
+          <li>
+            Overgrown shared utility modules with weak ownership and frequent
+            breaking side effects across unrelated features.
+          </li>
+          <li>
+            Inconsistent caching and revalidation decisions between pages,
+            causing data freshness bugs that are difficult to reproduce.
+          </li>
+          <li>
+            UI reuse without contract discipline, resulting in coupled styling,
+            implicit state assumptions, and brittle rendering behavior.
+          </li>
+        </ul>
+
+        <h3 id="final-takeaway">Final Takeaway</h3>
+        <p>
+          Scaling Next.js is mostly an architecture problem. Clear boundaries,
+          explicit contracts, and ownership discipline keep growth stable.
+        </p>
+      </>
+    ),
+    whatILearned: [
+      "Boundary clarity matters more than folder depth",
+      "Server/client contracts prevent hidden import failures",
+      "Consistent cache semantics reduce production surprises",
+      "Reusable primitives need strict API discipline",
+    ],
+    improvements: [
+      "Add boundary tests for server-only modules",
+      "Create feature ownership maps for route groups",
+      "Standardize fetch/cache policy templates",
+      "Track shared-module churn to prevent coupling drift",
+    ],
+    relatedNoteSlugs: [
+      "how-i-structure-real-projects",
+      "structuring-scalable-fullstack",
+    ],
+  },
+
+  "failure-handling-as-a-core-feature": {
+    title: "Failure Handling as a Core Feature",
+    subtitle: "Designing for Degraded Reality",
+    date: "Apr 13, 2026",
+    readTime: 8,
+    difficulty: "Advanced",
+    category: "Architecture",
+    description:
+      "Timeouts, retries, fallbacks, degraded states, and graceful behavior when systems fail.",
+    content: (
+      <>
+        <h3 id="why-it-matters">Why It Matters</h3>
+        <p>
+          Failures are guaranteed in distributed systems: timeouts, rate limits,
+          partial dependencies, invalid upstream responses, and transient
+          infrastructure faults. Treating them as edge cases produces brittle
+          products that appear stable until real traffic introduces variance.
+        </p>
+        <p>
+          Reliable systems do not avoid failure. They classify failure, respond
+          predictably, and preserve core user intent even when conditions are
+          degraded. Failure handling is therefore product behavior, not internal
+          plumbing hidden inside catch blocks.
+        </p>
+
+        <h3 id="key-principles">Key Principles</h3>
+        <ul>
+          <li>
+            Define a failure taxonomy: transport, dependency, validation,
+            policy, and domain failures. Recovery strategy should match failure
+            class, not reuse one generic retry path.
+          </li>
+          <li>
+            Set explicit timeout budgets with cancellation propagation so stalled
+            calls do not leak resources or create latent queue pressure.
+          </li>
+          <li>
+            Use retries selectively with idempotency and backoff plus jitter.
+            Retrying non-retryable faults wastes capacity and increases latency.
+          </li>
+          <li>
+            Design fallback and degraded modes deliberately: stale reads,
+            asynchronous completion, partial responses, or feature gating.
+          </li>
+          <li>
+            Emit structured failure telemetry by class and stage to improve
+            triage, tuning, and long-term reliability planning.
+          </li>
+        </ul>
+
+        <h3 id="common-failures">Common Failures</h3>
+        <ul>
+          <li>
+            Catch-all error handling that hides root cause and makes alerting
+            too generic for actionable response.
+          </li>
+          <li>
+            Retrying every exception, including validation and policy failures,
+            which only increases load and response time.
+          </li>
+          <li>
+            No degraded UX path, so minor dependency issues cause full feature
+            outages and unnecessary user churn.
+          </li>
+          <li>
+            Missing idempotency keys for async workflows, resulting in duplicate
+            side effects when retries occur.
+          </li>
+        </ul>
+
+        <h3 id="final-takeaway">Final Takeaway</h3>
+        <p>
+          Failure handling is a first-class feature. Systems earn trust when
+          they degrade gracefully and recover predictably under stress.
+        </p>
+      </>
+    ),
+    whatILearned: [
+      "Failure taxonomy accelerates root cause identification",
+      "Timeout discipline prevents silent resource exhaustion",
+      "Fallback design protects user trust during dependency incidents",
+      "Idempotency is mandatory for safe retries",
+    ],
+    improvements: [
+      "Implement failure-class dashboards across core flows",
+      "Add degraded-mode integration tests",
+      "Standardize idempotency key handling for async jobs",
+      "Document retry policies per dependency",
+    ],
+    relatedNoteSlugs: [
+      "designing-systems-that-hold",
+      "what-i-learned-building-webscope",
+    ],
+  },
+
+  "why-monitoring-should-exist-before-launch": {
+    title: "Why Monitoring Should Exist Before Launch",
+    subtitle: "Observability as a Release Requirement",
+    date: "Apr 13, 2026",
+    readTime: 7,
+    difficulty: "Advanced",
+    category: "DevOps",
+    description:
+      "Logs, metrics, alerts, and observability should be built before the first user arrives.",
+    content: (
+      <>
+        <h3 id="why-it-matters">Why It Matters</h3>
+        <p>
+          Launching without observability is shipping without feedback loops.
+          Teams cannot distinguish transient noise from systemic degradation, and
+          incident response becomes guesswork driven by partial anecdotes.
+          Recovery slows exactly when user trust is most fragile.
+        </p>
+        <p>
+          Early monitoring shortens mean time to detect and mean time to repair.
+          It also improves planning: latency trends, failure clusters, and usage
+          shape become visible before they turn into outages or expensive
+          architectural rewrites.
+        </p>
+
+        <h3 id="key-principles">Key Principles</h3>
+        <ul>
+          <li>
+            Emit structured logs with stable fields and correlation IDs across
+            all critical request paths and background workflows.
+          </li>
+          <li>
+            Track golden signals by boundary: latency, error rate, throughput,
+            and saturation for API, queues, and dependencies.
+          </li>
+          <li>
+            Alert on SLO impact, not raw event volume. Good alerts indicate user
+            risk and provide immediate first-response context.
+          </li>
+          <li>
+            Instrument deployment markers and feature flags so regressions can be
+            tied to rollout events without manual timeline reconstruction.
+          </li>
+          <li>
+            Keep dashboard ownership explicit. Every critical panel and alert
+            needs a responsible team and an actionable runbook link.
+          </li>
+        </ul>
+
+        <h3 id="common-failures">Common Failures</h3>
+        <ul>
+          <li>
+            Logging plain strings without context, making query and aggregation
+            nearly useless during incidents.
+          </li>
+          <li>
+            Alerting on every exception rather than user-impact thresholds,
+            creating fatigue and slow response to real incidents.
+          </li>
+          <li>
+            No tracing between services, forcing manual correlation across
+            systems during high-pressure triage.
+          </li>
+          <li>
+            Adding monitoring only after launch, when baseline behavior is
+            unknown and anomaly detection is unreliable.
+          </li>
+        </ul>
+
+        <h3 id="final-takeaway">Final Takeaway</h3>
+        <p>
+          Monitoring is part of product readiness. Teams that instrument before
+          launch make faster, calmer, and more accurate decisions in production.
+        </p>
+      </>
+    ),
+    whatILearned: [
+      "Observability maturity determines incident response quality",
+      "SLO-based alerts reduce noise and improve actionability",
+      "Release markers make regressions easier to attribute",
+      "Ownership is as important as instrumentation",
+    ],
+    improvements: [
+      "Add launch-day observability checklists per service",
+      "Define minimum telemetry contracts for new endpoints",
+      "Standardize alert payloads with runbook links",
+      "Expand synthetic monitoring for top user journeys",
+    ],
+    relatedNoteSlugs: [
+      "why-monitoring-is-part-of-development",
+      "production-readiness-starts-early",
+    ],
+  },
+
+  "database-choices-that-hurt-at-scale": {
+    title: "Database Choices That Hurt at Scale",
+    subtitle: "Schema and Query Decisions with Long Shadows",
+    date: "Apr 13, 2026",
+    readTime: 9,
+    difficulty: "Advanced",
+    category: "Data",
+    description:
+      "Schema mistakes, indexing gaps, bad queries, and growth pain caused by early shortcuts.",
+    content: (
+      <>
+        <h3 id="why-it-matters">Why It Matters</h3>
+        <p>
+          Database decisions compound over time. A shortcut that appears harmless
+          at 100k rows can become a severe bottleneck at 100 million rows,
+          especially when coupled with traffic growth and evolving product
+          access patterns.
+        </p>
+        <p>
+          Scale pain is often self-inflicted: weak data modeling, missing
+          indexes, overloaded transactional tables, and query patterns that do
+          not match storage strategy. Recovery later is possible but expensive,
+          involving migration risk, downtime windows, and cross-team coordination.
+        </p>
+
+        <h3 id="key-principles">Key Principles</h3>
+        <ul>
+          <li>
+            Model for current domain clarity first, then optimize with measured
+            access patterns. Premature denormalization increases inconsistency risk.
+          </li>
+          <li>
+            Index for real query predicates and sort orders, not for every
+            column. Each index has write amplification and storage cost.
+          </li>
+          <li>
+            Keep data types correct and explicit. Storing timestamps or numeric
+            values as strings destroys planner efficiency and index utility.
+          </li>
+          <li>
+            Separate OLTP and analytics workloads when query shapes diverge.
+            Mixed workloads on hot tables produce unpredictable latency.
+          </li>
+          <li>
+            Monitor query plans continuously. Execution drift after schema or
+            data-distribution changes is a common source of hidden regressions.
+          </li>
+        </ul>
+
+        <h3 id="common-failures">Common Failures</h3>
+        <ul>
+          <li>
+            Relying on ORMs without inspecting generated SQL, leading to N+1
+            patterns and expensive joins under production traffic.
+          </li>
+          <li>
+            Missing composite indexes for dominant filters and sort combinations,
+            forcing full scans on large datasets.
+          </li>
+          <li>
+            Adding indexes reactively without workload analysis, increasing write
+            latency while not fixing target queries.
+          </li>
+          <li>
+            Schema changes without backfill strategy or dual-read safety,
+            resulting in partial migrations and inconsistent application state.
+          </li>
+        </ul>
+
+        <h3 id="final-takeaway">Final Takeaway</h3>
+        <p>
+          Database pain at scale is usually decision debt. Measured schema
+          discipline early is far cheaper than emergency migrations later.
+        </p>
+      </>
+    ),
+    whatILearned: [
+      "Query plans should be treated as production signals",
+      "Correct data types are performance features",
+      "Index strategy must follow workload reality",
+      "Migration safety is as important as schema design",
+    ],
+    improvements: [
+      "Add automated plan-regression checks for critical queries",
+      "Document index ownership and purpose",
+      "Introduce migration runbooks with rollback paths",
+      "Separate analytical workloads from transactional hot paths",
+    ],
+    relatedNoteSlugs: ["database-schema-design", "nextjs-production-deployment"],
+  },
+
+  "technical-debt-is-usually-a-decision-debt": {
+    title: "Technical Debt Is Usually a Decision Debt",
+    subtitle: "Ownership, Standards, and Engineering Clarity",
+    date: "Apr 13, 2026",
+    readTime: 7,
+    difficulty: "Advanced",
+    category: "Engineering",
+    description:
+      "Most debt comes from unclear ownership, rushed choices, and missing standards.",
+    content: (
+      <>
+        <h3 id="why-it-matters">Why It Matters</h3>
+        <p>
+          Teams often describe debt as old code quality, but the deeper cause is
+          unresolved decisions: unclear ownership, inconsistent patterns,
+          undocumented trade-offs, and architecture drift accepted as temporary.
+          Code quality symptoms appear after these decisions remain unaddressed.
+        </p>
+        <p>
+          Decision debt slows every future change. Reviews take longer,
+          onboarding becomes expensive, incident triage loses context, and
+          strategic refactors are repeatedly postponed. The cost is not only
+          technical. It is organizational throughput and confidence.
+        </p>
+
+        <h3 id="key-principles">Key Principles</h3>
+        <ul>
+          <li>
+            Record meaningful architecture decisions with rationale, alternatives,
+            and explicit expiry conditions for temporary compromises.
+          </li>
+          <li>
+            Assign ownership per domain boundary so critical modules have clear
+            maintainers, review standards, and escalation paths.
+          </li>
+          <li>
+            Establish non-negotiable engineering defaults: error contracts,
+            logging standards, testing tiers, and dependency policy.
+          </li>
+          <li>
+            Budget remediation work continuously rather than treating cleanup as
+            a future initiative that never receives priority.
+          </li>
+          <li>
+            Measure debt using operational signals: change failure rate, review
+            cycle time, flaky tests, and incident recurrence by subsystem.
+          </li>
+        </ul>
+
+        <h3 id="common-failures">Common Failures</h3>
+        <ul>
+          <li>
+            Rushing architecture choices without documenting assumptions, then
+            losing decision context as team composition changes.
+          </li>
+          <li>
+            Shared core modules without ownership, causing review bottlenecks and
+            inconsistent implementation patterns.
+          </li>
+          <li>
+            Treating debt only as refactoring tasks instead of governance and
+            standards misalignment.
+          </li>
+          <li>
+            Deferring small cleanups repeatedly until they aggregate into
+            high-risk rewrites.
+          </li>
+        </ul>
+
+        <h3 id="final-takeaway">Final Takeaway</h3>
+        <p>
+          Technical debt is usually unresolved decision debt. Clarity in
+          ownership and standards is the fastest way to reduce long-term drag.
+        </p>
+      </>
+    ),
+    whatILearned: [
+      "Debt reduction starts with decision visibility",
+      "Ownership gaps create hidden operational risk",
+      "Standards reduce drift better than ad hoc reviews",
+      "Small continuous remediation beats periodic rewrites",
+    ],
+    improvements: [
+      "Adopt ADR templates for major system choices",
+      "Map ownership for every critical module",
+      "Track debt signals in engineering dashboards",
+      "Reserve sprint capacity for targeted remediation",
+    ],
+    relatedNoteSlugs: [
+      "why-explicit-architecture-beats-clever-code",
+      "how-i-structure-real-projects",
+    ],
+  },
+
+  "building-software-for-real-conditions": {
+    title: "Building Software for Real Conditions",
+    subtitle: "Engineering Beyond Perfect Environments",
+    date: "Apr 13, 2026",
+    readTime: 8,
+    difficulty: "Advanced",
+    category: "Systems",
+    description:
+      "Engineering for unstable networks, weak devices, bad inputs, and imperfect environments.",
+    content: (
+      <>
+        <h3 id="why-it-matters">Why It Matters</h3>
+        <p>
+          Production environments are messy: unstable mobile networks, CPU-throttled
+          devices, partial permissions, regional latency variance, and malformed
+          external inputs. Systems designed only for clean lab conditions perform
+          poorly where real users actually operate.
+        </p>
+        <p>
+          Engineering for reality means designing tolerant behavior, not perfect
+          assumptions. The objective is not flawless execution in ideal contexts;
+          it is predictable value delivery under imperfect conditions that cannot
+          be fully controlled by the product team.
+        </p>
+
+        <h3 id="key-principles">Key Principles</h3>
+        <ul>
+          <li>
+            Assume partial failure by default. Every external call should have
+            timeout, retry policy, and fallback semantics aligned to user intent.
+          </li>
+          <li>
+            Design payloads and rendering for constrained devices: smaller
+            responses, progressive hydration, and reduced client computation.
+          </li>
+          <li>
+            Validate and normalize all inbound data at boundaries to prevent
+            malformed inputs from propagating into domain workflows.
+          </li>
+          <li>
+            Build offline-tolerant and reconnect-aware UX for high-friction
+            flows, including clear state transitions and safe retry actions.
+          </li>
+          <li>
+            Test with production-like adversity: network throttling, dependency
+            chaos, cold caches, and regional latency simulation.
+          </li>
+        </ul>
+
+        <h3 id="common-failures">Common Failures</h3>
+        <ul>
+          <li>
+            Treating desktop broadband as the default environment, resulting in
+            poor behavior for mobile and low-bandwidth users.
+          </li>
+          <li>
+            Assuming clean inputs from every integration and discovering parser
+            failures only after upstream contract drift.
+          </li>
+          <li>
+            No UX path for degraded network conditions, causing user actions to
+            appear lost even when backends eventually recover.
+          </li>
+          <li>
+            Testing only happy paths, leaving resilience behavior unverified
+            until live traffic uncovers latent failure modes.
+          </li>
+        </ul>
+
+        <h3 id="final-takeaway">Final Takeaway</h3>
+        <p>
+          Software quality is proven in imperfect conditions. Teams that design
+          for messy reality build products that stay trustworthy at scale.
+        </p>
+      </>
+    ),
+    whatILearned: [
+      "Reliability depends on tolerance for imperfect environments",
+      "Constraint-aware UX reduces perceived failure",
+      "Boundary validation protects core domain behavior",
+      "Adversarial testing reveals hidden operational risk",
+    ],
+    improvements: [
+      "Add network and CPU throttling tests to CI",
+      "Introduce reconnect-aware UX patterns for critical flows",
+      "Expand malformed-input contract tests for integrations",
+      "Track device-class performance and failure metrics",
+    ],
+    relatedNoteSlugs: [
+      "designing-systems-that-hold-under-load",
+      "failure-handling-as-a-core-feature",
+    ],
+  },
 };

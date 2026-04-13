@@ -211,6 +211,144 @@ const DEPTH_GUIDES: Record<ArticlePost["category"], DepthGuide> = {
     takeaway:
       "Infrastructure quality is the discipline of making runtime behavior predictable, secure, and recoverable under change.",
   },
+  Data: {
+    intro:
+      "Data architecture decisions compound quietly until scale exposes them. Type drift, weak indexing, and query-pattern mismatch can turn normal growth into chronic latency and incident pressure.",
+    coreConcepts: [
+      "Design schemas for domain clarity first, then optimize from measured access patterns.",
+      "Use indexes deliberately for real predicates and sort paths, not blanket coverage.",
+      "Keep data types precise and stable to preserve planner and index efficiency.",
+      "Separate transactional and analytical workloads when contention patterns diverge.",
+    ],
+    mistakes: [
+      "Storing typed fields as strings and losing query planner effectiveness.",
+      "Ignoring ORM query shape and shipping N+1 behavior into production.",
+      "Adding reactive indexes without validating write amplification trade-offs.",
+      "Running schema migrations without backfill and rollback strategy.",
+    ],
+    patterns: [
+      "Track top queries with plan snapshots and detect regressions in staging.",
+      "Document index intent and ownership to avoid accidental removal drift.",
+      "Use dual-write/dual-read migration phases for high-risk schema changes.",
+      "Add query latency SLOs by endpoint to tie data health to user impact.",
+    ],
+    tradeoffs: [
+      "Normalization improves integrity but can increase read complexity.",
+      "Denormalization improves read speed but raises consistency and update cost.",
+      "Index depth improves query latency while increasing write overhead.",
+    ],
+    production: [
+      "Reliability improves when migration safety is treated as a release concern.",
+      "Performance stability depends on continuous query-plan visibility.",
+      "Maintainability improves when schema intent is explicit and versioned.",
+      "Incident recovery is faster with clear data ownership boundaries.",
+    ],
+    takeaway:
+      "Data systems scale when modeling, indexing, and migration strategy are treated as product-critical engineering, not afterthoughts.",
+  },
+  Engineering: {
+    intro:
+      "Engineering quality degrades less from syntax and more from unresolved decisions. Ownership gaps, weak standards, and undocumented trade-offs create recurring drag that compounds across releases.",
+    coreConcepts: [
+      "Treat architectural decisions as first-class artifacts with rationale and expiry.",
+      "Assign ownership per subsystem and keep escalation paths explicit.",
+      "Define engineering standards for error handling, observability, and testing.",
+      "Measure delivery health with operational signals, not intuition.",
+    ],
+    mistakes: [
+      "Relying on tribal knowledge for critical design assumptions.",
+      "Shared modules without maintainers or review accountability.",
+      "Deferring small cleanup repeatedly until rewrites become unavoidable.",
+      "Treating debt as only code refactoring, not decision and process drift.",
+    ],
+    patterns: [
+      "Use ADRs for high-impact decisions and revisit them on schedule.",
+      "Set explicit code ownership for critical modules and interfaces.",
+      "Reserve sprint capacity for targeted debt retirement.",
+      "Tie quality gates to release metrics such as failure rate and rollback frequency.",
+    ],
+    tradeoffs: [
+      "Governance adds overhead but reduces high-cost ambiguity during incidents.",
+      "Stricter standards can slow prototyping while improving long-term velocity.",
+      "Decision transparency takes effort yet improves onboarding and review quality.",
+    ],
+    production: [
+      "Reliability improves when ownership and standards are enforceable.",
+      "Maintainability improves when decisions are documented and revisitable.",
+      "Incident triage accelerates when system boundaries have clear maintainers.",
+      "Delivery confidence rises when quality signals are tracked continuously.",
+    ],
+    takeaway:
+      "Most technical debt is decision debt. Clarity in ownership and standards is the fastest path to durable engineering velocity.",
+  },
+  Systems: {
+    intro:
+      "Real systems operate in imperfect conditions: weak networks, constrained devices, unstable integrations, and malformed inputs. Reliability depends on tolerance for reality, not ideal assumptions.",
+    coreConcepts: [
+      "Design every external dependency with timeout, retry, and fallback semantics.",
+      "Optimize payload and rendering paths for constrained client environments.",
+      "Validate and normalize inputs at all ingress boundaries.",
+      "Test adverse scenarios regularly: throttling, packet loss, cold caches, and dependency faults.",
+    ],
+    mistakes: [
+      "Building primarily for fast desktop environments and stable networks.",
+      "Assuming upstream contracts remain clean and static.",
+      "Providing no degraded UX path when dependencies are unstable.",
+      "Testing only happy-path flows before release.",
+    ],
+    patterns: [
+      "Use progressive enhancement and resilient loading states for core journeys.",
+      "Apply circuit breakers and bounded retries for noisy dependencies.",
+      "Adopt reconnect-aware UX for critical user actions.",
+      "Track device-class and network-segment performance metrics.",
+    ],
+    tradeoffs: [
+      "Resilience controls add complexity but reduce outage severity.",
+      "Defensive validation adds code paths while protecting domain integrity.",
+      "Graceful degradation can limit features temporarily to preserve trust.",
+    ],
+    production: [
+      "Reliability improves when degraded behavior is designed, not improvised.",
+      "Performance consistency improves with network- and device-aware strategies.",
+      "Security improves when malformed or hostile input is normalized early.",
+      "Maintainability improves when resilience rules are standardized across services.",
+    ],
+    takeaway:
+      "Systems earn trust by staying predictable in non-ideal environments. Engineering for real conditions is a core product responsibility.",
+  },
+};
+
+const DEFAULT_DEPTH_GUIDE: DepthGuide = {
+  intro:
+    "Production systems are shaped by boundaries, failure behavior, and operational clarity. Strong engineering keeps behavior predictable as complexity and load increase.",
+  coreConcepts: [
+    "Define explicit contracts at every system boundary.",
+    "Design with bounded latency and concurrency limits.",
+    "Make errors observable and actionable with structured telemetry.",
+    "Keep ownership clear for critical code and infrastructure paths.",
+  ],
+  mistakes: [
+    "Relying on implicit assumptions instead of documented contracts.",
+    "Optimizing happy paths while ignoring degraded conditions.",
+    "Shipping changes without rollback criteria and observability baselines.",
+  ],
+  patterns: [
+    "Use validation at ingress and invariants in domain services.",
+    "Prefer deterministic behavior over hidden control flow.",
+    "Track p95/p99 outcomes for user-critical operations.",
+    "Continuously feed incident learnings back into architecture decisions.",
+  ],
+  tradeoffs: [
+    "Higher upfront discipline slows initial speed but reduces long-term risk.",
+    "Operational guardrails add overhead while improving release confidence.",
+  ],
+  production: [
+    "Reliability comes from explicit limits, ownership, and recovery rules.",
+    "Maintainability improves when system intent is encoded in structure.",
+    "Performance and safety both improve when behavior is measurable.",
+  ],
+  takeaway:
+    "The best systems are not the most complex. They are the most predictable under real production pressure.",
 };
 
 /**
@@ -290,7 +428,7 @@ function ArticleHeader({ post }: { post: ArticlePost }) {
  * Includes content, takeaways, and improvements sections
  */
 function ArticleContent({ post }: { post: ArticlePost }) {
-  const depthGuide = DEPTH_GUIDES[post.category];
+  const depthGuide = DEPTH_GUIDES[post.category] ?? DEFAULT_DEPTH_GUIDE;
 
   return (
     <div className="py-8 sm:py-10">

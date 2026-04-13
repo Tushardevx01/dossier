@@ -15,7 +15,10 @@ export type ArticleCategory =
   | "DevOps"
   | "Full-Stack"
   | "Performance"
-  | "Infrastructure";
+  | "Infrastructure"
+  | "Data"
+  | "Engineering"
+  | "Systems";
 
 /** Difficulty levels derived from read time */
 export type ArticleDifficulty = "Beginner" | "Intermediate" | "Advanced";
