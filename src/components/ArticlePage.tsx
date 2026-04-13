@@ -44,6 +44,10 @@ type LongFormSection = {
   production: string[];
   finalTakeaway: string[];
   implementationChecklist: string[];
+  architectureNotes: string[];
+  codeExampleTitle: string;
+  codeLanguage: string;
+  codeExample: string;
 };
 
 const DEPTH_GUIDES: Record<ArticlePost["category"], DepthGuide> = {
@@ -407,6 +411,31 @@ const LONG_FORM_CONTEXT: Record<ArticlePost["category"], LongFormSection> = {
       "Measure p95/p99 latency and error rates by architectural boundary.",
       "Document rollback strategies for high-risk structural changes.",
     ],
+    architectureNotes: [
+      "Boundary-first architecture scales better than framework-first architecture because it keeps design intent stable while implementation details evolve.",
+      "Teams should review architecture through incident history: repeated failure patterns usually reveal structural coupling rather than isolated bugs.",
+      "A practical litmus test: if rollback decisions require cross-team emergency synchronization, your boundaries are too entangled.",
+    ],
+    codeExampleTitle: "Boundary-Safe Service Contract",
+    codeLanguage: "typescript",
+    codeExample: `type CreateOrderInput = {
+  customerId: string;
+  items: Array<{ sku: string; quantity: number }>;
+};
+
+type CreateOrderResult =
+  | { ok: true; orderId: string }
+  | { ok: false; code: "VALIDATION" | "FORBIDDEN" | "DEPENDENCY"; message: string };
+
+export async function createOrder(input: CreateOrderInput): Promise<CreateOrderResult> {
+  // transport validation should happen before this boundary
+  if (!input.customerId || input.items.length === 0) {
+    return { ok: false, code: "VALIDATION", message: "Invalid order payload" };
+  }
+
+  // domain + dependency orchestration here
+  return { ok: true, orderId: crypto.randomUUID() };
+}`,
   },
   DevOps: {
     intro: [
@@ -452,6 +481,28 @@ const LONG_FORM_CONTEXT: Record<ArticlePost["category"], LongFormSection> = {
       "Verify dependency-aware health checks for critical paths.",
       "Run periodic failure drills for rollback and alert handling.",
     ],
+    architectureNotes: [
+      "Release pipelines should be treated as production systems with their own reliability posture and observability requirements.",
+      "Deployment maturity is reflected by decision latency during incidents: teams with predefined thresholds recover materially faster.",
+      "Operational consistency improves when CI/CD and runbooks use the same service ownership model.",
+    ],
+    codeExampleTitle: "Release Gate + Rollback Trigger",
+    codeLanguage: "typescript",
+    codeExample: `type ReleaseSignals = {
+  errorRate: number;
+  p95LatencyMs: number;
+  queueBacklog: number;
+};
+
+export function shouldRollback(signals: ReleaseSignals): boolean {
+  const breaches = [
+    signals.errorRate > 0.03,
+    signals.p95LatencyMs > 1200,
+    signals.queueBacklog > 5000,
+  ];
+
+  return breaches.filter(Boolean).length >= 2;
+}`,
   },
   "Full-Stack": {
     intro: [
@@ -497,6 +548,25 @@ const LONG_FORM_CONTEXT: Record<ArticlePost["category"], LongFormSection> = {
       "Instrument async workflows with idempotency and retry telemetry.",
       "Define environment validation and deployment assumptions explicitly.",
     ],
+    architectureNotes: [
+      "Full-stack complexity becomes manageable when each layer has an explicit reason to change and clear ownership for that change.",
+      "Shared types are most useful at boundary contracts; shared implementation logic across layers increases coupling risk.",
+      "Route-level composition should optimize user intent, while service-level contracts optimize business correctness.",
+    ],
+    codeExampleTitle: "Thin Route + Service Boundary",
+    codeLanguage: "typescript",
+    codeExample: `// app/api/contact/route.ts
+export async function POST(req: Request) {
+  const payload = await req.json();
+  const result = await contactService.submit(payload);
+  return Response.json(result, { status: result.ok ? 202 : 400 });
+}
+
+// services/contactService.ts
+export async function submit(payload: unknown) {
+  // parse, validate, enforce policy, queue side effects
+  return { ok: true, status: "queued" };
+}`,
   },
   Performance: {
     intro: [
@@ -542,6 +612,25 @@ const LONG_FORM_CONTEXT: Record<ArticlePost["category"], LongFormSection> = {
       "Adopt bundle splitting aligned to route intent.",
       "Track real-user interaction metrics continuously.",
     ],
+    architectureNotes: [
+      "Performance architecture should start from user-critical paths and only then drill into component-level cost.",
+      "Latency regressions are often distributed across network, API, and hydration; single-layer tuning rarely holds long term.",
+      "Budget policy should include both backend and frontend telemetry to avoid false optimization wins.",
+    ],
+    codeExampleTitle: "Route-Level Performance Budget Guard",
+    codeLanguage: "typescript",
+    codeExample: `type RoutePerf = { route: string; p95Ms: number; bundleKb: number };
+
+const budgets: Record<string, { p95Ms: number; bundleKb: number }> = {
+  "/": { p95Ms: 900, bundleKb: 180 },
+  "/pricing": { p95Ms: 1000, bundleKb: 220 },
+};
+
+export function violatesBudget(sample: RoutePerf): boolean {
+  const budget = budgets[sample.route];
+  if (!budget) return false;
+  return sample.p95Ms > budget.p95Ms || sample.bundleKb > budget.bundleKb;
+}`,
   },
   Infrastructure: {
     intro: [
@@ -587,6 +676,23 @@ const LONG_FORM_CONTEXT: Record<ArticlePost["category"], LongFormSection> = {
       "Define dependency-aware health checks and deploy gates.",
       "Test backup and restore paths regularly.",
     ],
+    architectureNotes: [
+      "Infrastructure drift is often a governance issue before it becomes an outage issue.",
+      "Deterministic builds reduce rollback ambiguity and simplify incident diagnosis.",
+      "Security and reliability both improve when runtime assumptions are explicit and validated.",
+    ],
+    codeExampleTitle: "Container Readiness Contract",
+    codeLanguage: "typescript",
+    codeExample: `type Health = { app: boolean; db: boolean; queue: boolean };
+
+export function readinessStatus(health: Health) {
+  const ready = health.app && health.db && health.queue;
+  return {
+    ready,
+    status: ready ? "ready" : "degraded",
+    details: health,
+  };
+}`,
   },
   Data: {
     intro: [
@@ -632,6 +738,28 @@ const LONG_FORM_CONTEXT: Record<ArticlePost["category"], LongFormSection> = {
       "Define migration rollback and verification strategy.",
       "Track data-layer SLOs tied to user-facing routes.",
     ],
+    architectureNotes: [
+      "Data architecture should be reviewed with both query latency and migration risk in mind; optimizing one and ignoring the other creates hidden fragility.",
+      "Index strategy is part of product performance strategy, not only database maintenance.",
+      "Teams should model expected growth vectors explicitly to avoid reactive schema churn.",
+    ],
+    codeExampleTitle: "Migration Safety Checklist Contract",
+    codeLanguage: "typescript",
+    codeExample: `type MigrationPlan = {
+  hasBackfill: boolean;
+  hasRollback: boolean;
+  dualReadWindowDays: number;
+  verifiedInStaging: boolean;
+};
+
+export function migrationIsSafe(plan: MigrationPlan): boolean {
+  return (
+    plan.hasBackfill &&
+    plan.hasRollback &&
+    plan.dualReadWindowDays >= 7 &&
+    plan.verifiedInStaging
+  );
+}`,
   },
   Engineering: {
     intro: [
@@ -677,6 +805,24 @@ const LONG_FORM_CONTEXT: Record<ArticlePost["category"], LongFormSection> = {
       "Record major trade-offs with revisit and rollback criteria.",
       "Monitor debt signals such as change failure rate and cycle time.",
     ],
+    architectureNotes: [
+      "Engineering systems degrade when decision quality is opaque; clarity is a technical accelerator.",
+      "Cross-team standards reduce operational variance and improve code review signal.",
+      "Continuous debt management is more effective than episodic cleanup initiatives.",
+    ],
+    codeExampleTitle: "Decision Record Guardrail",
+    codeLanguage: "typescript",
+    codeExample: `type DecisionRecord = {
+  title: string;
+  owner: string;
+  rationale: string;
+  revisitAt: string; // ISO date
+  rollbackPlan: string;
+};
+
+export function decisionRecordComplete(d: DecisionRecord): boolean {
+  return Boolean(d.title && d.owner && d.rationale && d.revisitAt && d.rollbackPlan);
+}`,
   },
   Systems: {
     intro: [
@@ -722,6 +868,20 @@ const LONG_FORM_CONTEXT: Record<ArticlePost["category"], LongFormSection> = {
       "Instrument failures by dependency and environment segment.",
       "Validate and sanitize all external inputs before domain execution.",
     ],
+    architectureNotes: [
+      "Systems engineering quality depends on tolerant behavior under adverse, non-ideal environments.",
+      "Degraded-state contracts should be explicit so user intent is preserved even when dependencies fail.",
+      "Runtime variability should be treated as a first-class design input, not a testing edge case.",
+    ],
+    codeExampleTitle: "Degraded-State Response Contract",
+    codeLanguage: "typescript",
+    codeExample: `type ProfileResponse =
+  | { state: "ok"; profile: { id: string; name: string } }
+  | { state: "degraded"; profile: { id: string }; stale: true; retryAfterSec: number };
+
+export function toDegradedProfile(id: string): ProfileResponse {
+  return { state: "degraded", profile: { id }, stale: true, retryAfterSec: 30 };
+}`,
   },
 };
 
@@ -854,6 +1014,17 @@ function ArticleContent({ post }: { post: ArticlePost }) {
               <li key={`${post.slug}-checklist-${index}`}>{item}</li>
             ))}
           </ul>
+
+          <h3 id="expanded-architecture-notes">Architecture Notes</h3>
+          {longForm.architectureNotes.map((note, index) => (
+            <p key={`${post.slug}-architecture-note-${index}`}>{note}</p>
+          ))}
+
+          <h3 id="expanded-applied-example">Applied Example</h3>
+          <p>{longForm.codeExampleTitle}</p>
+          <pre>
+            <code className={`language-${longForm.codeLanguage}`}>{longForm.codeExample}</code>
+          </pre>
 
           <h3 id="expanded-trade-offs">Trade-offs</h3>
           {longForm.tradeoffs.map((paragraph, index) => (
