@@ -14,7 +14,7 @@ export const experienceData = [
     url: "https://crm.azmth.in/",
   },
   {
-    role: "Cycoder Co-Tech Lead",
+    role: "Cycoders Co-Tech Lead",
     year: "Feb 2025 - Present",
     company: "CYCODERS",
     impactSummary:
@@ -31,7 +31,7 @@ export const experienceData = [
       "Git",
       "Vercel",
     ],
-    url: "https://cycoder-au.vercel.app/",
+    url: "https://https://cycoders.in",
   },
   {
     role: "Designer & Developer",
