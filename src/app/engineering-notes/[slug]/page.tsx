@@ -66,7 +66,7 @@ export default async function EngineeringNotesArticlePage({
   return (
     <>
       <JsonLd data={articleStructuredData} />
-      <ArticlePage post={article} slug={slug} />
+      <ArticlePage post={article} slug={slug} relatedArticles={relatedArticles} />
       <nav aria-label="Related engineering notes" className="sr-only">
         <ul>
           {relatedArticles.map((item) => (
