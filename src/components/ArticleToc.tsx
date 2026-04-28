@@ -79,7 +79,7 @@ export function ArticleToc({
                     block px-3 py-2 rounded-lg transition-all duration-200 text-sm
                     ${
                       activeHeading === heading.id
-                        ? "text-cyan-400 bg-cyan-500/10 border-l-2 border-cyan-400"
+                        ? "text-zinc-200 bg-zinc-900/80 border-l-2 border-zinc-500"
                         : "text-zinc-400 hover:text-zinc-200 border-l-2 border-transparent hover:border-zinc-600"
                     }
                   `}
