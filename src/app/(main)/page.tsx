@@ -20,6 +20,8 @@ import {
   generateWebsiteStructuredData,
 } from "@/lib/structured-data";
 
+export const revalidate = 60;
+
 export const metadata: Metadata = buildPageMetadata({
   title: "Tushar Kanti Dey | Full Stack Developer and DevOps Engineer",
   description:
@@ -32,8 +34,8 @@ export const metadata: Metadata = buildPageMetadata({
   ],
 });
 
-export default function Home() {
-  const latestNotes = getAllArticles().slice(0, 6);
+export default async function Home() {
+  const latestNotes = (await getAllArticles()).slice(0, 6);
   const featuredProject = projectsData[0];
 
   const homepageSchemas = [

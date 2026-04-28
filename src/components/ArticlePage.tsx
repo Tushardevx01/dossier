@@ -964,13 +964,14 @@ function ArticleHeader({ post }: { post: ArticlePost }) {
 function ArticleContent({ post }: { post: ArticlePost }) {
   const depthGuide = DEPTH_GUIDES[post.category] ?? DEFAULT_DEPTH_GUIDE;
   const longForm = LONG_FORM_CONTEXT[post.category];
+  const articleHtml = typeof post.content === "string" ? post.content : "";
 
   return (
     <div className="py-8 sm:py-10">
       <div className="max-w-[640px] mx-auto px-4 sm:px-6">
         {/* Main article prose section */}
         <div className="article-content prose prose-invert prose-neutral max-w-none prose-headings:scroll-mt-24 prose-headings:tracking-tight prose-h2:text-[1.7rem] sm:prose-h2:text-[2rem] prose-h2:mt-12 prose-h2:mb-4 prose-h3:text-[0.95rem] sm:prose-h3:text-[0.98rem] prose-h3:font-semibold prose-h3:text-neutral-200 prose-h3:mt-6 prose-h3:mb-2 prose-p:text-[12.5px] sm:prose-p:text-[13px] prose-p:leading-[1.72] prose-p:text-neutral-300 prose-strong:text-neutral-100 prose-a:text-neutral-200 prose-a:no-underline hover:prose-a:text-white prose-li:text-[12.5px] sm:prose-li:text-[13px] prose-li:leading-[1.72] prose-li:text-neutral-300 prose-li:marker:text-neutral-500 prose-ul:my-4 prose-code:text-[0.86em] prose-code:text-neutral-200 prose-pre:my-4 prose-pre:rounded-none prose-pre:border prose-pre:border-neutral-700 prose-pre:bg-neutral-800/65 prose-pre:px-3.5 prose-pre:py-3 prose-pre:leading-[1.42] prose-pre:text-[12px] space-y-4">
-          {post.content}
+          <div dangerouslySetInnerHTML={{ __html: articleHtml }} />
 
           <h3 id="expanded-introduction">Why This Topic Matters in Production</h3>
           <p>{depthGuide.intro}</p>

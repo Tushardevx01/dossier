@@ -5,6 +5,8 @@ import { NotesListClient } from "@/components/NotesListClient";
 import { getAllArticles, getArticleCategories } from "@/lib/articleLoader";
 import { buildPageMetadata } from "@/lib/seo";
 
+export const revalidate = 60;
+
 export const metadata: Metadata = buildPageMetadata({
   title: "Engineering Notes | Tushar Kanti Dey",
   description:
@@ -13,9 +15,9 @@ export const metadata: Metadata = buildPageMetadata({
   keywords: ["Full Stack Developer and DevOps Engineer", "Next.js Developer India", "Portfolio of Full Stack Developer"],
 });
 
-export default function EngineeringNotesPage() {
-  const posts = getAllArticles();
-  const categories = getArticleCategories();
+export default async function EngineeringNotesPage() {
+  const posts = await getAllArticles();
+  const categories = await getArticleCategories();
 
   return (
     <div className="min-h-screen bg-black">

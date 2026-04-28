@@ -15,7 +15,7 @@ interface ImageRouteProps {
 
 export default async function Image({ params }: ImageRouteProps) {
   const { slug } = await params;
-  const article = getArticle(slug);
+  const article = await getArticle(slug);
 
   const title = article?.title ?? "Engineering Notes";
   const category = article?.category ?? "Engineering";

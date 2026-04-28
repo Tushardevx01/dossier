@@ -12,6 +12,8 @@ interface ProjectPageProps {
   params: Promise<{ slug: string }>;
 }
 
+export const revalidate = 60;
+
 export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
   const { slug } = await params;
   const project = projectsData.find((item) => item.slug === slug);
@@ -44,7 +46,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
     notFound();
   }
 
-  const linkedNotes = getAllArticles().slice(0, 2);
+  const linkedNotes = (await getAllArticles()).slice(0, 2);
   const projectSchema = generateCaseStudyStructuredData({
     title: project.name,
     description: project.description,

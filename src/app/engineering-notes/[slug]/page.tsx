@@ -9,6 +9,8 @@ import { buildPageMetadata, absoluteUrl } from "@/lib/seo";
 import { generateArticleStructuredData } from "@/lib/structured-data";
 import "prismjs/themes/prism-tomorrow.css";
 
+export const revalidate = 60;
+
 interface GenerateMetadataParams {
   params: Promise<{ slug: string }>;
 }
@@ -17,7 +19,7 @@ export async function generateMetadata(
   { params }: GenerateMetadataParams
 ): Promise<Metadata> {
   const { slug } = await params;
-  const article = getArticle(slug);
+  const article = await getArticle(slug);
 
   if (!article) {
     return {
@@ -35,8 +37,8 @@ export async function generateMetadata(
   });
 }
 
-export function generateStaticParams() {
-  return generateArticleStaticParams();
+export async function generateStaticParams() {
+  return await generateArticleStaticParams();
 }
 
 export default async function EngineeringNotesArticlePage({
@@ -45,13 +47,13 @@ export default async function EngineeringNotesArticlePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const article = getArticle(slug);
+  const article = await getArticle(slug);
 
   if (!article) {
     notFound();
   }
 
-  const allArticles = getAllArticles();
+  const allArticles = await getAllArticles();
   const relatedArticles = allArticles.filter((item) => item.slug !== slug).slice(0, 2);
 
   const articleStructuredData = generateArticleStructuredData({

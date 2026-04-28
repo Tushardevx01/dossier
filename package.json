@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "db:seed": "node -r tsx/esm src/db/seed.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:seed": "tsx src/db/seed.ts",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio"
   },

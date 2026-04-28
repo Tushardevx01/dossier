@@ -13,11 +13,6 @@ const config: Config = {
   dbCredentials: {
     connectionString: process.env.DATABASE_URL || '',
   },
-  // Generate SQL statements for migrations
-  migrations: {
-    table: 'drizzle_migrations',
-    schema: 'public',
-  },
   // Print all SQL statements to console during development
   verbose: process.env.NODE_ENV === 'development',
   // Strict mode: warn about potentially destructive changes

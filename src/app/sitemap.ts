@@ -3,10 +3,10 @@ import { projectsData } from "@/constant/projects";
 import { generateArticleStaticParams } from "@/lib/articleLoader";
 import { SITE_URL } from "@/lib/site";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = SITE_URL;
   const lastModified = new Date();
-  const engineeringNotesSlugs = generateArticleStaticParams();
+  const engineeringNotesSlugs = await generateArticleStaticParams();
   const projectSlugs = projectsData.map((project) => project.slug);
 
   return [

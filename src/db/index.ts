@@ -16,7 +16,11 @@ import * as schema from './schema';
  * In development: uses connection pooling to prevent connection exhaustion.
  * In production: Vercel handles pooling through Neon's connection string.
  */
-function getDatabase() {
+type PostgresClient = ReturnType<typeof postgres>;
+
+let client: PostgresClient | null = null;
+
+function createDatabase() {
   const databaseUrl = process.env.DATABASE_URL;
 
   if (!databaseUrl) {
@@ -27,21 +31,70 @@ function getDatabase() {
   }
 
   // Create PostgreSQL connection
-  const client = postgres(databaseUrl, {
+  client = postgres(databaseUrl, {
     max: 10, // Connection pool size (adjust based on load)
   });
 
   return drizzle(client, { schema });
 }
 
-// Singleton instance
-let db: ReturnType<typeof drizzle> | null = null;
+type Database = ReturnType<typeof createDatabase>;
 
-export function getDb() {
+// Singleton instance
+let db: Database | null = null;
+let bootstrapPromise: Promise<void> | null = null;
+
+async function bootstrapEngineeringNotesTable() {
+  if (!client) {
+    throw new Error('Database client is not initialized');
+  }
+
+  await client`
+    CREATE TABLE IF NOT EXISTS engineering_notes (
+      id SERIAL PRIMARY KEY,
+      slug VARCHAR(255) NOT NULL UNIQUE,
+      title VARCHAR(255) NOT NULL,
+      subtitle TEXT NOT NULL,
+      excerpt TEXT NOT NULL,
+      content TEXT NOT NULL,
+      category VARCHAR(50) NOT NULL,
+      level VARCHAR(20) NOT NULL,
+      read_time INTEGER NOT NULL,
+      date TEXT NOT NULL,
+      tags JSONB NOT NULL DEFAULT '[]'::jsonb,
+      published BOOLEAN NOT NULL DEFAULT TRUE,
+      featured BOOLEAN NOT NULL DEFAULT FALSE,
+      what_i_learned JSONB NOT NULL DEFAULT '[]'::jsonb,
+      improvements JSONB NOT NULL DEFAULT '[]'::jsonb,
+      related_note_slugs JSONB,
+      related_project_slug VARCHAR(255),
+      related_system_design_slug VARCHAR(255),
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    )
+  `;
+}
+
+export function getDb(): Database {
   if (!db) {
-    db = getDatabase();
+    db = createDatabase();
   }
   return db;
+}
+
+export async function ensureDatabaseReady(): Promise<void> {
+  if (!bootstrapPromise) {
+    if (!db) {
+      db = createDatabase();
+    }
+
+    bootstrapPromise = bootstrapEngineeringNotesTable().catch((error) => {
+      bootstrapPromise = null;
+      throw error;
+    });
+  }
+
+  await bootstrapPromise;
 }
 
 export { schema };
