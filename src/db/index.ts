@@ -50,28 +50,39 @@ async function bootstrapEngineeringNotesTable() {
   }
 
   await client`
-    CREATE TABLE IF NOT EXISTS engineering_notes (
-      id SERIAL PRIMARY KEY,
-      slug VARCHAR(255) NOT NULL UNIQUE,
-      title VARCHAR(255) NOT NULL,
-      subtitle TEXT NOT NULL,
-      excerpt TEXT NOT NULL,
-      content TEXT NOT NULL,
-      category VARCHAR(50) NOT NULL,
-      level VARCHAR(20) NOT NULL,
-      read_time INTEGER NOT NULL,
-      date TEXT NOT NULL,
-      tags JSONB NOT NULL DEFAULT '[]'::jsonb,
-      published BOOLEAN NOT NULL DEFAULT TRUE,
-      featured BOOLEAN NOT NULL DEFAULT FALSE,
-      what_i_learned JSONB NOT NULL DEFAULT '[]'::jsonb,
-      improvements JSONB NOT NULL DEFAULT '[]'::jsonb,
-      related_note_slugs JSONB,
-      related_project_slug VARCHAR(255),
-      related_system_design_slug VARCHAR(255),
-      created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-      updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
-    )
+    DO $$
+    BEGIN
+      IF NOT EXISTS (
+        SELECT 1
+        FROM information_schema.tables
+        WHERE table_schema = 'public'
+          AND table_name = 'engineering_notes'
+      ) THEN
+        CREATE TABLE engineering_notes (
+          id SERIAL PRIMARY KEY,
+          slug VARCHAR(255) NOT NULL UNIQUE,
+          title VARCHAR(255) NOT NULL,
+          subtitle TEXT NOT NULL,
+          excerpt TEXT NOT NULL,
+          content TEXT NOT NULL,
+          category VARCHAR(50) NOT NULL,
+          level VARCHAR(20) NOT NULL,
+          read_time INTEGER NOT NULL,
+          date TEXT NOT NULL,
+          tags JSONB NOT NULL DEFAULT '[]'::jsonb,
+          published BOOLEAN NOT NULL DEFAULT TRUE,
+          featured BOOLEAN NOT NULL DEFAULT FALSE,
+          what_i_learned JSONB NOT NULL DEFAULT '[]'::jsonb,
+          improvements JSONB NOT NULL DEFAULT '[]'::jsonb,
+          related_note_slugs JSONB,
+          related_project_slug VARCHAR(255),
+          related_system_design_slug VARCHAR(255),
+          created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+          updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+        );
+      END IF;
+    END
+    $$;
   `;
 }
 

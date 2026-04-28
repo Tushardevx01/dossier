@@ -8,7 +8,6 @@
  */
 
 import { useEffect } from "react";
-import { motion } from "motion/react";
 
 interface ErrorProps {
   error: Error & { digest?: string };
@@ -40,12 +39,7 @@ export default function Error({ error, reset }: ErrorProps) {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="max-w-md w-full text-center"
-      >
+      <div className="max-w-md w-full text-center">
         {/* Error Icon */}
         <div className="mb-6">
           <div className="w-20 h-20 mx-auto rounded-full bg-red-500/10 flex items-center justify-center">
@@ -106,7 +100,7 @@ export default function Error({ error, reset }: ErrorProps) {
             Go Home
           </a>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }
