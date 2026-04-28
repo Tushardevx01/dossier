@@ -2,35 +2,13 @@
 
 import { motion } from "framer-motion";
 import { ArticlePost } from "@/lib/articleLoader";
+import { TagBadge } from "@/components/notes/TagBadge";
 
 interface ArticleHeroProps {
   post: ArticlePost;
 }
 
 export function ArticleHero({ post }: ArticleHeroProps) {
-  const difficultyColors: Record<string, string> = {
-    Beginner: "text-blue-400",
-    Intermediate: "text-amber-400",
-    Advanced: "text-red-400",
-  };
-
-  const difficultyBgColors: Record<string, string> = {
-    Beginner: "bg-blue-950 border-blue-900",
-    Intermediate: "bg-amber-950 border-amber-900",
-    Advanced: "bg-red-950 border-red-900",
-  };
-
-  const categoryColors: Record<string, string> = {
-    Architecture: "text-cyan-400 bg-cyan-950 border-cyan-900",
-    DevOps: "text-purple-400 bg-purple-950 border-purple-900",
-    "Full-Stack": "text-emerald-400 bg-emerald-950 border-emerald-900",
-    Performance: "text-pink-400 bg-pink-950 border-pink-900",
-    Infrastructure: "text-indigo-400 bg-indigo-950 border-indigo-900",
-    Data: "text-violet-400 bg-violet-950 border-violet-900",
-    Engineering: "text-sky-400 bg-sky-950 border-sky-900",
-    Systems: "text-lime-400 bg-lime-950 border-lime-900",
-  };
-
   return (
     <motion.div
       className="pt-20 pb-20"
@@ -78,24 +56,9 @@ export function ArticleHero({ post }: ArticleHeroProps) {
         </div>
 
         {/* Badges */}
-        <div className="flex flex-wrap gap-3">
-          {/* Category Badge */}
-          <div
-            className={`inline-flex items-center px-3 py-1.5 rounded-full border text-xs font-medium tracking-wide ${
-              categoryColors[post.category] || "text-cyan-400 bg-cyan-950 border-cyan-900"
-            }`}
-          >
-            {post.category}
-          </div>
-
-          {/* Difficulty Badge */}
-          <div
-            className={`inline-flex items-center px-3 py-1.5 rounded-full border text-xs font-medium tracking-wide ${
-              difficultyBgColors[post.difficulty] || "bg-zinc-900 border-zinc-800"
-            } ${difficultyColors[post.difficulty] || "text-zinc-400"}`}
-          >
-            {post.difficulty}
-          </div>
+        <div className="flex flex-wrap gap-2">
+          <TagBadge type="category" label={post.category} />
+          <TagBadge type="level" label={post.difficulty} />
         </div>
       </div>
     </motion.div>

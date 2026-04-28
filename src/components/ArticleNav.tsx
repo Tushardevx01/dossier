@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ArticleMetadata } from "@/lib/articleLoader";
+import { TagBadge } from "@/components/notes/TagBadge";
 
 interface ArticleNavProps {
   relatedArticles: ArticleMetadata[];
@@ -25,9 +26,7 @@ export function ArticleNav({ relatedArticles }: ArticleNavProps) {
               className="group p-6 rounded-xl border border-zinc-800 bg-zinc-900/30 hover:bg-zinc-900/60 hover:border-zinc-700 transition-all duration-300"
             >
               <div className="flex items-start justify-between mb-4">
-                <span className="text-xs uppercase tracking-widest font-medium text-zinc-500 group-hover:text-zinc-300 transition-colors">
-                  {article.category}
-                </span>
+                <TagBadge type="category" label={article.category} />
                 <span className="text-zinc-600 group-hover:text-zinc-400 transition-all duration-300 transform">
                   {idx === 0 ? "→" : "←"}
                 </span>
@@ -41,10 +40,10 @@ export function ArticleNav({ relatedArticles }: ArticleNavProps) {
                 {article.description}
               </p>
 
-              <div className="flex items-center gap-4 text-xs text-zinc-500">
+              <div className="flex items-center gap-2 text-xs text-zinc-500">
                 <span>{article.readTime} min</span>
                 <span>•</span>
-                <span>{article.difficulty}</span>
+                <TagBadge type="level" label={article.difficulty} />
               </div>
             </Link>
           ))}

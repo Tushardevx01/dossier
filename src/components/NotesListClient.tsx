@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
+import { TagBadge } from "@/components/notes/TagBadge";
 import type { CategoryFilter, ArticleMetadata } from "@/lib/articleLoader";
-import { DIFFICULTY_COLORS } from "@/types/article";
 
 interface NotesListClientProps {
   posts: ArticleMetadata[];
@@ -24,7 +24,7 @@ export function NotesListClient({ posts, categories }: NotesListClientProps) {
   return (
     <>
       <section className="max-w-4xl mx-auto px-4 sm:px-6 mb-16 sm:mb-20">
-        <div className="flex flex-wrap gap-2 sm:gap-3">
+        <div className="flex flex-wrap gap-2">
           {categories.map((item) => {
             const isSelected = selectedCategory === item;
 
@@ -33,10 +33,10 @@ export function NotesListClient({ posts, categories }: NotesListClientProps) {
                 key={item}
                 type="button"
                 onClick={() => setSelectedCategory(item)}
-                className={`px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-200 ${
+                className={`px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-md text-xs sm:text-sm font-medium transition-opacity duration-200 ${
                   isSelected
-                    ? "bg-white text-black shadow-lg"
-                    : "border border-neutral-700 text-neutral-400 hover:border-neutral-600 hover:text-neutral-300 hover:bg-neutral-950/50"
+                    ? "bg-zinc-800 text-zinc-100 border border-zinc-700"
+                    : "border border-zinc-800 bg-zinc-950/40 text-zinc-400 hover:opacity-85"
                 }`}
               >
                 {item}
@@ -61,7 +61,7 @@ export function NotesListClient({ posts, categories }: NotesListClientProps) {
                     </p>
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-4 mt-6 pt-6 border-t border-neutral-800">
+                  <div className="flex flex-wrap items-center gap-2 mt-6 pt-6 border-t border-neutral-800">
                     <time
                       dateTime={post.date}
                       className="text-xs uppercase tracking-widest text-neutral-500"
@@ -71,16 +71,8 @@ export function NotesListClient({ posts, categories }: NotesListClientProps) {
                     <span className="text-xs uppercase tracking-widest text-neutral-500">
                       {post.readTime} min read
                     </span>
-                    <span
-                      className={`text-xs uppercase tracking-widest font-semibold ${
-                        DIFFICULTY_COLORS[post.difficulty]
-                      }`}
-                    >
-                      {post.difficulty}
-                    </span>
-                    <span className="px-2.5 py-1 rounded text-xs font-medium bg-neutral-900 text-neutral-300">
-                      {post.category}
-                    </span>
+                    <TagBadge type="level" label={post.difficulty} />
+                    <TagBadge type="category" label={post.category} />
                     <span className="w-full sm:w-auto sm:ml-auto text-neutral-500 group-hover:text-neutral-300 transition-colors duration-200 flex-shrink-0">
                       Read →
                     </span>
