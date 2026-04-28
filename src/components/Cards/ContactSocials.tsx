@@ -45,7 +45,7 @@ export const ContactSocials = () => {
     },
     {
       Icon: FaLinkedinIn,
-      link: `https://www.linkedin.com/${selfData.socials_username.linkedin}`,
+      link: `https://www.linkedin.com/in/${selfData.socials_username.linkedin}`,
       initial: 10,
       name: "LinkedIn",
     },
