@@ -15,22 +15,20 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-import { ArticlePost, ArticleMetadata } from "@/lib/articleLoader";
+import { ArticlePost } from "@/lib/articleLoader";
 import { ArticleHero } from "@/components/ArticleHero";
 import { ArticleToc } from "@/components/ArticleToc";
-import { ArticleNav } from "@/components/ArticleNav";
 import { PrismHighlighter } from "@/components/PrismHighlighter";
 
 interface ArticlePageProps {
   post: ArticlePost;
   slug: string;
-  relatedArticles?: ArticleMetadata[];
 }
 
 /**
  * Article Renderer - Premium Modern Layout
  */
-export function ArticlePage({ post, slug, relatedArticles = [] }: ArticlePageProps) {
+export function ArticlePage({ post, slug }: ArticlePageProps) {
   return (
     <div className="min-h-screen bg-black">
       {/* Premium Hero Section */}
@@ -43,9 +41,6 @@ export function ArticlePage({ post, slug, relatedArticles = [] }: ArticlePagePro
       <PrismHighlighter slug={slug}>
         <ArticleContentWrapper post={post} />
       </PrismHighlighter>
-
-      {/* Related Articles Navigation */}
-      {relatedArticles.length > 0 && <ArticleNav relatedArticles={relatedArticles} />}
 
       {/* Footer */}
       <ArticleFooter />

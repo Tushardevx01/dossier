@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { ArticlePage } from "@/components/ArticlePage";
@@ -53,9 +52,6 @@ export default async function EngineeringNotesArticlePage({
     notFound();
   }
 
-  const allArticles = await getAllArticles();
-  const relatedArticles = allArticles.filter((item) => item.slug !== slug).slice(0, 2);
-
   const articleStructuredData = generateArticleStructuredData({
     title: article.title,
     description: article.description,
@@ -66,19 +62,7 @@ export default async function EngineeringNotesArticlePage({
   return (
     <>
       <JsonLd data={articleStructuredData} />
-      <ArticlePage post={article} slug={slug} relatedArticles={relatedArticles} />
-      <nav aria-label="Related engineering notes" className="sr-only">
-        <ul>
-          {relatedArticles.map((item) => (
-            <li key={item.slug}>
-              <Link href={`/engineering-notes/${item.slug}`}>{item.title}</Link>
-            </li>
-          ))}
-          <li>
-            <Link href="/projects">Projects</Link>
-          </li>
-        </ul>
-      </nav>
+      <ArticlePage post={article} slug={slug} />
     </>
   );
 }
