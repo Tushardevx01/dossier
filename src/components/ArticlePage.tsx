@@ -247,6 +247,7 @@ function ArticleFooter() {
         <div className="flex items-center justify-between gap-6">
           <Link
             href="/engineering-notes"
+            replace
             className="inline-flex items-center gap-2 text-sm uppercase tracking-widest font-medium text-zinc-400 hover:text-white transition-colors group"
           >
             <span className="group-hover:-translate-x-1 transition-transform">←</span>
