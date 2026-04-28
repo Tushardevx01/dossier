@@ -11,8 +11,8 @@ export function ArticleNav({ relatedArticles }: ArticleNavProps) {
   if (relatedArticles.length === 0) return null;
 
   return (
-    <div className="border-t border-zinc-800/50">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div className="py-16 md:py-20">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-sm uppercase tracking-widest font-semibold text-zinc-400 mb-8">
           Continue Reading
         </h2>

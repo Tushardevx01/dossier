@@ -62,7 +62,7 @@ function ArticleContentWrapper({ post }: { post: ArticlePost }) {
 
   return (
     <motion.div
-      className="py-16 md:py-20"
+      className="pt-8 pb-20 md:pt-10 md:pb-24"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6, delay: 0.2 }}
@@ -73,16 +73,13 @@ function ArticleContentWrapper({ post }: { post: ArticlePost }) {
           <div dangerouslySetInnerHTML={{ __html: articleHtml }} />
         </article>
 
-        {/* Divider */}
-        <div className="my-16 border-t border-zinc-800/50" />
-
         {/* Takeaways Section */}
         <TakeawaysSection takeaways={post.whatILearned} />
 
         {/* Improvements Section */}
         {post.improvements.length > 0 && (
           <>
-            <div className="my-12 border-t border-zinc-800/50" />
+            <div className="h-16 md:h-20" />
             <ImprovementsSection improvements={post.improvements} />
           </>
         )}
@@ -164,9 +161,6 @@ function ArticleContentWrapper({ post }: { post: ArticlePost }) {
           @apply px-4 py-3 text-zinc-300 border border-zinc-800;
         }
 
-        .article-content hr {
-          @apply my-12 border-t border-zinc-800/50;
-        }
       `}</style>
     </motion.div>
   );
@@ -177,7 +171,7 @@ function ArticleContentWrapper({ post }: { post: ArticlePost }) {
  */
 function TakeawaysSection({ takeaways }: { takeaways: string[] }) {
   return (
-    <section>
+    <section className="rounded-2xl bg-zinc-950/50 p-6 md:p-8 ring-1 ring-inset ring-zinc-800/40">
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -212,7 +206,7 @@ function TakeawaysSection({ takeaways }: { takeaways: string[] }) {
  */
 function ImprovementsSection({ improvements }: { improvements: string[] }) {
   return (
-    <section>
+    <section className="rounded-2xl bg-zinc-950/40 p-6 md:p-8 ring-1 ring-inset ring-zinc-800/30">
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -248,14 +242,14 @@ function ImprovementsSection({ improvements }: { improvements: string[] }) {
 function ArticleFooter() {
   return (
     <motion.footer
-      className="border-t border-zinc-800/50 bg-gradient-to-b from-black to-zinc-950/20 py-12"
+      className="bg-gradient-to-b from-black to-zinc-950/20 pt-10 pb-12"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
       viewport={{ once: true }}
     >
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-6">
           <Link
             href="/engineering-notes"
             className="inline-flex items-center gap-2 text-sm uppercase tracking-widest font-medium text-zinc-400 hover:text-white transition-colors group"
