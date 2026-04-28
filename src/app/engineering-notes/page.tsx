@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { nasalization } from "@/app/fonts";
 import { NotesListClient } from "@/components/NotesListClient";
+import NotesBackHandler from "@/components/NotesBackHandler";
 import { getAllArticles, getArticleCategories } from "@/lib/articleLoader";
 import { buildPageMetadata } from "@/lib/seo";
 
@@ -21,6 +22,7 @@ export default async function EngineeringNotesPage() {
 
   return (
     <div className="min-h-screen bg-black">
+      <NotesBackHandler />
       <section className="max-w-4xl mx-auto px-4 sm:px-6 pt-24 sm:pt-32 pb-20 sm:pb-28">
         <h1
           className={`${nasalization.className} text-4xl sm:text-6xl lg:text-7xl font-semibold text-white mb-5 sm:mb-6 tracking-tight leading-tight`}
