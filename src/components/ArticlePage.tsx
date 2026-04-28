@@ -16,10 +16,8 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 
 import { ArticlePost, ArticleMetadata } from "@/lib/articleLoader";
-import { useScrollProgress } from "@/hooks/useScrollProgress";
 import { ArticleHero } from "@/components/ArticleHero";
 import { ArticleToc } from "@/components/ArticleToc";
-import { ReadingProgress } from "@/components/ReadingProgress";
 import { ArticleNav } from "@/components/ArticleNav";
 import { PrismHighlighter } from "@/components/PrismHighlighter";
 
@@ -33,13 +31,8 @@ interface ArticlePageProps {
  * Article Renderer - Premium Modern Layout
  */
 export function ArticlePage({ post, slug, relatedArticles = [] }: ArticlePageProps) {
-  const scrollPercentage = useScrollProgress();
-
   return (
     <div className="min-h-screen bg-black">
-      {/* Modern gradient reading progress */}
-      <ReadingProgress percentage={scrollPercentage} />
-
       {/* Premium Hero Section */}
       <ArticleHero post={post} />
 
