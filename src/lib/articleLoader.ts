@@ -1,119 +1,134 @@
 /**
- * Article Data Layer
+ * Article Data Layer (Updated for Neon PostgreSQL)
  *
- * Single source of truth for all article access.
- * Types are imported from @/types/article — never redefined here.
+ * Now fetches from Neon PostgreSQL instead of hardcoded files.
+ * Maintains backward compatibility with existing route handlers.
  *
- * Performance: metadata list is computed once per process (module-level cache).
- * At 100+ articles this avoids re-mapping on every page render.
+ * IMPORTANT: All functions are now ASYNC and must be called with await.
  */
 
-import { articlesData } from "@/data/articles";
+import {
+  getAllNotes,
+  getNoteBySlug,
+  getCategories,
+  getNotesByCategory,
+  getAllNoteSlugs,
+  getFeaturedNotes,
+  getRelatedNotes,
+  getNoteCount,
+} from "@/lib/blogs";
 import type {
   ArticleMetadata,
   ArticlePost,
   CategoryFilter,
-  ArticleDifficulty,
 } from "@/types/article";
 
-// Re-export types so consumers can import from one place
+// Re-export types so consumers import from one place
 export type { ArticleMetadata, ArticlePost, CategoryFilter };
 
-// ─── Helpers ────────────────────────────────────────────────────────────────
+// ─── Public API (All ASYNC) ──────────────────────────────────────────────────
 
-function calculateDifficulty(readTime: number): ArticleDifficulty {
-  if (readTime <= 8) return "Beginner";
-  if (readTime <= 12) return "Intermediate";
-  return "Advanced";
+/**
+ * Get all published articles sorted by date (newest first)
+ *
+ * ASYNC - Must be called with await
+ * @example const posts = await getAllArticles();
+ */
+export async function getAllArticles(): Promise<ArticleMetadata[]> {
+  return getAllNotes();
 }
 
-// ─── Module-level cache ─────────────────────────────────────────────────────
-
-let _metadataCache: ArticleMetadata[] | null = null;
-let _categoryCache: CategoryFilter[] | null = null;
-
-function buildMetadataCache(): ArticleMetadata[] {
-  if (_metadataCache) return _metadataCache;
-
-  _metadataCache = Object.entries(articlesData)
-    .map(([slug, article], index) => ({
-      slug,
-      id: String(index + 1),
-      title: article.title,
-      subtitle: article.subtitle,
-      date: article.date,
-      readTime: article.readTime,
-      category: article.category,
-      description: article.description,
-      difficulty: article.difficulty ?? calculateDifficulty(article.readTime),
-    }))
-    .sort((first, second) => {
-      const firstDate = new Date(first.date).getTime();
-      const secondDate = new Date(second.date).getTime();
-      return secondDate - firstDate;
-    });
-
-  return _metadataCache;
+/**
+ * Get a single article by slug with full content
+ *
+ * ASYNC - Must be called with await
+ * @example const post = await getArticle('my-article-slug');
+ */
+export async function getArticle(slug: string): Promise<ArticlePost | null> {
+  return getNoteBySlug(slug);
 }
 
-// ─── Public API ─────────────────────────────────────────────────────────────
-
-/** Get all article metadata (cached — safe for repeated calls). */
-export function getAllArticles(): ArticleMetadata[] {
-  return buildMetadataCache();
+/**
+ * Get all available categories
+ *
+ * ASYNC - Must be called with await
+ * @example const categories = await getArticleCategories();
+ */
+export async function getArticleCategories(): Promise<CategoryFilter[]> {
+  const categories = await getCategories();
+  return ["All", ...categories];
 }
 
-/** Get a single article by slug. Returns null if not found. */
-export function getArticle(slug: string): ArticlePost | null {
-  const article = articlesData[slug];
-  if (!article) return null;
-
-  const allSlugs = Object.keys(articlesData);
-  const id = String(allSlugs.indexOf(slug) + 1);
-
-  return {
-    slug,
-    id,
-    title: article.title,
-    subtitle: article.subtitle,
-    date: article.date,
-    readTime: article.readTime,
-    category: article.category,
-    description: article.description,
-    difficulty: article.difficulty ?? calculateDifficulty(article.readTime),
-    content: article.content,
-    whatILearned: article.whatILearned,
-    improvements: article.improvements,
-    relatedNoteSlugs: article.relatedNoteSlugs,
-    relatedProjectSlug: article.relatedProjectSlug,
-    relatedSystemDesignSlug: article.relatedSystemDesignSlug,
-  };
+/**
+ * Total published article count
+ *
+ * ASYNC - Must be called with await
+ * @example const count = await getTotalArticleCount();
+ */
+export async function getTotalArticleCount(): Promise<number> {
+  return getNoteCount();
 }
 
-/** Get all available categories (cached). */
-export function getArticleCategories(): CategoryFilter[] {
-  if (_categoryCache) return _categoryCache;
-
-  const categories = new Set(
-    Object.values(articlesData).map((article) => article.category)
-  );
-  _categoryCache = ["All", ...Array.from(categories)];
-  return _categoryCache;
+/**
+ * Generate static params for Next.js SSG
+ *
+ * ASYNC - Must be called with await
+ * @example export const generateStaticParams = generateArticleStaticParams;
+ */
+export async function generateArticleStaticParams(): Promise<{ slug: string }[]> {
+  return getAllNoteSlugs();
 }
 
-/** Total published article count. */
-export function getTotalArticleCount(): number {
-  return Object.keys(articlesData).length;
+/**
+ * Filter articles by category
+ *
+ * ASYNC - Must be called with await
+ * @example const posts = await filterArticlesByCategory('Architecture');
+ */
+export async function filterArticlesByCategory(
+  category: CategoryFilter
+): Promise<ArticleMetadata[]> {
+  if (category === "All") {
+    return getAllNotes();
+  }
+  return getNotesByCategory(category);
 }
 
-/** Generate static params for Next.js SSG. */
-export function generateArticleStaticParams(): { slug: string }[] {
-  return Object.keys(articlesData).map((slug) => ({ slug }));
+/**
+ * Get featured articles for homepage
+ *
+ * ASYNC - Must be called with await
+ * @example const featured = await getFeaturedArticles();
+ */
+export async function getFeaturedArticles(limit = 6): Promise<ArticleMetadata[]> {
+  return getFeaturedNotes(limit);
 }
 
-/** Filter articles by category. */
-export function filterArticlesByCategory(category: CategoryFilter): ArticleMetadata[] {
-  const allPosts = getAllArticles();
-  if (category === "All") return allPosts;
-  return allPosts.filter((post) => post.category === category);
+/**
+ * Get related articles by category
+ *
+ * ASYNC - Must be called with await
+ * @example const related = await getRelatedArticles('Full-Stack', 'current-slug', 2);
+ */
+export async function getRelatedArticles(
+  category: string,
+  excludeSlug: string,
+  limit = 2
+): Promise<ArticleMetadata[]> {
+  return getRelatedNotes(category as any, excludeSlug, limit);
+}
+
+/**
+ * Check if database connection is working
+ *
+ * Useful for health checks and startup verification.
+ * ASYNC - Must be called with await
+ */
+export async function verifyDatabaseConnection(): Promise<boolean> {
+  try {
+    await getNoteCount();
+    return true;
+  } catch {
+    return false;
+  }
 }
