@@ -1,97 +1,44 @@
 import Link from "next/link";
-import { IconType } from "react-icons";
 import { motion } from "motion/react";
-
+import type { CSSProperties } from "react";
+import { type IconType } from "react-icons";
 import { FaDiscord, FaGithub, FaInstagram, FaLinkedinIn, FaTwitter, FaWhatsapp } from "react-icons/fa6";
 
+import { buildContactSocialLinks, type ContactSocialLink } from "@/config";
 import { selfData } from "@/constant";
 
 // Custom GDG Icon Component (Google Developer Groups)
-// Two chevrons < > each made of two rotated pill-shaped arms
-// Math: pill center = apex + (half_length * cos(±35°), ±half_length * sin(35°))
-// At 35°: cos≈0.819, sin≈0.574. Half-length=28 → offset=(22.9, 16.1)
-const GDGIcon = ({ className, style }: { className?: string; style?: React.CSSProperties }) => (
-  <svg
-    viewBox="0 0 200 100"
-    className={className}
-    style={style}
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    {/* ── LEFT  <  chevron, apex at (40, 50) ── */}
-    {/* Blue (bottom arm) — rendered first so Red overlaps at apex */}
-    <rect x="35" y="59" width="56" height="14" rx="7" fill="#4285F4"
-      transform="rotate(35, 63, 66)" />
-    {/* Red (top arm) */}
-    <rect x="35" y="27" width="56" height="14" rx="7" fill="#EA4335"
-      transform="rotate(-35, 63, 34)" />
-
-    {/* ── RIGHT  >  chevron, apex at (160, 50) ── */}
-    {/* Yellow (bottom arm) — rendered first so Green overlaps at apex */}
-    <rect x="109" y="59" width="56" height="14" rx="7" fill="#FBBC04"
-      transform="rotate(-35, 137, 66)" />
-    {/* Green (top arm) */}
-    <rect x="109" y="27" width="56" height="14" rx="7" fill="#34A853"
-      transform="rotate(35, 137, 34)" />
+// Two chevrons < > each made of two rotated pill-shaped arms.
+const GDGIcon = ({ className, style }: { className?: string; style?: CSSProperties }) => (
+  <svg viewBox="0 0 200 100" className={className} style={style} xmlns="http://www.w3.org/2000/svg">
+    <rect x="35" y="59" width="56" height="14" rx="7" fill="#4285F4" transform="rotate(35, 63, 66)" />
+    <rect x="35" y="27" width="56" height="14" rx="7" fill="#EA4335" transform="rotate(-35, 63, 34)" />
+    <rect x="109" y="59" width="56" height="14" rx="7" fill="#FBBC04" transform="rotate(-35, 137, 66)" />
+    <rect x="109" y="27" width="56" height="14" rx="7" fill="#34A853" transform="rotate(35, 137, 34)" />
   </svg>
 );
 
+const SOCIAL_ICONS: Record<ContactSocialLink["key"], IconType> = {
+  github: FaGithub,
+  linkedin: FaLinkedinIn,
+  instagram: FaInstagram,
+  twitter: FaTwitter,
+  discord: FaDiscord,
+  whatsapp: FaWhatsapp,
+  gdg: GDGIcon as IconType,
+};
+
 export const ContactSocials = () => {
-  const socialLinks = [
-    {
-      Icon: FaGithub,
-      link: `https://github.com/${selfData.socials_username.github}`,
-      initial: -10,
-      name: "GitHub",
-    },
-    {
-      Icon: FaLinkedinIn,
-      link: `https://www.linkedin.com/in/${selfData.socials_username.linkedin}`,
-      initial: 10,
-      name: "LinkedIn",
-    },
-    {
-      Icon: FaInstagram,
-      link: `https://instagram.com/${selfData.socials_username.instagram}`,
-      initial: -10,
-      name: "Instagram",
-    },
-
-    {
-      Icon: FaTwitter,
-      link: `https://twitter.com/${selfData.socials_username.twitter}`,
-      initial: 10,
-      name: "Twitter",
-    },
-
-    {
-      Icon: FaDiscord,
-      link: `https://discord.com/users/${selfData.socials_username.discord}`,
-      initial: 10,
-      name: "Discord",
-    },
-    {
-      Icon: FaWhatsapp,
-      link: `https://wa.me/${selfData.socials_username.whatsapp.replace(/[\s+]/g, '')}`,
-      initial: -10,
-      name: "WhatsApp",
-    },
-    {
-      Icon: GDGIcon as IconType,
-      link: `https://developers.google.com/profile/u/${selfData.socials_username.gdg}`,
-      initial: 10,
-      name: "Google Developer Profile",
-    },
-  ];
+  const socialLinks = buildContactSocialLinks(selfData.socials_username);
 
   return (
-    <ul className="flex gap-5 flex-wrap">
+    <ul className="flex flex-wrap gap-5">
       {socialLinks.map((social, index) => (
         <ContactSocialItem
-          key={index}
-          Icon={social.Icon}
-          link={social.link}
-          initial={social.initial}
-          name={social.name}
+          key={social.key}
+          Icon={SOCIAL_ICONS[social.key]}
+          link={social}
+          initial={index % 2 === 0 ? -10 : 10}
         />
       ))}
     </ul>
@@ -102,31 +49,19 @@ const ContactSocialItem = ({
   Icon,
   link,
   initial,
-  name,
 }: {
   Icon: IconType;
-  link: string;
+  link: ContactSocialLink;
   initial: number;
-  name: string;
 }) => {
-  // Brand colors for each social platform
-  const getBrandColor = () => {
-    if (link.includes('github')) return '#ffffff';
-    if (link.includes('linkedin')) return '#0A66C2';
-    if (link.includes('instagram')) return '#E4405F';
-    if (link.includes('twitter')) return '#1DA1F2';
-    if (link.includes('discord')) return '#5865F2';
-    if (link.includes('whatsapp') || link.includes('wa.me')) return '#25D366';
-    if (link.includes('google') || link.includes('developers.google')) return 'inherit'; // GDG has built-in colors
-    return '#ffffff';
-  };
-
-  const isGoogle = link.includes('google') || link.includes('developers.google');
+  const iconClassName = link.isGoogleProfile
+    ? "h-5 w-5 text-slate-400 opacity-70 transition-all duration-300 [filter:brightness(0)_invert(1)] group-hover:opacity-100 group-hover:[filter:none]"
+    : "h-5 w-5 text-slate-400 transition-colors duration-300 group-hover:[color:var(--social-hover)]";
 
   return (
     <motion.li
-      whileInView={{ opacity: 1, y: 0 }}
       initial={{ opacity: 0, y: initial }}
+      whileInView={{ opacity: 1, y: 0 }}
       transition={{
         duration: 0.5,
         type: "spring",
@@ -136,40 +71,15 @@ const ContactSocialItem = ({
       className="flex items-center justify-center"
     >
       <Link
-        href={link}
+        href={link.href}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center group"
-        aria-label={`Visit ${name}`}
+        className="group flex items-center"
+        aria-label={`Visit ${link.label}`}
+        style={{ "--social-hover": link.hoverColor } as CSSProperties}
       >
-        <motion.div
-          whileHover={{
-            scale: 1.05,
-            transition: { duration: 0.2 },
-          }}
-          whileTap={{
-            scale: 0.95,
-          }}
-        >
-          <Icon
-            className={`w-5 h-5 transition-all duration-300 ${isGoogle
-              ? 'opacity-70 [filter:brightness(0)_invert(1)] group-hover:[filter:none] group-hover:opacity-100'
-              : 'text-slate-400 group-hover:text-white'
-              }`}
-            style={{
-              color: isGoogle ? undefined : 'inherit',
-            }}
-            onMouseEnter={(e) => {
-              if (!isGoogle) {
-                e.currentTarget.style.color = getBrandColor();
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!isGoogle) {
-                e.currentTarget.style.color = '#94a3b8';
-              }
-            }}
-          />
+        <motion.div whileHover={{ scale: 1.05, transition: { duration: 0.2 } }} whileTap={{ scale: 0.95 }}>
+          <Icon className={iconClassName} />
         </motion.div>
       </Link>
     </motion.li>

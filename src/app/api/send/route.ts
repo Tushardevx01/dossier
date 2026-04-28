@@ -11,6 +11,7 @@ import type { NextRequest } from "next/server";
 import { generateRequestId, logger } from "@/lib/logger";
 import { getServerEnv } from "@/lib/env.server";
 import { AppError } from "@/lib/errors";
+import { CONTACT_MAX_BODY_BYTES } from "@/config";
 import {
   processContactSubmission,
   isValidBodySize,
@@ -40,6 +41,12 @@ function jsonResponse(
 }
 
 function errorResponse(error: AppError, requestId: string) {
+  const retryAfterSeconds = Number(error.meta?.retryAfter);
+  const retryAfterHeader =
+    error.code === "RATE_LIMIT_EXCEEDED" && Number.isFinite(retryAfterSeconds) && retryAfterSeconds > 0
+      ? { "Retry-After": String(Math.ceil(retryAfterSeconds)) }
+      : undefined;
+
   return jsonResponse(
     {
       error: error.message,
@@ -47,9 +54,7 @@ function errorResponse(error: AppError, requestId: string) {
       requestId,
     },
     error.statusCode,
-    error.code === "RATE_LIMIT_EXCEEDED" && error.meta.retryAfter
-      ? { "Retry-After": String(error.meta.retryAfter) }
-      : undefined
+    retryAfterHeader
   );
 }
 
@@ -59,7 +64,7 @@ export async function POST(request: NextRequest) {
   const requestId = generateRequestId();
 
   const contentLength = request.headers.get("content-length");
-  if (contentLength && Number(contentLength) > MAX_BODY_BYTES) {
+  if (contentLength && Number(contentLength) > CONTACT_MAX_BODY_BYTES) {
     return jsonResponse({ error: "Invalid request payload", requestId }, 413, { "X-Robots-Tag": "noindex, nofollow" });
   }
 

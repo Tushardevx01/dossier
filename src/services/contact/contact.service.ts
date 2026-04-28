@@ -12,18 +12,17 @@
 
 import { AppError, Errors } from "@/lib/errors";
 import { logger } from "@/lib/logger";
-import { extractClientIdentifier as getRequestClientIdentifier, isTrustedOrigin } from "@/lib/security/request";
+import { isTrustedOrigin } from "@/lib/security/request";
+import {
+  CONTACT_MAX_BODY_BYTES,
+  CONTACT_RATE_LIMIT_MAX_REQUESTS,
+  CONTACT_RATE_LIMIT_WINDOW_MS,
+} from "@/config";
 import { validateContactForm } from "./contact.schema";
 import { checkRateLimit, createRateLimitKey } from "./contact.rateLimit";
 import { sendEmail } from "@/services/email/email.transport";
 import { renderContactEmail } from "@/services/email/email.templates";
 import { verifyEmailAddress } from "@/services/email/email.verification";
-
-// ─── Configuration ───────────────────────────────────────────────────────────
-
-const RATE_LIMIT_MAX_REQUESTS = 5;
-const RATE_LIMIT_WINDOW_MS = 60_000;
-const MAX_BODY_LENGTH_BYTES = 12_000;
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -58,7 +57,11 @@ export async function processContactSubmission(
 
   // 1. Rate limit check
   const rateLimitKey = createRateLimitKey("contact", clientIdentifier);
-  const rateLimit = await checkRateLimit(rateLimitKey, RATE_LIMIT_MAX_REQUESTS, RATE_LIMIT_WINDOW_MS);
+  const rateLimit = await checkRateLimit(
+    rateLimitKey,
+    CONTACT_RATE_LIMIT_MAX_REQUESTS,
+    CONTACT_RATE_LIMIT_WINDOW_MS
+  );
 
   if (!rateLimit.allowed) {
     logger.warn("Rate limit exceeded", { requestId, clientIdentifier });
@@ -129,14 +132,7 @@ export async function processContactSubmission(
  * Validate request body size
  */
 export function isValidBodySize(body: string): boolean {
-  return body.length > 0 && body.length <= MAX_BODY_LENGTH_BYTES;
-}
-
-/**
- * Extract client identifier from request metadata
- */
-export function extractClientIdentifier(request: { headers: Headers; ip?: string | null }): string {
-  return getRequestClientIdentifier(request);
+  return body.length > 0 && body.length <= CONTACT_MAX_BODY_BYTES;
 }
 
 /**
