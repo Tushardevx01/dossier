@@ -18,7 +18,7 @@ COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV DOCKER_BUILD=true
-ARG SKIP_DB_BUILD=false
+ARG SKIP_DB_BUILD=true
 ENV SKIP_DB_BUILD=${SKIP_DB_BUILD}
 
 # Use webpack in Docker to avoid Turbopack font resolver issues on musl-based images.
