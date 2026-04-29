@@ -44,6 +44,7 @@ import { analyzeSEO, isAnalysisError, validateUrl } from "@/lib/seo-analyzer";
 import { logger } from "@/lib/logger";
 import { checkRateLimit, createRateLimitKey } from "@/lib/security/rateLimit";
 import { extractClientIdentifier } from "@/lib/security/request";
+import { validateApiKey, extractApiKey } from "@/lib/security/auth";
 
 // Use Node.js runtime for Cheerio compatibility
 export const runtime = "nodejs";
@@ -59,11 +60,22 @@ const MAX_BODY_BYTES = 4096;
 const RATE_LIMIT_MAX = 10; // requests per window
 const RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
 
+function secureJson(payload: Record<string, unknown>, status: number, extraHeaders?: Record<string, string>) {
+  return NextResponse.json(payload, {
+    status,
+    headers: {
+      "Cache-Control": "no-store",
+      "X-Robots-Tag": "noindex, nofollow",
+      ...extraHeaders,
+    },
+  });
+}
+
 export async function POST(request: NextRequest) {
   try {
     const contentType = request.headers.get("content-type") ?? "";
     if (!contentType.includes("application/json")) {
-      return NextResponse.json(
+      return secureJson(
         {
           success: false,
           error: {
@@ -71,13 +83,55 @@ export async function POST(request: NextRequest) {
             message: "Unsupported content type",
           },
         },
-        { status: 415, headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" } }
+        415
+      );
+    }
+
+    // Validate API key
+    const apiKey = extractApiKey(request);
+    if (!apiKey) {
+      return secureJson(
+        {
+          success: false,
+          error: {
+            code: "AUTHENTICATION_REQUIRED",
+            message: "API key required. Use Authorization: Bearer <key> or X-API-Key header",
+          },
+        },
+        401
+      );
+    }
+
+    const keyValidation = await validateApiKey(apiKey);
+    if (!keyValidation.valid) {
+      return secureJson(
+        {
+          success: false,
+          error: {
+            code: "AUTHENTICATION_FAILED",
+            message: keyValidation.error || "Authentication failed",
+          },
+        },
+        401
+      );
+    }
+
+    if (!keyValidation.permissions?.analyze) {
+      return secureJson(
+        {
+          success: false,
+          error: {
+            code: "INSUFFICIENT_PERMISSIONS",
+            message: "API key does not have analyze permission",
+          },
+        },
+        403
       );
     }
 
     const contentLength = request.headers.get("content-length");
     if (contentLength && Number(contentLength) > MAX_BODY_BYTES) {
-      return NextResponse.json(
+      return secureJson(
         {
           success: false,
           error: {
@@ -85,7 +139,7 @@ export async function POST(request: NextRequest) {
             message: "Request body is too large",
           },
         },
-        { status: 413, headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" } }
+        413
       );
     }
 
@@ -93,11 +147,12 @@ export async function POST(request: NextRequest) {
     const clientIdentifier = extractClientIdentifier(request);
     const key = createRateLimitKey("analyze", clientIdentifier);
 
-    // Check rate limit
-    const rateLimit = await checkRateLimit(key, RATE_LIMIT_MAX, RATE_LIMIT_WINDOW_MS);
+    // Check rate limit using API key's limit
+    const rateLimitMax = keyValidation.permissions?.rateLimit || RATE_LIMIT_MAX;
+    const rateLimit = await checkRateLimit(key, rateLimitMax, RATE_LIMIT_WINDOW_MS);
     if (!rateLimit.allowed) {
       const retryAfter = Math.max(rateLimit.retryAfterSeconds, 1);
-      return NextResponse.json(
+      return secureJson(
         {
           success: false,
           error: {
@@ -105,15 +160,11 @@ export async function POST(request: NextRequest) {
             message: "Too many requests. Please try again later.",
           },
         },
+        429,
         {
-          status: 429,
-          headers: {
-            "Cache-Control": "no-store",
-            "X-Robots-Tag": "noindex, nofollow",
-            "X-RateLimit-Limit": String(RATE_LIMIT_MAX),
-            "X-RateLimit-Remaining": "0",
-            "Retry-After": String(retryAfter),
-          },
+          "X-RateLimit-Limit": String(rateLimitMax),
+          "X-RateLimit-Remaining": "0",
+          "Retry-After": String(retryAfter),
         }
       );
     }
@@ -121,7 +172,7 @@ export async function POST(request: NextRequest) {
     // Parse and validate request body
     const rawBody = await request.text();
     if (rawBody.length > MAX_BODY_BYTES) {
-      return NextResponse.json(
+      return secureJson(
         {
           success: false,
           error: {
@@ -129,7 +180,7 @@ export async function POST(request: NextRequest) {
             message: "Request body is too large",
           },
         },
-        { status: 413, headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" } }
+        413
       );
     }
 
@@ -137,7 +188,7 @@ export async function POST(request: NextRequest) {
     try {
       body = rawBody ? JSON.parse(rawBody) : null;
     } catch {
-      return NextResponse.json(
+      return secureJson(
         {
           success: false,
           error: {
@@ -145,12 +196,12 @@ export async function POST(request: NextRequest) {
             message: "Invalid JSON body",
           },
         },
-        { status: 400, headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" } }
+        400
       );
     }
 
     if (!body) {
-      return NextResponse.json(
+      return secureJson(
         {
           success: false,
           error: {
@@ -158,12 +209,12 @@ export async function POST(request: NextRequest) {
             message: "Invalid JSON body",
           },
         },
-        { status: 400, headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" } }
+        400
       );
     }
 
     if (typeof body !== "object" || Array.isArray(body)) {
-      return NextResponse.json(
+      return secureJson(
         {
           success: false,
           error: {
@@ -171,14 +222,14 @@ export async function POST(request: NextRequest) {
             message: "Invalid input data",
           },
         },
-        { status: 400, headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" } }
+        400
       );
     }
 
     const validation = AnalyzeRequestSchema.safeParse(body);
     if (!validation.success) {
       const firstIssue = validation.error.issues[0];
-      return NextResponse.json(
+      return secureJson(
         {
           success: false,
           error: {
@@ -186,21 +237,21 @@ export async function POST(request: NextRequest) {
             message: firstIssue?.message || "Invalid request",
           },
         },
-        { status: 400, headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" } }
+        400
       );
     }
 
     const { url } = validation.data;
 
     // Validate URL before analysis
-    const urlValidation = validateUrl(url);
+    const urlValidation = await validateUrl(url);
     if (!urlValidation.valid) {
-      return NextResponse.json(
+      return secureJson(
         {
           success: false,
           error: urlValidation.error,
         },
-        { status: 400, headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" } }
+        400
       );
     }
 
@@ -211,37 +262,29 @@ export async function POST(request: NextRequest) {
     if (isAnalysisError(result)) {
       const statusCode = result.code === "TIMEOUT" ? 504 : 
                          result.code === "FETCH_FAILED" ? 502 : 400;
-      return NextResponse.json(
+      return secureJson(
         {
           success: false,
           error: result,
         },
-        { 
-          status: statusCode,
-          headers: {
-            "Cache-Control": "no-store",
-            "X-Robots-Tag": "noindex, nofollow",
-            "X-RateLimit-Limit": String(RATE_LIMIT_MAX),
-            "X-RateLimit-Remaining": String(rateLimit.remaining),
-          },
+        statusCode,
+        {
+          "X-RateLimit-Limit": String(rateLimitMax),
+          "X-RateLimit-Remaining": String(rateLimit.remaining),
         }
       );
     }
 
     // Success response
-    return NextResponse.json(
+    return secureJson(
       {
         success: true,
         data: result,
       },
+      200,
       {
-        status: 200,
-        headers: {
-          "X-Robots-Tag": "noindex, nofollow",
-          "X-RateLimit-Limit": String(RATE_LIMIT_MAX),
-          "X-RateLimit-Remaining": String(rateLimit.remaining),
-          "Cache-Control": "no-store", // Don't cache analysis results
-        },
+        "X-RateLimit-Limit": String(rateLimitMax),
+        "X-RateLimit-Remaining": String(rateLimit.remaining),
       }
     );
   } catch (error) {
@@ -249,7 +292,7 @@ export async function POST(request: NextRequest) {
     logger.error("[SEO Analyzer] Unexpected error", {
       error: error instanceof Error ? error.message : String(error),
     });
-    return NextResponse.json(
+    return secureJson(
       {
         success: false,
         error: {
@@ -257,7 +300,7 @@ export async function POST(request: NextRequest) {
           message: "An unexpected error occurred",
         },
       },
-      { status: 500, headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" } }
+      500
     );
   }
 }

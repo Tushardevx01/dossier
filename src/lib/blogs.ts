@@ -37,6 +37,11 @@ type NotePostRow = NoteRow & {
   relatedSystemDesignSlug: string | null;
 };
 
+// When building inside Docker or CI without a reachable DB, set SKIP_DB_BUILD=true
+// to allow the Next.js build to complete without attempting to connect to the database.
+// This prevents build-time DB access while keeping runtime DB behavior unchanged.
+const SKIP_DB_BUILD = process.env.SKIP_DB_BUILD === 'true' || process.env.SKIP_DB === 'true';
+
 function mapMetadata(note: NoteRow): ArticleMetadata {
   return {
     slug: note.slug,
@@ -75,6 +80,8 @@ function mapPost(note: NotePostRow): ArticlePost {
  * Get all published notes sorted by featured first and newest first.
  */
 export async function getAllNotes(): Promise<ArticleMetadata[]> {
+  if (SKIP_DB_BUILD) return [];
+
   await ensureDatabaseReady();
   const db = getDb();
 
@@ -101,6 +108,8 @@ export async function getAllNotes(): Promise<ArticleMetadata[]> {
  * Get a single note by slug with full content.
  */
 export async function getNoteBySlug(slug: string): Promise<ArticlePost | null> {
+  if (SKIP_DB_BUILD) return null;
+
   await ensureDatabaseReady();
   const db = getDb();
 
@@ -125,7 +134,7 @@ export async function getNoteBySlug(slug: string): Promise<ArticlePost | null> {
     .from(engineeringNotes)
     .where(and(eq(engineeringNotes.slug, slug), eq(engineeringNotes.published, true)))
     .limit(1)
-    .then((rows) => rows[0]);
+      .then((rows: Array<{ slug: string; id: number; title: string; subtitle: string; excerpt: string; date: string; content: string; readTime: number; category: ArticleCategory; level: ArticleDifficulty; whatILearned: string[] | null; improvements: string[] | null; relatedNoteSlugs: string[] | null; relatedProjectSlug: string | null; relatedSystemDesignSlug: string | null; }>) => rows[0]);
 
   if (!note) {
     return null;
@@ -138,6 +147,8 @@ export async function getNoteBySlug(slug: string): Promise<ArticlePost | null> {
  * Get featured notes for homepage.
  */
 export async function getFeaturedNotes(limit = 6): Promise<ArticleMetadata[]> {
+  if (SKIP_DB_BUILD) return [];
+
   await ensureDatabaseReady();
   const db = getDb();
 
@@ -169,6 +180,8 @@ export async function getRelatedNotes(
   excludeSlug: string,
   limit = 2
 ): Promise<ArticleMetadata[]> {
+  if (SKIP_DB_BUILD) return [];
+
   await ensureDatabaseReady();
   const db = getDb();
 
@@ -202,22 +215,26 @@ export async function getRelatedNotes(
  * Get all unique categories.
  */
 export async function getCategories(): Promise<ArticleCategory[]> {
+  if (SKIP_DB_BUILD) return [];
+
   await ensureDatabaseReady();
   const db = getDb();
 
-  const categories = await db
+  const categories = (await db
     .selectDistinct({ category: engineeringNotes.category })
     .from(engineeringNotes)
     .where(eq(engineeringNotes.published, true))
-    .orderBy(engineeringNotes.category);
+    .orderBy(engineeringNotes.category)) as Array<{ category: string }>;
 
-  return categories.map((row) => row.category as ArticleCategory);
+  return categories.map((row: { category: string }) => row.category as ArticleCategory);
 }
 
 /**
  * Filter notes by category.
  */
 export async function getNotesByCategory(category: ArticleCategory): Promise<ArticleMetadata[]> {
+  if (SKIP_DB_BUILD) return [];
+
   await ensureDatabaseReady();
   const db = getDb();
 
@@ -244,6 +261,8 @@ export async function getNotesByCategory(category: ArticleCategory): Promise<Art
  * Get total count of published notes.
  */
 export async function getNoteCount(): Promise<number> {
+  if (SKIP_DB_BUILD) return 0;
+
   await ensureDatabaseReady();
   const db = getDb();
 
@@ -251,7 +270,7 @@ export async function getNoteCount(): Promise<number> {
     .select({ count: sql<number>`count(*)` })
     .from(engineeringNotes)
     .where(eq(engineeringNotes.published, true))
-    .then((rows) => rows[0]);
+    .then((rows: Array<{ count: number }>) => rows[0]);
 
   return result?.count ?? 0;
 }
@@ -260,13 +279,15 @@ export async function getNoteCount(): Promise<number> {
  * Get all published note slugs for static params.
  */
 export async function getAllNoteSlugs(): Promise<{ slug: string }[]> {
+  if (SKIP_DB_BUILD) return [];
+
   await ensureDatabaseReady();
   const db = getDb();
 
-  const notes = await db
+  const notes = (await db
     .select({ slug: engineeringNotes.slug })
     .from(engineeringNotes)
-    .where(eq(engineeringNotes.published, true));
+    .where(eq(engineeringNotes.published, true))) as Array<{ slug: string }>;
 
-  return notes.map((row) => ({ slug: String(row.slug) }));
+  return notes.map((row: { slug: string }) => ({ slug: String(row.slug) }));
 }

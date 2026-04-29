@@ -44,7 +44,6 @@ export default async function Image() {
             alignItems: "center",
             justifyContent: "center",
             padding: "40px",
-            zIndex: 10,
           }}
         >
           {/* Local text badge avoids remote emoji fetches during build */}

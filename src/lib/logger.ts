@@ -17,6 +17,38 @@ interface LogEntry {
   [key: string]: unknown;
 }
 
+const PII_KEYS = ["email", "password", "token", "apiKey", "secret", "authorization", "senderEmail"];
+const EMAIL_REGEX = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+
+/**
+ * Strips PII from a value recursively
+ */
+function maskPII(value: unknown): unknown {
+  if (typeof value === "string") {
+    // Mask emails in strings
+    let masked = value.replace(EMAIL_REGEX, "[MASKED_EMAIL]");
+    return masked;
+  }
+
+  if (Array.isArray(value)) {
+    return value.map(maskPII);
+  }
+
+  if (value !== null && typeof value === "object") {
+    const maskedObj: Record<string, unknown> = {};
+    for (const [key, val] of Object.entries(value as Record<string, unknown>)) {
+      if (PII_KEYS.some((pii) => key.toLowerCase().includes(pii.toLowerCase()))) {
+        maskedObj[key] = "[MASKED]";
+      } else {
+        maskedObj[key] = maskPII(val);
+      }
+    }
+    return maskedObj;
+  }
+
+  return value;
+}
+
 const LOG_LEVEL_PRIORITY: Record<LogLevel, number> = {
   debug: 0,
   info: 1,
@@ -36,11 +68,13 @@ function shouldLog(level: LogLevel): boolean {
 }
 
 function formatLog(entry: LogEntry): string {
+  const maskedEntry = maskPII(entry) as LogEntry;
+
   if (process.env.NODE_ENV === "production") {
-    return JSON.stringify(entry);
+    return JSON.stringify(maskedEntry);
   }
   // Pretty print in development
-  const { level, message, timestamp, ...rest } = entry;
+  const { level, message, timestamp, ...rest } = maskedEntry;
   const meta = Object.keys(rest).length > 0 ? ` ${JSON.stringify(rest)}` : "";
   return `[${timestamp}] ${level.toUpperCase()}: ${message}${meta}`;
 }

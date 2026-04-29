@@ -6,10 +6,10 @@
 
 import type { Config } from 'drizzle-kit';
 
-const config: Config = {
+const config = {
   schema: './src/db/schema.ts',
   out: './migrations',
-  driver: 'pg',
+  dialect: 'postgresql',
   dbCredentials: {
     connectionString: process.env.DATABASE_URL || '',
   },
@@ -17,6 +17,6 @@ const config: Config = {
   verbose: process.env.NODE_ENV === 'development',
   // Strict mode: warn about potentially destructive changes
   strict: true,
-};
+} as Config;
 
 export default config;

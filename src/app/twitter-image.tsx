@@ -57,7 +57,6 @@ export default async function Image() {
             alignItems: "center",
             justifyContent: "center",
             padding: "40px",
-            zIndex: 10,
           }}
         >
           {/* Profile circle placeholder */}

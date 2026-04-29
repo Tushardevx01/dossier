@@ -13,12 +13,13 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 import { ArticlePost } from "@/lib/articleLoader";
 import { ArticleHero } from "@/components/ArticleHero";
 import { ArticleToc } from "@/components/ArticleToc";
 import { PrismHighlighter } from "@/components/PrismHighlighter";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 interface ArticlePageProps {
   post: ArticlePost;
@@ -51,9 +52,13 @@ export function ArticlePage({ post, slug }: ArticlePageProps) {
 /**
  * Article Content Wrapper
  * Handles all prose content with premium modern styling
+ *
+ * SECURITY: All HTML is sanitized before rendering to prevent XSS attacks
  */
 function ArticleContentWrapper({ post }: { post: ArticlePost }) {
   const articleHtml = typeof post.content === "string" ? post.content : "";
+  // Sanitize HTML to prevent XSS attacks
+  const safeHtml = sanitizeHtml(articleHtml);
 
   return (
     <motion.div
@@ -65,7 +70,7 @@ function ArticleContentWrapper({ post }: { post: ArticlePost }) {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Article Content */}
         <article className="article-content space-y-8">
-          <div dangerouslySetInnerHTML={{ __html: articleHtml }} />
+          <div dangerouslySetInnerHTML={{ __html: safeHtml }} />
         </article>
 
         {/* Takeaways Section */}

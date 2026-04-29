@@ -10,6 +10,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
+import { readCsrfTokenFromCookieString } from "@/lib/security/csrf.client";
+
 export interface ContactFormValues {
   senderName: string;
   senderEmail: string;
@@ -63,10 +65,23 @@ export function useContactForm() {
 
       const sendPromise = (async () => {
         try {
+          // Get CSRF token from cookie (set by middleware)
+          const csrfToken = readCsrfTokenFromCookieString(document.cookie);
+
+          if (!csrfToken) {
+            throw new Error("CSRF token not found. Please refresh the page.");
+          }
+
+          // Include CSRF token in request body (Double Submit Cookie pattern)
+          const payload = {
+            ...formValues,
+            csrfToken,
+          };
+
           const response = await fetch("/api/send", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(formValues),
+            body: JSON.stringify(payload),
           });
 
           const data = await response.json();

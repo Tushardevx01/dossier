@@ -18,6 +18,8 @@ import {
   extractClientIdentifier,
   isOriginAllowed,
 } from "@/services/contact";
+import { validateCsrfToken, getCsrfCookieName } from "@/lib/security/csrf.server";
+import { getCorsHeaders, getSecurityHeaders, mergeHeaders } from "@/lib/security/corsHeaders";
 
 export const runtime = "nodejs";
 
@@ -32,11 +34,15 @@ function jsonResponse(
 ) {
   return NextResponse.json(payload, {
     status,
-    headers: {
-      "Cache-Control": "no-store",
-      "X-Robots-Tag": "noindex, nofollow",
-      ...headers,
-    },
+    headers: mergeHeaders(
+      {
+        "Cache-Control": "no-store",
+        "X-Robots-Tag": "noindex, nofollow",
+      },
+      getCorsHeaders(),
+      getSecurityHeaders(),
+      headers ?? {}
+    ),
   });
 }
 
@@ -74,6 +80,9 @@ export async function POST(request: NextRequest) {
     return jsonResponse({ error: "Forbidden origin", requestId }, 403);
   }
 
+  // CSRF token check (Double Submit Cookie pattern)
+  const csrfCookieToken = request.cookies.get(getCsrfCookieName())?.value;
+
   // Content-Type check
   const contentType = request.headers.get("content-type") ?? "";
   if (!contentType.includes("application/json")) {
@@ -96,6 +105,15 @@ export async function POST(request: NextRequest) {
 
   if (!body || typeof body !== "object") {
     return jsonResponse({ error: "Invalid input data", requestId }, 400, { "X-Robots-Tag": "noindex, nofollow" });
+  }
+
+  // Validate CSRF token from request body against cookie
+  const bodyObj = body as Record<string, unknown>;
+  const csrfBodyToken = bodyObj.csrfToken as string | undefined;
+
+  if (!validateCsrfToken(csrfCookieToken, csrfBodyToken)) {
+    logger.warn("CSRF validation failed", { requestId });
+    return jsonResponse({ error: "CSRF validation failed", requestId }, 403);
   }
 
   // Get config

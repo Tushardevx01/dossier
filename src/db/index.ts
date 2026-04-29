@@ -20,10 +20,22 @@ type PostgresClient = ReturnType<typeof postgres>;
 
 let client: PostgresClient | null = null;
 
+// Allow skipping DB initialization during Docker/CI builds when a live DB isn't available.
+const SKIP_DB_BUILD = process.env.SKIP_DB_BUILD === 'true' || process.env.SKIP_DB === 'true';
+
 function createDatabase() {
   const databaseUrl = process.env.DATABASE_URL;
 
   if (!databaseUrl) {
+    if (SKIP_DB_BUILD) {
+      // Return a lightweight stub for build environments. Consumers should
+      // short-circuit DB calls when SKIP_DB_BUILD is enabled.
+      client = null;
+      // Return a minimal stub that won't be used during build-time static rendering.
+      // Type-cast to any to satisfy runtime usage.
+      return ({} as any);
+    }
+
     throw new Error(
       'DATABASE_URL is not set. Add it to .env.local:\n' +
       'DATABASE_URL=postgresql://user:password@host/database?sslmode=require'

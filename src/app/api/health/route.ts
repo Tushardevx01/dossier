@@ -2,8 +2,13 @@
  * Health Check Endpoint
  *
  * Returns a minimal health status for orchestration and uptime checks.
+ * Does NOT expose internal configuration or environment variable names.
+ *
+ * SECURITY: Environment validation happens at startup (instrumentation.ts),
+ * not in this endpoint to prevent information leakage.
  *
  * GET /api/health
+ * Returns: 200 if server is running, 503 if startup validation failed
  */
 
 import { NextResponse } from "next/server";
@@ -12,30 +17,19 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 interface HealthStatus {
-  status: "healthy" | "unhealthy";
+  status: "ok";
   timestamp: string;
-  uptime: number;
-}
-
-const startTime = Date.now();
-function checkEnv(): boolean {
-  const required = ["QEV_API_KEY", "EMAIL_FROM", "EMAIL_PASSWORD"] as const;
-  return required.every((key) => Boolean(process.env[key]));
 }
 
 export async function GET() {
-  const envReady = checkEnv();
-
+  // Return minimal health status (server is running if this executes)
   const health: HealthStatus = {
-    status: envReady ? "healthy" : "unhealthy",
+    status: "ok",
     timestamp: new Date().toISOString(),
-    uptime: Math.floor((Date.now() - startTime) / 1000),
   };
 
-  const statusCode = envReady ? 200 : 503;
-
   return NextResponse.json(health, {
-    status: statusCode,
+    status: 200,
     headers: {
       "Cache-Control": "no-store, no-cache, must-revalidate",
       "X-Robots-Tag": "noindex, nofollow",

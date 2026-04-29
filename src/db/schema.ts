@@ -64,3 +64,43 @@ export const engineeringNotes = pgTable('engineering_notes', {
  */
 export type EngineeringNote = typeof engineeringNotes.$inferSelect;
 export type NewEngineeringNote = typeof engineeringNotes.$inferInsert;
+
+/**
+ * api_keys table
+ *
+ * Stores API keys for authenticating requests to protected endpoints.
+ */
+export const apiKeys = pgTable('api_keys', {
+  id: serial('id').primaryKey(),
+
+  // API key value (hashed for security)
+  keyHash: varchar('key_hash', { length: 255 }).notNull().unique(),
+
+  // Human-readable name
+  name: varchar('name', { length: 100 }).notNull(),
+
+  // Permissions (JSON object defining what the key can access)
+  permissions: jsonb('permissions').$type<{
+    analyze: boolean;
+    rateLimit: number; // requests per minute
+  }>().notNull().default(sql`'{"analyze": true, "rateLimit": 10}'::jsonb`),
+
+  // Status
+  active: boolean('active').notNull().default(true),
+
+  // Usage tracking
+  lastUsed: timestamp('last_used', { withTimezone: true }),
+  usageCount: integer('usage_count').notNull().default(0),
+
+  // Timestamps
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .default(sql`now()`),
+  expiresAt: timestamp('expires_at', { withTimezone: true }),
+});
+
+/**
+ * Type exports for API keys
+ */
+export type ApiKey = typeof apiKeys.$inferSelect;
+export type NewApiKey = typeof apiKeys.$inferInsert;

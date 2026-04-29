@@ -5,6 +5,8 @@
  * and security validations. Designed for modern SSR/streaming sites.
  */
 
+import { lookup } from "node:dns/promises";
+import { isIP } from "node:net";
 import type { FetchResult, AnalyzerError } from "./types";
 
 /** Fetch timeout in milliseconds */
@@ -13,6 +15,7 @@ const FETCH_TIMEOUT_MS = 10_000;
 /** User agent for WebScope bot */
 const USER_AGENT = "Mozilla/5.0 (compatible; WebScopeBot/1.0; +https://tushardevx01.tech)";
 const MAX_REDIRECTS = 5;
+const MAX_RESPONSE_BYTES = 2_000_000; // 2MB
 
 /** Blocked hostnames to prevent internal network abuse */
 const BLOCKED_HOSTS = new Set([
@@ -37,9 +40,16 @@ const PRIVATE_IP_PATTERNS = [
 ];
 
 /**
+ * Validates an IP address is not private
+ */
+function isPrivateIP(ip: string): boolean {
+    return PRIVATE_IP_PATTERNS.some((pattern) => pattern.test(ip));
+}
+
+/**
  * Validates URL for safety and correctness
  */
-export function validateUrl(urlString: string): { valid: boolean; error?: AnalyzerError; url?: URL } {
+export async function validateUrl(urlString: string): Promise<{ valid: boolean; error?: AnalyzerError; url?: URL }> {
     // Must be non-empty string
     if (!urlString || typeof urlString !== "string") {
         return {
@@ -102,18 +112,70 @@ export function validateUrl(urlString: string): { valid: boolean; error?: Analyz
         };
     }
 
-    // Check for private IP ranges
-    for (const pattern of PRIVATE_IP_PATTERNS) {
-        if (pattern.test(hostname)) {
-            return {
-                valid: false,
-                error: {
-                    code: "BLOCKED_URL",
-                    message: "Private network URLs are not allowed",
-                    details: "Cannot analyze internal network addresses",
-                },
-            };
+    // Reject explicit non-standard ports for HTTPS to reduce SSRF surface
+    if (url.port && url.port !== "443") {
+        return {
+            valid: false,
+            error: {
+                code: "BLOCKED_URL",
+                message: "Non-standard ports are not allowed",
+                details: `Port ${url.port} is not permitted for analysis`,
+            },
+        };
+    }
+
+    // DNS Rebinding & IP literal protection: resolve all addresses and check each
+    try {
+        // If hostname is an IP literal (v4 or v6), validate it directly
+        if (isIP(hostname)) {
+            if (isPrivateIP(hostname)) {
+                return {
+                    valid: false,
+                    error: {
+                        code: "BLOCKED_URL",
+                        message: "Private network URLs are not allowed",
+                        details: "Cannot analyze internal network addresses",
+                    },
+                };
+            }
+        } else {
+            // Resolve all A/AAAA records and ensure none are private
+            const addresses = await lookup(hostname, { all: true });
+            if (!addresses || addresses.length === 0) {
+                return {
+                    valid: false,
+                    error: {
+                        code: "INVALID_URL",
+                        message: "Could not resolve hostname",
+                        details: `No DNS records found for ${hostname}`,
+                    },
+                };
+            }
+
+            for (const addrObj of addresses) {
+                const addr = addrObj.address;
+                if (isPrivateIP(addr)) {
+                    return {
+                        valid: false,
+                        error: {
+                            code: "BLOCKED_URL",
+                            message: "Private network URLs are not allowed",
+                            details: `Resolved address ${addr} is in a private range`,
+                        },
+                    };
+                }
+            }
         }
+    } catch (err) {
+        // If DNS fails, we block it to be safe
+        return {
+            valid: false,
+            error: {
+                code: "INVALID_URL",
+                message: "Could not resolve hostname",
+                details: err instanceof Error ? err.message : String(err),
+            },
+        };
     }
 
     return { valid: true, url };
@@ -137,7 +199,7 @@ function createTimeoutController(timeoutMs: number): { controller: AbortControll
  */
 export async function fetchHTML(urlString: string): Promise<FetchResult | AnalyzerError> {
     // Validate URL first
-    const validation = validateUrl(urlString);
+    const validation = await validateUrl(urlString);
     if (!validation.valid) {
         return validation.error!;
     }
@@ -173,7 +235,7 @@ export async function fetchHTML(urlString: string): Promise<FetchResult | Analyz
                 }
 
                 const nextUrl = new URL(location, url.toString());
-                const nextValidation = validateUrl(nextUrl.toString());
+                const nextValidation = await validateUrl(nextUrl.toString());
                 if (!nextValidation.valid || !nextValidation.url) {
                     clear();
                     return nextValidation.error ?? {
@@ -208,8 +270,24 @@ export async function fetchHTML(urlString: string): Promise<FetchResult | Analyz
                 };
             }
 
+            const contentLength = Number(response.headers.get("content-length") || "0");
+            if (Number.isFinite(contentLength) && contentLength > MAX_RESPONSE_BYTES) {
+                return {
+                    code: "FETCH_FAILED",
+                    message: "Response is too large",
+                    details: `Content-Length exceeds ${MAX_RESPONSE_BYTES} bytes`,
+                };
+            }
+
             // Read HTML content
             const html = await response.text();
+            if (Buffer.byteLength(html, "utf8") > MAX_RESPONSE_BYTES) {
+                return {
+                    code: "FETCH_FAILED",
+                    message: "Response is too large",
+                    details: `Response exceeds ${MAX_RESPONSE_BYTES} bytes`,
+                };
+            }
 
             // Extract headers we care about
             const headers: Record<string, string> = {};

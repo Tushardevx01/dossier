@@ -15,8 +15,10 @@
  * 4. Marks them as published
  */
 
+import { createHash } from 'crypto';
+
 import { ensureDatabaseReady, getDb } from '@/db';
-import { engineeringNotes } from '@/db/schema';
+import { engineeringNotes, apiKeys } from '@/db/schema';
 
 /**
  * Report current database state.
@@ -28,11 +30,38 @@ export async function seedDatabase() {
     await ensureDatabaseReady();
     const db = getDb();
 
-    const result = await db
+    const notesResult = await db
       .select({ count: engineeringNotes.id })
       .from(engineeringNotes);
 
-    console.log(`✅ engineering_notes table is available with ${result.length} rows.`);
+    console.log(`✅ engineering_notes table is available with ${notesResult.length} rows.`);
+
+    // Seed API keys if none exist
+    const keysResult = await db
+      .select({ count: apiKeys.id })
+      .from(apiKeys);
+
+    if (keysResult.length === 0) {
+      console.log('🔑 Seeding API keys...');
+
+      const testKey = 'test-api-key-12345';
+      const hashedKey = createHash('sha256').update(testKey).digest('hex');
+
+      await db.insert(apiKeys).values({
+        keyHash: hashedKey,
+        name: 'Test API Key',
+        permissions: {
+          analyze: true,
+          rateLimit: 10,
+        },
+        active: true,
+      });
+
+      console.log('✅ API keys seeded');
+    } else {
+      console.log(`✅ api_keys table is available with ${keysResult.length} keys.`);
+    }
+
     console.log('');
     console.log('ℹ️  The legacy hardcoded article source has been removed.');
     console.log('   Manage notes directly in Neon PostgreSQL.');

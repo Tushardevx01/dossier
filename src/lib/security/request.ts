@@ -7,6 +7,34 @@ type RequestLike = {
   ip?: string | null;
 };
 
+function normalizeClientIp(value: string | null | undefined): string | null {
+  if (!value) return null;
+  const candidate = value.split(",")[0]?.trim();
+  if (!candidate) return null;
+  if (candidate.length > 64) return null;
+  return candidate;
+}
+
+function shouldTrustForwardedHeaders(): boolean {
+  return process.env.VERCEL === "1" || process.env.TRUST_PROXY_HEADERS === "true";
+}
+
+function extractForwardedClientIp(headers: Headers): string | null {
+  const headerCandidates = [
+    headers.get("x-vercel-forwarded-for"),
+    headers.get("x-forwarded-for"),
+    headers.get("cf-connecting-ip"),
+    headers.get("x-real-ip"),
+  ];
+
+  for (const value of headerCandidates) {
+    const ip = normalizeClientIp(value);
+    if (ip) return ip;
+  }
+
+  return null;
+}
+
 export function isTrustedOrigin(headers: Headers): boolean {
   const originHeader = headers.get("origin") ?? headers.get("referer");
   if (!originHeader) {
@@ -21,17 +49,14 @@ export function isTrustedOrigin(headers: Headers): boolean {
 }
 
 export function extractClientIdentifier(request: RequestLike): string {
-  const directIp = request.ip?.trim();
+  const directIp = normalizeClientIp(request.ip);
   if (directIp) {
     return directIp;
   }
 
-  const forwardedFor = request.headers.get("x-vercel-forwarded-for");
-  if (forwardedFor) {
-    const firstHop = forwardedFor.split(",")[0]?.trim();
-    if (firstHop) {
-      return firstHop;
-    }
+  if (shouldTrustForwardedHeaders()) {
+    const forwardedIp = extractForwardedClientIp(request.headers);
+    if (forwardedIp) return forwardedIp;
   }
 
   return "unknown";

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { ArticlePost } from "@/lib/articleLoader";
 import { TagBadge } from "@/components/notes/TagBadge";
 
