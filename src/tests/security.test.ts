@@ -8,7 +8,7 @@ import {
 } from "@/lib/security/csrf.server";
 import { generateCsrfToken as generateEdgeCsrfToken } from "@/lib/security/csrf.edge";
 import { getCsrfCookieName } from "@/lib/security/csrf.client";
-import { extractClientIdentifier } from "@/lib/security/request";
+import { extractClientIdentifier, isTrustedOrigin } from "@/lib/security/request";
 
 describe("security helpers", () => {
   afterEach(() => {
@@ -56,6 +56,24 @@ describe("security helpers", () => {
     };
 
     expect(extractClientIdentifier(request)).toBe("198.51.100.7");
+  });
+
+  it("allows same-origin submissions on localhost", () => {
+    const headers = new Headers({
+      origin: "http://localhost:3000",
+      host: "localhost:3000",
+    });
+
+    expect(isTrustedOrigin(headers)).toBe(true);
+  });
+
+  it("rejects cross-origin submissions even when the host is local", () => {
+    const headers = new Headers({
+      origin: "https://evil.example",
+      host: "localhost:3000",
+    });
+
+    expect(isTrustedOrigin(headers)).toBe(false);
   });
 
   it("handles invalid CORS origins safely", () => {

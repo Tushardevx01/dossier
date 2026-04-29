@@ -11,7 +11,7 @@
 import { logger } from "@/lib/logger";
 import { Errors, AppError } from "@/lib/errors";
 
-const VERIFICATION_TIMEOUT_MS = 4000;
+const VERIFICATION_TIMEOUT_MS = 3000;
 
 export interface VerificationResult {
   valid: boolean;
@@ -52,8 +52,6 @@ export async function verifyEmailAddress(
       }
     );
 
-    clearTimeout(timeoutId);
-
     if (!response.ok) {
       logger.warn("Email verification API returned non-OK status", {
         status: response.status,
@@ -76,8 +74,6 @@ export async function verifyEmailAddress(
 
     return { valid: true };
   } catch (error) {
-    clearTimeout(timeoutId);
-
     const isAbort = error instanceof Error && error.name === "AbortError";
     const errorMessage = isAbort ? "timeout" : (error instanceof Error ? error.message : "unknown");
 
@@ -90,5 +86,7 @@ export async function verifyEmailAddress(
       valid: false,
       error: Errors.externalService("Email validation service", { requestId }),
     };
+  } finally {
+    clearTimeout(timeoutId);
   }
 }

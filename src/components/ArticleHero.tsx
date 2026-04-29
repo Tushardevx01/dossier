@@ -56,9 +56,9 @@ export function ArticleHero({ post }: ArticleHeroProps) {
         </div>
 
         {/* Badges */}
-        <div className="flex flex-wrap gap-2">
-          <TagBadge type="category" label={post.category} />
+        <div className="flex flex-wrap items-center gap-2">
           <TagBadge type="level" label={post.difficulty} />
+          <TagBadge type="category" label={post.category} />
         </div>
       </div>
     </motion.div>

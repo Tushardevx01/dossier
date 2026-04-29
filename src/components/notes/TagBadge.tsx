@@ -32,7 +32,7 @@ export function TagBadge({ type, label }: TagBadgeProps) {
 
   return (
     <span
-      className={`inline-flex items-center rounded-md border px-2.5 py-1 text-xs font-medium uppercase tracking-wide transition-opacity duration-200 hover:opacity-80 ${toneClass}`}
+      className={`inline-flex shrink-0 items-center rounded-md border px-2.5 py-1 text-xs font-medium uppercase tracking-wide leading-none whitespace-nowrap transition-opacity duration-200 hover:opacity-80 ${toneClass}`}
     >
       {label}
     </span>

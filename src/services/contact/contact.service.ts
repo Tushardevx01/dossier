@@ -42,6 +42,27 @@ export type ContactResult =
   | { success: true; message: string }
   | { success: false; error: AppError };
 
+async function runEmailVerificationBestEffort(
+  email: string,
+  apiKey: string,
+  requestId: string,
+  clientIdentifier: string
+): Promise<void> {
+  try {
+    const verification = await verifyEmailAddress(email, apiKey, requestId);
+
+    if (verification.valid) {
+      logger.info("Email verification completed", { requestId, clientIdentifier });
+    }
+  } catch (error) {
+    logger.warn("Email verification raised an unexpected error", {
+      requestId,
+      clientIdentifier,
+      error: error instanceof Error ? error.message : "unknown",
+    });
+  }
+}
+
 // ─── Service ─────────────────────────────────────────────────────────────────
 
 /**
@@ -53,79 +74,94 @@ export async function processContactSubmission(
 ): Promise<ContactResult> {
   const { body, clientIdentifier, requestId } = request;
 
-  logger.info("Processing contact submission", { requestId, clientIdentifier });
+  try {
+    logger.info("Processing contact submission", { requestId, clientIdentifier });
 
-  // 1. Rate limit check
-  const rateLimitKey = createRateLimitKey("contact", clientIdentifier);
-  const rateLimit = await checkRateLimit(
-    rateLimitKey,
-    CONTACT_RATE_LIMIT_MAX_REQUESTS,
-    CONTACT_RATE_LIMIT_WINDOW_MS
-  );
+    // 1. Rate limit check
+    const rateLimitKey = createRateLimitKey("contact", clientIdentifier);
+    const rateLimit = await checkRateLimit(
+      rateLimitKey,
+      CONTACT_RATE_LIMIT_MAX_REQUESTS,
+      CONTACT_RATE_LIMIT_WINDOW_MS
+    );
 
-  if (!rateLimit.allowed) {
-    logger.warn("Rate limit exceeded", { requestId, clientIdentifier });
+    if (!rateLimit.allowed) {
+      logger.warn("Rate limit exceeded", { requestId, clientIdentifier, retryAfterSeconds: rateLimit.retryAfterSeconds });
+      return {
+        success: false,
+        error: Errors.rateLimitExceeded(rateLimit.retryAfterSeconds, { requestId }),
+      };
+    }
+
+    // 2. Validate input
+    const validation = validateContactForm(body);
+    if (!validation.success) {
+      logger.info("Validation failed", { requestId, error: validation.error });
+      return {
+        success: false,
+        error: Errors.validation(validation.error.message, {
+          requestId,
+          field: validation.error.field,
+        }),
+      };
+    }
+
+    const formData = validation.data;
+
+    // 3. Honeypot check (bots fill this)
+    if (formData.website && formData.website.length > 0) {
+      logger.info("Honeypot triggered", { requestId, clientIdentifier });
+      // Return success to not reveal detection
+      return { success: true, message: "Message received" };
+    }
+
+    // 4. Start email verification as a best-effort side effect.
+    // It must never block or fail submission.
+    void runEmailVerificationBestEffort(
+      formData.senderEmail,
+      config.emailApiKey,
+      requestId,
+      clientIdentifier
+    );
+
+    // 5. Render and send email
+    const htmlContent = renderContactEmail({
+      userName: formData.senderName,
+      contactReason: formData.reasonToContact,
+      userMessage: formData.senderMsg,
+      requestId,
+    });
+
+    const emailResult = await sendEmail(
+      {
+        to: { name: formData.senderName, address: formData.senderEmail },
+        subject: "Request Received - Tushar Kanti Dey",
+        html: htmlContent,
+      },
+      { from: config.emailFrom, password: config.emailPassword }
+    );
+
+    if (!emailResult.success) {
+      logger.error("Email send failed", { requestId, error: emailResult.error, clientIdentifier });
+      return {
+        success: false,
+        error: Errors.internal("Failed to send email", { requestId }),
+      };
+    }
+
+    logger.info("Contact submission processed successfully", { requestId, clientIdentifier });
+    return { success: true, message: "Message has been sent successfully" };
+  } catch (error) {
+    logger.exception(error instanceof Error ? error : new Error("Unexpected contact submission failure"), {
+      requestId,
+      clientIdentifier,
+    });
+
     return {
       success: false,
-      error: Errors.rateLimitExceeded(rateLimit.retryAfterSeconds, { requestId }),
+      error: Errors.internal("Failed to process contact submission", { requestId }),
     };
   }
-
-  // 2. Validate input
-  const validation = validateContactForm(body);
-  if (!validation.success) {
-    logger.info("Validation failed", { requestId, error: validation.error });
-    return {
-      success: false,
-      error: Errors.validation(validation.error.message, {
-        requestId,
-        field: validation.error.field,
-      }),
-    };
-  }
-
-  const formData = validation.data;
-
-  // 3. Honeypot check (bots fill this)
-  if (formData.website && formData.website.length > 0) {
-    logger.info("Honeypot triggered", { requestId });
-    // Return success to not reveal detection
-    return { success: true, message: "Message received" };
-  }
-
-  // 4. Verify email address
-  const verification = await verifyEmailAddress(formData.senderEmail, config.emailApiKey, requestId);
-  if (!verification.valid) {
-    return { success: false, error: verification.error! };
-  }
-
-  // 5. Render and send email
-  const htmlContent = renderContactEmail({
-    userName: formData.senderName,
-    contactReason: formData.reasonToContact,
-    userMessage: formData.senderMsg,
-    requestId,
-  });
-
-  const emailResult = await sendEmail(
-    {
-      to: { name: formData.senderName, address: formData.senderEmail },
-      subject: "Request Received - Tushar Kanti Dey",
-      html: htmlContent,
-    },
-    { from: config.emailFrom, password: config.emailPassword }
-  );
-
-  if (!emailResult.success) {
-    logger.error("Email send failed", { requestId, error: emailResult.error });
-    return {
-      success: false,
-      error: Errors.internal("Failed to send email", { requestId }),
-    };
-  }
-
-  logger.info("Contact submission processed successfully", { requestId });
-  return { success: true, message: "Message has been sent successfully" };
 }
 
 /**
