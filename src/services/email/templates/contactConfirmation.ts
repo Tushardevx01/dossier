@@ -1,10 +1,11 @@
 /**
  * Contact Confirmation Email Template
  *
- * Production-grade email template with infrastructure-focused design.
- * Uses inline styles for email client compatibility.
- * No external CSS, no flexbox, table-based layout.
+ * Production-grade email template with a personal, modern tone.
+ * Uses inline styles for email client compatibility and table-safe layout.
  */
+
+import { selfData } from "@/constant";
 
 export interface ContactConfirmationData {
   name: string;
@@ -24,7 +25,7 @@ function escapeHtml(text: string): string {
     '"': "&quot;",
     "'": "&#039;",
   };
-  return text.replace(/[&<>"']/g, (char) => map[char]);
+  return (text || "").replace(/[&<>"']/g, (char) => map[char]);
 }
 
 /**
@@ -33,13 +34,50 @@ function escapeHtml(text: string): string {
 export function generateContactConfirmationEmail(
   data: ContactConfirmationData
 ): string {
-  const { name, inquiryType, message, requestId } = data;
+  const { name, inquiryType, message } = data;
 
-  // Escape all user-provided content
-  const safeName = escapeHtml(name);
-  const safeInquiryType = escapeHtml(inquiryType);
-  const safeMessage = escapeHtml(message);
-  const safeRequestId = escapeHtml(requestId);
+  const safeName = escapeHtml(name || "");
+  const safeInquiryType = escapeHtml(inquiryType || "");
+  const safeMessage = escapeHtml(message || "");
+
+  function clamp(str: string, n = 220) {
+    const t = (str || "").replace(/\s+/g, " ").trim();
+    return t.length > n ? t.slice(0, n).trimEnd() + "…" : t;
+  }
+
+  function smallIntroFor(reason: string) {
+    if (!reason) return "I’ve received your message and will review it personally.";
+    const r = reason.toLowerCase();
+    if (r.includes("project")) return "I’ve received your message — I’d be glad to learn more about your project.";
+    if (r.includes("collab") || r.includes("collaboration")) return "I’ve received your message — looking forward to exploring ideas together.";
+    return "I’ve received your message and will review it personally.";
+  }
+
+  const preview = clamp(safeMessage, 220) || "(No message provided)";
+  const accent = "#06b6d4";
+  const site = "https://tushardevx01.tech";
+  const socials = [
+    {
+      name: "GitHub",
+      url: `https://github.com/${selfData.socials_username.github}`,
+      icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/github.svg",
+    },
+    {
+      name: "Instagram",
+      url: `https://instagram.com/${selfData.socials_username.instagram}`,
+      icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/instagram.svg",
+    },
+    {
+      name: "LinkedIn",
+      url: `https://www.linkedin.com/in/${selfData.socials_username.linkedin}`,
+      icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/linkedin.svg",
+    },
+    {
+      name: "Twitter",
+      url: `https://twitter.com/${selfData.socials_username.twitter}`,
+      icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/x.svg",
+    },
+  ];
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -47,7 +85,7 @@ export function generateContactConfirmationEmail(
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Message Received</title>
+  <title>Thanks for reaching out</title>
   <!--[if mso]>
   <noscript>
     <xml>
@@ -58,189 +96,123 @@ export function generateContactConfirmationEmail(
   </noscript>
   <![endif]-->
 </head>
-<body style="margin: 0; padding: 0; background-color: #0b0f14; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;">
-  
-  <!-- Outer wrapper -->
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #0b0f14;">
+<body style="margin:0;padding:0;background-color:#0b0b0c;font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;color:#fff;">
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#0b0b0c;width:100%;">
     <tr>
-      <td align="center" style="padding: 40px 16px;">
-        
-        <!-- Main container -->
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; background-color: #11161c; border: 1px solid #1f2933; border-radius: 12px;">
+      <td align="center" style="padding:32px 12px;">
+
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;background:#111214;border:1px solid #222;border-radius:20px;padding:32px;box-shadow:0 6px 20px rgba(2,6,23,0.6);">
           <tr>
-            <td style="padding: 32px;">
-              
+            <td>
+
               <!-- Header -->
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
-                  <td style="padding-bottom: 8px;">
-                    <span style="font-size: 11px; font-weight: 600; letter-spacing: 1.5px; color: #4ade80; text-transform: uppercase;">MESSAGE RECEIVED</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td style="padding-bottom: 8px;">
-                    <h1 style="margin: 0; font-size: 24px; font-weight: 600; color: #f1f5f9; line-height: 1.3;">Your request has entered the system.</h1>
-                  </td>
-                </tr>
-                <tr>
-                  <td style="padding-bottom: 32px;">
-                    <span style="font-size: 14px; color: #94a3b8;">Expected Response Time: 24-48 hours</span>
-                  </td>
-                </tr>
-              </table>
-              
-              <!-- Divider -->
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                  <td style="border-bottom: 1px solid #1f2933; padding-bottom: 24px; margin-bottom: 24px;"></td>
-                </tr>
-              </table>
-              
-              <!-- Identity Section -->
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="padding-top: 24px;">
-                <tr>
-                  <td>
-                    <p style="margin: 0 0 4px 0; font-size: 16px; font-weight: 600; color: #f1f5f9;">Tushar Kanti Dey</p>
-                    <p style="margin: 0 0 4px 0; font-size: 14px; color: #94a3b8;">Full-Stack & DevOps Engineer</p>
-                    <p style="margin: 0 0 24px 0; font-size: 13px; color: #64748b;">Infrastructure &middot; Production Systems &middot; Performance</p>
-                  </td>
-                </tr>
-              </table>
-              
-              <!-- Greeting -->
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                  <td style="padding-bottom: 24px;">
-                    <p style="margin: 0; font-size: 15px; color: #cbd5e1;">Hello ${safeName},</p>
-                  </td>
-                </tr>
-              </table>
-              
-              <!-- Request Type -->
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                  <td style="padding-bottom: 8px;">
-                    <span style="font-size: 11px; font-weight: 600; letter-spacing: 1px; color: #64748b; text-transform: uppercase;">REQUEST TYPE</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td style="padding-bottom: 24px;">
-                    <span style="display: inline-block; padding: 6px 12px; background-color: #1e293b; border: 1px solid #334155; border-radius: 6px; font-size: 13px; font-weight: 500; color: #e2e8f0;">${safeInquiryType}</span>
-                  </td>
-                </tr>
-              </table>
-              
-              <!-- Request Payload -->
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                  <td style="padding-bottom: 8px;">
-                    <span style="font-size: 11px; font-weight: 600; letter-spacing: 1px; color: #64748b; text-transform: uppercase;">REQUEST PAYLOAD</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td style="padding-bottom: 32px;">
-                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #0f1720; border: 1px solid #1f2933; border-radius: 8px;">
-                      <tr>
-                        <td style="padding: 16px;">
-                          <p style="margin: 0; font-size: 14px; color: #cbd5e1; line-height: 1.7; font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace; white-space: pre-wrap; word-break: break-word;">${safeMessage}</p>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-              </table>
-              
-              <!-- Processing Pipeline -->
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                  <td style="padding-bottom: 12px;">
-                    <span style="font-size: 11px; font-weight: 600; letter-spacing: 1px; color: #64748b; text-transform: uppercase;">PROCESSING PIPELINE</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td style="padding-bottom: 32px;">
+                  <td style="vertical-align:middle;padding-bottom:12px;">
                     <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                       <tr>
-                        <td style="padding: 8px 0;">
-                          <table role="presentation" cellpadding="0" cellspacing="0" border="0">
-                            <tr>
-                              <td style="width: 24px; vertical-align: top;">
-                                <span style="display: inline-block; width: 20px; height: 20px; background-color: #166534; border-radius: 50%; text-align: center; line-height: 20px; font-size: 11px; font-weight: 600; color: #4ade80;">1</span>
-                              </td>
-                              <td style="padding-left: 12px; vertical-align: middle;">
-                                <span style="font-size: 14px; color: #94a3b8;">Validation</span>
-                                <span style="margin-left: 8px; font-size: 11px; color: #4ade80; font-weight: 500;">COMPLETE</span>
-                              </td>
-                            </tr>
-                          </table>
+                        <td style="width:64px;vertical-align:middle;">
+                          <img src="https://tushardevx01.tech/images/logo.png" alt="TKD Logo" width="56" height="56" style="display:inline-block;border:0;outline:none;text-decoration:none;border-radius:14px;" />
                         </td>
-                      </tr>
-                      <tr>
-                        <td style="padding: 8px 0;">
-                          <table role="presentation" cellpadding="0" cellspacing="0" border="0">
-                            <tr>
-                              <td style="width: 24px; vertical-align: top;">
-                                <span style="display: inline-block; width: 20px; height: 20px; background-color: #1e40af; border-radius: 50%; text-align: center; line-height: 20px; font-size: 11px; font-weight: 600; color: #60a5fa;">2</span>
-                              </td>
-                              <td style="padding-left: 12px; vertical-align: middle;">
-                                <span style="font-size: 14px; color: #94a3b8;">Manual Review</span>
-                                <span style="margin-left: 8px; font-size: 11px; color: #fbbf24; font-weight: 500;">PENDING</span>
-                              </td>
-                            </tr>
-                          </table>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding: 8px 0;">
-                          <table role="presentation" cellpadding="0" cellspacing="0" border="0">
-                            <tr>
-                              <td style="width: 24px; vertical-align: top;">
-                                <span style="display: inline-block; width: 20px; height: 20px; background-color: #374151; border-radius: 50%; text-align: center; line-height: 20px; font-size: 11px; font-weight: 600; color: #9ca3af;">3</span>
-                              </td>
-                              <td style="padding-left: 12px; vertical-align: middle;">
-                                <span style="font-size: 14px; color: #64748b;">Structured Response</span>
-                                <span style="margin-left: 8px; font-size: 11px; color: #64748b; font-weight: 500;">QUEUED</span>
-                              </td>
-                            </tr>
-                          </table>
+                        <td style="padding-left:12px;vertical-align:middle;">
+                          <div style="font-size:18px;font-weight:700;color:#fff;margin:0;">Tushar Kanti Dey</div>
+                          <div style="font-size:13px;color:rgba(255,255,255,0.6);margin-top:4px;">Full Stack Developer &amp; DevOps Engineer</div>
                         </td>
                       </tr>
                     </table>
                   </td>
                 </tr>
               </table>
-              
-              <!-- Divider -->
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:1px solid rgba(255,255,255,0.04);margin-top:12px;padding-top:20px;">
                 <tr>
-                  <td style="border-bottom: 1px solid #1f2933; padding-bottom: 24px;"></td>
+                  <td>
+                    <h1 style="margin:0 0 12px 0;font-size:20px;color:#fff;font-weight:700;">Thanks for reaching out</h1>
+                    <p style="margin:0 0 12px 0;color:rgba(255,255,255,0.85);font-size:15px;">Hello ${safeName || 'there'},</p>
+                    <p style="margin:0 0 14px 0;color:rgba(255,255,255,0.75);font-size:14px;">${escapeHtml(smallIntroFor(safeInquiryType))}</p>
+                    <p style="margin:0 0 18px 0;color:rgba(255,255,255,0.7);font-size:14px;">I usually reply within <strong>24–48 hours</strong>. I appreciate your interest and look forward to connecting.</p>
+                  </td>
                 </tr>
               </table>
-              
+
+              <!-- Message preview -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:18px;">
+                <tr>
+                  <td style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);border-radius:12px;padding:16px;">
+                    <div style="font-size:12px;color:rgba(255,255,255,0.6);font-weight:700;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.6px;">Your Message</div>
+                    <div style="font-size:14px;color:rgba(255,255,255,0.88);line-height:1.6;white-space:pre-wrap;">${preview}</div>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Brand + CTAs -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:18px;">
+                <tr>
+                  <td style="padding-top:16px;padding-bottom:6px;">
+                    <div style="font-weight:700;font-size:15px;color:#fff;">Tushar Kanti Dey</div>
+                    <div style="font-size:13px;color:rgba(255,255,255,0.6);margin-top:6px;">Building scalable web products, modern interfaces, and reliable infrastructure.</div>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding-top:16px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td>
+                          <a href="${site}" style="display:inline-block;padding:12px 18px;border-radius:10px;background:${accent};color:#071127;font-weight:700;text-decoration:none;font-size:13px;">Visit Portfolio</a>
+                        </td>
+                        <td style="width:12px;"></td>
+                        <td>
+                          <a href="${site}/resume" style="display:inline-block;padding:12px 18px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);color:#dbeafe;background:transparent;font-weight:700;text-decoration:none;font-size:13px;">View Resume</a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Social icons -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:18px;">
+                <tr>
+                  <td align="center" style="padding-top:4px;">
+                    <div style="font-size:12px;letter-spacing:0.6px;text-transform:uppercase;color:rgba(255,255,255,0.55);font-weight:700;margin-bottom:10px;">Connect</div>
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
+                      <tr>
+                        ${socials
+                          .map(
+                            (social) => `
+                          <td style="padding:0 6px;">
+                            <a href="${social.url}" style="display:inline-block;width:36px;height:36px;border-radius:999px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);text-decoration:none;line-height:36px;text-align:center;">
+                              <img src="${social.icon}" alt="${social.name}" width="18" height="18" style="display:inline-block;vertical-align:middle;border:0;outline:none;text-decoration:none;" />
+                            </a>
+                          </td>`
+                          )
+                          .join("")}
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
               <!-- Footer -->
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="padding-top: 24px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:22px;border-top:1px solid rgba(255,255,255,0.03);padding-top:18px;">
                 <tr>
-                  <td align="center">
-                    <p style="margin: 0 0 4px 0; font-size: 13px; color: #64748b;">&copy; 2026 Tushar Kanti Dey</p>
-                    <p style="margin: 0 0 8px 0; font-size: 12px; color: #475569;">Kolkata, India</p>
-                    <a href="https://www.tushardevx01.tech/" style="font-size: 12px; color: #4ade80; text-decoration: none;">tushardevx01.tech</a>
-                  </td>
-                </tr>
-                <tr>
-                  <td align="center" style="padding-top: 16px;">
-                    <span style="font-size: 10px; color: #374151; font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;">ref: ${safeRequestId}</span>
+                  <td align="center" style="font-size:13px;color:rgba(255,255,255,0.8);">
+                    <div>Kolkata, India</div>
+                    <div style="margin-top:6px;"><a href="${site}" style="color:${accent};text-decoration:none;">tushardevx01.tech</a></div>
+                    <div style="margin-top:8px;font-size:12px;color:rgba(255,255,255,0.45);">© ${new Date().getFullYear()} Tushar Kanti Dey</div>
                   </td>
                 </tr>
               </table>
-              
+
             </td>
           </tr>
         </table>
-        
+
       </td>
     </tr>
   </table>
-  
+
 </body>
 </html>`;
 }
