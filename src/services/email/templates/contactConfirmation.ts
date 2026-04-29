@@ -96,13 +96,13 @@ export function generateContactConfirmationEmail(
   </noscript>
   <![endif]-->
 </head>
-<body style="margin:0;padding:0;background-color:#0b0b0c;font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;color:#fff;">
+<body style="margin:0;padding:0;background-color:#050505;font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;color:#fff;">
 
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#0b0b0c;width:100%;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#050505;width:100%;">
     <tr>
       <td align="center" style="padding:32px 12px;">
 
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;background:#111214;border:1px solid #222;border-radius:20px;padding:32px;box-shadow:0 6px 20px rgba(2,6,23,0.6);">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;background:#0b0b0f;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:32px;box-shadow:0 8px 32px rgba(59,130,246,0.12), 0 0 1px rgba(6,182,212,0.2);">
           <tr>
             <td>
 
@@ -159,11 +159,11 @@ export function generateContactConfirmationEmail(
                     <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                       <tr>
                         <td>
-                          <a href="${site}" style="display:inline-block;padding:12px 18px;border-radius:10px;background:${accent};color:#071127;font-weight:700;text-decoration:none;font-size:13px;">Visit Portfolio</a>
+                          <a href="${site}" style="display:inline-block;padding:12px 18px;border-radius:12px;background:linear-gradient(135deg, #2563eb, #06b6d4);border:1px solid transparent;color:#ffffff;font-weight:700;text-decoration:none;font-size:13px;box-shadow:0 0 18px rgba(59,130,246,0.22);">Visit Portfolio</a>
                         </td>
                         <td style="width:12px;"></td>
                         <td>
-                          <a href="${site}/resume" style="display:inline-block;padding:12px 18px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);color:#dbeafe;background:transparent;font-weight:700;text-decoration:none;font-size:13px;">View Resume</a>
+                          <a href="${site}/resume" style="display:inline-block;padding:12px 18px;border-radius:12px;background:#111214;border:1px solid rgba(255,255,255,0.08);color:#f5f5f5;font-weight:700;text-decoration:none;font-size:13px;">View Resume</a>
                         </td>
                       </tr>
                     </table>
@@ -199,7 +199,7 @@ export function generateContactConfirmationEmail(
                 <tr>
                   <td align="center" style="font-size:13px;color:rgba(255,255,255,0.8);">
                     <div>Kolkata, India</div>
-                    <div style="margin-top:6px;"><a href="${site}" style="color:${accent};text-decoration:none;">tushardevx01.tech</a></div>
+                    <div style="margin-top:6px;"><a href="${site}" style="color:#06b6d4;text-decoration:none;">tushardevx01.tech</a></div>
                     <div style="margin-top:8px;font-size:12px;color:rgba(255,255,255,0.45);">© ${new Date().getFullYear()} Tushar Kanti Dey</div>
                   </td>
                 </tr>

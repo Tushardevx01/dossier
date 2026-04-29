@@ -40,7 +40,7 @@ export function EmailTemplate({ userName, contactReason, userMessage }: EmailTem
 
   const preview = clamp(userMessage || "");
 
-  const accent = "#06b6d4"; // subtle cyan
+  const accent = "#4ade80"; // subtle cyan
   const site = "https://tushardevx01.tech";
 
   return (
@@ -93,13 +93,13 @@ export function EmailTemplate({ userName, contactReason, userMessage }: EmailTem
                 <tbody>
                   <tr>
                     <td>
-                      <Link href={site} style={{ ...button, backgroundColor: accent, borderColor: accent }}>
+                      <Link href={site} style={{ ...button, background: "linear-gradient(135deg, #2563eb, #06b6d4)", color: "#ffffff", boxShadow: "0 0 18px rgba(59,130,246,0.22)" }}>
                         Visit Portfolio
                       </Link>
                     </td>
                     <td style={{ width: "12px" }} />
                     <td>
-                      <Link href={`${site}/resume`} style={{ ...button, backgroundColor: "transparent", border: "1px solid rgba(255,255,255,0.08)", color: "#dbeafe" }}>
+                      <Link href={`${site}/resume`} style={{ ...button, backgroundColor: "#111214", border: "1px solid rgba(255,255,255,0.08)", color: "#f5f5f5" }}>
                         View Resume
                       </Link>
                     </td>
@@ -150,7 +150,7 @@ export function EmailTemplate({ userName, contactReason, userMessage }: EmailTem
           {/* Footer */}
           <Section style={footerSection}>
             <Text style={footerText}>Kolkata, India</Text>
-            <Text style={footerLink}><Link href={site} style={{ color: accent, textDecoration: "none" }}>tushardevx01.tech</Link></Text>
+            <Text style={footerLink}><Link href={site} style={{ color: "#06b6d4", textDecoration: "none" }}>tushardevx01.tech</Link></Text>
             <Text style={smallMuted}>© {currentYear} Tushar Kanti Dey</Text>
           </Section>
         </Container>
@@ -164,7 +164,7 @@ export function EmailTemplate({ userName, contactReason, userMessage }: EmailTem
    =========================== */
 
 const main: React.CSSProperties = {
-  backgroundColor: "#0b0b0c",
+  backgroundColor: "#050505",
   padding: "24px 0",
   fontFamily:
     '-apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif',
@@ -174,30 +174,30 @@ const main: React.CSSProperties = {
 const container: React.CSSProperties = {
   maxWidth: "600px",
   margin: "0 auto",
-  backgroundColor: "#111214",
-  border: "1px solid #222",
+  backgroundColor: "#0b0b0f",
+  border: "1px solid rgba(255,255,255,0.08)",
   borderRadius: "20px",
   overflow: "hidden",
   padding: "32px",
-  boxShadow: "0 6px 20px rgba(2,6,23,0.6)",
+  boxShadow: "0 8px 32px rgba(59,130,246,0.12), 0 0 1px rgba(6,182,212,0.2)",
 };
 
 const headerSection: React.CSSProperties = {
   padding: "0 0 20px 0",
-  borderBottom: "1px solid rgba(255, 255, 255, 0.04)",
+  borderBottom: "1px solid rgba(255,255,255,0.06)",
   marginBottom: "8px",
 };
 
 const nameStyle: React.CSSProperties = {
   fontSize: "18px",
   fontWeight: 700,
-  color: "#ffffff",
+  color: "#f5f5f5",
   margin: 0,
 };
 
 const titleStyle: React.CSSProperties = {
   fontSize: "13px",
-  color: "rgba(255,255,255,0.6)",
+  color: "#a1a1aa",
   margin: 0,
   marginTop: "4px",
 };
@@ -209,41 +209,42 @@ const contentSection: React.CSSProperties = {
 const greetingText: React.CSSProperties = {
   fontSize: "22px",
   fontWeight: 700,
-  color: "#ffffff",
+  color: "#f5f5f5",
   margin: "0 0 8px 0",
 };
 
 const leadText: React.CSSProperties = {
   fontSize: "15px",
-  color: "rgba(255,255,255,0.9)",
+  color: "#a1a1aa",
   margin: "0 0 10px 0",
 };
 
 const bodyText: React.CSSProperties = {
   fontSize: "14px",
-  color: "rgba(255,255,255,0.7)",
+  color: "#a1a1aa",
   margin: "0 0 18px 0",
   lineHeight: "1.6",
 };
 
 const previewCard: React.CSSProperties = {
-  backgroundColor: "rgba(255,255,255,0.02)",
-  border: "1px solid rgba(255,255,255,0.04)",
+  backgroundColor: "#101116",
+  border: "1px solid rgba(59,130,246,0.25)",
   borderRadius: "12px",
   padding: "16px",
   marginTop: "14px",
+  boxShadow: "0 0 16px rgba(59,130,246,0.06)",
 };
 
 const previewLabel: React.CSSProperties = {
   fontSize: "12px",
-  color: "rgba(255,255,255,0.6)",
+  color: "#a1a1aa",
   margin: "0 0 8px 0",
   fontWeight: 700,
 };
 
 const previewText: React.CSSProperties = {
   fontSize: "14px",
-  color: "rgba(255,255,255,0.87)",
+  color: "#d4d4d8",
   margin: 0,
   lineHeight: 1.5,
   whiteSpace: "pre-wrap",
@@ -256,13 +257,13 @@ const brandSection: React.CSSProperties = {
 const brandName: React.CSSProperties = {
   fontSize: "15px",
   fontWeight: 700,
-  color: "#ffffff",
+  color: "#f5f5f5",
   margin: 0,
 };
 
 const brandTag: React.CSSProperties = {
   fontSize: "13px",
-  color: "rgba(255,255,255,0.6)",
+  color: "#a1a1aa",
   margin: "6px 0 0 0",
 };
 
@@ -277,7 +278,7 @@ const button: React.CSSProperties = {
   display: "inline-block",
   padding: "12px 18px",
   borderRadius: "10px",
-  color: "#071127",
+  color: "#f5f5f5",
   textDecoration: "none",
   fontWeight: 700,
   fontSize: "13px",
@@ -286,12 +287,12 @@ const button: React.CSSProperties = {
 const footerSection: React.CSSProperties = {
   padding: "20px 0 0 0",
   textAlign: "center",
-  borderTop: "1px solid rgba(255,255,255,0.02)",
+  borderTop: "1px solid rgba(255,255,255,0.06)",
 };
 
 const footerText: React.CSSProperties = {
   fontSize: "13px",
-  color: "rgba(255,255,255,0.8)",
+  color: "#a1a1aa",
   margin: 0,
 };
 
@@ -302,12 +303,12 @@ const footerLink: React.CSSProperties = {
 
 const smallMuted: React.CSSProperties = {
   fontSize: "12px",
-  color: "rgba(255,255,255,0.45)",
+  color: "#71717a",
   margin: "6px 0 0 0",
 };
 
 const divider: React.CSSProperties = {
-  borderColor: "rgba(255, 255, 255, 0.04)",
+  borderColor: "rgba(255,255,255,0.06)",
   margin: "12px 0",
 };
 
@@ -320,7 +321,7 @@ const socialSectionStyle: React.CSSProperties = {
 const socialHeading: React.CSSProperties = {
   fontSize: "12px",
   fontWeight: 700,
-  color: "rgba(255, 255, 255, 0.55)",
+  color: "#a1a1aa",
   margin: "0 0 10px 0",
   textTransform: "uppercase",
   letterSpacing: "0.6px",
@@ -331,12 +332,13 @@ const socialIconLink: React.CSSProperties = {
   width: "36px",
   height: "36px",
   borderRadius: "999px",
-  backgroundColor: "rgba(255, 255, 255, 0.03)",
-  border: "1px solid rgba(255, 255, 255, 0.06)",
+  backgroundColor: "rgba(59,130,246,0.08)",
+  border: "1px solid rgba(59,130,246,0.2)",
   textDecoration: "none",
   lineHeight: "36px",
   textAlign: "center",
   padding: "0",
+  boxShadow: "0 0 12px rgba(59,130,246,0.1)",
 };
 
 
