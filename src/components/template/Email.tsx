@@ -40,7 +40,7 @@ export function EmailTemplate({ userName, contactReason, userMessage }: EmailTem
 
   const preview = clamp(userMessage || "");
 
-  const accent = "#4ade80"; // subtle cyan
+  const accent = "#d4d4d8";
   const site = "https://tushardevx01.tech";
 
   return (
@@ -93,13 +93,13 @@ export function EmailTemplate({ userName, contactReason, userMessage }: EmailTem
                 <tbody>
                   <tr>
                     <td>
-                      <Link href={site} style={{ ...button, background: "linear-gradient(135deg, #2563eb, #06b6d4)", color: "#ffffff", boxShadow: "0 0 18px rgba(59,130,246,0.22)" }}>
+                      <Link href={site} style={{ ...button, backgroundColor: "#f5f5f5", color: "#050505", border: "none", boxShadow: "0 6px 18px rgba(0,0,0,0.25)" }}>
                         Visit Portfolio
                       </Link>
                     </td>
                     <td style={{ width: "12px" }} />
                     <td>
-                      <Link href={`${site}/resume`} style={{ ...button, backgroundColor: "#111214", border: "1px solid rgba(255,255,255,0.08)", color: "#f5f5f5" }}>
+                      <Link href={`${site}/resume`} style={{ ...button, backgroundColor: "#111214", border: "1px solid rgba(255,255,255,0.08)", color: "#ffffff" }}>
                         View Resume
                       </Link>
                     </td>
@@ -116,22 +116,22 @@ export function EmailTemplate({ userName, contactReason, userMessage }: EmailTem
                   <tr>
                     <td style={{ padding: "0 6px" }}>
                       <Link href={`https://github.com/${selfData.socials_username.github}`} style={socialIconLink}>
-                        <Img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/github.svg" alt="GitHub" width="18" height="18" style={{ display: "block" }} />
+                        <Img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/github.svg" alt="GitHub" width="18" height="18" style={{ display: "block", filter: "brightness(0) invert(1)" }} />
                       </Link>
                     </td>
                     <td style={{ padding: "0 6px" }}>
                       <Link href={`https://instagram.com/${selfData.socials_username.instagram}`} style={socialIconLink}>
-                        <Img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/instagram.svg" alt="Instagram" width="18" height="18" style={{ display: "block" }} />
+                        <Img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/instagram.svg" alt="Instagram" width="18" height="18" style={{ display: "block", filter: "brightness(0) invert(1)" }} />
                       </Link>
                     </td>
                     <td style={{ padding: "0 6px" }}>
                       <Link href={`https://www.linkedin.com/in/${selfData.socials_username.linkedin}`} style={socialIconLink}>
-                        <Img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/linkedin.svg" alt="LinkedIn" width="18" height="18" style={{ display: "block" }} />
+                        <Img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/linkedin.svg" alt="LinkedIn" width="18" height="18" style={{ display: "block", filter: "brightness(0) invert(1)" }} />
                       </Link>
                     </td>
                     <td style={{ padding: "0 6px" }}>
                       <Link href={`https://twitter.com/${selfData.socials_username.twitter}`} style={socialIconLink}>
-                        <Img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/x.svg" alt="Twitter" width="18" height="18" style={{ display: "block" }} />
+                        <Img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/x.svg" alt="Twitter" width="18" height="18" style={{ display: "block", filter: "brightness(0) invert(1)" }} />
                       </Link>
                     </td>
                     <td style={{ padding: "0 6px" }}>
@@ -150,7 +150,7 @@ export function EmailTemplate({ userName, contactReason, userMessage }: EmailTem
           {/* Footer */}
           <Section style={footerSection}>
             <Text style={footerText}>Kolkata, India</Text>
-            <Text style={footerLink}><Link href={site} style={{ color: "#06b6d4", textDecoration: "none" }}>tushardevx01.tech</Link></Text>
+            <Text style={footerLink}><Link href={site} style={{ color: "#ffffff", textDecoration: "none" }}>tushardevx01.tech</Link></Text>
             <Text style={smallMuted}>© {currentYear} Tushar Kanti Dey</Text>
           </Section>
         </Container>
@@ -179,7 +179,7 @@ const container: React.CSSProperties = {
   borderRadius: "20px",
   overflow: "hidden",
   padding: "32px",
-  boxShadow: "0 8px 32px rgba(59,130,246,0.12), 0 0 1px rgba(6,182,212,0.2)",
+  boxShadow: "0 12px 36px rgba(0,0,0,0.35)",
 };
 
 const headerSection: React.CSSProperties = {
@@ -228,11 +228,11 @@ const bodyText: React.CSSProperties = {
 
 const previewCard: React.CSSProperties = {
   backgroundColor: "#101116",
-  border: "1px solid rgba(59,130,246,0.25)",
+  border: "1px solid rgba(255,255,255,0.08)",
   borderRadius: "12px",
   padding: "16px",
   marginTop: "14px",
-  boxShadow: "0 0 16px rgba(59,130,246,0.06)",
+  boxShadow: "0 0 16px rgba(0,0,0,0.18)",
 };
 
 const previewLabel: React.CSSProperties = {
@@ -277,8 +277,7 @@ const ctaWrap: React.CSSProperties = {
 const button: React.CSSProperties = {
   display: "inline-block",
   padding: "12px 18px",
-  borderRadius: "10px",
-  color: "#f5f5f5",
+  borderRadius: "12px",
   textDecoration: "none",
   fontWeight: 700,
   fontSize: "13px",
