@@ -11,7 +11,7 @@ export const experienceData = [
       "Shipped and operated deployments with CI/CD, environment validation, and runtime health monitoring.",
     ],
     technologies: ["Next.js", "Tailwind CSS", "Supabase", "Git", "Vercel"],
-    url: "https://crm.azmth.in/",
+    url: "https://azmth.in/",
   },
   {
     role: "Cycoders Co-Tech Lead",
