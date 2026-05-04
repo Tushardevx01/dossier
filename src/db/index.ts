@@ -9,6 +9,9 @@ import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import * as schema from './schema';
 
+// Database handle returned by `drizzle`
+type Database = ReturnType<typeof drizzle>;
+
 /**
  * Initialize Neon connection
  *
@@ -32,8 +35,8 @@ function createDatabase() {
       // short-circuit DB calls when SKIP_DB_BUILD is enabled.
       client = null;
       // Return a minimal stub that won't be used during build-time static rendering.
-      // Type-cast to any to satisfy runtime usage.
-      return ({} as any);
+      // Use `unknown` first to avoid `any` usage.
+      return {} as unknown as Database;
     }
 
     throw new Error(
@@ -50,7 +53,7 @@ function createDatabase() {
   return drizzle(client, { schema });
 }
 
-type Database = ReturnType<typeof createDatabase>;
+// Note: `Database` is defined above as ReturnType<typeof drizzle>
 
 // Singleton instance
 let db: Database | null = null;

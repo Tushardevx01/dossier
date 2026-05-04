@@ -28,16 +28,16 @@ export async function seedDatabase() {
 
   try {
     await ensureDatabaseReady();
-    const db = getDb();
+    const database = getDb();
 
-    const notesResult = await db
+    const notesResult = await database
       .select({ count: engineeringNotes.id })
       .from(engineeringNotes);
 
     console.log(`✅ engineering_notes table is available with ${notesResult.length} rows.`);
 
     // Seed API keys if none exist
-    const keysResult = await db
+    const keysResult = await database
       .select({ count: apiKeys.id })
       .from(apiKeys);
 
@@ -47,7 +47,7 @@ export async function seedDatabase() {
       const testKey = 'test-api-key-12345';
       const hashedKey = createHash('sha256').update(testKey).digest('hex');
 
-      await db.insert(apiKeys).values({
+      await database.insert(apiKeys).values({
         keyHash: hashedKey,
         name: 'Test API Key',
         permissions: {
@@ -78,7 +78,7 @@ export async function resetDatabase() {
   console.log('⚠️  Resetting database (development only)...');
   
   try {
-    const db = getDb();
+    void getDb();
     
     // Note: In production, use proper migrations instead
     // This is just for quick local development resets

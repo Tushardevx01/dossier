@@ -26,7 +26,7 @@ const EMAIL_REGEX = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
 function maskPII(value: unknown): unknown {
   if (typeof value === "string") {
     // Mask emails in strings
-    let masked = value.replace(EMAIL_REGEX, "[MASKED_EMAIL]");
+    const masked = value.replace(EMAIL_REGEX, "[MASKED_EMAIL]");
     return masked;
   }
 

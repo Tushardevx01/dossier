@@ -54,7 +54,6 @@ export function generateContactConfirmationEmail(
   }
 
   const preview = clamp(safeMessage, 220) || "(No message provided)";
-  const accent = "#d4d4d8";
   const site = "https://tushardevx01.tech";
   const socials = [
     {

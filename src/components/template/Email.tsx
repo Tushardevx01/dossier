@@ -39,8 +39,6 @@ export function EmailTemplate({ userName, contactReason, userMessage }: EmailTem
   const currentYear = new Date().getFullYear();
 
   const preview = clamp(userMessage || "");
-
-  const accent = "#d4d4d8";
   const site = "https://tushardevx01.tech";
 
   return (

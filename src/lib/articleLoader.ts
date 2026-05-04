@@ -111,11 +111,12 @@ export async function getFeaturedArticles(limit = 6): Promise<ArticleMetadata[]>
  * @example const related = await getRelatedArticles('Full-Stack', 'current-slug', 2);
  */
 export async function getRelatedArticles(
-  category: string,
+  category: CategoryFilter,
   excludeSlug: string,
   limit = 2
 ): Promise<ArticleMetadata[]> {
-  return getRelatedNotes(category as any, excludeSlug, limit);
+  if (category === "All") return [];
+  return getRelatedNotes(category, excludeSlug, limit);
 }
 
 /**

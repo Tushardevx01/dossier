@@ -5,10 +5,9 @@ import { useState } from "react";
 interface CodeBlockProps {
   children: React.ReactNode;
   language?: string;
-  title?: string;
 }
 
-export function CodeBlock({ children, language = "text", title }: CodeBlockProps) {
+export function CodeBlock({ children, language = "text" }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
