@@ -8,6 +8,7 @@ import { buildPageMetadata, absoluteUrl } from "@/lib/seo";
 import { generateArticleStructuredData } from "@/lib/structured-data";
 import "prismjs/themes/prism-tomorrow.css";
 
+export const dynamic = "force-dynamic";
 export const revalidate = 60;
 
 interface GenerateMetadataParams {
@@ -18,7 +19,10 @@ export async function generateMetadata(
   { params }: GenerateMetadataParams
 ): Promise<Metadata> {
   const { slug } = await params;
-  const article = await getArticle(slug);
+  const normalizedSlug = slug.trim().toLowerCase();
+  console.log("Slug:", slug);
+
+  const article = await getArticle(normalizedSlug);
 
   if (!article) {
     return {
@@ -29,10 +33,10 @@ export async function generateMetadata(
   return buildPageMetadata({
     title: `${article.title} | Tushar Kanti Dey`,
     description: article.description,
-    path: `/engineering-notes/${slug}`,
+    path: `/engineering-notes/${normalizedSlug}`,
     type: "article",
     keywords: [article.category, "engineering", "software development", "Tushar Kanti Dey"],
-    image: absoluteUrl(`/engineering-notes/${slug}/opengraph-image`),
+    image: absoluteUrl(`/engineering-notes/${normalizedSlug}/opengraph-image`),
   });
 }
 
@@ -46,7 +50,10 @@ export default async function EngineeringNotesArticlePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const article = await getArticle(slug);
+  const normalizedSlug = slug.trim().toLowerCase();
+  console.log("Slug:", slug);
+
+  const article = await getArticle(normalizedSlug);
 
   if (!article) {
     notFound();
@@ -55,14 +62,14 @@ export default async function EngineeringNotesArticlePage({
   const articleStructuredData = generateArticleStructuredData({
     title: article.title,
     description: article.description,
-    slug,
+    slug: normalizedSlug,
     publishedAt: new Date(article.date).toISOString(),
   });
 
   return (
     <>
       <JsonLd data={articleStructuredData} />
-      <ArticlePage post={article} slug={slug} />
+      <ArticlePage post={article} slug={normalizedSlug} />
     </>
   );
 }

@@ -112,6 +112,7 @@ export async function getNoteBySlug(slug: string): Promise<ArticlePost | null> {
 
   await ensureDatabaseReady();
   const db = getDb();
+  const normalizedSlug = slug.trim().toLowerCase();
 
   const note = await db
     .select({
@@ -132,7 +133,7 @@ export async function getNoteBySlug(slug: string): Promise<ArticlePost | null> {
       relatedSystemDesignSlug: engineeringNotes.relatedSystemDesignSlug,
     })
     .from(engineeringNotes)
-    .where(and(eq(engineeringNotes.slug, slug), eq(engineeringNotes.published, true)))
+    .where(and(eq(engineeringNotes.slug, normalizedSlug), eq(engineeringNotes.published, true)))
     .limit(1)
       .then((rows: Array<{ slug: string; id: number; title: string; subtitle: string; excerpt: string; date: string; content: string; readTime: number; category: ArticleCategory; level: ArticleDifficulty; whatILearned: string[] | null; improvements: string[] | null; relatedNoteSlugs: string[] | null; relatedProjectSlug: string | null; relatedSystemDesignSlug: string | null; }>) => rows[0]);
 
@@ -289,5 +290,5 @@ export async function getAllNoteSlugs(): Promise<{ slug: string }[]> {
     .from(engineeringNotes)
     .where(eq(engineeringNotes.published, true))) as Array<{ slug: string }>;
 
-  return notes.map((row: { slug: string }) => ({ slug: String(row.slug) }));
+  return notes.map((row: { slug: string }) => ({ slug: String(row.slug).trim().toLowerCase() }));
 }
