@@ -6,9 +6,9 @@ import { HiExternalLink } from "react-icons/hi";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 
-// Configure PDF.js worker
+// Configure PDF.js worker from the app route
 if (typeof window !== "undefined") {
-  pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
+  pdfjs.GlobalWorkerOptions.workerSrc = "/api/pdf-worker";
 }
 
 interface PDFViewerProps {
