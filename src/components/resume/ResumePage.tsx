@@ -1,10 +1,13 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import { HiDownload, HiOutlineArrowsExpand, HiExternalLink } from "react-icons/hi";
 import { Navbar, Footer, Background } from "@/components/common";
 import { nasalization } from "@/app/fonts";
+
+const PDFViewer = dynamic(() => import("./PDFViewer"), { ssr: false });
 
 const PDF_URL = "/docs/Resume.pdf";
 
@@ -55,6 +58,8 @@ export function ResumePage() {
       await webkitDocument.webkitExitFullscreen?.();
     }
   };
+
+  const PDF_URL = "/docs/Resume.pdf";
 
   return (
     <div className={`min-h-screen selection:bg-primary/20 ${nasalization.className}`}>
@@ -166,31 +171,7 @@ export function ResumePage() {
             className="pdf-container relative w-full overflow-hidden bg-white/95 backdrop-blur-sm rounded-3xl"
             style={{ height: "clamp(520px, 75vh, 800px)" }}
           >
-            <div className="pdf-viewer h-full">
-              <div className="flex justify-center items-start h-full p-2 sm:p-4">
-                <object
-                  data={PDF_URL}
-                  type="application/pdf"
-                  className="w-full h-full border-0 shadow-lg rounded-lg"
-                  aria-label="Resume PDF preview"
-                >
-                  <div className="flex h-full w-full items-center justify-center rounded-lg border border-border/50 bg-background/80 p-8 text-center text-sm text-muted-foreground">
-                    <div className="max-w-sm space-y-4">
-                      <p>Your browser cannot display the PDF inline.</p>
-                      <a
-                        href={PDF_URL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center gap-2 rounded-xl border border-secondary/30 bg-card/60 px-4 py-2 font-medium text-foreground transition-colors hover:bg-secondary/10"
-                      >
-                        <HiExternalLink className="h-4 w-4 text-secondary" />
-                        Open the resume PDF
-                      </a>
-                    </div>
-                  </div>
-                </object>
-              </div>
-            </div>
+            <PDFViewer pdfUrl={PDF_URL} />
           </div>
         </motion.div>
 
