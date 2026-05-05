@@ -9,6 +9,7 @@ import { and, desc, eq, sql } from 'drizzle-orm';
 
 import { ensureDatabaseReady, getDb } from '@/db';
 import { engineeringNotes } from '@/db/schema';
+import { normalizeArray } from '@/lib/data-normalization';
 import type {
   ArticleCategory,
   ArticleDifficulty,
@@ -68,8 +69,8 @@ function mapPost(note: NotePostRow): ArticlePost {
     description: note.excerpt,
     difficulty: note.level,
     content: note.content,
-    whatILearned: note.whatILearned ?? [],
-    improvements: note.improvements ?? [],
+    whatILearned: normalizeArray(note.whatILearned),
+    improvements: normalizeArray(note.improvements),
     relatedNoteSlugs: note.relatedNoteSlugs ?? undefined,
     relatedProjectSlug: note.relatedProjectSlug ?? undefined,
     relatedSystemDesignSlug: note.relatedSystemDesignSlug ?? undefined,

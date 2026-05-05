@@ -77,7 +77,7 @@ function ArticleContentWrapper({ post }: { post: ArticlePost }) {
         <TakeawaysSection takeaways={post.whatILearned} />
 
         {/* Improvements Section */}
-        {post.improvements.length > 0 && (
+        {Array.isArray(post.improvements) && post.improvements.length > 0 && (
           <>
             <div className="h-16 md:h-20" />
             <ImprovementsSection improvements={post.improvements} />
@@ -167,6 +167,43 @@ function ArticleContentWrapper({ post }: { post: ArticlePost }) {
 }
 
 /**
+ * Utility: Safely parse and normalize string arrays
+ * 
+ * Handles both:
+ * - Proper arrays: ['item1', 'item2']
+ * - JSON stringified: '["item1", "item2"]'
+ * - Invalid/null/empty cases
+ */
+function normalizeStringArray(value: string[] | string | null | undefined): string[] {
+  if (!value) return [];
+
+  // Already an array
+  if (Array.isArray(value)) {
+    return value.filter((item): item is string => typeof item === 'string');
+  }
+
+  // Try to parse if it's a stringified JSON array
+  if (typeof value === 'string') {
+    // If it doesn't start with '[', it's not stringified JSON
+    if (!value.startsWith('[')) {
+      return [];
+    }
+
+    try {
+      const parsed = JSON.parse(value);
+      if (Array.isArray(parsed)) {
+        return parsed.filter((item): item is string => typeof item === 'string');
+      }
+    } catch {
+      // Invalid JSON, return empty array
+      return [];
+    }
+  }
+
+  return [];
+}
+
+/**
  * Takeaways Section
  */
 function TakeawaysSection({ takeaways }: { takeaways: string[] }) {
@@ -203,8 +240,20 @@ function TakeawaysSection({ takeaways }: { takeaways: string[] }) {
 
 /**
  * Improvements Section
+ * 
+ * Safely handles improvements that may be:
+ * - A proper array: string[]
+ * - A JSON stringified array: string
+ * - Null/undefined/empty
  */
-function ImprovementsSection({ improvements }: { improvements: string[] }) {
+function ImprovementsSection({ improvements }: { improvements: string[] | string | null | undefined }) {
+  // Normalize improvements: handle both array and stringified cases
+  const normalizedImprovements = normalizeStringArray(improvements);
+
+  if (!normalizedImprovements || normalizedImprovements.length === 0) {
+    return null;
+  }
+
   return (
     <section className="rounded-2xl bg-zinc-950/40 p-6 md:p-8 ring-1 ring-inset ring-zinc-800/30">
       <motion.div
@@ -217,7 +266,7 @@ function ImprovementsSection({ improvements }: { improvements: string[] }) {
           Future Improvements
         </h2>
         <div className="space-y-4">
-          {improvements.map((point, i) => (
+          {normalizedImprovements.map((point, i) => (
             <motion.div
               key={i}
               className="flex gap-4 p-4 rounded-lg border border-zinc-800/50 bg-zinc-900/20 hover:bg-zinc-900/40 transition-colors"
