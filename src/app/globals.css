@@ -700,7 +700,6 @@ canvas {
     @apply relative w-full h-full;
   }
 
-  .pdf-viewer iframe,
   .pdf-viewer object,
   .pdf-viewer embed {
     @apply w-full h-full border-0;
@@ -708,14 +707,9 @@ canvas {
     border-radius: 8px;
   }
 
-  /* Ensure PDF is visible in all browsers */
-  .pdf-viewer iframe {
-    min-height: 500px;
-    min-width: 100%;
-  }
-
   @media (max-width: 640px) {
-    .pdf-viewer iframe {
+    .pdf-viewer object,
+    .pdf-viewer embed {
       min-height: 420px;
     }
   }
