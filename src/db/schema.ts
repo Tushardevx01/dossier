@@ -30,7 +30,7 @@ export const engineeringNotes = pgTable('engineering_notes', {
 
   // Metadata
   category: varchar('category', { length: 50 }).notNull().$type<ArticleCategory>(),
-  level: varchar('level', { length: 20 }).notNull().$type<ArticleDifficulty>(),
+  level: varchar('difficulty', { length: 20 }).notNull().$type<ArticleDifficulty>(),
 
   // Reading time in minutes
   readTime: integer('read_time').notNull(),
