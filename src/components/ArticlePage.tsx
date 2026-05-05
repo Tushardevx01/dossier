@@ -171,7 +171,7 @@ function ArticleContentWrapper({ post }: { post: ArticlePost }) {
  */
 function TakeawaysSection({ takeaways }: { takeaways: string[] }) {
   return (
-    <section className="rounded-2xl bg-zinc-950/50 p-6 md:p-8 ring-1 ring-inset ring-zinc-800/40">
+    <section className="mt-12 md:mt-16 rounded-2xl bg-zinc-950/50 p-6 md:p-8 ring-1 ring-inset ring-zinc-800/40">
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
