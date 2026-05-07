@@ -29,19 +29,23 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set lowercase repository name
+        id: repo
+        run: echo "name=${GITHUB_REPOSITORY,,}" >> $GITHUB_OUTPUT
+
       - name: Build and push image (tagged by sha)
         id: build
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository }}:${{ github.sha }}
+          tags: ghcr.io/${{ steps.repo.outputs.name }}:${{ github.sha }}
 
       - name: Prepare manifests branch and update image
         env:
           MANIFESTS_BRANCH: manifests
           SHORT_SHA: ${{ github.sha }}
-          IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}
+          IMAGE: ghcr.io/${{ steps.repo.outputs.name }}:${{ github.sha }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -72,4 +76,4 @@ jobs:
           git push origin HEAD:$MANIFESTS_BRANCH
 
       - name: Output image
-        run: echo "image=ghcr.io/${{ github.repository }}:${{ github.sha }}" >> $GITHUB_OUTPUT
+        run: echo "image=ghcr.io/${{ steps.repo.outputs.name }}:${{ github.sha }}" >> $GITHUB_OUTPUT
