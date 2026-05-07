@@ -46,8 +46,11 @@ function createDatabase() {
   }
 
   // Create PostgreSQL connection
+  // Note: Neon's pooler automatically handles query pipelining for optimal concurrency
   client = postgres(databaseUrl, {
-    max: 10, // Connection pool size (adjust based on load)
+    max: 20, // Increase connection pool for better concurrency during builds (15 workers)
+    idle_timeout: 20, // Close idle connections after 20 seconds
+    connect_timeout: 10, // 10 second connection timeout
   });
 
   return drizzle(client, { schema });
