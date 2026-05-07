@@ -20,7 +20,6 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { slug } = await params;
   const normalizedSlug = slug.trim().toLowerCase();
-  console.log("Slug:", slug);
 
   const article = await getArticle(normalizedSlug);
 
@@ -51,7 +50,6 @@ export default async function EngineeringNotesArticlePage({
 }) {
   const { slug } = await params;
   const normalizedSlug = slug.trim().toLowerCase();
-  console.log("Slug:", slug);
 
   const article = await getArticle(normalizedSlug);
 

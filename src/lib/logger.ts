@@ -99,7 +99,7 @@ function log(level: LogLevel, message: string, meta?: Record<string, unknown>) {
       console.warn(formatted);
       break;
     default:
-      console.log(formatted);
+      console.info(formatted);
   }
 }
 

@@ -19,12 +19,13 @@ import { createHash } from 'crypto';
 
 import { ensureDatabaseReady, getDb } from '@/db';
 import { engineeringNotes, apiKeys } from '@/db/schema';
+import { logger } from '@/lib/logger';
 
 /**
  * Report current database state.
  */
 export async function seedDatabase() {
-  console.log('🌱 Checking database state...');
+  logger.info('Checking database state');
 
   try {
     await ensureDatabaseReady();
@@ -34,7 +35,7 @@ export async function seedDatabase() {
       .select({ count: engineeringNotes.id })
       .from(engineeringNotes);
 
-    console.log(`✅ engineering_notes table is available with ${notesResult.length} rows.`);
+    logger.info('engineering_notes table is available', { rows: notesResult.length });
 
     // Seed API keys if none exist
     const keysResult = await database
@@ -42,7 +43,7 @@ export async function seedDatabase() {
       .from(apiKeys);
 
     if (keysResult.length === 0) {
-      console.log('🔑 Seeding API keys...');
+      logger.info('Seeding API keys');
 
       const testKey = 'test-api-key-12345';
       const hashedKey = createHash('sha256').update(testKey).digest('hex');
@@ -57,16 +58,14 @@ export async function seedDatabase() {
         active: true,
       });
 
-      console.log('✅ API keys seeded');
+      logger.info('API keys seeded');
     } else {
-      console.log(`✅ api_keys table is available with ${keysResult.length} keys.`);
+      logger.info('api_keys table is available', { rows: keysResult.length });
     }
 
-    console.log('');
-    console.log('ℹ️  The legacy hardcoded article source has been removed.');
-    console.log('   Manage notes directly in Neon PostgreSQL.');
+    logger.info('The legacy hardcoded article source has been removed');
   } catch (error) {
-    console.error('❌ Database check failed:', error);
+    logger.error('Database check failed', { error });
     process.exit(1);
   }
 }
@@ -75,17 +74,17 @@ export async function seedDatabase() {
  * Drop and recreate tables (development only)
  */
 export async function resetDatabase() {
-  console.log('⚠️  Resetting database (development only)...');
+  logger.warn('Resetting database (development only)');
   
   try {
     void getDb();
     
     // Note: In production, use proper migrations instead
     // This is just for quick local development resets
-    console.log('📋 This would drop and recreate tables');
-    console.log('   Use proper Drizzle migrations in production');
+    logger.info('This would drop and recreate tables');
+    logger.info('Use proper Drizzle migrations in production');
   } catch (error) {
-    console.error('❌ Reset failed:', error);
+    logger.error('Reset failed', { error });
     process.exit(1);
   }
 }
@@ -94,5 +93,5 @@ export async function resetDatabase() {
  * Run seed if called directly
  */
 if (import.meta.url === `file://${process.argv[1]}`) {
-  seedDatabase().catch(console.error);
+  seedDatabase().catch((error) => logger.error('Seed script failed', { error }));
 }
