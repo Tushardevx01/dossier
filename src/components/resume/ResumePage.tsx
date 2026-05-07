@@ -9,7 +9,6 @@ import { nasalization } from "@/app/fonts";
 
 const PDFViewer = dynamic(() => import("./PDFViewer"), { ssr: false });
 
-const PDF_URL = "/docs/Resume.pdf";
 
 export function ResumePage() {
   const previewRef = useRef<HTMLDivElement | null>(null);
