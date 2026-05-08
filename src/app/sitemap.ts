@@ -5,7 +5,7 @@ import { SITE_URL } from "@/lib/site";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = SITE_URL;
-  const lastModified = new Date();
+  const now = new Date();
   const engineeringNotesSlugs = await generateArticleStaticParams();
   const projectSlugs = projectsData.map((project) => project.slug);
 
@@ -13,42 +13,49 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Homepage - highest priority
     {
       url: baseUrl,
-      lastModified,
+      lastModified: now,
       changeFrequency: "monthly" as const,
       priority: 1.0,
+    },
+    // About page - critical for personal brand entity
+    {
+      url: `${baseUrl}/about`,
+      lastModified: now,
+      changeFrequency: "monthly" as const,
+      priority: 0.95,
     },
     // Engineering Notes index
     {
       url: `${baseUrl}/engineering-notes`,
-      lastModified,
+      lastModified: now,
       changeFrequency: "weekly" as const,
       priority: 0.9,
     },
     // Projects index
     {
       url: `${baseUrl}/projects`,
-      lastModified,
+      lastModified: now,
       changeFrequency: "weekly" as const,
       priority: 0.9,
     },
     // Individual project pages
     ...projectSlugs.map((slug) => ({
       url: `${baseUrl}/projects/${slug}`,
-      lastModified,
+      lastModified: now,
       changeFrequency: "monthly" as const,
       priority: 0.8,
     })),
     // Individual engineering notes
     ...engineeringNotesSlugs.map(({ slug }) => ({
       url: `${baseUrl}/engineering-notes/${slug}`,
-      lastModified,
+      lastModified: now,
       changeFrequency: "weekly" as const,
       priority: 0.75,
     })),
     // Resume page
     {
       url: `${baseUrl}/resume`,
-      lastModified,
+      lastModified: now,
       changeFrequency: "monthly" as const,
       priority: 0.8,
     },

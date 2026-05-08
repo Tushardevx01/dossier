@@ -8,15 +8,26 @@ const PROFILE_PAGE_ID = `${SITE_URL}#profile-page`;
 
 export function generatePersonStructuredData() {
   return {
-    "@context": "https://schema.org/",
+    "@context": "https://schema.org",
     "@type": "Person",
     "@id": PERSON_ID,
     name: siteConfig.name,
     alternateName: "Tushar Kanti Dey",
     url: SITE_URL,
     image: `${SITE_URL}/images/me.png`,
-    jobTitle: "Full Stack Developer and DevOps Engineer",
-    description: siteConfig.description,
+    jobTitle: "Full-Stack Developer and DevOps Engineer",
+    description:
+      "Tushar Kanti Dey is a full-stack developer and DevOps engineer based near Kolkata, India, building scalable Next.js apps, real-time systems, and product-ready web experiences.",
+    homeLocation: {
+      "@type": "Place",
+      name: "Barasat, Kolkata, India",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Barasat",
+        addressRegion: "West Bengal",
+        addressCountry: "IN",
+      },
+    },
     alumniOf: {
       "@type": "CollegeOrUniversity",
       name: "Adamas University",
@@ -26,11 +37,17 @@ export function generatePersonStructuredData() {
       siteConfig.social.linkedin,
       siteConfig.social.instagram,
       siteConfig.social.twitter,
+      "https://dev.to/tushardevx01",
+      "https://hashnode.com/@tushardevx01",
+      "PLACEHOLDER_AZMTH_PROFILE_URL",
+      "PLACEHOLDER_URBANPRO_PROFILE_URL",
     ],
     knowsAbout: [
       "Full Stack Development",
       "Next.js",
+      "Node.js",
       "TypeScript",
+      "DevOps",
       "Real-time application architecture",
       "Scalable web application development",
       "UI/UX focused engineering",
@@ -119,6 +136,21 @@ export function generateSoftwareApplicationStructuredData(project: Project) {
     url: `${SITE_URL}/projects/${project.slug}`,
     sameAs: [project.github_link, ...(project.demo ? [project.demo] : [])],
     keywords: project.tech.join(", "),
+  };
+}
+
+export function generateBreadcrumbListStructuredData(
+  items: Array<{ name: string; url: string }>
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: item.url,
+    })),
   };
 }
 

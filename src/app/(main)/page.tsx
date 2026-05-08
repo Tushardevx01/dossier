@@ -23,14 +23,18 @@ import {
 export const revalidate = 60;
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "Tushar Kanti Dey | Full Stack Developer and DevOps Engineer",
+  title: "Tushar Kanti Dey — Full-Stack Developer & DevOps Engineer (Kolkata, India)",
   description:
-    "Portfolio of Tushar Kanti Dey, a Full Stack Developer and DevOps Engineer building scalable Next.js apps, real-time systems, and product-ready web experiences.",
+    "Tushar Kanti Dey is a full-stack developer and DevOps engineer based near Kolkata, India. Building scalable Next.js apps, real-time systems, and product-ready web experiences.",
   path: "/",
   keywords: [
+    "Tushar Kanti Dey",
     "Full Stack Developer and DevOps Engineer",
     "Next.js Developer India",
     "Real-Time App Developer",
+    "Barasat developer",
+    "West Bengal developer",
+    "Kolkata full stack developer",
   ],
 });
 

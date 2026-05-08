@@ -6,7 +6,8 @@ import { JsonLd } from "@/components/shared/JsonLd";
 import { projectsData } from "@/constant/projects";
 import { getAllArticles } from "@/lib/articleLoader";
 import { buildPageMetadata } from "@/lib/seo";
-import { generateCaseStudyStructuredData, generateSoftwareApplicationStructuredData } from "@/lib/structured-data";
+import { generateBreadcrumbListStructuredData, generateCaseStudyStructuredData, generateSoftwareApplicationStructuredData } from "@/lib/structured-data";
+import { absoluteUrl } from "@/lib/seo";
 
 interface ProjectPageProps {
   params: Promise<{ slug: string }>;
@@ -30,7 +31,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
     description: project.description,
     path: `/projects/${project.slug}`,
     type: "article",
-    keywords: [...project.tech, project.role, "project details"],
+    keywords: [...project.tech, project.role, "project details", "Tushar Kanti Dey"],
   });
 }
 
@@ -53,11 +54,17 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
     slug: project.slug,
   });
   const softwareSchema = generateSoftwareApplicationStructuredData(project);
+  const breadcrumbSchema = generateBreadcrumbListStructuredData([
+    { name: "Tushar Kanti Dey", url: absoluteUrl("/") },
+    { name: "Projects", url: absoluteUrl("/projects") },
+    { name: project.name, url: absoluteUrl(`/projects/${project.slug}`) },
+  ]);
 
   return (
     <main className="min-h-screen bg-black">
       <JsonLd data={projectSchema} />
       <JsonLd data={softwareSchema} />
+      <JsonLd data={breadcrumbSchema} />
       <section className="max-w-5xl mx-auto px-4 sm:px-6 pt-24 sm:pt-32 pb-16">
         <h1 className="text-4xl sm:text-6xl font-semibold text-white tracking-tight">{project.name}</h1>
         <p className="mt-5 text-base sm:text-lg text-neutral-400 max-w-3xl leading-relaxed">{project.description}</p>
@@ -95,6 +102,17 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
             ))}
           </ul>
         </nav>
+
+        {/* Footer link back to homepage for entity reinforcement */}
+        <div className="mt-16 pt-8 border-t border-neutral-800">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-sm uppercase tracking-widest font-medium text-neutral-400 hover:text-white transition-colors group"
+          >
+            <span className="group-hover:-translate-x-1 transition-transform">←</span>
+            Back to Tushar Kanti Dey&apos;s Portfolio
+          </Link>
+        </div>
       </section>
     </main>
   );

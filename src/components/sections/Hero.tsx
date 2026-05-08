@@ -35,7 +35,7 @@ export const Hero = () => {
             >
               Systems • Infrastructure • Product
             </motion.p>
-            <p className="sr-only">Tushar Kanti Dey | Full Stack Developer and DevOps Engineer </p>
+            <p className="sr-only">Tushar Kanti Dey — Full-Stack Developer and DevOps Engineer based in Barasat, Kolkata, India </p>
             <motion.h1
               className={`${quentine.className} text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.95] break-words`}
               style={{ color: "hsl(var(--primary))" }}
@@ -61,7 +61,7 @@ export const Hero = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.4 }}
             >
-              {selfData.roles[0]}
+              {selfData.roles[0]} — {selfData.current_location.city}, {selfData.current_location.country}
             </motion.p>
 
             <motion.p

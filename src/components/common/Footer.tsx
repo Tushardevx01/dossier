@@ -5,8 +5,6 @@ import { motion } from "motion/react";
 
 import { TbHeart, TbHeartFilled } from "react-icons/tb";
 
-import { selfData } from "@/constant/";
-
 const floatingParticles = [
   { x: 200, y: 80, color: "hsl(var(--primary))", duration: 7, delay: 0 },
   { x: 400, y: 120, color: "hsl(var(--secondary))", duration: 8, delay: 1 },
@@ -37,12 +35,10 @@ export const Footer = () => {
               {isHeartFilled ? <TbHeartFilled /> : <TbHeart />}
             </button>
             <a
-              href={`https://github.com/${selfData.socials_username.github}`}
-              target="_blank"
-              rel="noreferrer"
+              href="/"
               className="text-primary/80 hover:text-primary"
             >
-              Tushar
+              Tushar Kanti Dey
             </a>
           </p>
           <p className="text-muted-foreground/60">© {currentYear} All rights reserved</p>

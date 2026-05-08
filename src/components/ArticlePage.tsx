@@ -314,7 +314,7 @@ function ArticleFooter() {
               href="/"
               className="text-zinc-400 hover:text-white transition-colors"
             >
-              Tushar
+              Tushar Kanti Dey
             </Link>
           </div>
         </div>

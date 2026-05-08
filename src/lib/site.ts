@@ -5,9 +5,9 @@ export const siteConfig = {
   fullName: "Tushar Kanti Dey",
   location: "Kolkata, India",
   email: "thetushardev0@gmail.com",
-  title: "Tushar Kanti Dey | Full Stack Developer and DevOps Engineer",
+  title: "Tushar Kanti Dey — Full-Stack Developer & DevOps Engineer (Kolkata, India)",
   description:
-    "Portfolio of Tushar Kanti Dey, a Full Stack Developer and DevOps Engineer building scalable Next.js apps, real-time systems, and product-ready web experiences.",
+    "Tushar Kanti Dey is a full-stack developer and DevOps engineer based near Kolkata, India. Building scalable Next.js apps, real-time systems, and product-ready web experiences.",
   social: {
     github: "https://github.com/Tusharxhub",
     linkedin: "https://linkedin.com/in/tushardevx01",
@@ -17,6 +17,7 @@ export const siteConfig = {
 } as const;
 
 export const defaultSeoKeywords = [
+  "Tushar Kanti Dey",
   "Full Stack Developer and DevOps Engineer",
   "Next.js Developer India",
   "Freelance Web Developer India",
@@ -26,4 +27,8 @@ export const defaultSeoKeywords = [
   "TypeScript Developer",
   "Next.js portfolio",
   "product-focused developer",
+  "Barasat developer",
+  "Kolkata developer",
+  "West Bengal developer",
+  "India full stack developer",
 ];

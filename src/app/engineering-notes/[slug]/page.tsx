@@ -5,7 +5,7 @@ import { ArticlePage } from "@/components/ArticlePage";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { generateArticleStaticParams, getArticle } from "@/lib/articleLoader";
 import { buildPageMetadata, absoluteUrl } from "@/lib/seo";
-import { generateArticleStructuredData } from "@/lib/structured-data";
+import { generateArticleStructuredData, generateBreadcrumbListStructuredData } from "@/lib/structured-data";
 import "prismjs/themes/prism-tomorrow.css";
 
 export const dynamic = "force-dynamic";
@@ -64,9 +64,16 @@ export default async function EngineeringNotesArticlePage({
     publishedAt: new Date(article.date).toISOString(),
   });
 
+  const breadcrumbStructuredData = generateBreadcrumbListStructuredData([
+    { name: "Tushar Kanti Dey", url: absoluteUrl("/") },
+    { name: "Engineering Notes", url: absoluteUrl("/engineering-notes") },
+    { name: article.title, url: absoluteUrl(`/engineering-notes/${normalizedSlug}`) },
+  ]);
+
   return (
     <>
       <JsonLd data={articleStructuredData} />
+      <JsonLd data={breadcrumbStructuredData} />
       <ArticlePage post={article} slug={normalizedSlug} />
     </>
   );
