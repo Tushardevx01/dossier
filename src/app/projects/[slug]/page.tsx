@@ -103,8 +103,10 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
           </ul>
         </nav>
 
-        {/* Footer link back to homepage for entity reinforcement */}
+        {/* Author bio + Footer link back to homepage for entity reinforcement */}
         <div className="mt-16 pt-8 border-t border-neutral-800">
+          
+
           <Link
             href="/"
             className="inline-flex items-center gap-2 text-sm uppercase tracking-widest font-medium text-neutral-400 hover:text-white transition-colors group"

@@ -11,7 +11,6 @@ import { HomePageShell } from "@/components/HomePageShell";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { projectsData } from "@/constant/projects";
 import { getAllArticles } from "@/lib/articleLoader";
-import { buildPageMetadata } from "@/lib/seo";
 import {
   generateEngineeringNotesItemListStructuredData,
   generateOrganizationStructuredData,
@@ -22,21 +21,11 @@ import {
 
 export const revalidate = 60;
 
-export const metadata: Metadata = buildPageMetadata({
-  title: "Tushar Kanti Dey — Full-Stack Developer & DevOps Engineer (Kolkata, India)",
+export const metadata: Metadata = {
+  title: { absolute: "Tushar Kanti Dey | Full-Stack Developer & DevOps Engineer" },
   description:
-    "Tushar Kanti Dey is a full-stack developer and DevOps engineer based near Kolkata, India. Building scalable Next.js apps, real-time systems, and product-ready web experiences.",
-  path: "/",
-  keywords: [
-    "Tushar Kanti Dey",
-    "Full Stack Developer and DevOps Engineer",
-    "Next.js Developer India",
-    "Real-Time App Developer",
-    "Barasat developer",
-    "West Bengal developer",
-    "Kolkata full stack developer",
-  ],
-});
+    "Tushar Kanti Dey — Full-Stack Developer and DevOps Engineer based in Kolkata, India. I build production-grade Next.js and Node.js applications, CI/CD pipelines, and scalable real-time systems focused on reliability and product outcomes.",
+};
 
 export default async function Home() {
   const latestNotes = (await getAllArticles()).slice(0, 6);

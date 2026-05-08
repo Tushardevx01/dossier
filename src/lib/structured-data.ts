@@ -12,47 +12,42 @@ export function generatePersonStructuredData() {
     "@type": "Person",
     "@id": PERSON_ID,
     name: siteConfig.name,
-    alternateName: "Tushar Kanti Dey",
+    givenName: "Tushar",
+    familyName: "Dey",
     url: SITE_URL,
     image: `${SITE_URL}/images/me.png`,
-    jobTitle: "Full-Stack Developer and DevOps Engineer",
+    jobTitle: "Full-Stack Developer & DevOps Engineer",
     description:
-      "Tushar Kanti Dey is a full-stack developer and DevOps engineer based near Kolkata, India, building scalable Next.js apps, real-time systems, and product-ready web experiences.",
-    homeLocation: {
-      "@type": "Place",
-      name: "Barasat, Kolkata, India",
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: "Barasat",
-        addressRegion: "West Bengal",
-        addressCountry: "IN",
-      },
+      "Full-Stack Developer and DevOps Engineer based in Kolkata, India. Builds production-grade Next.js and Node.js applications, CI/CD pipelines, and scalable real-time systems.",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Kolkata",
+      addressRegion: "West Bengal",
+      addressCountry: "IN"
     },
     alumniOf: {
       "@type": "CollegeOrUniversity",
-      name: "Adamas University",
+      name: "Adamas University"
     },
     sameAs: [
-      siteConfig.social.github,
       siteConfig.social.linkedin,
+      siteConfig.social.github,
       siteConfig.social.instagram,
       siteConfig.social.twitter,
       "https://dev.to/tushardevx01",
-      "https://hashnode.com/@tushardevx01",
-      "PLACEHOLDER_AZMTH_PROFILE_URL",
-      "PLACEHOLDER_URBANPRO_PROFILE_URL",
+      "https://www.tushardevx01.tech/azmth"
     ],
     knowsAbout: [
-      "Full Stack Development",
       "Next.js",
-      "Node.js",
       "TypeScript",
+      "Node.js",
       "DevOps",
-      "Real-time application architecture",
-      "Scalable web application development",
-      "UI/UX focused engineering",
-      "Developer tools",
-      "AI-powered web products",
+      "Docker",
+      "CI/CD",
+      "Observability",
+      "Real-time systems",
+      "Web performance",
+      "Scalable architecture"
     ],
   };
 }
