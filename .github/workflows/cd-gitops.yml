@@ -64,6 +64,16 @@ jobs:
             cp -R manifests_template/base/* manifests/base/ || true
           fi
 
+          cat > package.json <<'EOF'
+          {
+            "name": "tushardevx01-manifests",
+            "private": true,
+            "scripts": {
+              "build": "node -e \"process.exit(0)\""
+            }
+          }
+          EOF
+
           # replace image line in deployment manifest
           if grep -q "image:" manifests/base/deployment.yaml; then
             sed -i "s|image: .*|image: ${IMAGE}|g" manifests/base/deployment.yaml
@@ -71,7 +81,7 @@ jobs:
             echo "image: ${IMAGE}" >> manifests/base/deployment.yaml
           fi
 
-          git add manifests/base/deployment.yaml
+          git add manifests/base/deployment.yaml package.json
           git commit -m "chore: update image ${SHORT_SHA}" || echo "no changes to commit"
           git push origin HEAD:$MANIFESTS_BRANCH
 
