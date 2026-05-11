@@ -65,7 +65,7 @@ export function buildContactSocialLinks(usernames: ContactSocialUsernames): Cont
     {
       key: "gdg",
       label: "Google Developer Profile",
-      href: `https://developers.google.com/profile/u/${usernames.gdg}`,
+      href: `https://g.dev/${usernames.gdg}`,
       hoverColor: "#ffffff",
       isGoogleProfile: true,
     },
