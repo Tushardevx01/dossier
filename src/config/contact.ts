@@ -9,15 +9,13 @@ export interface ContactSocialUsernames {
   twitter: string;
   discord: string;
   whatsapp: string;
-  gdg: string;
 }
 
 export interface ContactSocialLink {
-  key: "github" | "linkedin" | "instagram" | "twitter" | "discord" | "whatsapp" | "gdg";
+  key: "github" | "linkedin" | "instagram" | "twitter" | "discord" | "whatsapp";
   label: string;
   href: string;
   hoverColor: string;
-  isGoogleProfile?: boolean;
 }
 
 function sanitizeWhatsAppNumber(value: string): string {
@@ -61,13 +59,6 @@ export function buildContactSocialLinks(usernames: ContactSocialUsernames): Cont
       label: "WhatsApp",
       href: `https://wa.me/${sanitizeWhatsAppNumber(usernames.whatsapp)}`,
       hoverColor: "#25D366",
-    },
-    {
-      key: "gdg",
-      label: "Google Developer Profile",
-      href: `https://g.dev/${usernames.gdg}`,
-      hoverColor: "#ffffff",
-      isGoogleProfile: true,
     },
   ];
 }

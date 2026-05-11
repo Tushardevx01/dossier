@@ -132,11 +132,6 @@ export function EmailTemplate({ userName, contactReason, userMessage }: EmailTem
                         <Img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/x.svg" alt="Twitter" width="18" height="18" style={{ display: "block", filter: "brightness(0) invert(1)" }} />
                       </Link>
                     </td>
-                    <td style={{ padding: "0 6px" }}>
-                      <Link href={`https://g.dev/${selfData.socials_username.gdg}`} style={socialIconLink}>
-                        <Img src="data:image/svg+xml,%3Csvg viewBox='0 0 200 100' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='35' y='59' width='56' height='14' rx='7' fill='%23FFFFFF' transform='rotate(35, 63, 66)' /%3E%3Crect x='35' y='27' width='56' height='14' rx='7' fill='%23FFFFFF' transform='rotate(-35, 63, 34)' /%3E%3Crect x='109' y='59' width='56' height='14' rx='7' fill='%23FFFFFF' transform='rotate(-35, 137, 66)' /%3E%3Crect x='109' y='27' width='56' height='14' rx='7' fill='%23FFFFFF' transform='rotate(35, 137, 34)' /%3E%3C/svg%3E" alt="GDG" width="18" height="18" style={{ display: "block" }} />
-                      </Link>
-                    </td>
                   </tr>
                 </tbody>
               </table>

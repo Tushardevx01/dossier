@@ -7,17 +7,6 @@ import { FaDiscord, FaGithub, FaInstagram, FaLinkedinIn, FaTwitter, FaWhatsapp }
 import { buildContactSocialLinks, type ContactSocialLink } from "@/config";
 import { selfData } from "@/constant";
 
-// Custom GDG Icon Component (Google Developer Groups)
-// Two chevrons < > each made of two rotated pill-shaped arms.
-const GDGIcon = ({ className, style }: { className?: string; style?: CSSProperties }) => (
-  <svg viewBox="0 0 200 100" className={className} style={style} xmlns="http://www.w3.org/2000/svg">
-    <rect x="35" y="59" width="56" height="14" rx="7" fill="#4285F4" transform="rotate(35, 63, 66)" />
-    <rect x="35" y="27" width="56" height="14" rx="7" fill="#EA4335" transform="rotate(-35, 63, 34)" />
-    <rect x="109" y="59" width="56" height="14" rx="7" fill="#FBBC04" transform="rotate(-35, 137, 66)" />
-    <rect x="109" y="27" width="56" height="14" rx="7" fill="#34A853" transform="rotate(35, 137, 34)" />
-  </svg>
-);
-
 const SOCIAL_ICONS: Record<ContactSocialLink["key"], IconType> = {
   github: FaGithub,
   linkedin: FaLinkedinIn,
@@ -25,7 +14,6 @@ const SOCIAL_ICONS: Record<ContactSocialLink["key"], IconType> = {
   twitter: FaTwitter,
   discord: FaDiscord,
   whatsapp: FaWhatsapp,
-  gdg: GDGIcon as IconType,
 };
 
 export const ContactSocials = () => {
@@ -54,9 +42,7 @@ const ContactSocialItem = ({
   link: ContactSocialLink;
   initial: number;
 }) => {
-  const iconClassName = link.isGoogleProfile
-    ? "h-5 w-5 text-slate-400 opacity-70 transition-all duration-300 [filter:brightness(0)_invert(1)] group-hover:opacity-100 group-hover:[filter:none]"
-    : "h-5 w-5 text-slate-400 transition-colors duration-300 group-hover:[color:var(--social-hover)]";
+  const iconClassName = "h-5 w-5 text-slate-400 transition-colors duration-300 group-hover:[color:var(--social-hover)]";
 
   return (
     <motion.li

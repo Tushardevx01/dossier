@@ -45,6 +45,5 @@ export const selfData = {
     twitter: "tushardevX01",
     discord: "tushardevx01",
     whatsapp: "+91 629 528 9626",
-    gdg: "tushardevx01",
   },
 };
