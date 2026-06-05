@@ -5,8 +5,8 @@
  * Handles connection pooling and query execution.
  */
 
-import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
+import { neon } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-http';
 import * as schema from './schema';
 
 // Database handle returned by `drizzle`
@@ -19,7 +19,7 @@ type Database = ReturnType<typeof drizzle>;
  * In development: uses connection pooling to prevent connection exhaustion.
  * In production: Vercel handles pooling through Neon's connection string.
  */
-type PostgresClient = ReturnType<typeof postgres>;
+type PostgresClient = ReturnType<typeof neon>;
 
 let client: PostgresClient | null = null;
 
@@ -47,11 +47,7 @@ function createDatabase() {
 
   // Create PostgreSQL connection
   // Note: Neon's pooler automatically handles query pipelining for optimal concurrency
-  client = postgres(databaseUrl, {
-    max: 20, // Increase connection pool for better concurrency during builds (15 workers)
-    idle_timeout: 20, // Close idle connections after 20 seconds
-    connect_timeout: 10, // 10 second connection timeout
-  });
+  client = neon(databaseUrl);
 
   return drizzle(client, { schema });
 }
