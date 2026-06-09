@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { JsonLd } from "@/components/shared/JsonLd";
 import { projectsData } from "@/constant/projects";
-import { buildPageMetadata } from "@/lib/seo";
+import { buildPageMetadata, absoluteUrl } from "@/lib/seo";
+import { generateBreadcrumbListStructuredData } from "@/lib/structured-data";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Projects | Tushar Kanti Dey",
@@ -13,8 +15,14 @@ export const metadata: Metadata = buildPageMetadata({
 });
 
 export default function ProjectsPage() {
+  const breadcrumbSchema = generateBreadcrumbListStructuredData([
+    { name: "Tushar Kanti Dey", url: absoluteUrl("/") },
+    { name: "Projects", url: absoluteUrl("/projects") },
+  ]);
+
   return (
     <main className="min-h-screen bg-black">
+      <JsonLd data={breadcrumbSchema} />
       <section className="max-w-5xl mx-auto px-4 sm:px-6 pt-24 sm:pt-32 pb-16">
         <h1 className="text-4xl sm:text-6xl font-semibold text-white tracking-tight">Projects</h1>
       </section>

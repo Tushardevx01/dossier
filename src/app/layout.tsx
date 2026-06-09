@@ -1,10 +1,10 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { absoluteUrl } from "@/lib/seo";
-import { defaultSeoKeywords, siteConfig } from "@/lib/site";
+
+import { SITE_URL, defaultSeoKeywords, siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(absoluteUrl("/")),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: siteConfig.title,
     template: `%s | ${siteConfig.fullName}`,
@@ -12,25 +12,27 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   keywords: defaultSeoKeywords,
   alternates: {
-    canonical: absoluteUrl("/"),
+    canonical: "/",
   },
   manifest: "/manifest.json",
   applicationName: siteConfig.name,
-  authors: [{ name: siteConfig.fullName, url: absoluteUrl("/") }],
+  authors: [{ name: siteConfig.fullName, url: SITE_URL }],
+  creator: siteConfig.fullName,
+  publisher: siteConfig.fullName,
   icons: {
-    icon: ["/android-chrome-192x192.png", "/android-chrome-512x512.png"],
+    icon: ["/favicon.ico", "/favicon-32x32.png", "/favicon-16x16.png", "/android-chrome-192x192.png", "/android-chrome-512x512.png"],
     apple: "/apple-touch-icon.png",
   },
   openGraph: {
     title: siteConfig.title,
     description: siteConfig.description,
-    url: absoluteUrl("/"),
+    url: SITE_URL,
     siteName: siteConfig.name,
     type: "website",
     locale: "en_US",
     images: [
       {
-        url: absoluteUrl("/opengraph-image"),
+        url: "/opengraph-image",
         width: 1200,
         height: 630,
         alt: `${siteConfig.name} portfolio preview`,
@@ -42,7 +44,7 @@ export const metadata: Metadata = {
     title: siteConfig.title,
     description: siteConfig.description,
     creator: "@tushardevX01",
-    images: [absoluteUrl("/opengraph-image")],
+    images: ["/twitter-image"],
   },
   robots: {
     index: true,
