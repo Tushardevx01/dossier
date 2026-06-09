@@ -28,18 +28,14 @@ export function validateCsrfToken(cookieToken?: string, bodyToken?: string): boo
     return false;
   }
 
-  const decodedCookie = decodeToken(cookieToken);
-  const decodedBody = decodeToken(bodyToken);
+  const cookieBuf = Buffer.from(cookieToken, "utf8");
+  const bodyBuf = Buffer.from(bodyToken, "utf8");
 
-  if (!decodedCookie || !decodedBody) {
+  if (cookieBuf.length !== bodyBuf.length) {
     return false;
   }
 
-  if (decodedCookie.length !== CSRF_TOKEN_LENGTH || decodedBody.length !== CSRF_TOKEN_LENGTH) {
-    return false;
-  }
-
-  return timingSafeEqual(decodedCookie, decodedBody);
+  return timingSafeEqual(cookieBuf, bodyBuf);
 }
 
 export { CSRF_TOKEN_LENGTH, getCsrfCookieName, readCsrfTokenFromCookieString };
