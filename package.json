@@ -1,0 +1,7 @@
+{
+  "name": "tushardevx01-manifests",
+  "private": true,
+  "scripts": {
+    "build": "node -e \"process.exit(0)\""
+  }
+}
