@@ -187,7 +187,7 @@ All endpoints enforce request validation and rate limiting.
 **Tushar Kanti Dey**  
 Full-Stack Software Engineer focused on scalable systems, platform engineering, and production infrastructure.
 
-- 📧 Email: [t.k.d.dey2033929837@gmail.com](mailto:t.k.d.dey2033929837@gmail.com)
+- 📧 Email: [thetushardev0@gmail.com](mailto:thetushardev0@gmail.com)
 - 🔗 GitHub: [@Tusharxhub](https://github.com/Tusharxhub)
 - 📸 Instagram: [@tushardevx01](https://www.instagram.com/tushardevx01/)
 - 🌐 Portfolio: [tushardevx01.tech](https://www.tushardevx01.tech)
