@@ -54,12 +54,12 @@ This website showcasing projects, engineering notes, and professional experience
 Technical articles covering systems architecture, DevOps practices, full-stack development, and production engineering lessons learned.
 
 ### Open Source Contributions
-Various experiments and tools available on GitHub: https://github.com/Tusharxhub
+Various experiments and tools available on GitHub: https://github.com/
 
 ## Contact Tushar Kanti Dey
 
 - **Email**: thetushardev0@gmail.com
-- **GitHub**: https://github.com/Tusharxhub
+- **GitHub**: https://github.com/
 - **LinkedIn**: https://linkedin.com/in/tushardevx01
 - **Twitter**: https://twitter.com/tushardevx01
 - **Website**: https://tushardevx01.tech

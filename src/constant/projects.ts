@@ -26,7 +26,7 @@ export const projectsData = [
     name: "CarePulse",
     description:
       "Healthcare platform for clinics — appointment workflows, provider integrations, patient data handling. Built with strict security constraints and production-grade error boundaries.",
-    github_link: "https://github.com/Tusharxhub/carepulse",
+    github_link: "https://github.com//carepulse",
     demo: "https://carepulse-brown-omega.vercel.app/",
     tech: ["TypeScript", "Appwrite", "Next.js"],
     role: "Full-Stack + Integrations",
@@ -36,7 +36,7 @@ export const projectsData = [
     name: "Fenix",
     description:
       "Real-time video platform with low-latency media, secure auth, and session stability under variable network conditions. Focused on connection reliability over feature count.",
-    github_link: "https://github.com/Tusharxhub/Fenix",
+    github_link: "https://github.com//Fenix",
     demo: "https://fenix-ecru.vercel.app/",
     tech: ["Next.js", "Clerk", "LiveKit"],
     role: "Realtime Infrastructure",
@@ -46,7 +46,7 @@ export const projectsData = [
     name: "WebScope",
     description:
       "Web intelligence platform — extraction, processing, and structured output from dynamic sources. Clean service boundaries with failure-aware retry logic and rate-limited crawling.",
-    github_link: "https://github.com/Tusharxhub/webscope",
+    github_link: "https://github.com//webscope",
     demo: "https://webscope-three.vercel.app",
     tech: ["Next.js", "Node.js", "API Integration"],
     role: "System Architecture",
@@ -56,7 +56,7 @@ export const projectsData = [
     name: "Subscription Tracker",
     description:
       "REST API for subscription lifecycle management — tracking, automated reminders, cost projections. Designed for predictable financial operations with auditable state transitions.",
-    github_link: "https://github.com/Tusharxhub/subscription-tracker",
+    github_link: "https://github.com//subscription-tracker",
     demo: "https://subscription-tracker-jet.vercel.app/",
     tech: ["Node.js", "Express", "MongoDB"],
     role: "Backend API",

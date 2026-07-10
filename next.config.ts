@@ -97,7 +97,7 @@ const nextConfig: NextConfig = {
       { source: "/email", destination: "mailto:Tushar.Dey@gmail.com", permanent: true },
       { source: "/directresume", destination: "/docs/Resume.pdf", permanent: true },
       { source: "/direct-resume", destination: "/docs/Resume.pdf", permanent: true },
-      { source: "/github", destination: "https://www.github.com/Tusharxhub", permanent: true },
+      { source: "/github", destination: "https://www.github.com/", permanent: true },
     ];
   },
 };

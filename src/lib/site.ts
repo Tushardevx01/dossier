@@ -9,7 +9,7 @@ export const siteConfig = {
   description:
     "Tushar Kanti Dey is a full-stack developer and DevOps engineer based near Kolkata, India. Building scalable Next.js apps, real-time systems, and product-ready web experiences.",
   social: {
-    github: "https://github.com/Tusharxhub",
+    github: "https://github.com/",
     linkedin: "https://linkedin.com/in/tushardevx01",
     instagram: "https://instagram.com/tushardevx01",
     twitter: "https://twitter.com/tushardevX01",
