@@ -39,7 +39,7 @@ export const selfData = {
   ],
 
   socials_username: {
-    github: "",
+    github: "tushardevx01",
     instagram: "tushardevx01",
     linkedin: "tushardevx01",
     twitter: "tushardevX01",
