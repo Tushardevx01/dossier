@@ -8,7 +8,6 @@ import { buildPageMetadata, absoluteUrl } from "@/lib/seo";
 import { generateArticleStructuredData, generateBreadcrumbListStructuredData } from "@/lib/structured-data";
 import "prismjs/themes/prism-tomorrow.css";
 
-export const dynamic = "force-dynamic";
 export const revalidate = 60;
 
 interface GenerateMetadataParams {
