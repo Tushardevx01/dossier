@@ -30,7 +30,9 @@ The objective is to present professional work clearly, share engineering insight
 |-------|-----------|
 | **Frontend** | Next.js, React, TypeScript, Tailwind CSS, Framer Motion |
 | **Backend** | Node.js, Next.js Route Handlers |
-| **Infrastructure** | Docker, Alpine Linux, Redis (optional) |
+| **Database** | Neon Serverless Postgres, Drizzle ORM |
+| **Infrastructure** | Docker, Alpine Linux, Upstash Redis |
+| **Testing** | Vitest, React Testing Library |
 | **Monitoring** | Structured logging, Sentry (optional), health probes |
 
 ---
@@ -95,11 +97,18 @@ src/
    ```bash
    cp .env.example .env.local
    ```
-   Required variables include `QEV_API_KEY`, `EMAIL_FROM`, and `EMAIL_PASSWORD`.
+   Required variables include `DATABASE_URL`, `QEV_API_KEY`, `EMAIL_FROM`, and `EMAIL_PASSWORD`.
 
    Optional production variables include `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`, and `SENTRY_DSN`.
 
-3. Start the development server:
+3. Set up the database:
+   ```bash
+   npm run db:generate
+   npm run db:migrate
+   npm run db:seed
+   ```
+
+4. Start the development server:
    ```bash
    npm run dev
    ```
@@ -114,6 +123,19 @@ npm run lint
 npm run typecheck
 npm run build
 npm run start
+```
+
+---
+
+## Database Management
+
+The project uses Drizzle ORM with Neon Serverless Postgres for type-safe database interactions.
+
+```bash
+npm run db:generate   # Generate migration files based on schema changes
+npm run db:migrate    # Run pending migrations against the database
+npm run db:seed       # Seed the database with initial data
+npm run db:studio     # Open Drizzle Studio to view and manage data
 ```
 
 ---
