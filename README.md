@@ -22,7 +22,7 @@ The objective is to present professional work clearly, share engineering insight
 - **Containerized deployment** for consistent environments and streamlined delivery
 - **Observability built in** through structured logging, health checks, and error handling
 
----
+
 
 ## Technology Stack
 
