@@ -78,7 +78,7 @@ src/
 - Structured logging for debugging and diagnostics
 - Health endpoints for deployment verification
 
----
+
 
 ## Getting Started
 
