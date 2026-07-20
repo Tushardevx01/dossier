@@ -2,7 +2,7 @@
 
 A production-grade portfolio built with Next.js, showcasing clean architecture, strong engineering practices, and a focus on performance, security, and maintainability.
 
----
+
 
 ## Overview
 
