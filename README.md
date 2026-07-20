@@ -35,7 +35,7 @@ The objective is to present professional work clearly, share engineering insight
 | **Testing** | Vitest, React Testing Library |
 | **Monitoring** | Structured logging, Sentry (optional), health probes |
 
----
+
 
 ## Project Structure
 
