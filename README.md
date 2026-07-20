@@ -10,7 +10,7 @@ This project is more than a portfolio website; it is a practical demonstration o
 
 The objective is to present professional work clearly, share engineering insights through structured content, and maintain a high standard of quality across every layer of the stack.
 
----
+
 
 ## Highlights
 
