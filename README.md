@@ -210,7 +210,7 @@ All endpoints enforce request validation and rate limiting.
 Full-Stack Software Engineer focused on scalable systems, platform engineering, and production infrastructure.
 
 - 📧 Email: [thetushardev0@gmail.com](mailto:thetushardev0@gmail.com)
-- 🔗 GitHub: [@](https://github.com/)
+- 🔗 GitHub: [Tushardevx01](https://github.com/Tushardevx01)
 - 📸 Instagram: [@tushardevx01](https://www.instagram.com/tushardevx01/)
 - 🌐 Portfolio: [tushardevx01.tech](https://www.tushardevx01.tech)
 
