@@ -8,3 +8,8 @@ export {
   generateContactConfirmationEmail,
   type ContactConfirmationData,
 } from "./contactConfirmation";
+
+export {
+  generateContactNotificationEmail,
+  type ContactNotificationData,
+} from "./contactNotification";

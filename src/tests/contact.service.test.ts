@@ -11,6 +11,7 @@ vi.mock("@/services/email/email.transport", () => ({
 
 vi.mock("@/services/email/email.templates", () => ({
   renderContactEmail: vi.fn(() => "<p>Contact email</p>"),
+  renderContactNotificationEmail: vi.fn(() => "<p>Notification email</p>"),
 }));
 
 vi.mock("@/services/email/email.verification", () => ({

@@ -21,7 +21,7 @@ import {
 import { validateContactForm } from "./contact.schema";
 import { checkRateLimit, createRateLimitKey } from "./contact.rateLimit";
 import { sendEmail } from "@/services/email/email.transport";
-import { renderContactEmail } from "@/services/email/email.templates";
+import { renderContactEmail, renderContactNotificationEmail } from "@/services/email/email.templates";
 import { verifyEmailAddress } from "@/services/email/email.verification";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -124,7 +124,7 @@ export async function processContactSubmission(
       clientIdentifier
     );
 
-    // 5. Render and send email
+    // 5. Render and send emails
     const htmlContent = renderContactEmail({
       userName: formData.senderName,
       contactReason: formData.reasonToContact,
@@ -141,20 +141,21 @@ export async function processContactSubmission(
       { from: config.emailFrom, password: config.emailPassword }
     );
 
+    // Render notification email for owner
+    const ownerHtmlContent = renderContactNotificationEmail({
+      userName: formData.senderName,
+      userEmail: formData.senderEmail,
+      contactReason: formData.reasonToContact,
+      userMessage: formData.senderMsg,
+      requestId,
+    });
+
     // Send notification to the site owner
     const ownerEmailResult = await sendEmail(
       {
         to: { name: "Tushar Kanti Dey", address: config.emailFrom },
         subject: `New Collaboration Request from ${formData.senderName} - ${formData.reasonToContact}`,
-        html: `
-          <h2>New Contact Request</h2>
-          <p><strong>Name:</strong> ${formData.senderName}</p>
-          <p><strong>Email:</strong> ${formData.senderEmail}</p>
-          <p><strong>Reason:</strong> ${formData.reasonToContact}</p>
-          <hr />
-          <p><strong>Message:</strong></p>
-          <p style="white-space: pre-wrap;">${formData.senderMsg}</p>
-        `,
+        html: ownerHtmlContent,
         replyTo: formData.senderEmail,
       },
       { from: config.emailFrom, password: config.emailPassword }
