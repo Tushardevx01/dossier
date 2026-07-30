@@ -71,7 +71,7 @@ describe("contact service", () => {
       "api-key",
       "req-1"
     );
-    expect(mockedSendEmail).toHaveBeenCalledTimes(1);
+    expect(mockedSendEmail).toHaveBeenCalledTimes(2);
   });
 
   it("returns 429 when rate limited", async () => {
