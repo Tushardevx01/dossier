@@ -132,7 +132,7 @@ export async function processContactSubmission(
       requestId,
     });
 
-    const emailResult = await sendEmail(
+    const userEmailResult = await sendEmail(
       {
         to: { name: formData.senderName, address: formData.senderEmail },
         subject: "Request Received - Tushar Kanti Dey",
@@ -141,8 +141,27 @@ export async function processContactSubmission(
       { from: config.emailFrom, password: config.emailPassword }
     );
 
-    if (!emailResult.success) {
-      logger.error("Email send failed", { requestId, error: emailResult.error, clientIdentifier });
+    // Send notification to the site owner
+    const ownerEmailResult = await sendEmail(
+      {
+        to: { name: "Tushar Kanti Dey", address: config.emailFrom },
+        subject: `New Collaboration Request from ${formData.senderName} - ${formData.reasonToContact}`,
+        html: `
+          <h2>New Contact Request</h2>
+          <p><strong>Name:</strong> ${formData.senderName}</p>
+          <p><strong>Email:</strong> ${formData.senderEmail}</p>
+          <p><strong>Reason:</strong> ${formData.reasonToContact}</p>
+          <hr />
+          <p><strong>Message:</strong></p>
+          <p style="white-space: pre-wrap;">${formData.senderMsg}</p>
+        `,
+        replyTo: formData.senderEmail,
+      },
+      { from: config.emailFrom, password: config.emailPassword }
+    );
+
+    if (!userEmailResult.success || !ownerEmailResult.success) {
+      logger.error("Email send failed", { requestId, userError: userEmailResult.error, ownerError: ownerEmailResult.error, clientIdentifier });
       return {
         success: false,
         error: Errors.internal("Failed to send email", { requestId }),

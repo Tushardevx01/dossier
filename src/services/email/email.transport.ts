@@ -35,6 +35,7 @@ export interface EmailMessage {
   };
   subject: string;
   html: string;
+  replyTo?: string;
 }
 
 export interface SendEmailResult {
@@ -58,6 +59,7 @@ export async function sendEmail(
       to: message.to,
       subject: message.subject,
       html: message.html,
+      replyTo: message.replyTo,
       headers: {
         "X-Entity-Ref-ID": "newmail",
       },
