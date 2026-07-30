@@ -132,15 +132,6 @@ export async function processContactSubmission(
       requestId,
     });
 
-    const userEmailResult = await sendEmail(
-      {
-        to: { name: formData.senderName, address: formData.senderEmail },
-        subject: "Request Received - Tushar Kanti Dey",
-        html: htmlContent,
-      },
-      { from: config.emailFrom, password: config.emailPassword }
-    );
-
     // Render notification email for owner
     const ownerHtmlContent = renderContactNotificationEmail({
       userName: formData.senderName,
@@ -150,8 +141,17 @@ export async function processContactSubmission(
       requestId,
     });
 
-    // Send notification to the site owner
-    const ownerEmailResult = await sendEmail(
+    // Send both emails in parallel to reduce end-to-end response time.
+    const [userEmailResult, ownerEmailResult] = await Promise.all([
+      sendEmail(
+        {
+          to: { name: formData.senderName, address: formData.senderEmail },
+          subject: "Request Received - Tushar Kanti Dey",
+          html: htmlContent,
+        },
+        { from: config.emailFrom, password: config.emailPassword }
+      ),
+      sendEmail(
       {
         to: { name: "Tushar Kanti Dey", address: config.emailFrom },
         subject: `New Collaboration Request from ${formData.senderName} - ${formData.reasonToContact}`,
@@ -159,7 +159,8 @@ export async function processContactSubmission(
         replyTo: formData.senderEmail,
       },
       { from: config.emailFrom, password: config.emailPassword }
-    );
+      ),
+    ]);
 
     if (!userEmailResult.success || !ownerEmailResult.success) {
       logger.error("Email send failed", { requestId, userError: userEmailResult.error, ownerError: ownerEmailResult.error, clientIdentifier });
