@@ -120,7 +120,6 @@ export const supportingStack: SkillsCategory[] = [
       { techKey: "Postman" },
       { techKey: "ESLint" },
       { techKey: "Linux(Fedora)" },
-      { techKey: "OpenAPI" },
     ],
   },
 ];
@@ -145,7 +144,6 @@ export const additionalStack: SkillsCategory[] = [
     title: "Design & Specification",
     skills: [
       { techKey: "Figma" },
-      { techKey: "Canva" },
       { techKey: "Photoshop" },
       { techKey: "Illustrator" },
       { techKey: "XD" },

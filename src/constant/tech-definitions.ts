@@ -212,12 +212,6 @@ export const techDefinitions: Record<TechIconKey, TechDefinition> = {
     color: "#51A2DA",
     iconKey: "Linux(Fedora)",
   },
-  OpenAPI: {
-    name: "OpenAPI",
-    description: "Specification standard for documented REST APIs",
-    color: "#FFFFFF",
-    iconKey: "OpenAPI",
-  },
   C: {
     name: "C",
     description: "Low-level systems programming language",
@@ -253,12 +247,6 @@ export const techDefinitions: Record<TechIconKey, TechDefinition> = {
     description: "Collaborative interface design and prototyping platform",
     color: "#F24E1E",
     iconKey: "Figma",
-  },
-  Canva: {
-    name: "Canva",
-    description: "Fast visual design tool for branded assets",
-    color: "#00C4CC",
-    iconKey: "Canva",
   },
   Photoshop: {
     name: "Photoshop",
