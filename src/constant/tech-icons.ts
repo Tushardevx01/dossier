@@ -14,7 +14,7 @@ import {
 
 import {
   SiAppwrite,
-  SiCanva,
+  SiCanvas,
   SiEslint,
   SiExpress,
   SiFedora,
@@ -30,7 +30,6 @@ import {
   SiNextdotjs,
   SiNodedotjs,
   SiNpm,
-  SiOpenai,
   SiPostman,
   SiPrisma,
   SiRadixui,
@@ -48,7 +47,7 @@ import {
   SiNodemon,
 } from "react-icons/si";
 
-import { TbBrandCpp } from "react-icons/tb";
+import { TbBrandCpp, TbBrandOpenai } from "react-icons/tb";
 
 export const techIcons = {
   TypeScript: SiTypescript,
@@ -85,14 +84,14 @@ export const techIcons = {
   Appwrite: SiAppwrite,
   Redis: SiRedis,
   "Linux(Fedora)": SiFedora,
-  OpenAPI: SiOpenai,
+  OpenAPI: TbBrandOpenai,
   C: SiC,
   "C++": TbBrandCpp,
   Java: FaJava,
   "Shell (Bash)": SiGnubash,
   Python: FaPython,
   Figma: SiFigma,
-  Canva: SiCanva,
+  Canva: SiCanvas,
   Photoshop: MdPhoto,
   Illustrator: MdBrush,
   XD: MdDesignServices,

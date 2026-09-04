@@ -41,7 +41,7 @@ import {
   SiGnubash,
   SiC,
   SiFigma,
-  SiCanva,
+  SiCanvas,
   SiSass,
   SiWebpack,
   SiRadixui,
@@ -50,10 +50,9 @@ import {
   SiJavascript,
   SiFedora,
   SiGraphql,
-  SiOpenai,
 } from "react-icons/si";
 
-import { TbBrandCpp } from "react-icons/tb";
+import { TbBrandCpp, TbBrandOpenai } from "react-icons/tb";
 
 interface LogoProps {
   title: string;
@@ -151,7 +150,7 @@ export const skillsData: SkillsDataProps[] = [
     title: "UI/UX & Design",
     data: [
       { title: "Figma", logoComponent: SiFigma, color: "#F24E1E" },
-      { title: "Canva", logoComponent: SiCanva, color: "#00C4CC" },
+      { title: "Canva", logoComponent: SiCanvas, color: "#00C4CC" },
       { title: "Photoshop", logoComponent: MdPhoto, color: "#31A8FF" },
       { title: "Illustrator", logoComponent: MdBrush, color: "#FF9A00" },
       { title: "XD", logoComponent: MdDesignServices, color: "#FF61F6" },
@@ -164,7 +163,7 @@ export const skillsData: SkillsDataProps[] = [
       { title: "GraphQL", logoComponent: SiGraphql, color: "#E10098" },
       { title: "WebSockets", logoComponent: SiSocketdotio, color: "#010101" },
       { title: "Bash Scripts", logoComponent: SiGnubash, color: "#4EAA25" },
-      { title: "OpenAPI", logoComponent: SiOpenai, color: "#FFFFFF" },
+      { title: "OpenAPI", logoComponent: TbBrandOpenai, color: "#FFFFFF" },
     ],
   },
 ];
