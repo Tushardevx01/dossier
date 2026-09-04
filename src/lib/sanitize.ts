@@ -2,26 +2,28 @@
  * HTML Sanitization Utility
  *
  * Prevents XSS attacks by sanitizing user-generated or database HTML content.
- * Uses isomorphic-dompurify for server-side and client-side compatibility.
+ * Uses sanitize-html which is pure JS and works reliably in Edge/Serverless environments.
  */
 
-import DOMPurify from "isomorphic-dompurify";
+import sanitizeHtmlLib from "sanitize-html";
 
 /**
  * Configuration for HTML sanitization
  * Allows formatting tags but prevents script execution and malicious attributes
  */
 const SANITIZE_CONFIG = {
-  ALLOWED_TAGS: [
+  allowedTags: [
     "h1", "h2", "h3", "h4", "h5", "h6",
     "p", "br", "span", "strong", "em", "i", "b", "u",
     "a", "ul", "ol", "li", "blockquote", "pre", "code",
     "table", "thead", "tbody", "tr", "th", "td",
     "img", "figure", "figcaption", "div", "section", "article",
   ],
-  ALLOWED_ATTR: ["href", "title", "target", "rel", "src", "alt", "class"],
-  ALLOW_DATA_ATTR: false,
-  KEEP_CONTENT: true,
+  allowedAttributes: {
+    "*": ["class"],
+    "a": ["href", "title", "target", "rel"],
+    "img": ["src", "alt"],
+  },
 };
 
 /**
@@ -35,7 +37,7 @@ export function sanitizeHtml(html: string): string {
     return "";
   }
 
-  return DOMPurify.sanitize(html, SANITIZE_CONFIG);
+  return sanitizeHtmlLib(html, SANITIZE_CONFIG);
 }
 
 /**
@@ -49,7 +51,7 @@ export function sanitizeText(text: string): string {
     return "";
   }
 
-  return DOMPurify.sanitize(text, { ALLOWED_TAGS: [] });
+  return sanitizeHtmlLib(text, { allowedTags: [], allowedAttributes: {} });
 }
 
 /**
