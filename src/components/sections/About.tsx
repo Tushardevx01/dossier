@@ -11,7 +11,7 @@ import { LuMapPinned } from "react-icons/lu";
 export const About = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, {
-    once: false,
+    once: true,
     margin: "-60px",
     amount: 0.2,
   });

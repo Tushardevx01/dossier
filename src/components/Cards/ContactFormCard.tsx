@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+
 import { BsSend, BsSendCheck } from "react-icons/bs";
 
 import { Card } from "../ui/card";
@@ -8,10 +8,7 @@ export const ContactFormCard = () => {
   const { formValues, isSending, isSent, handleChange, handleSubmit } = useContactForm();
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+    <div
       className="h-full"
     >
       <Card
@@ -35,11 +32,7 @@ export const ContactFormCard = () => {
             />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-              >
+              <div>
                 <label className="block text-xs uppercase tracking-wider text-white/50 mb-2">
                   Name
                 </label>
@@ -55,13 +48,9 @@ export const ContactFormCard = () => {
                     color: "hsl(var(--foreground))",
                   }}
                 />
-              </motion.div>
+              </div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.15 }}
-              >
+              <div>
                 <label className="block text-xs uppercase tracking-wider text-white/50 mb-2">
                   Email
                 </label>
@@ -77,14 +66,10 @@ export const ContactFormCard = () => {
                     color: "hsl(var(--foreground))",
                   }}
                 />
-              </motion.div>
+              </div>
             </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
+            <div>
               <label className="block text-xs uppercase tracking-wider text-white/50 mb-2">
                 Type of Inquiry
               </label>
@@ -111,12 +96,9 @@ export const ContactFormCard = () => {
                   Technical Conversation
                 </option>
               </select>
-            </motion.div>
+            </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.25 }}
+            <div
               className="flex-grow flex flex-col"
             >
               <label className="block text-xs uppercase tracking-wider text-white/50 mb-2">
@@ -134,50 +116,28 @@ export const ContactFormCard = () => {
                   color: "hsl(var(--foreground))",
                 }}
               />
-            </motion.div>
+            </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
+            <div
               className="pt-4"
             >
-              <motion.button
+              <button
                 type="submit"
                 disabled={isSending}
-                whileHover={{
-                  y: -2,
-                  transition: { duration: 0.2 },
-                }}
-                whileTap={{ y: 0 }}
                 className="w-full btn-primary px-6 py-3 rounded-xl font-medium text-base flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
               >
                 {isSending ? (
                   <>
-                    <motion.div
-                      animate={{ rotate: 360 }}
-                      transition={{
-                        duration: 0.8,
-                        repeat: Infinity,
-                        ease: "linear",
-                      }}
-                      className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
+                    <div
+                      className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"
                     />
                     <span>Sending...</span>
                   </>
                 ) : isSent ? (
                   <>
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 300,
-                        damping: 10,
-                      }}
-                    >
+                    <div>
                       <BsSendCheck className="w-4 h-4" />
-                    </motion.div>
+                    </div>
                     <span>Sent! Thanks for reaching out.</span>
                   </>
                 ) : (
@@ -186,11 +146,11 @@ export const ContactFormCard = () => {
                     <span>Start a Conversation</span>
                   </>
                 )}
-              </motion.button>
-            </motion.div>
+              </button>
+            </div>
           </form>
         </div>
       </Card>
-    </motion.div>
+    </div>
   );
 };

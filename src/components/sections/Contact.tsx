@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "motion/react";
+
 import { IconType } from "react-icons";
 import { useRef } from "react";
 
@@ -21,31 +21,20 @@ export const Contact = () => {
       className="py-24 sm:py-28 max-w-6xl mx-auto relative overflow-hidden"
     >
       <div className="px-4 sm:px-6 lg:px-8 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="text-center mb-14 sm:mb-16"
-        >
-          <motion.h2
+        <div className="text-center mb-14 sm:mb-16">
+          <h2
             className={`text-4xl md:text-5xl lg:text-6xl font-semibold mb-5 relative tracking-tight ${nasalization.className}`}
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.7, delay: 0.1 }}
             style={{ color: "hsl(var(--primary))" }}
           >
             Open{" "}
             <span style={{ color: "hsl(var(--foreground) / 0.5)" }}>Channel.</span>
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
+          </h2>
+          <p
             className="text-base md:text-lg text-white/60 max-w-2xl mx-auto leading-relaxed"
           >
             Open to full-time engineering roles and focused collaborations where architecture quality, delivery ownership, and production reliability matter.
-          </motion.p>
-        </motion.div>
+          </p>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-start px-0 sm:px-4 lg:px-0">
           {/* Contact Form */}
@@ -54,10 +43,7 @@ export const Contact = () => {
           {/* Contact Information */}
           <div className="space-y-12">
             {/* Contact List */}
-            <motion.div
-              initial={{ opacity: 0, x: 40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 0.2 }}
+            <div
               className="space-y-6"
             >
               <h3
@@ -67,14 +53,10 @@ export const Contact = () => {
                 Contact Information
               </h3>
               <ContactList />
-            </motion.div>
+            </div>
 
             {/* Social Links */}
-            <motion.div
-              initial={{ opacity: 0, x: 40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 0.3 }}
-            >
+            <div>
               <h3
                 className="text-base font-semibold tracking-[0.16em] uppercase mb-6"
                 style={{ color: "hsl(var(--foreground))" }}
@@ -82,7 +64,7 @@ export const Contact = () => {
                 Connect Professionally
               </h3>
               <ContactSocials />
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>
@@ -104,9 +86,7 @@ const ContactItem: React.FC<ContactItemProps> = ({
   href,
 }) => {
   const content = (
-    <motion.div
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
+    <div
       className="p-5 rounded-xl transition-all duration-300 hover:bg-white/5 group cursor-pointer border border-white/10 bg-white/[0.02] hover:border-white/20"
     >
       <div className="flex items-start space-x-4">
@@ -123,7 +103,7 @@ const ContactItem: React.FC<ContactItemProps> = ({
           </p>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 
   if (href) {
