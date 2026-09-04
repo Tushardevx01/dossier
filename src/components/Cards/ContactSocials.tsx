@@ -21,7 +21,7 @@ export const ContactSocials = () => {
 
   return (
     <ul className="flex flex-wrap gap-5">
-      {socialLinks.map((social, index) => (
+      {socialLinks.map((social) => (
         <ContactSocialItem
           key={social.key}
           Icon={SOCIAL_ICONS[social.key]}
