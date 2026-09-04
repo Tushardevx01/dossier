@@ -4,7 +4,6 @@ import { Experience } from "./Experience";
 import { Hero } from "./Hero";
 import { Projects } from "./Projects";
 import { Skills } from "./Skills";
-import { GitHub } from "./GitHub";
 import { DevOps } from "./DevOps";
 
-export { About, Contact, Experience, Hero, Projects, Skills, GitHub, DevOps };
+export { About, Contact, Experience, Hero, Projects, Skills, DevOps };
