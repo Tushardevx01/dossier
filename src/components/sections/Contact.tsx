@@ -18,7 +18,7 @@ export const Contact = () => {
     <section
       ref={ref}
       id="contact"
-      className="py-24 sm:py-28 max-w-6xl mx-auto relative overflow-hidden"
+      className="py-24 sm:py-28 max-w-6xl mx-auto relative overflow-hidden scroll-mt-24"
     >
       <div className="px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-14 sm:mb-16">

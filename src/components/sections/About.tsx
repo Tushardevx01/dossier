@@ -20,7 +20,7 @@ export const About = () => {
     <section
       id="about"
       ref={ref}
-      className="py-24 max-w-6xl mx-auto relative overflow-hidden"
+      className="py-24 max-w-6xl mx-auto relative overflow-hidden scroll-mt-24"
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 overflow-x-hidden">
         {/* Title Section */}

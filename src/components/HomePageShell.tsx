@@ -32,6 +32,25 @@ export function HomePageShell() {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    if (!loading && typeof window !== "undefined" && window.location.hash) {
+      const id = window.location.hash.slice(1);
+      const timer = setTimeout(() => {
+        const el = document.getElementById(id);
+        if (el) {
+          const navOffset = 80;
+          const elementPosition = el.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - navOffset;
+          window.scrollTo({
+            top: Math.max(0, offsetPosition),
+            behavior: "smooth",
+          });
+        }
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [loading]);
+
   if (loading) return <PreLoader />;
 
   return (

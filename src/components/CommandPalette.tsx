@@ -47,9 +47,9 @@ export const CommandPalette = () => {
     setIsOpen(false);
     setSearch("");
     setSelectedIndex(0);
-    // Restore focus
+    // Restore focus without jumping viewport scroll
     if (previousFocusRef.current) {
-      previousFocusRef.current.focus();
+      previousFocusRef.current.focus({ preventScroll: true });
     }
   }, []);
 
@@ -106,6 +106,47 @@ export const CommandPalette = () => {
     }
   }, [closePalette]);
 
+  const navigateTo = useCallback(
+    (path: string) => {
+      closePalette();
+
+      if (path.startsWith("/#")) {
+        const targetId = path.slice(2);
+        if (typeof window !== "undefined") {
+          if (window.location.pathname === "/") {
+            setTimeout(() => {
+              const el = document.getElementById(targetId);
+              if (el) {
+                const navOffset = 80;
+                const elementPosition = el.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - navOffset;
+                window.scrollTo({
+                  top: Math.max(0, offsetPosition),
+                  behavior: "smooth",
+                });
+                window.history.pushState(null, "", path);
+              }
+            }, 60);
+            return;
+          }
+        }
+      }
+
+      if (path === "/") {
+        if (typeof window !== "undefined" && window.location.pathname === "/") {
+          setTimeout(() => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            window.history.pushState(null, "", "/");
+          }, 60);
+          return;
+        }
+      }
+
+      router.push(path);
+    },
+    [closePalette, router]
+  );
+
   const commands: CommandItem[] = [
     // Navigation
     {
@@ -114,35 +155,17 @@ export const CommandPalette = () => {
       category: "Navigation",
       description: "Jump to overview & editorial hero",
       icon: LuCompass,
-      action: () => {
-        router.push("/");
-        closePalette();
-      },
+      action: () => navigateTo("/"),
       keywords: ["home", "main", "start", "landing"],
     },
     {
-      id: "nav-system",
-      label: "Featured System: RunStack",
+      id: "nav-about",
+      label: "About Me",
       category: "Navigation",
-      description: "Distributed job orchestrator architecture",
-      icon: LuCpu,
-      action: () => {
-        router.push("/#featured-system");
-        closePalette();
-      },
-      keywords: ["runstack", "system", "flagship", "distributed", "orchestrator", "go"],
-    },
-    {
-      id: "nav-lab",
-      label: "Architecture Lab",
-      category: "Navigation",
-      description: "Interactive system topologies & data flow",
-      icon: LuLayers,
-      action: () => {
-        router.push("/#architecture-lab");
-        closePalette();
-      },
-      keywords: ["lab", "architecture", "flow", "topology", "aegis"],
+      description: "Engineering background, mindset & bio",
+      icon: LuCompass,
+      action: () => navigateTo("/#about"),
+      keywords: ["about", "bio", "background", "story", "me", "mindset"],
     },
     {
       id: "nav-work",
@@ -150,35 +173,17 @@ export const CommandPalette = () => {
       category: "Navigation",
       description: "Production case studies & outcomes",
       icon: LuFolderGit2,
-      action: () => {
-        router.push("/#selected-work");
-        closePalette();
-      },
+      action: () => navigateTo("/#selected-work"),
       keywords: ["work", "projects", "case studies", "selected"],
     },
     {
-      id: "nav-proof",
-      label: "Engineering Proof",
+      id: "nav-devops",
+      label: "DevOps & Cloud Architecture",
       category: "Navigation",
-      description: "Concurrency, reliability, idempotency & testing",
+      description: "CI/CD pipelines, Docker, Kubernetes & cloud automation",
       icon: LuTerminal,
-      action: () => {
-        router.push("/#engineering-proof");
-        closePalette();
-      },
-      keywords: ["proof", "concurrency", "reliability", "idempotency", "testing", "race"],
-    },
-    {
-      id: "nav-build-log",
-      label: "Build Log",
-      category: "Navigation",
-      description: "Engineering ledger of changes and optimizations",
-      icon: LuFileText,
-      action: () => {
-        router.push("/#build-log");
-        closePalette();
-      },
-      keywords: ["build", "log", "changelog", "timeline", "updates"],
+      action: () => navigateTo("/#devops"),
+      keywords: ["devops", "cloud", "docker", "ci/cd", "kubernetes", "infrastructure", "deploy"],
     },
     {
       id: "nav-stack",
@@ -186,23 +191,8 @@ export const CommandPalette = () => {
       category: "Navigation",
       description: "Purpose-organized languages, backend, infra & tooling",
       icon: LuCpu,
-      action: () => {
-        router.push("/#tech");
-        closePalette();
-      },
+      action: () => navigateTo("/#tech"),
       keywords: ["stack", "technology", "tech", "matrix", "skills", "languages", "tools"],
-    },
-    {
-      id: "nav-principles",
-      label: "Engineering Principles",
-      category: "Navigation",
-      description: "How I engineer: failure, observability, clarity",
-      icon: LuCompass,
-      action: () => {
-        router.push("/#principles");
-        closePalette();
-      },
-      keywords: ["principles", "philosophy", "how i engineer", "rules"],
     },
     {
       id: "nav-experience",
@@ -210,23 +200,8 @@ export const CommandPalette = () => {
       category: "Navigation",
       description: "Full-time roles, platform leadership & impact",
       icon: LuFileText,
-      action: () => {
-        router.push("/#experience");
-        closePalette();
-      },
+      action: () => navigateTo("/#experience"),
       keywords: ["experience", "roles", "jobs", "azmth", "cycoders", "namespace"],
-    },
-    {
-      id: "nav-github",
-      label: "GitHub & Open Source",
-      category: "Navigation",
-      description: "Public repositories, languages & commits",
-      icon: LuFolderGit2,
-      action: () => {
-        router.push("/#open-source");
-        closePalette();
-      },
-      keywords: ["github", "repos", "open source", "code"],
     },
     {
       id: "nav-contact",
@@ -234,10 +209,7 @@ export const CommandPalette = () => {
       category: "Navigation",
       description: "Direct email and professional channels",
       icon: LuCompass,
-      action: () => {
-        router.push("/#contact");
-        closePalette();
-      },
+      action: () => navigateTo("/#contact"),
       keywords: ["contact", "email", "collaborate", "hire", "message"],
     },
     {
@@ -246,10 +218,7 @@ export const CommandPalette = () => {
       category: "Navigation",
       description: "Technical writing and architecture deep-dives",
       icon: LuFileText,
-      action: () => {
-        router.push("/engineering-notes");
-        closePalette();
-      },
+      action: () => navigateTo("/engineering-notes"),
       keywords: ["notes", "blog", "articles", "writings"],
     },
     {
@@ -258,10 +227,7 @@ export const CommandPalette = () => {
       category: "Navigation",
       description: "Verified engineering CV and experience sheet",
       icon: LuFileText,
-      action: () => {
-        router.push("/resume");
-        closePalette();
-      },
+      action: () => navigateTo("/resume"),
       keywords: ["resume", "cv", "pdf", "qualifications"],
     },
 
@@ -272,10 +238,7 @@ export const CommandPalette = () => {
       category: "Case Studies",
       description: "Distributed deployment and job orchestration in Go",
       icon: LuCpu,
-      action: () => {
-        router.push("/work/runstack");
-        closePalette();
-      },
+      action: () => navigateTo("/work/runstack"),
       keywords: ["runstack", "orchestrator", "kafka", "redis", "docker", "go"],
     },
     {
@@ -284,10 +247,7 @@ export const CommandPalette = () => {
       category: "Case Studies",
       description: "Air-gapped AIOps & self-healing infrastructure",
       icon: LuLayers,
-      action: () => {
-        router.push("/work/aegis");
-        closePalette();
-      },
+      action: () => navigateTo("/work/aegis"),
       keywords: ["aegis", "aiops", "sre", "incident", "remediation", "docker", "kafka", "nestjs", "python"],
     },
     {
@@ -296,10 +256,7 @@ export const CommandPalette = () => {
       category: "Case Studies",
       description: "Full-stack healthcare appointment & patient onboarding engine",
       icon: LuFileText,
-      action: () => {
-        router.push("/work/carepulse");
-        closePalette();
-      },
+      action: () => navigateTo("/work/carepulse"),
       keywords: ["carepulse", "healthcare", "appointments", "appwrite", "sms", "twilio", "nextjs", "zod", "server-actions"],
     },
     {
@@ -308,10 +265,7 @@ export const CommandPalette = () => {
       category: "Case Studies",
       description: "Real-time meeting platform with Stream Video SDK & Clerk",
       icon: LuLayers,
-      action: () => {
-        router.push("/work/fenix");
-        closePalette();
-      },
+      action: () => navigateTo("/work/fenix"),
       keywords: ["fenix", "stream", "video", "clerk", "meetings", "realtime", "nextjs"],
     },
     {
@@ -320,10 +274,7 @@ export const CommandPalette = () => {
       category: "Case Studies",
       description: "Mobile event infrastructure, native payments & 120Hz engine",
       icon: LuSmartphone,
-      action: () => {
-        router.push("/work/signifiya");
-        closePalette();
-      },
+      action: () => navigateTo("/work/signifiya"),
       keywords: ["signifiya", "expo", "react-native", "supabase", "razorpay", "better-auth", "mobile"],
     },
     {
@@ -332,10 +283,7 @@ export const CommandPalette = () => {
       category: "Case Studies",
       description: "Website intelligence platform with Axios, Cheerio & Prisma",
       icon: LuGlobe,
-      action: () => {
-        router.push("/work/webscope");
-        closePalette();
-      },
+      action: () => navigateTo("/work/webscope"),
       keywords: ["webscope", "seo", "cheerio", "axios", "prisma", "scraper", "monitoring"],
     },
     {
@@ -344,10 +292,7 @@ export const CommandPalette = () => {
       category: "Case Studies",
       description: "API architecture, Upstash Workflow scheduling & Arcjet security",
       icon: LuWorkflow,
-      action: () => {
-        router.push("/work/subscription-tracker");
-        closePalette();
-      },
+      action: () => navigateTo("/work/subscription-tracker"),
       keywords: [
         "subscription",
         "tracker",
@@ -486,7 +431,7 @@ export const CommandPalette = () => {
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   onKeyDown={handleInputKeyDown}
-                  placeholder="Search or run a command... (work, system, stack, github, email)"
+                  placeholder="Search or run a command... (work, notes, stack, contact, email)"
                   className="flex-1 bg-transparent border-none outline-none text-neutral-100 placeholder:text-neutral-500 font-mono text-xs sm:text-sm"
                 />
                 {search && (

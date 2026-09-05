@@ -13,7 +13,7 @@ export const Skills = () => {
   const [showAdditional, setShowAdditional] = useState(false);
 
   return (
-    <section id="tech" ref={ref} className="py-24 relative overflow-hidden control-grid">
+    <section id="tech" ref={ref} className="py-24 relative overflow-hidden control-grid scroll-mt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           className="mb-16 space-y-2"

@@ -16,7 +16,7 @@ export const Projects = () => {
     <section
       id="selected-work"
       ref={ref}
-      className="py-24 relative"
+      className="py-24 relative scroll-mt-24"
     >
       <div id="projects" className="absolute -top-20" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

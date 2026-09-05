@@ -13,7 +13,7 @@ export const DevOps = () => {
   const { telemetry, logs } = useSystemStatus();
 
   return (
-    <section id="devops" ref={ref} className="py-24 relative overflow-hidden control-grid">
+    <section id="devops" ref={ref} className="py-24 relative overflow-hidden control-grid scroll-mt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           className="mb-12 space-y-2"
