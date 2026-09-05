@@ -201,8 +201,8 @@ export const projectsData: Project[] = [
     demo: "https://github.com/Tushardevx01/Runstack",
   },
   {
-    id: "project-aegis",
-    slug: "project-aegis",
+    id: "aegis",
+    slug: "aegis",
     name: "Aegis",
     title: "Aegis",
     subtitle: "Air-Gapped AIOps & Self-Healing Infrastructure",
@@ -213,8 +213,8 @@ export const projectsData: Project[] = [
     year: "2026",
     timeline: "Feb 2026 — Present",
     status: "Active",
-    technologies: ["NestJS", "Kafka", "MongoDB", "Python", "Docker"],
-    tech: ["NestJS", "Kafka", "Docker", "Python", "MongoDB"],
+    technologies: ["TypeScript", "Python", "NestJS", "Kafka", "Docker", "MongoDB"],
+    tech: ["TypeScript", "Python", "NestJS", "Kafka", "Docker"],
     problem:
       "Modern containerized systems fail through OOM conditions, timeouts, crash loops, port collisions, memory leaks, and permission errors. SRE teams require a closed-loop platform that detects, diagnoses, evaluates safety, remediates, and audits without external cloud dependencies.",
     approach:

@@ -279,13 +279,13 @@ export const CommandPalette = () => {
       id: "cs-aegis",
       label: "Case Study: Aegis",
       category: "Case Studies",
-      description: "Autonomous infrastructure resilience and self-healing",
+      description: "Air-gapped AIOps & self-healing infrastructure",
       icon: LuLayers,
       action: () => {
-        router.push("/work/project-aegis");
+        router.push("/work/aegis");
         closePalette();
       },
-      keywords: ["aegis", "resilience", "incident", "remediation", "docker"],
+      keywords: ["aegis", "aiops", "sre", "incident", "remediation", "docker", "kafka", "nestjs", "python"],
     },
     {
       id: "cs-simpui",

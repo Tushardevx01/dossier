@@ -31,7 +31,7 @@ interface ProjectCaseStudyProps {
 }
 
 export const ProjectCaseStudy = ({ project, nextProject }: ProjectCaseStudyProps) => {
-  if (project.id === "project-aegis" || project.slug === "project-aegis") {
+  if (project.id === "aegis" || project.slug === "aegis" || project.id === "project-aegis" || project.slug === "project-aegis") {
     return <AegisCaseStudy project={project} nextProject={nextProject} />;
   }
 

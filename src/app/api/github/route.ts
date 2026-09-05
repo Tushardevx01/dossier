@@ -34,10 +34,10 @@ const verifiedStaticRepos = [
     updatedAt: "2026-09-01T12:00:00Z",
   },
   {
-    name: "project-aegis",
+    name: "aegis",
     description: "Autonomous infrastructure resilience and self-healing incident remediation engine.",
     language: "TypeScript",
-    url: "https://github.com/tushardevx01/project-aegis",
+    url: "https://github.com/tushardevx01/aegis",
     stars: 0,
     forks: 0,
     updatedAt: "2026-08-28T14:30:00Z",
@@ -72,10 +72,10 @@ const verifiedStaticActivity = [
   },
   {
     id: "act-2",
-    repo: "project-aegis",
-    message: "feat: autonomous infrastructure recovery workflow",
+    repo: "aegis",
+    message: "feat: closed-loop incident detection & remediation pipeline",
     date: "Aug 2026",
-    url: "https://github.com/tushardevx01/project-aegis",
+    url: "https://github.com/tushardevx01/aegis",
   },
   {
     id: "act-3",
