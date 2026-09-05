@@ -291,25 +291,25 @@ export const CommandPalette = () => {
       id: "cs-carepulse",
       label: "Case Study: CarePulse",
       category: "Case Studies",
-      description: "Healthcare appointment engine and patient scheduling",
+      description: "Full-stack healthcare appointment & patient onboarding engine",
       icon: LuFileText,
       action: () => {
         router.push("/work/carepulse");
         closePalette();
       },
-      keywords: ["carepulse", "healthcare", "appointments", "appwrite", "sms"],
+      keywords: ["carepulse", "healthcare", "appointments", "appwrite", "sms", "twilio", "nextjs", "zod", "server-actions"],
     },
     {
       id: "cs-fenix",
       label: "Case Study: Fenix",
       category: "Case Studies",
-      description: "Low-latency WebRTC and LiveKit real-time video",
-      icon: LuCpu,
+      description: "Real-time meeting platform with Stream Video SDK & Clerk",
+      icon: LuLayers,
       action: () => {
         router.push("/work/fenix");
         closePalette();
       },
-      keywords: ["fenix", "webrtc", "livekit", "video", "realtime"],
+      keywords: ["fenix", "stream", "video", "clerk", "meetings", "realtime", "nextjs"],
     },
 
     // Actions

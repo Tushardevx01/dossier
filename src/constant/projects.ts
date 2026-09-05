@@ -401,88 +401,144 @@ export const projectsData: Project[] = [
     title: "CarePulse",
     subtitle: "Healthcare Operations & Appointment Workflow Engine",
     description:
-      "Healthcare operations and patient scheduling platform designed with strict security constraints and fault-tolerant workflows.",
-    category: "Full-Stack Platform",
-    role: "Full-Stack Engineer",
+      "Healthcare appointment and patient onboarding platform engineered with Next.js 14 App Router, server-side data operations, Appwrite backend services, centralized Zod validation, and Twilio SMS dispatch.",
+    category: "Full-Stack Product Engineering",
+    role: "Full-Stack Product Engineer",
     year: "2024",
     timeline: "2024 — 2025",
     status: "Production",
-    technologies: ["Next.js", "TypeScript", "Appwrite", "Tailwind CSS", "Twilio SMS", "Zod"],
-    tech: ["Next.js", "TypeScript", "Appwrite", "Tailwind CSS"],
+    technologies: [
+      "Next.js 14",
+      "TypeScript",
+      "React",
+      "Tailwind CSS",
+      "shadcn/ui",
+      "Appwrite",
+      "Twilio",
+      "Sentry",
+      "Vercel",
+    ],
+    tech: ["Next.js 14", "TypeScript", "Appwrite", "Tailwind CSS", "Twilio"],
     problem:
-      "Medical clinics suffer high patient no-show rates, disjointed appointment scheduling across providers, and data privacy compliance risks when patient records lack strict isolation.",
+      "Healthcare appointment systems involve distinct actors and complex state transitions. The engineering challenge was not simply displaying forms, but coordinating patient registration, clinical data, doctor selection, appointment requests, status transitions (Pending, Scheduled, Cancelled), SMS notifications, document storage, and administrative workflows in a unified, reliable product lifecycle.",
     approach:
-      "Developed a HIPAA-conscious scheduling workflow with Zod schema verification, multi-provider calendar slotting, automated SMS confirmations via Twilio, and role-gated clinical administrative portals.",
+      "Built a server-centric Next.js 14 application keeping the client experience simple while moving data operations into server actions. Structured the codebase with clean separation between UI forms, server actions, centralized Zod validation, Appwrite backend service configuration, and typed data models.",
     architecture: {
-      flowSummary: "Patient Interface → Next.js Server Actions → Zod Schema Validator → Appwrite DB → Twilio Notification Engine",
+      flowSummary:
+        "Patient UI / Admin Dashboard → Next.js 14 Server Actions → Zod Schema Validator → Appwrite BaaS (Users, DB, Storage) → Twilio SMS",
       layers: [
         {
-          name: "Patient Portal",
-          role: "Multi-Step Booking Interface",
-          tech: "Next.js / React Hook Form / Tailwind CSS",
+          name: "Client Interface Layer",
+          role: "Patient Onboarding & Admin Dashboard",
+          tech: "Next.js 14 / React Hook Form / shadcn/ui / Tailwind CSS",
         },
         {
           name: "Validation Boundary",
-          role: "Strict Input Sanitation & Schema Guard",
-          tech: "Zod Schema Validation / Server Actions",
+          role: "Centralized Input Integrity & Schema Resolvers",
+          tech: "Zod Schemas (User, Patient, Appointment)",
         },
         {
-          name: "Data Platform",
-          role: "Encrypted Patient & Appointment Storage",
-          tech: "Appwrite Cloud Database & Secure File Vault",
+          name: "Server Action Engine",
+          role: "Privileged Server-Side Mutations & Cache Invalidation",
+          tech: "Next.js Server Actions (appointment.actions.ts, patient.actions.ts)",
         },
         {
-          name: "Notification Dispatch",
-          role: "Real-Time Appointment Confirmation",
-          tech: "Twilio SMS API / Webhook Integration",
+          name: "Backend Service Platform",
+          role: "Document DB, User Identity & Identification Vault",
+          tech: "Appwrite BaaS (Users, Databases, Storage)",
         },
         {
-          name: "Admin Control",
-          role: "Clinical Schedule Management",
-          tech: "Role-Based Access Control / Next.js SSR",
+          name: "Notification Bridge",
+          role: "Automated SMS Updates for Schedule & Cancellation",
+          tech: "Twilio SMS via Appwrite Messaging",
         },
       ],
     },
     challenges: [
       {
-        title: "Appointment Double-Booking Concurrency",
+        title: "Multi-Step Patient Onboarding",
         description:
-          "Simultaneous patients booking the exact same time slot could result in provider overbooking.",
+          "Patient creation cannot be completed in a single flat form due to identity separation.",
         solution:
-          "Implemented conditional reservation locks in Appwrite with atomic status transitions (`PENDING` → `CONFIRMED`), immediately invalidating conflicting pending reservations.",
+          "Coordinated initial user creation via Appwrite Users, transferring the generated userId to `/patients/[userId]/register` for full medical history and consent capture.",
       },
       {
-        title: "Resilient SMS Notification Delivery",
+        title: "Complex Healthcare Form Validation",
         description:
-          "Network drops or carrier errors could drop appointment confirmations, leaving patients uninformed.",
+          "Intake forms collect varied clinical data types: E.164 phone formats, date-of-birth constraints, insurance policies, and legal consent checkboxes.",
         solution:
-          "Wrapped Twilio API dispatches in an exponential backoff retry queue with persistent delivery audit logs in Appwrite.",
+          "Centralized all runtime validation in `lib/validation.ts` using Zod schemas, enforcing strict client-side validation before server action invocation.",
+      },
+      {
+        title: "Polymorphic Appointment State Management",
+        description:
+          "A single appointment form modal services create, schedule, and cancel workflows with differing input requirements.",
+        solution:
+          "Dynamically generated validation schemas via `getAppointmentSchema(type)` to conditionally require cancellation justification or schedule date fields.",
+      },
+      {
+        title: "External Service Coordination",
+        description:
+          "Synchronizing Next.js App Router, Appwrite document collections, file storage buckets, Twilio SMS messaging, and Sentry telemetry.",
+        solution:
+          "Encapsulated third-party operations within typed server actions with try/catch exception routing to Sentry and instant cache revalidation.",
       },
     ],
     decisions: [
       {
+        technology: "Next.js 14 App Router",
+        reason:
+          "Provides modern React component architecture with explicit server and client boundaries, native layout nesting, and file-based routing.",
+        tradeoff:
+          "Requires disciplined demarcation between server-side data loaders and interactive client components.",
+        outcome:
+          "Streamlined full-stack architecture with zero REST API boilerplate.",
+      },
+      {
+        technology: "Server Actions",
+        reason:
+          "Executes Appwrite SDK mutations and administrative API calls server-side, eliminating custom endpoint routes and securing credentials.",
+        tradeoff:
+          "Client components require structured state management during asynchronous mutations.",
+        outcome:
+          "Secure mutation pipeline keeping Appwrite API keys and Twilio credentials isolated from the browser.",
+      },
+      {
+        technology: "Appwrite BaaS",
+        reason:
+          "Delivers managed user authentication, document collections, encrypted document file storage, and SMS messaging without custom database operations.",
+        tradeoff:
+          "Coupled to Appwrite's document modeling conventions and SDK interfaces.",
+        outcome:
+          "Rapid, reliable full-stack execution covering authentication, database, storage, and notifications.",
+      },
+      {
         technology: "Zod",
         reason:
-          "Guaranteed end-to-end type safety from client inputs through database persistence with zero runtime type coercion vulnerabilities.",
+          "Single source of truth for runtime input validation and automatic TypeScript type inference across client forms and server actions.",
+        tradeoff:
+          "Schemas must be maintained alongside changing product requirements.",
+        outcome:
+          "Zero runtime type coercion vulnerabilities and instantaneous inline form validation feedback.",
       },
       {
-        technology: "Next.js Server Actions",
+        technology: "React Hook Form",
         reason:
-          "Eliminated unnecessary REST boilerplate and reduced client-side bundle size by executing form mutations securely on the server.",
-      },
-      {
-        technology: "Appwrite",
-        reason:
-          "Provided managed authentication, file storage encryption, and document database APIs with strict permission models.",
+          "Handles 20+ clinical inputs and masked fields without triggering unnecessary global re-renders.",
+        tradeoff:
+          "Requires controlled component wrappers and integration adapters with the Zod resolver.",
+        outcome:
+          "Highly responsive form interfaces with accessible keyboard navigation and state isolation.",
       },
     ],
     results: [
-      "Zero double-booking incidents across appointment test scenarios.",
-      "Sub-2-second automated SMS appointment confirmation delivery.",
-      "End-to-end encrypted medical record upload pipeline.",
+      "8+ Core Technologies integrated across full-stack Next.js, Appwrite, Twilio, and Sentry.",
+      "3 Strict Appointment States: PENDING, SCHEDULED, and CANCELLED with zero ambiguous statuses.",
+      "2 Primary User Flows: Patient onboarding portal and passkey-gated admin management dashboard.",
+      "Fully responsive multi-device execution spanning desktop, tablet, and mobile viewports.",
     ],
-    githubUrl: "https://github.com/tushardevx01/carepulse",
-    github_link: "https://github.com/tushardevx01/carepulse",
+    githubUrl: "https://github.com/Tushardevx01/carepulse",
+    github_link: "https://github.com/Tushardevx01/carepulse",
     liveUrl: "https://carepulse-brown-omega.vercel.app/",
     demo: "https://carepulse-brown-omega.vercel.app/",
   },
@@ -491,80 +547,134 @@ export const projectsData: Project[] = [
     slug: "fenix",
     name: "Fenix",
     title: "Fenix",
-    subtitle: "Low-Latency Real-Time Video & Media Infrastructure",
+    subtitle: "Real-Time Video Collaboration Platform",
     description:
-      "Real-time low-latency video platform with adaptive media streaming and session recovery under variable network conditions.",
-    category: "Realtime Infrastructure",
-    role: "Realtime Infrastructure Engineer",
+      "Real-time video calling platform engineered around authenticated meeting lifecycle management, room access, device state, participant presence, media controls, and responsive call layouts using Next.js, Clerk, and Stream Video SDK.",
+    category: "Real-Time Systems",
+    role: "Real-Time Systems Architect & Frontend Engineer",
     year: "2024",
     timeline: "2024 — 2025",
     status: "Production",
-    technologies: ["Next.js", "TypeScript", "LiveKit", "WebRTC", "Clerk Auth", "Tailwind CSS"],
-    tech: ["Next.js", "TypeScript", "LiveKit", "WebRTC", "Clerk"],
+    technologies: [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "Clerk",
+      "Stream Video SDK",
+      "Stream Node SDK",
+      "Radix UI",
+      "Lucide",
+      "Framer Motion",
+      "Vercel",
+    ],
+    tech: ["Next.js", "TypeScript", "Stream Video", "Clerk", "Tailwind CSS"],
     problem:
-      "Real-time video conferencing platforms frequently stutter, desynchronize audio/video streams, and completely disconnect when network bandwidth fluctuates or packets drop.",
+      "Building a video calling interface is not only about rendering a video grid. The application must coordinate authentication, meeting creation, room access, device state, participant presence, call lifecycle, and real-time media while remaining responsive across devices.",
     approach:
-      "Integrated LiveKit's Selective Forwarding Unit (SFU) architecture with client-side simulcast negotiation, automated reconnection state machines, and dynamic bitrate adaptation.",
+      "Engineered a decoupled real-time architecture integrating Clerk for session identity, Next.js App Router for application structure, Stream Node SDK for server-side token generation, and Stream Video React SDK for real-time media and participant state.",
     architecture: {
-      flowSummary: "WebRTC Peer Client → Selective Forwarding Unit (LiveKit) → Media Track Router → Downstream Participants",
+      flowSummary:
+        "User Browser → Clerk Auth → Next.js App Router → Server Action (Stream Node SDK Token Provider) → Stream Video Client → Active Meeting Room",
       layers: [
         {
-          name: "Client Media Engine",
-          role: "Camera/Mic Capture & Track Publishing",
-          tech: "WebRTC API / LiveKit Client SDK / Next.js",
+          name: "Identity & Authentication",
+          role: "User Session Verification & Auth Routing",
+          tech: "Clerk Authentication / Next.js Middleware",
         },
         {
-          name: "Authentication & Rooms",
-          role: "Token Signing & Room RBAC",
-          tech: "Clerk Auth / JWT Room Permissions",
+          name: "Application & Interface",
+          role: "Meeting Dashboard, Schedule & Room UI",
+          tech: "Next.js App Router / React / Tailwind CSS / Radix UI",
         },
         {
-          name: "Media Routing SFU",
-          role: "Selective Forwarding & Simulcast",
-          tech: "LiveKit Cloud SFU Engine / UDP",
+          name: "Server Token Issuance",
+          role: "Cryptographic Stream Token Generation",
+          tech: "Stream Node SDK / Next.js Server Actions",
         },
         {
-          name: "Network Supervisor",
-          role: "Jitter Buffer & Quality Adaptation",
-          tech: "WebRTC Stats API / Adaptive Bitrate Fallback",
+          name: "Real-Time Media Engine",
+          role: "Call Transport, Device Control & Participant State",
+          tech: "@stream-io/video-react-sdk / WebRTC Managed SFU",
         },
       ],
     },
     challenges: [
       {
-        title: "Call Drops During Network Handoffs",
+        title: "Authenticated Real-Time Access",
         description:
-          "Switching between Wi-Fi and mobile cellular data caused TCP/UDP socket severance and dropped active calls.",
+          "Meeting URLs must not automatically expose video streams or grant unverified room entry.",
         solution:
-          "Engineered an automated reconnection state machine that holds room participant leases for 15 seconds while re-establishing peer ICE candidates.",
+          "Evaluated Clerk authentication before initializing the Stream Video client and enforced invited-member access checks before call admission.",
       },
       {
-        title: "CPU Overheating on Multi-Participant Calls",
+        title: "Device State Before Join",
         description:
-          "Decoding 1080p video streams for 8+ simultaneous participants overloaded client CPU cores.",
+          "Entering calls without previewing camera or microphone state causes immediate disruption.",
         solution:
-          "Implemented client-side simulcast: offscreen video tiles subscribe to low-resolution 240p/15fps video streams, conserving 65% client decode CPU.",
+          "Provided a dedicated pre-join MeetingSetup stage featuring live VideoPreview, DeviceSettings dialogs, and Stream camera/mic toggles.",
+      },
+      {
+        title: "Real-Time Call State Synchronization",
+        description:
+          "The client cannot assume a meeting room is immediately ready or accessible.",
+        solution:
+          "Inspected call state hooks to handle loading states, future scheduled meetings, already-ended calls, and unauthorized access gracefully.",
+      },
+      {
+        title: "Multiple Dynamic Call Layouts",
+        description:
+          "Different collaboration contexts require distinct presentation modes without dropping active media connections.",
+        solution:
+          "Integrated in-flight layout switching between Paginated Grid, Speaker Left, and Speaker Right layouts with responsive participant drawers.",
       },
     ],
     decisions: [
       {
-        technology: "LiveKit (SFU)",
+        technology: "Clerk Authentication",
         reason:
-          "Chosen over peer-to-peer mesh architecture to scale beyond 4 participants without overloading client upload bandwidth.",
+          "Delegates user identity and session management rather than maintaining custom credential stores and token refresh routines.",
+        tradeoff:
+          "Application access is coupled to an external identity provider and its availability.",
+        outcome:
+          "Robust, multi-provider authentication with instant session resolution across meeting routes.",
       },
       {
-        technology: "Clerk Auth",
+        technology: "Stream Video SDK",
         reason:
-          "Provided cryptographically signed JWT tokens for room entry with sub-millisecond edge validation.",
+          "Provides production-grade real-time video infrastructure without building custom WebRTC signaling and SFU servers.",
+        tradeoff:
+          "Meeting models and call parameters conform to Stream Video SDK contracts.",
+        outcome:
+          "Rapid delivery of high-reliability video calls, speaking indicators, and call diagnostics.",
+      },
+      {
+        technology: "Next.js App Router",
+        reason:
+          "Consolidates application routes, dynamic meeting parameters, and server actions for token generation into a single framework.",
+        tradeoff:
+          "Requires strict separation between server-side token generation and client-side real-time media hooks.",
+        outcome:
+          "Modular codebase with isolated secret keys and zero REST boilerplate.",
+      },
+      {
+        technology: "Componentized Call UI",
+        reason:
+          "Isolates setup, active room orchestration, controls, participant drawers, and modals into distinct components.",
+        tradeoff:
+          "Requires coordinated state management across multiple nested components and SDK hooks.",
+        outcome:
+          "Clean separation between device preview, active media controls, and call diagnostic panels.",
       },
     ],
     results: [
-      "Sub-150ms peer-to-peer audio and video delivery latency globally.",
-      "Zero dropped active calls during simulated Wi-Fi to cellular network switches.",
-      "65% reduction in client CPU consumption through adaptive simulcast layers.",
+      "3 Call Modes supported: Instant meetings, meeting link joins, and scheduled calendar calls.",
+      "3 Call Layouts: In-call switching between Paginated Grid, Speaker Left, and Speaker Right.",
+      "100% Authenticated Access: Enforcing Clerk sessions and server-signed Stream tokens.",
+      "Pre-Join Device Control: Live camera preview and microphone toggles verified before entering.",
     ],
-    githubUrl: "https://github.com/tushardevx01/fenix",
-    github_link: "https://github.com/tushardevx01/fenix",
+    githubUrl: "https://github.com/Tushardevx01/Fenix",
+    github_link: "https://github.com/Tushardevx01/Fenix",
     liveUrl: "https://fenix-ecru.vercel.app/",
     demo: "https://fenix-ecru.vercel.app/",
   },

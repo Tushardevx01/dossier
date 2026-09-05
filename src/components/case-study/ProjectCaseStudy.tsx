@@ -2,6 +2,8 @@
 
 import { Project } from "@/types/project";
 import { AegisCaseStudy } from "./aegis";
+import { CarePulseCaseStudy } from "./carepulse";
+import { FenixCaseStudy } from "./fenix";
 import { CaseStudyNavigator } from "./CaseStudyNavigator";
 import { CaseStudyHero } from "./CaseStudyHero";
 import { CaseStudyProblem } from "./CaseStudyProblem";
@@ -33,6 +35,14 @@ interface ProjectCaseStudyProps {
 export const ProjectCaseStudy = ({ project, nextProject }: ProjectCaseStudyProps) => {
   if (project.id === "aegis" || project.slug === "aegis" || project.id === "project-aegis" || project.slug === "project-aegis") {
     return <AegisCaseStudy project={project} nextProject={nextProject} />;
+  }
+
+  if (project.id === "carepulse" || project.slug === "carepulse") {
+    return <CarePulseCaseStudy project={project} nextProject={nextProject} />;
+  }
+
+  if (project.id === "fenix" || project.slug === "fenix") {
+    return <FenixCaseStudy project={project} nextProject={nextProject} />;
   }
 
   return (

@@ -42,15 +42,6 @@ const verifiedStaticRepos = [
     forks: 0,
     updatedAt: "2026-08-28T14:30:00Z",
   },
-  {
-    name: "dossier",
-    description: "High-performance personal engineering portfolio built with Next.js 16 App Router and Framer Motion.",
-    language: "TypeScript",
-    url: "https://github.com/tushardevx01/dossier",
-    stars: 0,
-    forks: 0,
-    updatedAt: "2026-09-05T18:00:00Z",
-  },
 ];
 
 const verifiedStaticActivity = [
