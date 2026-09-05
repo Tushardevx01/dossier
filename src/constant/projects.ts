@@ -205,104 +205,194 @@ export const projectsData: Project[] = [
     slug: "project-aegis",
     name: "Aegis",
     title: "Aegis",
-    subtitle: "Autonomous Infrastructure & Incident Recovery Engine",
+    subtitle: "Air-Gapped AIOps & Self-Healing Infrastructure",
     description:
-      "Autonomous infrastructure resilience and incident remediation engine that parses system telemetry and executes self-healing workflows.",
-    category: "Systems Architecture & Automation",
-    role: "Systems Architect & Backend Engineer",
+      "Closed-loop, local-first SRE platform for detecting container failures, diagnosing incidents, and executing policy-controlled remediation.",
+    category: "Distributed SRE / AIOps Platform",
+    role: "Lead Systems Architect & Core Developer",
     year: "2026",
     timeline: "Feb 2026 — Present",
     status: "Active",
-    technologies: ["TypeScript", "Node.js", "Docker Engine API", "PostgreSQL", "Redis", "Prometheus Metrics"],
-    tech: ["TypeScript", "Node.js", "Docker", "PostgreSQL", "Redis"],
+    technologies: ["NestJS", "Kafka", "MongoDB", "Python", "Docker"],
+    tech: ["NestJS", "Kafka", "Docker", "Python", "MongoDB"],
     problem:
-      "Infrastructure disruptions and memory leaks in production microservices often take 20-45 minutes to triage manually by on-call engineers, causing SLA violations and cascading failure propagation.",
+      "Modern containerized systems fail through OOM conditions, timeouts, crash loops, port collisions, memory leaks, and permission errors. SRE teams require a closed-loop platform that detects, diagnoses, evaluates safety, remediates, and audits without external cloud dependencies.",
     approach:
-      "Constructed an event-driven telemetry digestion engine that matches incoming error spikes and metric anomalies against deterministic remediation state machines. The engine triggers scoped container restarts, cache flushes, and canary traffic isolation through direct Docker runtime integrations, backing every decision with an immutable audit log.",
+      "Engineered an air-gapped, closed-loop pipeline. Docker Watchman captures death events and extracts recent logs into Kafka KRaft. A NestJS orchestrator invokes local Python embedding (all-MiniLM-L6-v2), FAISS similarity search, and an MLP classifier. Remediation passes a deterministic safety gate before bounded Dockerode execution and complete MongoDB audit logging.",
     architecture: {
-      flowSummary: "Telemetry Ingestion → Event Bus (Redis) → Rules & Pattern Engine → Safety Validator → Actuator (Docker API) → Audit Log (PostgreSQL)",
+      flowSummary: "Docker Event → Watchman → Kafka KRaft → NestJS Orchestrator → AI Engine (FAISS/MLP) → Safety Gate → Dockerode → MongoDB Audit",
       layers: [
         {
-          name: "Telemetry Ingestion",
-          role: "Health Probe & Anomaly Listener",
-          tech: "Node.js / Express Webhooks / Metric Collectors",
+          name: "Docker Watchman",
+          role: "Container Death Detection & Log Tailing",
+          tech: "NestJS / Dockerode Events API",
         },
         {
-          name: "Event Bus",
-          role: "High-Throughput Incident Buffering",
-          tech: "Redis Streams with Backpressure",
+          name: "Kafka KRaft",
+          role: "Decoupled Event Streaming & Buffering",
+          tech: "KafkaJS / KRaft Broker (ZooKeeper-Free)",
         },
         {
-          name: "Decision Engine",
-          role: "Fault Classification & Workflow Selection",
-          tech: "TypeScript Rule Engine / Heuristic Evaluator",
+          name: "Control Plane Orchestrator",
+          role: "Workflow Coordination & Safety Gate",
+          tech: "NestJS 11 / TypeScript Modular Architecture",
         },
         {
-          name: "Safety Validator",
-          role: "Blast Radius & Flapping Guard",
-          tech: "Sliding-Window Action Limiter (Max 2 actions/service/hr)",
+          name: "Local AI Engine",
+          role: "Log Embedding & Incident Classification",
+          tech: "Python / SentenceTransformers (all-MiniLM-L6-v2) / FAISS / MLP",
         },
         {
-          name: "Actuator",
-          role: "Container & Traffic Manipulation",
-          tech: "Docker Engine API / Linux cgroups Controller",
+          name: "Remediation Actuator",
+          role: "Enum-Only Container Remediation",
+          tech: "Dockerode / Docker Engine Unix Socket",
         },
         {
-          name: "Audit Store",
-          role: "Immutable Post-Mortem Logging",
-          tech: "PostgreSQL Event Store with JSONB Diff",
+          name: "Audit & State Store",
+          role: "Durable Event & Replay Dataset Persistence",
+          tech: "MongoDB 7.x / Mongoose",
         },
       ],
     },
     challenges: [
       {
-        title: "Remediation Flapping Prevention",
+        title: "Automated Remediation Without RCE",
         description:
-          "If a service fails due to bad application code, an automated restart loop can trigger restart flapping that overwhelms orchestration daemons.",
+          "Giving an AI system unrestricted shell access creates a catastrophic vulnerability if arbitrary commands enter the execution path.",
         solution:
-          "Built a sliding-window circuit breaker that tracks remediation attempts per service signature. If 2 restarts fail to stabilize health, the service is quarantined and alerted to human engineers without further automated re-spins.",
+          "Constrained actions to a strict enum-only registry (RESTART_CONTAINER, STOP_CONTAINER, IGNORE) mapped directly to explicit Dockerode API calls.",
       },
       {
-        title: "Low-Latency Event Stream Processing",
+        title: "AI Uncertainty & False Diagnoses",
         description:
-          "Burst error spikes during outages can overwhelm webhook ingestors, dropping critical incident events.",
+          "Probabilistic AI models can emit inaccurate failure diagnoses or low-confidence classifications on novel crash patterns.",
         solution:
-          "Used Redis Streams with consumer groups to buffer up to 10,000 incident events/sec, allowing decoupled asynchronous processing with zero dropped signals.",
+          "Enforced a deterministic safety gate: requires confidence >= 0.85, risk == LOW, and action == RESTART_CONTAINER; otherwise defaults to human review.",
       },
       {
-        title: "Blast Radius Containment",
+        title: "Event Decoupling & Latency Skew",
         description:
-          "Automated infrastructure modification risks unintended container termination if target identifiers are ambiguous.",
+          "Burst container death spikes must not block on neural network inference or fail during transient compute pauses.",
         solution:
-          "Strict container label matching with cryptographic HMAC verification before issuing any teardown or re-spin instruction via the Docker Engine API.",
+          "Decoupled event capture from diagnosis via Kafka KRaft topics, buffering incidents asynchronously with durable consumer groups.",
+      },
+      {
+        title: "Complete System Auditability",
+        description:
+          "Automated remediation in production infrastructure requires absolute post-incident traceability for post-mortems.",
+        solution:
+          "Persisted raw crash logs, 384-dimensional embeddings, AI diagnosis records, safety gate outcomes, and Docker execution receipts in MongoDB.",
       },
     ],
     decisions: [
       {
-        technology: "TypeScript & Node.js",
+        technology: "Kafka KRaft",
         reason:
-          "Provided asynchronous non-blocking event-driven I/O ideal for handling thousands of incoming telemetry events per second without heavy thread overhead.",
+          "Provides durable event streaming and decouples event capture from AI inference without requiring ZooKeeper.",
+        tradeoff:
+          "Higher operational footprint than in-memory message brokers, requiring structured broker configuration.",
+        outcome:
+          "Zero event loss during burst container failures and reliable asynchronous incident queues.",
       },
       {
-        technology: "PostgreSQL",
+        technology: "MongoDB",
         reason:
-          "Chosen for strict ACID transactional consistency in recording incident post-mortems and tamper-proof operational audit receipts.",
+          "Flexible document persistence well-suited for varying incident schemas, embedding arrays, audit logs, and replay buffers.",
+        tradeoff:
+          "Lacks cross-document multi-table relational joins.",
+        outcome:
+          "High-speed write throughput for raw crash logs and structured JSON remediation plans.",
       },
       {
-        technology: "Redis Streams",
+        technology: "Dockerode",
         reason:
-          "Provides in-memory microsecond event ingestion and durable consumer acknowledgment across multiple engine instances.",
+          "Direct Unix socket communication with the Docker daemon without invoking shell subprocesses.",
+        tradeoff:
+          "Restricted to local host Docker socket permissions.",
+        outcome:
+          "Deterministic, injection-free container lifecycle actuation with zero shell execution.",
+      },
+      {
+        technology: "SentenceTransformers + FAISS",
+        reason:
+          "Generates compact 384-dimensional vector embeddings locally and executes sub-millisecond similarity search over historical incidents.",
+        tradeoff:
+          "Requires local model weight storage and Python runtime sidecar.",
+        outcome:
+          "Completely air-gapped, zero-cloud semantic matching against known infrastructure incident patterns.",
+      },
+      {
+        technology: "PyTorch MLP Classifier",
+        reason:
+          "Predicts deterministic failure classes (OOM, Timeout, Crash Loop, Port Collision, Permission, Memory Leak) with explicit confidence scores.",
+        tradeoff:
+          "Requires curated training dataset and offline model retraining on new failure modes.",
+        outcome:
+          "Calibrated probabilistic confidence metrics that directly drive the safety gate policy.",
+      },
+      {
+        technology: "NestJS",
+        reason:
+          "Provides enterprise-grade TypeScript modularity, dependency injection, and clean separation between watchers, orchestrators, and actuators.",
+        tradeoff:
+          "Framework boilerplate and lifecycle structure compared to minimalist Express scripts.",
+        outcome:
+          "Highly testable, maintainable SRE control plane with clear domain boundaries.",
       },
     ],
     results: [
-      "Sub-60-second autonomous fault detection and recovery for verified memory leak and hung worker classes.",
-      "Zero unhandled flapping loops across stress test benchmark environments.",
-      "100% immutable audit trace recorded for every automated lifecycle actuation.",
+      "Local-First Architecture: 100% offline inference with zero runtime dependency on cloud AI or external LLM endpoints.",
+      "Air-Gapped Operation: All detection, streaming, and model inference execute inside the local private Docker environment.",
+      "Deterministic Guardrails: Remediation gated by confidence (>= 0.85), risk (LOW), and explicit enum bounds.",
+      "Complete Audit Trail: Incidents, raw crash logs, 384-dim embeddings, and execution receipts persisted in MongoDB.",
+      "Built-in Chaos Testing: Automated failure injection harness covering OOM, timeout, crash loop, and permission scenarios.",
     ],
-    githubUrl: "https://github.com/tushardevx01/project-aegis",
-    github_link: "https://github.com/tushardevx01/project-aegis",
-    liveUrl: "https://github.com/tushardevx01/project-aegis",
-    demo: "https://github.com/tushardevx01/project-aegis",
+    metrics: [
+      {
+        value: "01",
+        label: "LOCAL-FIRST",
+        description: "Zero runtime dependency on cloud AI or external APIs; all models run locally.",
+      },
+      {
+        value: "02",
+        label: "AIR-GAPPED",
+        description: "Services operate inside a private Docker bridge with zero external egress.",
+      },
+      {
+        value: "03",
+        label: "POLICY-GATED",
+        description: "Automatic remediation gated by confidence >= 0.85 and LOW risk thresholds.",
+      },
+      {
+        value: "04",
+        label: "AUDITABLE",
+        description: "Immutable incident records, raw log tails, embeddings, and execution plans in MongoDB.",
+      },
+    ],
+    learnings: [
+      {
+        index: "01",
+        insight: "AI in infrastructure must be policy-bounded.",
+        description:
+          "AI should recommend actions, but deterministic code must decide whether the action executes. Unbounded AI is an operational risk.",
+      },
+      {
+        index: "02",
+        insight: "Decoupling is essential for resilient remediation.",
+        description:
+          "Docker event loops must never block on model inference. Streaming events through Kafka KRaft isolates failures between capture and compute.",
+      },
+      {
+        index: "03",
+        insight: "Air-gapped operation builds better systems.",
+        description:
+          "Relying solely on local embeddings (all-MiniLM-L6-v2) and FAISS eliminated cloud latency, external API costs, and data leakage concerns.",
+      },
+    ],
+    githubUrl: "https://github.com/Tushardevx01/aegis",
+    github_link: "https://github.com/Tushardevx01/aegis",
+    liveUrl: "https://github.com/Tushardevx01/aegis",
+    demo: "https://github.com/Tushardevx01/aegis",
   },
   {
     id: "simpui",

@@ -1,6 +1,7 @@
 "use client";
 
 import { Project } from "@/types/project";
+import { AegisCaseStudy } from "./aegis";
 import { CaseStudyNavigator } from "./CaseStudyNavigator";
 import { CaseStudyHero } from "./CaseStudyHero";
 import { CaseStudyProblem } from "./CaseStudyProblem";
@@ -30,6 +31,10 @@ interface ProjectCaseStudyProps {
 }
 
 export const ProjectCaseStudy = ({ project, nextProject }: ProjectCaseStudyProps) => {
+  if (project.id === "project-aegis" || project.slug === "project-aegis") {
+    return <AegisCaseStudy project={project} nextProject={nextProject} />;
+  }
+
   return (
     <article className="min-h-screen bg-black text-foreground pt-24 sm:pt-32 pb-24 px-4 sm:px-6 lg:px-8 selection:bg-emerald-500/20 selection:text-emerald-300">
       {/* Main Container: 1340px width for wide ASCII architecture diagrams */}

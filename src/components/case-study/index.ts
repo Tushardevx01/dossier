@@ -1,5 +1,6 @@
 export { ProjectCard } from "./ProjectCard";
 export { ProjectCaseStudy } from "./ProjectCaseStudy";
+export { AegisCaseStudy } from "./aegis";
 export { AsciiDiagram } from "./AsciiDiagram";
 export { CaseStudyNavigator } from "./CaseStudyNavigator";
 export { CaseStudyHero } from "./CaseStudyHero";
