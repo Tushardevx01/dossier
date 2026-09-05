@@ -17,6 +17,7 @@ import {
   LuCpu,
   LuTerminal,
   LuCheck,
+  LuSmartphone,
 } from "react-icons/lu";
 
 interface CommandItem {
@@ -310,6 +311,18 @@ export const CommandPalette = () => {
         closePalette();
       },
       keywords: ["fenix", "stream", "video", "clerk", "meetings", "realtime", "nextjs"],
+    },
+    {
+      id: "cs-signifiya",
+      label: "Case Study: Signifiya",
+      category: "Case Studies",
+      description: "Mobile event infrastructure, native payments & 120Hz engine",
+      icon: LuSmartphone,
+      action: () => {
+        router.push("/work/signifiya");
+        closePalette();
+      },
+      keywords: ["signifiya", "expo", "react-native", "supabase", "razorpay", "better-auth", "mobile"],
     },
 
     // Actions

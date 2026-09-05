@@ -4,6 +4,7 @@ import { Project } from "@/types/project";
 import { AegisCaseStudy } from "./aegis";
 import { CarePulseCaseStudy } from "./carepulse";
 import { FenixCaseStudy } from "./fenix";
+import { SignifiyaCaseStudy } from "./signifiya";
 import { CaseStudyNavigator } from "./CaseStudyNavigator";
 import { CaseStudyHero } from "./CaseStudyHero";
 import { CaseStudyProblem } from "./CaseStudyProblem";
@@ -43,6 +44,10 @@ export const ProjectCaseStudy = ({ project, nextProject }: ProjectCaseStudyProps
 
   if (project.id === "fenix" || project.slug === "fenix") {
     return <FenixCaseStudy project={project} nextProject={nextProject} />;
+  }
+
+  if (project.id === "signifiya" || project.slug === "signifiya") {
+    return <SignifiyaCaseStudy project={project} nextProject={nextProject} />;
   }
 
   return (

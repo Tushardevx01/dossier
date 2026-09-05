@@ -683,72 +683,81 @@ export const projectsData: Project[] = [
     slug: "signifiya",
     name: "Signifiya",
     title: "Signifiya",
-    subtitle: "Event Operations Platform & Real-Time Sync Engine",
+    subtitle: "Mobile Event Infrastructure, Native Payments & 120Hz Engine",
     description:
-      "Event operations platform — schedules, registration, live coordination. Handles peak traffic with real-time state sync across distributed teams and attendees.",
-    category: "Full-Stack Platform",
-    role: "Full-Stack Platform Engineer",
-    year: "2024",
-    timeline: "2024 — 2025",
+      "Official event management and registration platform for Signifiya 2026. Engineered with React Native, Expo SDK 54, Better Auth, Supabase PostgreSQL with strict RLS, Razorpay payments, and a custom Kotlin 120Hz display plugin.",
+    category: "Mobile Platform",
+    role: "App Developer / Core Team",
+    year: "2026",
+    timeline: "2026",
     status: "Production",
-    technologies: ["Next.js", "Expo React Native", "Supabase", "TypeScript", "PostgreSQL"],
-    tech: ["Next.js", "Expo", "Supabase", "TypeScript"],
+    technologies: ["React Native", "Expo SDK 54", "TypeScript", "Supabase", "PostgreSQL", "Better Auth", "Razorpay", "NativeWind"],
+    tech: ["React Native", "Expo", "Supabase", "Razorpay"],
     problem:
-      "Large-scale university and developer conferences suffer registration database bottlenecks, uncoordinated event schedule changes, and duplicate ticket claims during peak burst moments.",
+      "Multi-day campus tech festivals face database registration bottlenecks, Android 60Hz display throttling, client query security leaks, and gate verification queues under peak attendee traffic.",
     approach:
-      "Architected a cross-platform mobile (Expo) and web (Next.js) platform backed by Supabase real-time broadcast channels and PostgreSQL row-level locks.",
+      "Engineered a high-performance native Expo SDK 54 mobile application with a custom Kotlin 120Hz display mode plugin, hybrid Better Auth + Supabase RLS policies, defensive data parsers, and GPU-accelerated video passes.",
     architecture: {
-      flowSummary: "Mobile/Web Client → Next.js API → Supabase PostgreSQL (RLS) → Real-Time Broadcast Websocket → Attendees",
+      flowSummary:
+        "React Native Mobile (Expo 54) → Better Auth / Supabase PostgREST → PostgreSQL (RLS & Prisma) → Razorpay SDK / UTR Reconciliation → Dynamic QR Video Passes",
       layers: [
         {
-          name: "Clients",
-          role: "Web & Native Mobile Applications",
-          tech: "Next.js / React Native Expo",
+          name: "Native Client",
+          role: "120Hz Gesture & Rendering Runtime",
+          tech: "React Native 0.81 / Expo SDK 54 / NativeWind v4",
         },
         {
-          name: "API & Auth",
-          role: "Permission Verification & Registration Gateway",
-          tech: "Next.js Edge Functions / Supabase Auth",
+          name: "Auth & Identity",
+          role: "Hybrid Session & Booking ID Minting",
+          tech: "Better Auth Expo / SGF26-* Tokens",
         },
         {
           name: "Database Layer",
-          role: "Row-Level Locked Transactions",
-          tech: "PostgreSQL with ACID Row Locks",
+          role: "Row-Level Security & Typed Relational Schema",
+          tech: "Supabase PostgreSQL / Prisma ORM",
         },
         {
-          name: "Broadcast Engine",
-          role: "Sub-100ms Announcement Fan-out",
-          tech: "Supabase Realtime WebSockets",
+          name: "Payments & Passes",
+          role: "Native Checkout & GPU Video Pass Canvas",
+          tech: "Razorpay Native SDK / expo-video QR",
         },
       ],
     },
     challenges: [
       {
-        title: "Burst Traffic Ticket Overselling",
+        title: "Android 60Hz Display Throttling on 120Hz Hardware",
         description:
-          "Hundreds of attendees clicking register simultaneously could overrun seat quotas due to read-modify-write race conditions.",
+          "Android window manager caps React Native rendering at 60fps, degrading animation fluidity.",
         solution:
-          "Utilized PostgreSQL strict serializable transactions with `SELECT ... FOR UPDATE` row-level locks, ensuring zero overbooking.",
+          "Authored custom Expo config plugin injecting Kotlin display mode logic into MainActivity.kt to lock maximum refresh rate (90/120/144Hz).",
+      },
+      {
+        title: "Client-Side Array Crashes from Schema Deviations",
+        description:
+          "PostgREST network errors or wrapper variations caused fatal TypeError crashes when calling .map() on data.",
+        solution:
+          "Implemented defensive data parser (defensiveHandler.ts) with safeArrayParse, runtime type guards, and atomic state fallbacks.",
       },
     ],
     decisions: [
       {
-        technology: "Supabase Realtime",
+        technology: "Custom Kotlin Config Plugin",
         reason:
-          "Delivered sub-100ms schedule updates and announcement broadcasts without building a custom WebSocket server cluster.",
+          "Overrides Android display manager 60Hz throttle without ejecting from Expo or maintaining a bare React Native fork.",
       },
       {
-        technology: "Next.js + Expo",
+        technology: "Supabase PostgreSQL RLS Policies",
         reason:
-          "Allowed sharing TypeScript types and business logic between mobile and web applications, cutting development overhead.",
+          "Guarantees zero-trust data protection at the database level, preventing client-side scraping of attendee PII and payments.",
       },
     ],
     results: [
-      "Zero duplicate ticket bookings under simulated 500 concurrent registration requests.",
-      "Sub-100ms live announcement broadcast propagation to all active attendees.",
+      "Unthrottled 120Hz/144Hz display rendering verified on capable Android hardware.",
+      "Zero client secret leakage and 100% whitelisted column projections verified across security audit.",
+      "Zero unhandled TypeError client crashes across unexpected PostgREST error payloads via defensive parsing.",
     ],
-    githubUrl: "https://github.com/AbhishekS04/signifiyaAppFinal",
-    github_link: "https://github.com/AbhishekS04/signifiyaAppFinal",
+    githubUrl: "https://github.com/AbhishekS04/Signifiyaa",
+    github_link: "https://github.com/AbhishekS04/Signifiyaa",
     liveUrl: "https://signifiya.in",
     demo: "https://signifiya.in",
   },
