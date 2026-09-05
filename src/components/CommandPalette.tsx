@@ -288,18 +288,6 @@ export const CommandPalette = () => {
       keywords: ["aegis", "aiops", "sre", "incident", "remediation", "docker", "kafka", "nestjs", "python"],
     },
     {
-      id: "cs-simpui",
-      label: "Case Study: SimpUI",
-      category: "Case Studies",
-      description: "Design system tokens and motion primitives",
-      icon: LuLayers,
-      action: () => {
-        router.push("/work/simpui");
-        closePalette();
-      },
-      keywords: ["simpui", "design system", "motion", "components", "tailwind"],
-    },
-    {
       id: "cs-carepulse",
       label: "Case Study: CarePulse",
       category: "Case Studies",

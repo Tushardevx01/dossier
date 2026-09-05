@@ -54,8 +54,9 @@ const skills = [
 ];
 
 const projects = [
+  "RunStack",
+  "Aegis",
   "WebScope",
-  "SimpUI",
   "Signifiya",
   "CarePulse",
   "Fenix",

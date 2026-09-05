@@ -51,15 +51,6 @@ const verifiedStaticRepos = [
     forks: 0,
     updatedAt: "2026-09-05T18:00:00Z",
   },
-  {
-    name: "SimpyUI",
-    description: "Component system with motion primitives, design tokens, and layout patterns.",
-    language: "TypeScript",
-    url: "https://github.com/AbhishekS04/SimpyUI",
-    stars: 0,
-    forks: 0,
-    updatedAt: "2026-07-15T09:00:00Z",
-  },
 ];
 
 const verifiedStaticActivity = [
