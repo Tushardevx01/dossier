@@ -764,64 +764,83 @@ export const projectsData: Project[] = [
   {
     id: "webscope",
     slug: "webscope",
-    name: "WebScope",
-    title: "WebScope",
-    subtitle: "Dynamic Extraction & Schema Processing Pipeline",
+    name: "WebScope Pro",
+    title: "WebScope Pro",
+    subtitle: "Website Intelligence Platform & Bounded Analysis Pipeline",
     description:
-      "Web intelligence platform — extraction, processing, and structured output from dynamic sources with failure-aware retry logic.",
-    category: "System Architecture",
-    role: "System Architect",
+      "Website intelligence and analysis platform that accepts a URL, safely fetches and analyzes the site, calculates SEO and performance signals, persists scan history, supports comparisons and monitoring, and produces structured insights.",
+    category: "Full-Stack Intelligence Platform",
+    role: "Full-Stack Systems Engineer",
     year: "2024",
     timeline: "2024",
-    status: "Archived",
-    technologies: ["Next.js", "Node.js", "TypeScript", "Cheerio", "API Integration"],
-    tech: ["Next.js", "Node.js", "API Integration"],
+    status: "Production",
+    technologies: ["Next.js 14 App Router", "TypeScript", "Axios", "Cheerio", "Prisma", "PostgreSQL", "NextAuth", "Tailwind CSS"],
+    tech: ["Next.js", "Cheerio", "Prisma", "PostgreSQL"],
     problem:
-      "Extracting structured business information from dynamic, frequently changing web portals breaks traditional rigid scraping scripts.",
+      "Websites expose data through diverse layers: metadata, headings, content structure, media, scripts, and crawl rules. The challenge was turning an unparsed URL into structured, persistent, and actionable website intelligence without unbounded execution or server crashes.",
     approach:
-      "Designed a resilient extraction pipeline featuring adaptive DOM fallbacks, circuit-breaker rate limiters, and structured JSON output normalization.",
+      "Engineered an 8-stage bounded pipeline: robots.txt compliance, 5s timeout fetch, Cheerio DOM extraction, dual SEO/performance scoring, decoupled Gemini AI fallback, and PostgreSQL persistence with comparison and monitoring services.",
     architecture: {
-      flowSummary: "Target Ingestion → Rate-Limited Crawler → Adaptive DOM Parser → Normalization Worker → Output API",
+      flowSummary:
+        "Web Client (Next.js 14) → API Layer (auth / scrape / logs) → Analysis Pipeline (Bounded Queue) → Axios + Cheerio → SEO & Performance → AI Fallback → Prisma PostgreSQL → Dashboard / Compare / Monitor",
       layers: [
         {
-          name: "Ingestion API",
-          role: "Target URL Queue & Request Management",
-          tech: "Node.js / Express Gateway",
+          name: "Web Client",
+          role: "Next.js 14 App Router UI",
+          tech: "Next.js 14 / Tailwind CSS / Recharts",
         },
         {
-          name: "Parser Layer",
-          role: "Adaptive Schema Extraction",
-          tech: "Cheerio / Fallback Selector Heuristics",
+          name: "Pipeline Engine",
+          role: "Bounded Concurrency (Max 4)",
+          tech: "analyzeWebsite.ts / Axios / Cheerio",
         },
         {
-          name: "Output Normalizer",
-          role: "JSON Validation & Deduplication",
-          tech: "TypeScript / Zod Schemas",
+          name: "Safety & Fallback",
+          role: "Dual Timeouts & AI Fallback",
+          tech: "robotsChecker.ts / Gemini AI / Local Heuristics",
+        },
+        {
+          name: "Persistence Layer",
+          role: "Relational Schema & Services",
+          tech: "Prisma ORM / PostgreSQL / compareService / monitorService",
         },
       ],
     },
     challenges: [
       {
-        title: "DOM Structure Drift Resistance",
+        title: "Bounded Analysis Concurrency",
         description:
-          "Target websites frequently modify CSS class names, causing standard selectors to return null.",
+          "Simultaneous user and monitor scans risk socket exhaustion and target server rate limits.",
         solution:
-          "Engineered multi-tier fallback selectors using semantic HTML tags and regex patterns to locate core content when class names change.",
+          "Implemented in-memory slot queue (MAX_CONCURRENT_ANALYSIS = 4) with FIFO waiting buffers.",
+      },
+      {
+        title: "Decoupled AI Resilience",
+        description:
+          "Third-party LLM generation delays or outages must not block core analytical metrics.",
+        solution:
+          "Pre-computes deterministic heuristic insights locally with strict 6s AI timeout fallbacks.",
       },
     ],
     decisions: [
       {
-        technology: "Node.js & Cheerio",
+        technology: "Axios + Cheerio",
         reason:
-          "Provided blazing fast HTML parsing with minimal memory footprint compared to heavy headless browser emulators.",
+          "Lightweight HTTP fetching and server-side DOM AST parsing with sub-second execution, avoiding headless browser cold starts.",
+      },
+      {
+        technology: "Prisma + PostgreSQL",
+        reason:
+          "Structured relational models for users, scans, metadata, monitors, alerts, and comparative verdicts.",
       },
     ],
     results: [
-      "99.2% successful schema extraction fidelity across targeted dynamic sources.",
-      "Sub-800ms average parsing and structured payload generation time.",
+      "4 maximum concurrent analysis slots strictly enforced via in-memory queue.",
+      "5-second scrape timeout and 6-second AI generation timeout barriers active across all runs.",
+      "Zero unhandled runtime crashes across malformed or robots-disallowed external targets.",
     ],
-    githubUrl: "https://github.com/tushardevx01/webscope",
-    github_link: "https://github.com/tushardevx01/webscope",
+    githubUrl: "https://github.com/Tushardevx01/webscope",
+    github_link: "https://github.com/Tushardevx01/webscope",
     liveUrl: "https://webscope-three.vercel.app",
     demo: "https://webscope-three.vercel.app",
   },

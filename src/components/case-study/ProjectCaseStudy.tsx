@@ -5,6 +5,7 @@ import { AegisCaseStudy } from "./aegis";
 import { CarePulseCaseStudy } from "./carepulse";
 import { FenixCaseStudy } from "./fenix";
 import { SignifiyaCaseStudy } from "./signifiya";
+import { WebScopeCaseStudy } from "./webscope";
 import { CaseStudyNavigator } from "./CaseStudyNavigator";
 import { CaseStudyHero } from "./CaseStudyHero";
 import { CaseStudyProblem } from "./CaseStudyProblem";
@@ -48,6 +49,10 @@ export const ProjectCaseStudy = ({ project, nextProject }: ProjectCaseStudyProps
 
   if (project.id === "signifiya" || project.slug === "signifiya") {
     return <SignifiyaCaseStudy project={project} nextProject={nextProject} />;
+  }
+
+  if (project.id === "webscope" || project.slug === "webscope") {
+    return <WebScopeCaseStudy project={project} nextProject={nextProject} />;
   }
 
   return (

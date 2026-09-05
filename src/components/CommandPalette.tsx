@@ -18,6 +18,7 @@ import {
   LuTerminal,
   LuCheck,
   LuSmartphone,
+  LuGlobe,
 } from "react-icons/lu";
 
 interface CommandItem {
@@ -323,6 +324,18 @@ export const CommandPalette = () => {
         closePalette();
       },
       keywords: ["signifiya", "expo", "react-native", "supabase", "razorpay", "better-auth", "mobile"],
+    },
+    {
+      id: "cs-webscope",
+      label: "Case Study: WebScope Pro",
+      category: "Case Studies",
+      description: "Website intelligence platform with Axios, Cheerio & Prisma",
+      icon: LuGlobe,
+      action: () => {
+        router.push("/work/webscope");
+        closePalette();
+      },
+      keywords: ["webscope", "seo", "cheerio", "axios", "prisma", "scraper", "monitoring"],
     },
 
     // Actions
