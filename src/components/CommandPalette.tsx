@@ -19,6 +19,7 @@ import {
   LuCheck,
   LuSmartphone,
   LuGlobe,
+  LuWorkflow,
 } from "react-icons/lu";
 
 interface CommandItem {
@@ -336,6 +337,28 @@ export const CommandPalette = () => {
         closePalette();
       },
       keywords: ["webscope", "seo", "cheerio", "axios", "prisma", "scraper", "monitoring"],
+    },
+    {
+      id: "cs-subscription-tracker",
+      label: "Case Study: Subscription Tracker",
+      category: "Case Studies",
+      description: "API architecture, Upstash Workflow scheduling & Arcjet security",
+      icon: LuWorkflow,
+      action: () => {
+        router.push("/work/subscription-tracker");
+        closePalette();
+      },
+      keywords: [
+        "subscription",
+        "tracker",
+        "express",
+        "mongodb",
+        "mongoose",
+        "arcjet",
+        "upstash",
+        "workflow",
+        "nodemailer",
+      ],
     },
 
     // Actions

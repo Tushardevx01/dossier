@@ -849,68 +849,130 @@ export const projectsData: Project[] = [
     slug: "subscription-tracker",
     name: "Subscription Tracker",
     title: "Subscription Tracker",
-    subtitle: "REST API for Subscription Lifecycle Management",
+    subtitle: "API Architecture, Upstash Workflow Scheduling & Arcjet Security",
     description:
-      "REST API for subscription lifecycle management — tracking, automated reminders, and auditable state transitions.",
-    category: "Backend API",
+      "Production-ready REST API for subscription lifecycle management engineered with Express 4, MongoDB Mongoose session transactions, Arcjet bot defense, Upstash Workflow durable step functions, and Nodemailer dispatch.",
+    category: "Backend Engineering & Systems",
     role: "Backend Engineer",
     year: "2024",
-    timeline: "2024",
-    status: "Archived",
-    technologies: ["Node.js", "Express", "MongoDB", "JWT", "Nodemailer"],
-    tech: ["Node.js", "Express", "MongoDB"],
+    timeline: "2024 — 2025",
+    status: "Production",
+    technologies: [
+      "Node.js",
+      "Express 4",
+      "MongoDB",
+      "Mongoose",
+      "JWT",
+      "bcryptjs",
+      "Arcjet",
+      "Upstash Workflow",
+      "Nodemailer",
+      "Day.js",
+    ],
+    tech: ["Node.js", "Express", "MongoDB", "Upstash Workflow", "Arcjet"],
     problem:
-      "Managing recurring subscription expenditures often leads to missed renewal cancellations and unpredictable monthly software spend.",
+      "Subscription tracking requires coordinating multi-tenant account data, auto-calculating recurring renewal intervals across varied frequencies, orchestrating multi-day reminder schedules without in-memory timer leaks, and protecting public auth surfaces from bot floods.",
     approach:
-      "Built a secure REST API with JWT authorization, automated background cron reminders, and projection math for quarterly expense forecasting.",
+      "Architected a modular Express API with Mongoose pre-save lifecycle hooks for deterministic date math, MongoDB session transactions for atomic user registration, Upstash Workflow durable step functions for zero-leak reminder sleeping, and an Arcjet edge defense gateway.",
     architecture: {
-      flowSummary: "REST Client → Express Router → JWT Auth Middleware → MongoDB Store → Background Cron Worker",
+      flowSummary:
+        "Client Request → Arcjet Bot/Rate Guard → JWT Authentication & Ownership → Express Domain Controller → Mongoose Pre-Save Hook → MongoDB Atlas → Upstash Workflow Step Engine → Nodemailer SMTP",
       layers: [
         {
-          name: "REST Interface",
-          role: "CRUD Endpoint Routing",
-          tech: "Express.js / Helmet / CORS",
+          name: "Edge Security Gateway",
+          role: "Bot Mitigation & Token Bucket Rate Limiting",
+          tech: "Arcjet (@arcjet/node)",
         },
         {
-          name: "Security Guard",
-          role: "Token Authentication & Role Verification",
-          tech: "JSON Web Tokens (JWT) / bcrypt hashing",
+          name: "Authentication Boundary",
+          role: "Bearer Token Validation & Ownership Check",
+          tech: "JSON Web Tokens (JWT) / bcryptjs",
         },
         {
-          name: "Data Store",
-          role: "Document Storage & TTL Indexing",
-          tech: "MongoDB / Mongoose ODM",
+          name: "API Routing & Controllers",
+          role: "Domain Logic for Auth, Users & Subscriptions",
+          tech: "Express 4.21.2 (ES Modules)",
         },
         {
-          name: "Scheduler",
-          role: "Automated Renewal Alert Dispatch",
-          tech: "Node-Cron / Nodemailer Email Pipeline",
+          name: "Persistence & Lifecycle Layer",
+          role: "Schema Validation, Pre-Save Math & ACID Transactions",
+          tech: "MongoDB 6 / Mongoose 8 (Session Transactions)",
+        },
+        {
+          name: "Durable Workflow Orchestrator",
+          role: "Serverless Step Execution & Multi-Day Sleep",
+          tech: "Upstash Workflow (@upstash/workflow/express)",
+        },
+        {
+          name: "Notification Dispatcher",
+          role: "Personalized HTML Email Delivery",
+          tech: "Nodemailer SMTP Transporter",
         },
       ],
     },
     challenges: [
       {
-        title: "Duplicate Renewal Notification Prevention",
+        title: "Durable Multi-Day Scheduling",
         description:
-          "Cron runners executing concurrently across server instances could trigger duplicate email alerts to users.",
+          "In-memory Node timers drop pending reminders on server restarts, while recurring cron polls create high database load.",
         solution:
-          "Implemented database flag locks and date-hashed notification tokens, ensuring exactly-once alert delivery per billing cycle.",
+          "Integrated Upstash Workflow step functions to offload sleep states (7d, 5d, 2d, 1d) durably to QStash without keeping server threads occupied.",
+      },
+      {
+        title: "Atomic User Registration",
+        description:
+          "Sequential validation, password hashing, and user creation risk orphaned records if an error occurs midway.",
+        solution:
+          "Enforced Mongoose session transactions with explicit commit and abort rollback handling on errors.",
+      },
+      {
+        title: "Deterministic Renewal Math",
+        description:
+          "Client-submitted renewal dates invite drift, timezone bugs, and expired subscriptions remaining active.",
+        solution:
+          "Centralized renewal calculation and expired status transitions in a Mongoose pre-save lifecycle hook.",
+      },
+      {
+        title: "Edge Rate & Bot Mitigation",
+        description:
+          "Public authentication routes are vulnerable to automated bot scans and rate exhaustion.",
+        solution:
+          "Mounted Arcjet middleware globally to reject bots (403) and rate limits (429) prior to database execution.",
       },
     ],
     decisions: [
       {
-        technology: "MongoDB",
+        technology: "Upstash Workflow",
         reason:
-          "Allowed flexible schema representations for varying subscription billing models (monthly, annual, usage-tiered).",
+          "Provides serverless, durable step execution with context.sleepUntil(), avoiding dedicated worker infrastructure and in-memory timer loss.",
+      },
+      {
+        technology: "Mongoose Pre-Save Hooks",
+        reason:
+          "Enforces business invariants directly at the model layer so that renewal dates and expiration status cannot be bypassed.",
+      },
+      {
+        technology: "Mongoose Session Transactions",
+        reason:
+          "Guarantees ACID atomicity across multi-step user registration without orphan accounts.",
+      },
+      {
+        technology: "Arcjet Middleware",
+        reason:
+          "Provides edge bot detection and token-bucket rate limiting directly within the Express request pipeline.",
       },
     ],
     results: [
-      "100% predictable at-most-once billing reminder dispatch.",
-      "Sub-50ms API response time across authenticated subscription queries.",
+      "4 core API domains (/auth, /users, /subscriptions, /workflows) with clean separation of concerns.",
+      "4 staged reminder intervals (7, 5, 2, 1 days before renewal) orchestrated via durable step functions.",
+      "3 discrete lifecycle states (active, cancelled, expired) enforced via schema hooks.",
+      "0 in-memory timers consuming Node process RAM or vulnerable to process restarts.",
+      "10 dynamic port fallback retries handling EADDRINUSE collisions automatically.",
+      "8000ms graceful shutdown window draining active HTTP sockets on process signals.",
     ],
-    githubUrl: "https://github.com/tushardevx01/subscription-tracker",
-    github_link: "https://github.com/tushardevx01/subscription-tracker",
-    liveUrl: "https://subscription-tracker-jet.vercel.app/",
-    demo: "https://subscription-tracker-jet.vercel.app/",
+    githubUrl: "https://github.com/Tushardevx01/subscription-tracker",
+    github_link: "https://github.com/Tushardevx01/subscription-tracker",
+    liveUrl: "https://sub-track-api.vercel.app",
+    demo: "https://sub-track-api.vercel.app",
   },
 ];

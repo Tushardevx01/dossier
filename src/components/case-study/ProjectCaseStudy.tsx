@@ -6,6 +6,7 @@ import { CarePulseCaseStudy } from "./carepulse";
 import { FenixCaseStudy } from "./fenix";
 import { SignifiyaCaseStudy } from "./signifiya";
 import { WebScopeCaseStudy } from "./webscope";
+import { SubscriptionTrackerCaseStudy } from "./subscription-tracker";
 import { CaseStudyNavigator } from "./CaseStudyNavigator";
 import { CaseStudyHero } from "./CaseStudyHero";
 import { CaseStudyProblem } from "./CaseStudyProblem";
@@ -53,6 +54,10 @@ export const ProjectCaseStudy = ({ project, nextProject }: ProjectCaseStudyProps
 
   if (project.id === "webscope" || project.slug === "webscope") {
     return <WebScopeCaseStudy project={project} nextProject={nextProject} />;
+  }
+
+  if (project.id === "subscription-tracker" || project.slug === "subscription-tracker") {
+    return <SubscriptionTrackerCaseStudy project={project} nextProject={nextProject} />;
   }
 
   return (
