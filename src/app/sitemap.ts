@@ -16,7 +16,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 1,
     },
-
+    {
+      url: `${baseUrl}/work`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.95,
+    },
+    ...projectsData.map((project) => ({
+      url: `${baseUrl}/work/${project.slug}`,
+      lastModified: now,
+      changeFrequency: "monthly" as const,
+      priority: 0.85,
+    })),
     {
       url: `${baseUrl}/engineering-notes`,
       lastModified: now,
@@ -27,13 +38,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${baseUrl}/projects`,
       lastModified: now,
       changeFrequency: "weekly",
-      priority: 0.9,
+      priority: 0.8,
     },
     ...projectsData.map((project) => ({
       url: `${baseUrl}/projects/${project.slug}`,
       lastModified: now,
       changeFrequency: "monthly" as const,
-      priority: 0.8,
+      priority: 0.75,
     })),
     ...engineeringNotesSlugs.map(({ slug }) => ({
       url: `${baseUrl}/engineering-notes/${slug}`,

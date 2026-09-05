@@ -1,26 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { motion, useInView } from "motion/react";
 import { useRef } from "react";
 
 import { mono, nasalization } from "@/app/fonts";
 import { projectsData } from "@/constant/projects";
-
-const cardVariants = {
-  rest: { y: 0 },
-  hover: { y: -6 },
-};
-
-const titleVariants = {
-  rest: { opacity: 0.92 },
-  hover: { opacity: 1 },
-};
-
-const arrowVariants = {
-  rest: { x: 0 },
-  hover: { x: 3 },
-};
+import { ProjectCard } from "@/components/case-study/ProjectCard";
 
 export const Projects = () => {
   const projects = projectsData;
@@ -29,10 +14,11 @@ export const Projects = () => {
 
   return (
     <section
-      id="projects"
+      id="selected-work"
       ref={ref}
-      className="py-24"
+      className="py-24 relative"
     >
+      <div id="projects" className="absolute -top-20" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
@@ -60,74 +46,11 @@ export const Projects = () => {
         {projects.length > 0 && (
           <div className="grid gap-6 md:grid-cols-2">
             {projects.map((project, index) => (
-              <motion.article
-                key={project.name}
-                initial="rest"
-                whileHover="hover"
-                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                transition={{ duration: 0.5, delay: 0.08 * index }}
-                variants={cardVariants}
-                className="rounded-xl border border-neutral-800/50 bg-[#0c0c0c] p-6 sm:p-8 transition-all duration-300 hover:border-neutral-700 hover:bg-[#111111] hover:shadow-lg hover:shadow-neutral-900/50"
-              >
-                <div className="flex items-start justify-between gap-4 mb-4">
-                  <div>
-                    <p className={`${mono.className} text-[11px] uppercase tracking-widest text-neutral-500`}>
-                      {project.role}
-                    </p>
-                    <motion.h3
-                      variants={titleVariants}
-                      className="mt-2 text-xl font-semibold text-white"
-                    >
-                      <Link href={`/projects/${project.slug}`} className="hover:text-white transition-colors">
-                        {project.name}
-                      </Link>
-                    </motion.h3>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="relative flex h-2 w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                    </span>
-                    <span className={`${mono.className} text-[11px] text-emerald-400`}>Live</span>
-                  </div>
-                </div>
-
-                <p className="text-sm text-neutral-400 leading-relaxed mb-6">
-                  {project.description}
-                </p>
-
-                <div className="flex flex-wrap gap-2.5 mb-8">
-                  {project.tech.map((techItem) => (
-                    <span
-                      key={techItem}
-                      className={`${mono.className} px-3 py-1.5 rounded-full text-[11px] text-neutral-400 border border-neutral-700/60`}
-                    >
-                      {techItem.toUpperCase()}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="flex items-center gap-6">
-                  {project.demo && (
-                    <a
-                      href={project.demo}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`${mono.className} text-xs text-white border border-neutral-600 px-4 py-2 rounded-full hover:border-neutral-400 transition-colors`}
-                    >
-                      View Live Deployment <motion.span variants={arrowVariants} className="inline-block">→</motion.span>
-                    </a>
-                  )}
-                  <a
-                    href={project.github_link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`${mono.className} text-xs text-neutral-400 hover:text-white transition-colors`}
-                  >
-                    View Architecture <motion.span variants={arrowVariants} className="inline-block">→</motion.span>
-                  </a>
-                </div>
-              </motion.article>
+              <ProjectCard
+                key={project.slug || project.name}
+                project={project}
+                index={index}
+              />
             ))}
           </div>
         )}

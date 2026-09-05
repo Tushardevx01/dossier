@@ -23,8 +23,9 @@ describe("security helpers", () => {
 
   it("rejects mismatched CSRF tokens", () => {
     const token = generateServerCsrfToken();
+    const mismatched = token.endsWith("A") ? `${token.slice(0, -1)}B` : `${token.slice(0, -1)}A`;
 
-    expect(validateCsrfToken(token, `${token.slice(0, -1)}A`)).toBe(false);
+    expect(validateCsrfToken(token, mismatched)).toBe(false);
   });
 
   it("generates edge-safe CSRF tokens compatible with server validation", () => {

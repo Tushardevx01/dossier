@@ -11,19 +11,19 @@ import {
 import { ProjectCaseStudy } from "@/components/case-study/ProjectCaseStudy";
 import { Navbar, Footer, Background } from "@/components/common";
 
-interface ProjectPageProps {
+interface WorkDetailPageProps {
   params: Promise<{ slug: string }>;
 }
 
 export const revalidate = 60;
 
-export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: WorkDetailPageProps): Promise<Metadata> {
   const { slug } = await params;
   const project = projectsData.find((item) => item.slug === slug);
 
   if (!project) {
     return {
-      title: "Project Not Found",
+      title: "Case Study Not Found",
       robots: { index: false, follow: false },
     };
   }
@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   return buildPageMetadata({
     title: `${project.name} — Architecture & Case Study | Tushar Kanti Dey`,
     description: `${project.subtitle}. ${project.problem}`,
-    path: `/projects/${project.slug}`,
+    path: `/work/${project.slug}`,
     type: "article",
     keywords: [...project.tech, project.role, "case study", "software architecture", "Tushar Kanti Dey"],
   });
@@ -41,7 +41,7 @@ export function generateStaticParams() {
   return projectsData.map((project) => ({ slug: project.slug }));
 }
 
-export default async function ProjectDetailPage({ params }: ProjectPageProps) {
+export default async function WorkDetailPage({ params }: WorkDetailPageProps) {
   const { slug } = await params;
   const projectIndex = projectsData.findIndex((item) => item.slug === slug);
 
@@ -60,8 +60,8 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
   const softwareSchema = generateSoftwareApplicationStructuredData(project);
   const breadcrumbSchema = generateBreadcrumbListStructuredData([
     { name: "Tushar Kanti Dey", url: absoluteUrl("/") },
-    { name: "Projects", url: absoluteUrl("/projects") },
-    { name: project.name, url: absoluteUrl(`/projects/${project.slug}`) },
+    { name: "Work", url: absoluteUrl("/work") },
+    { name: project.name, url: absoluteUrl(`/work/${project.slug}`) },
   ]);
 
   return (

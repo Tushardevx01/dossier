@@ -442,9 +442,8 @@ canvas {
 
   /* Navigation styling */
   .floating-nav {
-    backdrop-filter: blur(10px);
-    background: hsl(var(--primary-foreground) / 0);
-    border: 1px solid hsl(var(--primary) / 0.4);
+    background: transparent;
+    border: none;
     will-change: transform, opacity;
   }
 
