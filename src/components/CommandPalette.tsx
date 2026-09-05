@@ -388,7 +388,7 @@ export const CommandPalette = () => {
     }
   };
 
-  // Scroll selected item into visible viewport whenever selectedIndex changes
+  // Scroll selected item into visible viewport whenever selectedIndex changes with smooth animation
   useEffect(() => {
     if (!isOpen) return;
     const container = listRef.current;
@@ -403,9 +403,15 @@ export const CommandPalette = () => {
     const padding = 6;
 
     if (itemTop < containerTop + padding) {
-      container.scrollTop = Math.max(0, itemTop - padding);
+      container.scrollTo({
+        top: Math.max(0, itemTop - padding),
+        behavior: "smooth",
+      });
     } else if (itemBottom > containerBottom - padding) {
-      container.scrollTop = itemBottom - containerHeight + padding;
+      container.scrollTo({
+        top: itemBottom - containerHeight + padding,
+        behavior: "smooth",
+      });
     }
   }, [selectedIndex, isOpen, filteredCommands.length]);
 
@@ -451,18 +457,22 @@ export const CommandPalette = () => {
       {/* Modal Backdrop & Command Palette */}
       <AnimatePresence>
         {isOpen && (
-          <div
-            className="fixed inset-0 z-[100] flex items-start justify-center pt-16 sm:pt-24 px-4 bg-black/75 backdrop-blur-sm"
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18, ease: "easeOut" }}
+            className="fixed inset-0 z-[100] flex items-start justify-center pt-16 sm:pt-24 px-4 bg-black/80 backdrop-blur-md"
             onClick={closePalette}
             role="dialog"
             aria-modal="true"
             aria-label="Command Palette"
           >
             <motion.div
-              initial={{ opacity: 0, scale: 0.98, y: -10 }}
+              initial={{ opacity: 0, scale: 0.96, y: -16 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.98, y: -10 }}
-              transition={{ duration: 0.15, ease: "easeOut" }}
+              exit={{ opacity: 0, scale: 0.97, y: -10 }}
+              transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
               onClick={(e) => e.stopPropagation()}
               className="w-full max-w-2xl bg-[#09090b] border border-neutral-800 rounded-xl overflow-hidden shadow-2xl flex flex-col max-h-[80vh]"
             >
@@ -548,21 +558,29 @@ export const CommandPalette = () => {
                             setSelectedIndex(index);
                           }
                         }}
-                        className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center justify-between gap-3 transition-colors ${
-                          isSelected
-                            ? "bg-neutral-800/90 text-white font-medium border border-neutral-700/80 shadow-sm"
-                            : "text-neutral-300 hover:bg-neutral-900/60 border border-transparent"
-                        }`}
+                        className="relative w-full text-left px-3 py-2.5 rounded-lg flex items-center justify-between gap-3 select-none group focus:outline-none"
                       >
-                        <div className="flex items-center gap-3 min-w-0">
+                        {isSelected && (
+                          <motion.div
+                            layoutId="activeCommandPill"
+                            className="absolute inset-0 bg-neutral-800/90 border border-neutral-700/80 rounded-lg shadow-sm"
+                            transition={{
+                              type: "spring",
+                              stiffness: 450,
+                              damping: 35,
+                            }}
+                          />
+                        )}
+
+                        <div className="relative z-10 flex items-center gap-3 min-w-0">
                           <Icon
-                            className={`w-4 h-4 flex-shrink-0 ${
-                              isSelected ? "text-emerald-400" : "text-neutral-500"
+                            className={`w-4 h-4 flex-shrink-0 transition-colors duration-150 ${
+                              isSelected ? "text-emerald-400" : "text-neutral-500 group-hover:text-neutral-400"
                             }`}
                           />
                           <div className="truncate">
                             <span
-                              className={`block truncate ${
+                              className={`block truncate transition-colors duration-150 ${
                                 isSelected ? "text-white font-medium" : "text-neutral-200"
                               }`}
                             >
@@ -570,7 +588,7 @@ export const CommandPalette = () => {
                             </span>
                             {cmd.description && (
                               <span
-                                className={`text-[11px] block truncate ${
+                                className={`text-[11px] block truncate transition-colors duration-150 ${
                                   isSelected ? "text-neutral-300" : "text-neutral-500"
                                 }`}
                               >
@@ -580,9 +598,9 @@ export const CommandPalette = () => {
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-2 flex-shrink-0">
+                        <div className="relative z-10 flex items-center gap-2 flex-shrink-0">
                           <span
-                            className={`text-[10px] uppercase font-mono px-1.5 py-0.5 rounded ${
+                            className={`text-[10px] uppercase font-mono px-1.5 py-0.5 rounded transition-colors duration-150 ${
                               isSelected
                                 ? "text-emerald-400 bg-emerald-950/60 border border-emerald-800/50"
                                 : "text-neutral-500 bg-neutral-900/80"
@@ -591,9 +609,14 @@ export const CommandPalette = () => {
                             {cmd.category}
                           </span>
                           {isSelected && (
-                            <span className="text-xs text-emerald-400 font-mono font-bold">
+                            <motion.span
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              transition={{ duration: 0.15 }}
+                              className="text-xs text-emerald-400 font-mono font-bold"
+                            >
                               ↵
-                            </span>
+                            </motion.span>
                           )}
                         </div>
                       </button>
@@ -625,9 +648,10 @@ export const CommandPalette = () => {
                 </div>
               </div>
             </motion.div>
-          </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </>
   );
 };
+
