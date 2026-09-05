@@ -17,7 +17,7 @@ export const CaseStudyFooter = ({ project, nextProject }: CaseStudyFooterProps) 
       <div className="p-6 sm:p-8 rounded-xl border border-neutral-800 bg-[#070709] flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-1.5 max-w-xl">
           <span className={`${mono.className} text-[11px] tracking-[0.25em] text-emerald-400 uppercase font-semibold block`}>
-            20 // OPEN REPOSITORY
+            OPEN REPOSITORY
           </span>
           <h2 className={`${nasalization.className} text-xl sm:text-2xl md:text-3xl font-bold text-white uppercase tracking-tight`}>
             THE IMPLEMENTATION IS OPEN.

@@ -80,7 +80,7 @@ export const CaseStudyHero = ({ project }: CaseStudyHeroProps) => {
         <motion.div variants={itemVariants} className="space-y-3">
           <div className="flex items-center gap-2">
             <span className={`${mono.className} text-[11px] uppercase tracking-[0.25em] text-neutral-500 font-semibold`}>
-              01 // CASE STUDY
+              CASE STUDY
             </span>
             <span className="text-neutral-700">/</span>
             <span className={`${mono.className} text-[11px] uppercase tracking-[0.2em] text-neutral-500`}>

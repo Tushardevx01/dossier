@@ -1,6 +1,6 @@
 "use client";
 
-import { nasalization, mono } from "@/app/fonts";
+import { nasalization } from "@/app/fonts";
 
 const RIGOR_ITEMS = [
   {
@@ -55,9 +55,6 @@ export const CaseStudyTechnicalRigor = () => {
     <section id="rigor" className="scroll-mt-28 space-y-6 sm:space-y-8">
       {/* Section Header */}
       <div className="space-y-2 pb-3 border-b border-neutral-900">
-        <span className={`${mono.className} text-[11px] tracking-[0.25em] text-neutral-500 uppercase font-semibold block`}>
-          07 // TECHNICAL RIGOR
-        </span>
         <h2 className={`${nasalization.className} text-2xl sm:text-3xl md:text-4xl font-bold text-white uppercase tracking-tight`}>
           TECHNICAL RIGOR
         </h2>

@@ -6,11 +6,6 @@ export const SignifiyaChallenges = () => {
   return (
     <section id="challenges" className="scroll-mt-24 space-y-8">
       <div className="space-y-3">
-        <div className="flex items-center gap-2 font-mono text-xs text-emerald-400">
-          <span>05</span>
-          <span className="w-8 h-px bg-emerald-500/30" />
-          <span>ENGINEERING CHALLENGES</span>
-        </div>
         <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
           Overcoming Mobile Hardware, Network, and Runtime Bottlenecks
         </h2>
@@ -27,7 +22,7 @@ export const SignifiyaChallenges = () => {
           <div className="flex items-start justify-between gap-4">
             <div className="space-y-1">
               <span className="font-mono text-[10px] text-amber-400 uppercase tracking-wider">
-                CHALLENGE 01 // HARDWARE LAYER
+                HARDWARE LAYER
               </span>
               <h3 className="text-base sm:text-lg font-semibold text-white">
                 Android 60Hz Display Throttling on 120Hz/144Hz Capable Hardware
@@ -61,7 +56,7 @@ export const SignifiyaChallenges = () => {
           <div className="flex items-start justify-between gap-4">
             <div className="space-y-1">
               <span className="font-mono text-[10px] text-red-400 uppercase tracking-wider">
-                CHALLENGE 02 // DATA & RUNTIME LAYER
+                DATA & RUNTIME LAYER
               </span>
               <h3 className="text-base sm:text-lg font-semibold text-white">
                 PostgREST Payload Deviations Causing Client Array Crashes
@@ -94,7 +89,7 @@ export const SignifiyaChallenges = () => {
           <div className="flex items-start justify-between gap-4">
             <div className="space-y-1">
               <span className="font-mono text-[10px] text-emerald-400 uppercase tracking-wider">
-                CHALLENGE 03 // GATE VERIFICATION LAYER
+                GATE VERIFICATION LAYER
               </span>
               <h3 className="text-base sm:text-lg font-semibold text-white">
                 Multi-Day Gate Check-In Fraud & Screenshot Pass Sharing
@@ -128,7 +123,7 @@ export const SignifiyaChallenges = () => {
           <div className="flex items-start justify-between gap-4">
             <div className="space-y-1">
               <span className="font-mono text-[10px] text-cyan-400 uppercase tracking-wider">
-                CHALLENGE 04 // MOBILE MEMORY & PERFORMANCE
+                MOBILE MEMORY & PERFORMANCE
               </span>
               <h3 className="text-base sm:text-lg font-semibold text-white">
                 Startup RAM Footprint & Background Media Leaks

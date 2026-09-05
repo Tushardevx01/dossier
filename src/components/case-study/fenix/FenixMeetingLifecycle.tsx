@@ -42,8 +42,6 @@ export const FenixMeetingLifecycle = () => {
     <section id="lifecycle" className="scroll-mt-28 space-y-6">
       {/* Section Header */}
       <div className="flex items-center gap-3 pb-3 border-b border-neutral-900">
-        <span className="text-xs font-mono text-emerald-400 font-bold">04</span>
-        <span className="text-neutral-600 font-mono text-xs">//</span>
         <h2 className={`${nasalization.className} text-xl sm:text-2xl font-bold tracking-tight text-white uppercase`}>
           MEETING LIFECYCLE
         </h2>
@@ -69,7 +67,7 @@ export const FenixMeetingLifecycle = () => {
       {/* Active Call Sub-Components */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 font-mono text-xs">
         <div className="p-3.5 rounded-lg border border-neutral-900 bg-[#09090b] space-y-1">
-          <div className="text-emerald-400 font-bold">01 / DYNAMIC LAYOUTS</div>
+          <div className="text-emerald-400 font-bold">DYNAMIC LAYOUTS</div>
           <div className="text-white font-medium text-[11px]">PaginatedGrid & SpeakerLayout</div>
           <p className="text-neutral-400 font-sans text-xs">
             Users can toggle on the fly between equal-weight grid tiles and speaker-focused layouts with participant sidebars.
@@ -77,7 +75,7 @@ export const FenixMeetingLifecycle = () => {
         </div>
 
         <div className="p-3.5 rounded-lg border border-neutral-900 bg-[#09090b] space-y-1">
-          <div className="text-emerald-400 font-bold">02 / PARTICIPANTS PANEL</div>
+          <div className="text-emerald-400 font-bold">PARTICIPANTS PANEL</div>
           <div className="text-white font-medium text-[11px]">CallParticipantsList</div>
           <p className="text-neutral-400 font-sans text-xs">
             Displays connected users, active speaking indicators, individual mute states, and connection quality indicators.
@@ -85,7 +83,7 @@ export const FenixMeetingLifecycle = () => {
         </div>
 
         <div className="p-3.5 rounded-lg border border-neutral-900 bg-[#09090b] space-y-1">
-          <div className="text-emerald-400 font-bold">03 / CALL DIAGNOSTICS</div>
+          <div className="text-emerald-400 font-bold">CALL DIAGNOSTICS</div>
           <div className="text-white font-medium text-[11px]">CallStatsButton</div>
           <p className="text-neutral-400 font-sans text-xs">
             Surfaces real-time network latency, video bitrate, frame rates, and packet loss metrics directly within the UI.

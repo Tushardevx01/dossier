@@ -6,11 +6,6 @@ export const SignifiyaChallengeSolutions = () => {
   return (
     <section id="solutions" className="scroll-mt-24 space-y-8">
       <div className="space-y-3">
-        <div className="flex items-center gap-2 font-mono text-xs text-emerald-400">
-          <span>07</span>
-          <span className="w-8 h-px bg-emerald-500/30" />
-          <span>DEEP DIVE SOLUTIONS</span>
-        </div>
         <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
           Production Implementations Grounded in Repository Code
         </h2>
@@ -26,7 +21,7 @@ export const SignifiyaChallengeSolutions = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-emerald-400 font-mono text-xs">
               <LuZap className="w-4 h-4" />
-              <span>01 // KOTLIN DISPLAY MODE INJECTION (plugins/withHighRefreshRate.js)</span>
+              <span>KOTLIN DISPLAY MODE INJECTION (plugins/withHighRefreshRate.js)</span>
             </div>
             <span className="text-[10px] font-mono text-neutral-400">EXPO CONFIG PLUGIN</span>
           </div>
@@ -80,7 +75,7 @@ module.exports = withHighRefreshRate;`}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-emerald-400 font-mono text-xs">
               <LuShieldCheck className="w-4 h-4" />
-              <span>02 // ENTERPRISE DEFENSIVE PARSER (src/lib/defensiveHandler.ts)</span>
+              <span>ENTERPRISE DEFENSIVE PARSER (src/lib/defensiveHandler.ts)</span>
             </div>
             <span className="text-[10px] font-mono text-neutral-400">RUNTIME CRASH PREVENTION</span>
           </div>
@@ -130,7 +125,7 @@ module.exports = withHighRefreshRate;`}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-emerald-400 font-mono text-xs">
               <LuCode className="w-4 h-4" />
-              <span>03 // BOOKING ID GENERATION & PERSISTENCE (src/context/AuthContext.tsx)</span>
+              <span>BOOKING ID GENERATION & PERSISTENCE (src/context/AuthContext.tsx)</span>
             </div>
             <span className="text-[10px] font-mono text-neutral-400">SESSION SYNCHRONIZATION</span>
           </div>
@@ -181,7 +176,7 @@ const syncUserProfile = async (baseUser: any) => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-emerald-400 font-mono text-xs">
               <LuQrCode className="w-4 h-4" />
-              <span>04 // ANIMATED VIDEO PASS & VECTOR QR (src/components/passes/VisitorPass.tsx)</span>
+              <span>ANIMATED VIDEO PASS & VECTOR QR (src/components/passes/VisitorPass.tsx)</span>
             </div>
             <span className="text-[10px] font-mono text-neutral-400">GATE VERIFICATION</span>
           </div>

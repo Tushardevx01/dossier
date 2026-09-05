@@ -39,11 +39,6 @@ export const SubscriptionTrackerChallenges = () => {
   return (
     <section id="challenges" className="scroll-mt-24 space-y-8">
       <div className="space-y-3">
-        <div className="flex items-center gap-2 font-mono text-xs text-emerald-400">
-          <span>05</span>
-          <span className="w-8 h-px bg-emerald-500/30" />
-          <span>ENGINEERING CHALLENGES</span>
-        </div>
         <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
           Architectural Bottlenecks in Recurring Systems
         </h2>

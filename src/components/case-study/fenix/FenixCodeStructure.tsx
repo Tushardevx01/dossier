@@ -38,8 +38,6 @@ export const FenixCodeStructure = () => {
     <section id="structure" className="scroll-mt-28 space-y-6">
       {/* Section Header */}
       <div className="flex items-center gap-3 pb-3 border-b border-neutral-900">
-        <span className="text-xs font-mono text-emerald-400 font-bold">12</span>
-        <span className="text-neutral-600 font-mono text-xs">//</span>
         <h2 className={`${nasalization.className} text-xl sm:text-2xl font-bold tracking-tight text-white uppercase`}>
           ENGINEERING STRUCTURE
         </h2>

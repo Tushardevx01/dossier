@@ -28,8 +28,6 @@ export const CarePulseProblem = () => {
     <section id="problem" className="scroll-mt-28 space-y-6">
       {/* Section Header */}
       <div className="flex items-center gap-3 pb-3 border-b border-neutral-900">
-        <span className="text-xs font-mono text-emerald-400 font-bold">01</span>
-        <span className="text-neutral-600 font-mono text-xs">//</span>
         <h2 className={`${nasalization.className} text-xl sm:text-2xl font-bold tracking-tight text-white uppercase`}>
           THE PROBLEM
         </h2>
@@ -55,19 +53,19 @@ export const CarePulseProblem = () => {
       {/* Key Coordination Points */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 font-mono text-xs">
         <div className="p-3 rounded-lg border border-neutral-900 bg-[#09090b]">
-          <span className="text-emerald-400 font-bold">01. CLINICAL DATA</span>
+          <span className="text-emerald-400 font-bold">CLINICAL DATA</span>
           <p className="text-neutral-400 text-[11px] mt-1">Multi-step patient history, insurance, and emergency contacts.</p>
         </div>
         <div className="p-3 rounded-lg border border-neutral-900 bg-[#09090b]">
-          <span className="text-emerald-400 font-bold">02. STATE MUTATIONS</span>
+          <span className="text-emerald-400 font-bold">STATE MUTATIONS</span>
           <p className="text-neutral-400 text-[11px] mt-1">Deterministic transitions across Pending, Scheduled, and Cancelled.</p>
         </div>
         <div className="p-3 rounded-lg border border-neutral-900 bg-[#09090b]">
-          <span className="text-emerald-400 font-bold">03. DOCUMENT VAULT</span>
+          <span className="text-emerald-400 font-bold">DOCUMENT VAULT</span>
           <p className="text-neutral-400 text-[11px] mt-1">Encrypted patient identification uploads via Appwrite Storage.</p>
         </div>
         <div className="p-3 rounded-lg border border-neutral-900 bg-[#09090b]">
-          <span className="text-emerald-400 font-bold">04. NOTIFICATIONS</span>
+          <span className="text-emerald-400 font-bold">NOTIFICATIONS</span>
           <p className="text-neutral-400 text-[11px] mt-1">Instant SMS dispatch verifying appointments and cancellations.</p>
         </div>
       </div>

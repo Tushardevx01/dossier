@@ -1,6 +1,6 @@
 "use client";
 
-import { nasalization, mono } from "@/app/fonts";
+import { nasalization } from "@/app/fonts";
 import { LuShieldCheck } from "react-icons/lu";
 
 const VERIFIED_OUTCOMES = [
@@ -41,10 +41,7 @@ export const AegisResults = () => {
     <section id="results" className="scroll-mt-28 space-y-6 sm:space-y-8">
       {/* Section Header */}
       <div className="space-y-2 pb-3 border-b border-neutral-900">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <span className={`${mono.className} text-[11px] tracking-[0.25em] text-neutral-500 uppercase font-semibold block`}>
-            16 // VERIFIED ARCHITECTURE
-          </span>
+        <div className="flex items-center justify-end">
           <span className="flex items-center gap-1.5 font-mono text-xs text-emerald-400">
             <LuShieldCheck className="w-4 h-4" />
             <span>VERIFIED ENGINEERING OUTCOMES</span>

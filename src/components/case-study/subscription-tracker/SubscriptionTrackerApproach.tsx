@@ -34,11 +34,6 @@ export const SubscriptionTrackerApproach = () => {
   return (
     <section id="approach" className="scroll-mt-24 space-y-8">
       <div className="space-y-3">
-        <div className="flex items-center gap-2 font-mono text-xs text-emerald-400">
-          <span>02</span>
-          <span className="w-8 h-px bg-emerald-500/30" />
-          <span>THE APPROACH</span>
-        </div>
         <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
           A Resilient, Layered Backend Foundation
         </h2>

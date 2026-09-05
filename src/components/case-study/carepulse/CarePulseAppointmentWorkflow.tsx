@@ -28,8 +28,6 @@ export const CarePulseAppointmentWorkflow = () => {
     <section id="appointment-workflow" className="scroll-mt-28 space-y-6">
       {/* Section Header */}
       <div className="flex items-center gap-3 pb-3 border-b border-neutral-900">
-        <span className="text-xs font-mono text-emerald-400 font-bold">05</span>
-        <span className="text-neutral-600 font-mono text-xs">//</span>
         <h2 className={`${nasalization.className} text-xl sm:text-2xl font-bold tracking-tight text-white uppercase`}>
           APPOINTMENT LIFECYCLE
         </h2>
@@ -56,7 +54,7 @@ export const CarePulseAppointmentWorkflow = () => {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 font-mono text-xs">
         <div className="p-3.5 rounded-lg border border-neutral-900 bg-[#09090b] space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-amber-400 font-bold">01 / PENDING</span>
+            <span className="text-amber-400 font-bold">PENDING</span>
             <span className="text-[10px] text-neutral-500">CREATE FLOW</span>
           </div>
           <p className="text-neutral-400 font-sans text-xs">
@@ -66,7 +64,7 @@ export const CarePulseAppointmentWorkflow = () => {
 
         <div className="p-3.5 rounded-lg border border-neutral-900 bg-[#09090b] space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-emerald-400 font-bold">02 / SCHEDULED</span>
+            <span className="text-emerald-400 font-bold">SCHEDULED</span>
             <span className="text-[10px] text-neutral-500">ADMIN FLOW</span>
           </div>
           <p className="text-neutral-400 font-sans text-xs">
@@ -76,7 +74,7 @@ export const CarePulseAppointmentWorkflow = () => {
 
         <div className="p-3.5 rounded-lg border border-neutral-900 bg-[#09090b] space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-red-400 font-bold">03 / CANCELLED</span>
+            <span className="text-red-400 font-bold">CANCELLED</span>
             <span className="text-[10px] text-neutral-500">ADMIN FLOW</span>
           </div>
           <p className="text-neutral-400 font-sans text-xs">

@@ -42,8 +42,6 @@ export const CarePulseArchitecture = () => {
     <section id="architecture" className="scroll-mt-28 space-y-6">
       {/* Section Header */}
       <div className="flex items-center gap-3 pb-3 border-b border-neutral-900">
-        <span className="text-xs font-mono text-emerald-400 font-bold">03</span>
-        <span className="text-neutral-600 font-mono text-xs">//</span>
         <h2 className={`${nasalization.className} text-xl sm:text-2xl font-bold tracking-tight text-white uppercase`}>
           ARCHITECTURE & DATA FLOW
         </h2>
@@ -70,7 +68,7 @@ export const CarePulseArchitecture = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
         <div className="p-4 rounded-xl border border-neutral-800/80 bg-[#09090b] space-y-2">
           <div className="text-[10px] font-mono uppercase tracking-widest text-neutral-500">
-            01 / INTERFACE BOUNDARY
+            INTERFACE BOUNDARY
           </div>
           <h3 className="text-sm font-semibold text-white font-mono">Patient Portal & Admin Gate</h3>
           <p className="text-xs text-neutral-400 leading-relaxed font-sans">
@@ -80,7 +78,7 @@ export const CarePulseArchitecture = () => {
 
         <div className="p-4 rounded-xl border border-neutral-800/80 bg-[#09090b] space-y-2">
           <div className="text-[10px] font-mono uppercase tracking-widest text-neutral-500">
-            02 / COMPUTATION BOUNDARY
+            COMPUTATION BOUNDARY
           </div>
           <h3 className="text-sm font-semibold text-white font-mono">Next.js 14 Server Actions</h3>
           <p className="text-xs text-neutral-400 leading-relaxed font-sans">
@@ -90,7 +88,7 @@ export const CarePulseArchitecture = () => {
 
         <div className="p-4 rounded-xl border border-neutral-800/80 bg-[#09090b] space-y-2">
           <div className="text-[10px] font-mono uppercase tracking-widest text-neutral-500">
-            03 / PERSISTENCE BOUNDARY
+            PERSISTENCE BOUNDARY
           </div>
           <h3 className="text-sm font-semibold text-white font-mono">Appwrite Service Engine</h3>
           <p className="text-xs text-neutral-400 leading-relaxed font-sans">

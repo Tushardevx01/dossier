@@ -26,8 +26,6 @@ export const FenixProblem = () => {
     <section id="problem" className="scroll-mt-28 space-y-6">
       {/* Section Header */}
       <div className="flex items-center gap-3 pb-3 border-b border-neutral-900">
-        <span className="text-xs font-mono text-emerald-400 font-bold">01</span>
-        <span className="text-neutral-600 font-mono text-xs">//</span>
         <h2 className={`${nasalization.className} text-xl sm:text-2xl font-bold tracking-tight text-white uppercase`}>
           THE PROBLEM
         </h2>
@@ -53,19 +51,19 @@ export const FenixProblem = () => {
       {/* Key Coordination Pillars */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 font-mono text-xs">
         <div className="p-3 rounded-lg border border-neutral-900 bg-[#09090b]">
-          <span className="text-emerald-400 font-bold">01. IDENTITY</span>
+          <span className="text-emerald-400 font-bold">IDENTITY</span>
           <p className="text-neutral-400 text-[11px] mt-1 font-sans">Cryptographically verified Clerk user sessions and access tokens.</p>
         </div>
         <div className="p-3 rounded-lg border border-neutral-900 bg-[#09090b]">
-          <span className="text-emerald-400 font-bold">02. DEVICE STATE</span>
+          <span className="text-emerald-400 font-bold">DEVICE STATE</span>
           <p className="text-neutral-400 text-[11px] mt-1 font-sans">Pre-join hardware evaluation with camera and microphone controls.</p>
         </div>
         <div className="p-3 rounded-lg border border-neutral-900 bg-[#09090b]">
-          <span className="text-emerald-400 font-bold">03. CALL TOPOLOGY</span>
+          <span className="text-emerald-400 font-bold">CALL TOPOLOGY</span>
           <p className="text-neutral-400 text-[11px] mt-1 font-sans">Seamless in-call switching between Grid and Speaker presentation modes.</p>
         </div>
         <div className="p-3 rounded-lg border border-neutral-900 bg-[#09090b]">
-          <span className="text-emerald-400 font-bold">04. PARTICIPANTS</span>
+          <span className="text-emerald-400 font-bold">PARTICIPANTS</span>
           <p className="text-neutral-400 text-[11px] mt-1 font-sans">Real-time presence tracking, speaking indicators, and call statistics.</p>
         </div>
       </div>

@@ -6,11 +6,6 @@ export const SignifiyaArchitecture = () => {
   return (
     <section id="architecture" className="scroll-mt-24 space-y-8">
       <div className="space-y-3">
-        <div className="flex items-center gap-2 font-mono text-xs text-emerald-400">
-          <span>03</span>
-          <span className="w-8 h-px bg-emerald-500/30" />
-          <span>SYSTEM ARCHITECTURE</span>
-        </div>
         <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
           End-to-End System Topology & Security Boundary
         </h2>
@@ -78,7 +73,7 @@ export const SignifiyaArchitecture = () => {
         <div className="p-4 rounded-xl bg-neutral-950/60 border border-neutral-800 space-y-2">
           <div className="flex items-center gap-2 text-emerald-400 font-mono text-xs">
             <LuSmartphone className="w-4 h-4" />
-            <span>01 // NATIVE RUNTIME</span>
+            <span>NATIVE RUNTIME</span>
           </div>
           <h4 className="text-sm font-semibold text-white">Expo 54 & Android Display Hack</h4>
           <p className="text-xs text-neutral-400 leading-relaxed">
@@ -91,7 +86,7 @@ export const SignifiyaArchitecture = () => {
         <div className="p-4 rounded-xl bg-neutral-950/60 border border-neutral-800 space-y-2">
           <div className="flex items-center gap-2 text-emerald-400 font-mono text-xs">
             <LuShieldCheck className="w-4 h-4" />
-            <span>02 // ZERO-TRUST BOUNDARY</span>
+            <span>ZERO-TRUST BOUNDARY</span>
           </div>
           <h4 className="text-sm font-semibold text-white">Hybrid Auth & RLS Enforcement</h4>
           <p className="text-xs text-neutral-400 leading-relaxed">
@@ -104,7 +99,7 @@ export const SignifiyaArchitecture = () => {
         <div className="p-4 rounded-xl bg-neutral-950/60 border border-neutral-800 space-y-2">
           <div className="flex items-center gap-2 text-emerald-400 font-mono text-xs">
             <LuDatabase className="w-4 h-4" />
-            <span>03 // DATA MODEL & OPS</span>
+            <span>DATA MODEL & OPS</span>
           </div>
           <h4 className="text-sm font-semibold text-white">Prisma Relational Model & Monitors</h4>
           <p className="text-xs text-neutral-400 leading-relaxed">
