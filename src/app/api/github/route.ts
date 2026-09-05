@@ -43,15 +43,6 @@ const verifiedStaticRepos = [
     updatedAt: "2026-08-28T14:30:00Z",
   },
   {
-    name: "devmatch",
-    description: "Repository intelligence pipeline evaluating engineering competencies from Git commit graphs.",
-    language: "TypeScript",
-    url: "https://github.com/tushardevx01/devmatch",
-    stars: 0,
-    forks: 0,
-    updatedAt: "2026-08-20T10:15:00Z",
-  },
-  {
     name: "dossier",
     description: "High-performance personal engineering portfolio built with Next.js 16 App Router and Framer Motion.",
     language: "TypeScript",
@@ -88,13 +79,6 @@ const verifiedStaticActivity = [
   },
   {
     id: "act-3",
-    repo: "devmatch",
-    message: "perf: optimize GraphQL repository analysis pipeline",
-    date: "Aug 2026",
-    url: "https://github.com/tushardevx01/devmatch",
-  },
-  {
-    id: "act-4",
     repo: "dossier",
     message: "refactor: structured case study data architecture & command palette",
     date: "Sep 2026",

@@ -95,21 +95,37 @@ export const projectsData: Project[] = [
         technology: "Go",
         reason:
           "Chosen for its zero-overhead runtime, predictable garbage collection latencies, first-class goroutine concurrency primitives, and direct POSIX system call bindings.",
+        tradeoff:
+          "Requires manual goroutine pool budgeting and non-blocking leak guards rather than managed actor runtime abstractions.",
+        outcome:
+          "Sub-millisecond scheduling dispatch with a predictable, constant memory envelope under high-volume burst traffic.",
       },
       {
         technology: "Kafka",
         reason:
           "Selected over RabbitMQ for persistent partitioned event logs, allowing historical event replay during disaster recovery and guaranteed at-least-once message delivery.",
+        tradeoff:
+          "Higher operational footprint and stateful broker management compared to lightweight in-memory queues.",
+        outcome:
+          "Zero workload loss during node partition failures, enabling safe offline queueing and partition replay.",
       },
       {
         technology: "Redis",
         reason:
           "Used specifically for sub-millisecond distributed lock acquisition (Redlock) and ephemeral lease keys with atomic SET NX EX semantics.",
+        tradeoff:
+          "Requires strict clock drift synchronization across Redis instances to prevent premature lease expiration.",
+        outcome:
+          "Deterministic 5000ms distributed lease locking that eliminates split-brain dual dispatch entirely.",
       },
       {
         technology: "Docker Engine API & cgroups v2",
         reason:
           "Enables strict memory and CPU throttling per worker process, preventing rogue customer workloads from exhausting host resources.",
+        tradeoff:
+          "Demands host kernel cgroups v2 support and direct socket access with granular daemon isolation.",
+        outcome:
+          "Hard kernel-enforced multi-tenant resource boundaries with automated POSIX SIGKILL runaway task watchdogs.",
       },
     ],
     results: [
@@ -117,6 +133,48 @@ export const projectsData: Project[] = [
       "Sub-second node eviction window (3.2 seconds average detection to task rescue).",
       "Passed `go test -race -count=100` across 500 simulated concurrent worker routines with zero race warnings.",
       "Deterministic 24-hour request replay protection via SHA-256 idempotency cache.",
+    ],
+    metrics: [
+      {
+        value: "0",
+        label: "RACE CONDITIONS",
+        description: "Zero race warnings across 500 simulated concurrent worker routines via `go test -race -count=100`.",
+      },
+      {
+        value: "3.2s",
+        label: "EVICTION WINDOW",
+        description: "Average sliding-window heartbeat detection to automatic task rescue across worker nodes.",
+      },
+      {
+        value: "100%",
+        label: "PARTITION SURVIVAL",
+        description: "Zero dropped jobs recorded during simulated 40% packet-loss network partitions.",
+      },
+      {
+        value: "24h",
+        label: "IDEMPOTENCY CACHE",
+        description: "Deterministic duplicate execution protection via SHA-256 request signature caching.",
+      },
+    ],
+    learnings: [
+      {
+        index: "01",
+        insight: "Distributed systems fail at boundaries, not only at components.",
+        description:
+          "The most catastrophic failures in cluster orchestration happen between network transitions, clock skew, and partition recoveries—not inside individual service functions.",
+      },
+      {
+        index: "02",
+        insight: "Observability is part of the core architecture, not an afterthought.",
+        description:
+          "Without deterministic sliding-window heartbeat state tracking and structured transition telemetry, a control plane cannot reliably distinguish between a dead worker node and a transient network latency spike.",
+      },
+      {
+        index: "03",
+        insight: "Graceful failure is a fundamental feature.",
+        description:
+          "Systems must be engineered to fail deterministically. With 30-second POSIX SIGTERM drain loops, bounded worker channels, and idempotent retry keys, recovery is a routine operational state.",
+      },
     ],
     githubUrl: "https://github.com/tushardevx01/runstack",
     github_link: "https://github.com/tushardevx01/runstack",
@@ -226,105 +284,6 @@ export const projectsData: Project[] = [
     github_link: "https://github.com/tushardevx01/project-aegis",
     liveUrl: "https://github.com/tushardevx01/project-aegis",
     demo: "https://github.com/tushardevx01/project-aegis",
-  },
-  {
-    id: "devmatch",
-    slug: "devmatch",
-    name: "DevMatch",
-    title: "DevMatch",
-    subtitle: "Developer Intelligence & Repository Profiling Pipeline",
-    description:
-      "Developer intelligence and repository profiling platform that parses codebases and activity graphs to extract genuine engineering competencies.",
-    category: "Full-Stack & Data Pipelines",
-    role: "Full-Stack Lead & Pipeline Engineer",
-    year: "2026",
-    timeline: "Jan 2026 — Present",
-    status: "Active",
-    technologies: ["Next.js", "TypeScript", "GitHub GraphQL API", "Supabase", "PostgreSQL", "Tailwind CSS"],
-    tech: ["Next.js", "TypeScript", "GitHub API", "Supabase", "Tailwind CSS"],
-    problem:
-      "Evaluating developer proficiency based on static CVs or generic commit counts fails to capture actual architectural thinking, PR review collaboration quality, code entropy, and distributed systems ability.",
-    approach:
-      "Engineered an automated data extraction and synthesis pipeline using the GitHub GraphQL v4 API. The pipeline ingests commit histories, code review commentary, language distributions, and commit cadence, transforming raw metrics into deterministic capability radars and evidence graphs.",
-    architecture: {
-      flowSummary: "Next.js Edge Client → API Route Handlers → Rate-Budgeted GraphQL Crawler → Analysis Worker → Supabase Cache",
-      layers: [
-        {
-          name: "Presentation Layer",
-          role: "Responsive Capability Dashboard",
-          tech: "Next.js App Router / React 19 / Tailwind CSS",
-        },
-        {
-          name: "API Gateway",
-          role: "Validation & Rate Budget Management",
-          tech: "Next.js Edge Route Handlers with Token-Bucket Throttling",
-        },
-        {
-          name: "Upstream Ingestion",
-          role: "Batch Data Fetching",
-          tech: "GitHub GraphQL API v4 with Pagination Controls",
-        },
-        {
-          name: "Analysis Engine",
-          role: "Capability Synthesis & Metric Extraction",
-          tech: "TypeScript / Language Entropy & AST Analyzers",
-        },
-        {
-          name: "Persistence Layer",
-          role: "Profile Caching & Relational Graph",
-          tech: "Supabase PostgreSQL with Edge Invalidation",
-        },
-      ],
-    },
-    challenges: [
-      {
-        title: "GitHub API Rate Limit Budgeting",
-        description:
-          "Public GitHub API allowances (5,000 points/hr) are rapidly consumed when crawling deep multi-year repository commit trees.",
-        solution:
-          "Consolidated multiple REST calls into batched GraphQL queries requesting only required fields, and implemented multi-tier caching in Supabase with 6-hour TTLs.",
-      },
-      {
-        title: "Latency Optimization for Profile Generation",
-        description:
-          "Initial prototype parsing took 14+ seconds per profile due to sequential network round trips.",
-        solution:
-          "Parallelized repository ingestion via Promise.allSettled and pre-computed language breakdowns, reducing generation time to under 3 seconds.",
-      },
-      {
-        title: "Deterministic Capability Scoring",
-        description:
-          "Preventing vanity metrics (e.g. thousands of automated commits) from artificially inflating developer capability scores.",
-        solution:
-          "Weighted PR review complexity, multi-file code contributions, and language diversity higher than raw single-line commit frequency.",
-      },
-    ],
-    decisions: [
-      {
-        technology: "Next.js App Router",
-        reason:
-          "Enabled streaming SSR with suspense boundaries, delivering immediate UI shell rendering while repository analysis streams in the background.",
-      },
-      {
-        technology: "GitHub GraphQL API",
-        reason:
-          "Cut network payload sizes by 78% compared to REST by fetching only precise commit nodes, PR threads, and language byte counts.",
-      },
-      {
-        technology: "Supabase",
-        reason:
-          "Provided instant serverless PostgreSQL with built-in connection pooling and real-time cache synchronization.",
-      },
-    ],
-    results: [
-      "Under 3 seconds average profile generation latency per repository index.",
-      "78% reduction in network payload transfer using tailored GraphQL queries.",
-      "Zero unhandled rate-limit failures through token bucket budget enforcement.",
-    ],
-    githubUrl: "https://github.com/tushardevx01/devmatch",
-    github_link: "https://github.com/tushardevx01/devmatch",
-    liveUrl: "https://github.com/tushardevx01/devmatch",
-    demo: "https://github.com/tushardevx01/devmatch",
   },
   {
     id: "simpui",

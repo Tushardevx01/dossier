@@ -6,20 +6,26 @@ import type { IconType } from "react-icons";
 import { FaDocker, FaGithub, FaReact } from "react-icons/fa6";
 import {
   SiAppwrite,
+  SiClerk,
+  SiExpo,
   SiExpress,
   SiFramer,
   SiGo,
   SiJavascript,
+  SiLinux,
   SiMongodb,
   SiNestjs,
   SiNextdotjs,
   SiNodedotjs,
   SiPostgresql,
+  SiPrometheus,
   SiPython,
   SiRedis,
   SiSupabase,
   SiTailwindcss,
   SiTypescript,
+  SiWebrtc,
+  SiZod,
 } from "react-icons/si";
 
 import { mono, nasalization } from "@/app/fonts";
@@ -67,6 +73,64 @@ const techIconMap: Record<string, IconType> = {
   github: FaGithub,
   "github api": FaGithub,
   "github graphql api": FaGithub,
+  "linux cgroups": SiLinux,
+  linux: SiLinux,
+  prometheus: SiPrometheus,
+  "prometheus metrics": SiPrometheus,
+  webrtc: SiWebrtc,
+  clerk: SiClerk,
+  "clerk auth": SiClerk,
+  expo: SiExpo,
+  "expo react native": SiExpo,
+  zod: SiZod,
+};
+
+const techColorMap: Record<string, string> = {
+  go: "#00ADD8",
+  golang: "#00ADD8",
+  docker: "#2496ED",
+  "docker engine api": "#2496ED",
+  typescript: "#3178C6",
+  javascript: "#F7DF1E",
+  react: "#61DAFB",
+  "next.js": "#FFFFFF",
+  nextjs: "#FFFFFF",
+  "node.js": "#5FA04E",
+  nodejs: "#5FA04E",
+  node: "#5FA04E",
+  express: "#FFFFFF",
+  "express.js": "#FFFFFF",
+  nestjs: "#E0234E",
+  "tailwind css": "#06B6D4",
+  tailwind: "#06B6D4",
+  mongodb: "#47A248",
+  postgresql: "#4169E1",
+  postgres: "#4169E1",
+  redis: "#DC382D",
+  python: "#3776AB",
+  supabase: "#3ECF8E",
+  appwrite: "#FD366E",
+  "framer motion": "#0055FF",
+  github: "#FFFFFF",
+  "github api": "#FFFFFF",
+  "github graphql api": "#FFFFFF",
+  "linux cgroups": "#FCC624",
+  linux: "#FCC624",
+  prometheus: "#E6522C",
+  "prometheus metrics": "#E6522C",
+  webrtc: "#FF5C5C",
+  clerk: "#6C47FF",
+  "clerk auth": "#6C47FF",
+  expo: "#FFFFFF",
+  "expo react native": "#FFFFFF",
+  zod: "#3E67B1",
+  protobuf: "#4285F4",
+  jwt: "#D63AFF",
+  nodemailer: "#00B4D8",
+  livekit: "#1F80E0",
+  twilio: "#F22F46",
+  "twilio sms": "#F22F46",
+  cheerio: "#E88C1F",
 };
 
 function getTechIcon(name: string): IconType | null {
@@ -76,6 +140,15 @@ function getTechIcon(name: string): IconType | null {
     if (key.includes(techKey)) return icon;
   }
   return null;
+}
+
+function getTechColor(name: string): string {
+  const key = name.toLowerCase().trim();
+  if (techColorMap[key]) return techColorMap[key];
+  for (const [techKey, color] of Object.entries(techColorMap)) {
+    if (key.includes(techKey)) return color;
+  }
+  return "#A3A3A3";
 }
 
 function getStatusConfig(status?: string, liveUrl?: string): StatusConfig {
@@ -152,7 +225,6 @@ function getStatusConfig(status?: string, liveUrl?: string): StatusConfig {
 export const ProjectCard = ({ project, index }: ProjectCardProps) => {
   const shouldReduceMotion = useReducedMotion();
 
-  const projectIndex = project.index || String(index + 1).padStart(2, "0");
   const liveUrl = project.liveUrl || project.demo;
   const githubUrl = project.githubUrl || project.github_link;
   const hasGithubUrl = Boolean(githubUrl);
@@ -223,21 +295,11 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
 
       {/* Top Section */}
       <div className="relative z-10">
-        {/* 01 / CATEGORY  ● LIVE */}
+        {/* Status badge */}
         <motion.div
           variants={childVariants}
-          className="flex items-center justify-between gap-3 mb-4"
+          className="flex items-center justify-end mb-4"
         >
-          <div
-            className={`${mono.className} flex items-center gap-2 text-[11px] uppercase tracking-wider text-neutral-500`}
-          >
-            <span className="text-neutral-400 font-semibold">{projectIndex}</span>
-            <span className="text-neutral-700 font-normal">/</span>
-            <span className="truncate text-neutral-400 font-medium">
-              {project.category}
-            </span>
-          </div>
-
           {/* Status badge */}
           <div
             className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border ${statusConfig.containerClass} shrink-0 transition-colors`}
@@ -291,13 +353,18 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
         <motion.div variants={childVariants} className="flex flex-wrap gap-2 mb-8">
           {tags.map((techItem) => {
             const Icon = getTechIcon(techItem);
+            const iconColor = getTechColor(techItem);
             return (
               <span
                 key={techItem}
                 className={`${mono.className} inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-medium text-neutral-300 bg-neutral-900/60 border border-neutral-800/80 transition-colors duration-200 group-hover:border-neutral-700/80`}
               >
                 {Icon && (
-                  <Icon className="w-3 h-3 text-neutral-400 shrink-0" aria-hidden="true" />
+                  <Icon
+                    className="w-3.5 h-3.5 shrink-0"
+                    style={{ color: iconColor }}
+                    aria-hidden="true"
+                  />
                 )}
                 <span>{techItem}</span>
               </span>
@@ -306,10 +373,10 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
         </motion.div>
       </div>
 
-      {/* Bottom Section (Divider, Role, and Footer Action Bar) */}
+      {/* Bottom Section (Role and Footer Action Bar) */}
       <motion.div
         variants={childVariants}
-        className="relative z-10 pt-5 border-t border-neutral-800/80 space-y-4 mt-auto"
+        className="relative z-10 space-y-4 mt-auto"
       >
         <p
           className={`${mono.className} text-[10px] sm:text-[11px] uppercase tracking-wider text-neutral-500 font-medium`}

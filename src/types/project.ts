@@ -13,6 +13,20 @@ export interface ProjectChallenge {
 export interface ProjectDecision {
   technology: string;
   reason: string;
+  tradeoff?: string;
+  outcome?: string;
+}
+
+export interface ProjectLearning {
+  index: string;
+  insight: string;
+  description?: string;
+}
+
+export interface ProjectMetric {
+  value: string;
+  label: string;
+  description: string;
 }
 
 export interface Project {
@@ -39,6 +53,8 @@ export interface Project {
   challenges: ProjectChallenge[];
   decisions: ProjectDecision[];
   results: string[];
+  learnings?: ProjectLearning[];
+  metrics?: ProjectMetric[];
   images?: string[];
   liveUrl?: string;
   demo?: string; // alias for backward compatibility

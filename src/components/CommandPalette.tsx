@@ -139,7 +139,7 @@ export const CommandPalette = () => {
         router.push("/#architecture-lab");
         closePalette();
       },
-      keywords: ["lab", "architecture", "flow", "topology", "aegis", "devmatch"],
+      keywords: ["lab", "architecture", "flow", "topology", "aegis"],
     },
     {
       id: "nav-work",
@@ -286,18 +286,6 @@ export const CommandPalette = () => {
         closePalette();
       },
       keywords: ["aegis", "resilience", "incident", "remediation", "docker"],
-    },
-    {
-      id: "cs-devmatch",
-      label: "Case Study: DevMatch",
-      category: "Case Studies",
-      description: "GitHub GraphQL repository intelligence pipeline",
-      icon: LuFolderGit2,
-      action: () => {
-        router.push("/work/devmatch");
-        closePalette();
-      },
-      keywords: ["devmatch", "github", "graphql", "pipeline", "skills"],
     },
     {
       id: "cs-simpui",
