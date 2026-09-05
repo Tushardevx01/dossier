@@ -12,32 +12,32 @@ interface ChallengeIntroItem {
 
 const CHALLENGES_INTRO: ChallengeIntroItem[] = [
   {
-    id: "split-brain",
+    id: "node-failure",
     number: "01",
-    tag: "CONSENSUS",
-    title: "Split-Brain & Lease Race Conditions",
-    teaser: "During transient network partitions, multiple scheduler instances could attempt to dispatch identical batch workloads to separate nodes, causing duplicate resource reservation and state corruption.",
-  },
-  {
-    id: "node-eviction",
-    number: "02",
     tag: "AVAILABILITY",
-    title: "Sub-Second Node Eviction & Workload Rescue",
-    teaser: "Compute instances experiencing kernel stalls or silent network drops leave tasks orphaned indefinitely without notifying the control plane.",
+    title: "Node Failure & Recovery",
+    teaser: "Nodes can disappear while jobs are assigned or actively running, requiring deterministic heartbeats, grace periods, and workload requeuing.",
   },
   {
-    id: "goroutine-exhaustion",
+    id: "stale-results",
+    number: "02",
+    tag: "CONSISTENCY",
+    title: "Stale Execution Results",
+    teaser: "A recovered job must strictly reject results from an older execution attempt if a severed worker completes after cluster reassignment.",
+  },
+  {
+    id: "concurrent-mutation",
     number: "03",
     tag: "CONCURRENCY",
-    title: "Goroutine Exhaustion Under Burst Traffic",
-    teaser: "Unchecked incoming dispatch streams spawn tens of thousands of goroutines, degrading Go garbage collection cycles and increasing latency.",
+    title: "Concurrent State Mutation",
+    teaser: "Claims, results, scheduler operations, and registries must remain strictly consistent under concurrent parallel worker traffic.",
   },
   {
-    id: "graceful-drain",
+    id: "bounded-retries",
     number: "04",
-    tag: "LIFECYCLE",
-    title: "Graceful Termination During Deployments",
-    teaser: "Restarting node daemons during maintenance cycles risks severing running container workloads mid-computation without proper state flushing.",
+    tag: "RELIABILITY",
+    title: "Bounded Retries",
+    teaser: "Failures must recover automatically without triggering unbounded retry storms or infinite execution loops on faulty workloads.",
   },
 ];
 
@@ -47,7 +47,7 @@ export const CaseStudyChallenges = () => {
       {/* Section Header */}
       <div className="space-y-2 pb-3 border-b border-neutral-900">
         <span className={`${mono.className} text-[11px] tracking-[0.25em] text-neutral-500 uppercase font-semibold block`}>
-          04 // HARD PROBLEMS
+          06 // ENGINEERING CHALLENGES
         </span>
         <h2 className={`${nasalization.className} text-2xl sm:text-3xl md:text-4xl font-bold text-white uppercase tracking-tight`}>
           ENGINEERING CHALLENGES
@@ -55,7 +55,7 @@ export const CaseStudyChallenges = () => {
       </div>
 
       <p className="text-sm sm:text-base text-neutral-300 font-sans max-w-3xl leading-relaxed">
-        The primary failure modes encountered when scaling autonomous execution loops across unpredictable cloud infrastructure.
+        Four fundamental distributed systems challenges encountered when coordinating uncoordinated compute workers across network boundaries.
       </p>
 
       {/* Compact Numbered Challenge List */}

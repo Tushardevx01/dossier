@@ -17,13 +17,13 @@ export const CaseStudyFooter = ({ project, nextProject }: CaseStudyFooterProps) 
       <div className="p-6 sm:p-8 rounded-xl border border-neutral-800 bg-[#070709] flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-1.5 max-w-xl">
           <span className={`${mono.className} text-[11px] tracking-[0.25em] text-emerald-400 uppercase font-semibold block`}>
-            11 // OPEN REPOSITORY
+            20 // OPEN REPOSITORY
           </span>
           <h2 className={`${nasalization.className} text-xl sm:text-2xl md:text-3xl font-bold text-white uppercase tracking-tight`}>
             THE IMPLEMENTATION IS OPEN.
           </h2>
           <p className="text-xs sm:text-sm text-neutral-400 font-sans leading-relaxed">
-            Inspect the Go source code, min-heap scheduler routines, Docker container hooks, and Redis Redlock lease implementation.
+            Inspect the Go source code, deterministic scheduler cursor, ExecutionID fencing gates, Docker/Podman agent loops, and the PostgreSQL V2 transactional foundation on GitHub.
           </p>
         </div>
 

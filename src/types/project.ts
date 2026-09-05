@@ -41,7 +41,7 @@ export interface Project {
   role: string;
   year: string;
   timeline: string;
-  status: "Production" | "Active" | "Archived" | "Open Source";
+  status: "Production" | "Active" | "Active Development" | "Archived" | "Open Source";
   technologies: string[];
   tech: string[]; // alias for backward compatibility
   problem: string;

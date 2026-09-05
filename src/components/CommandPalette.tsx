@@ -277,7 +277,7 @@ export const CommandPalette = () => {
     },
     {
       id: "cs-aegis",
-      label: "Case Study: Project Aegis",
+      label: "Case Study: Aegis",
       category: "Case Studies",
       description: "Autonomous infrastructure resilience and self-healing",
       icon: LuLayers,

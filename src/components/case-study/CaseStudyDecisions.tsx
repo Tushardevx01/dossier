@@ -7,44 +7,51 @@ interface DecisionItem {
   badge: string;
   why: string;
   tradeoff: string;
-  result: string;
+  outcome: string;
 }
 
 const DECISION_RECORDS: DecisionItem[] = [
   {
-    tech: "Go (Golang)",
+    tech: "Go",
     badge: "CORE RUNTIME",
-    why: "Predictable low-latency garbage collection, zero-overhead binary packaging, and first-class goroutines/channels.",
-    tradeoff: "Explicit concurrency management requires disciplined bounded worker pool budgets and channel leak guards.",
-    result: "Sub-millisecond scheduling dispatch with a predictable, constant memory envelope under burst traffic.",
+    why: "Concurrency primitives, explicit control over execution, low memory overhead, and single binary deployment across Linux hosts.",
+    tradeoff: "More explicit lifecycle and state management required compared to heavy actor framework runtimes.",
+    outcome: "Clean, portable binaries with microsecond goroutine synchronization and zero runtime dependencies.",
   },
   {
-    tech: "Docker Engine API & cgroups v2",
-    badge: "WORKER ISOLATION",
-    why: "Hard kernel-level multi-tenant CPU throttling and memory ceilings preventing rogue customer workload exhaustion.",
-    tradeoff: "Requires local Unix socket permissions and strict host kernel cgroups v2 hierarchy support.",
-    result: "Rigid task sandboxes with automated POSIX SIGKILL runaway watchdog protection.",
+    tech: "In-Memory Registries (V1)",
+    badge: "STATE ENGINE",
+    why: "Keep initial cluster architecture lightweight, deterministic, and free of external database overhead.",
+    tradeoff: "Control plane restart loses runtime state, requiring agent re-registration and job requeueing.",
+    outcome: "Crystal-clear state machine contracts that established the exact transactional boundaries needed for V2.",
   },
   {
-    tech: "Concurrent Min-Heap Scheduler",
+    tech: "HTTP Polling Architecture",
+    badge: "NETWORK TOPOLOGY",
+    why: "Agents do not require inbound listening ports, public IPs, or firewall punching; all connections are outbound.",
+    tradeoff: "Execution coordination and dispatch latency are bounded by periodic polling intervals.",
+    outcome: "Resilient perimeter security where agents safely run across arbitrary private clouds and edge devices.",
+  },
+  {
+    tech: "ExecutionID Fencing",
+    badge: "EXECUTION SAFETY",
+    why: "Separates logical job identity from individual physical execution attempts across nodes.",
+    tradeoff: "Demands per-attempt execution tracking, state generation counters, and rigorous fencing validation.",
+    outcome: "Completely prevents stale worker results from overwriting state after node failure and reassignment.",
+  },
+  {
+    tech: "Round-Robin Scheduler",
     badge: "PLACEMENT ENGINE",
-    why: "O(log N) node capacity selection evaluating real-time memory envelopes and idle CPU metrics.",
-    tradeoff: "Scheduler min-heap requires reliable periodic heartbeat telemetry to maintain accurate scoring.",
-    result: "Instantaneous placement selection without head-of-line blocking or scheduling starvations.",
+    why: "Provides predictable, starvation-free, deterministic node assignment via a sorted ID ring and persistent cursor.",
+    tradeoff: "V1 placement is not dynamic resource-aware and does not balance CPU/RAM utilization.",
+    outcome: "Deterministic testability and zero starvation across heterogeneous worker nodes.",
   },
   {
-    tech: "Redis 7.x & Redlock Mutex",
-    badge: "CONSENSUS & LEASE",
-    why: "Sub-millisecond distributed lock acquisition with atomic SET NX EX semantics and deterministic 5000ms TTLs.",
-    tradeoff: "Demands tight clock synchronization (NTP) across nodes to prevent premature lease expiration.",
-    result: "Globally mutually exclusive task execution with zero split-brain duplicate dispatch.",
-  },
-  {
-    tech: "Apache Kafka Event Bus",
-    badge: "DURABILITY LOG",
-    why: "Partitioned, persistent event log allowing historical replay during node recovery and guaranteed at-least-once delivery.",
-    tradeoff: "Higher operational overhead and broker infrastructure compared to ephemeral in-memory queues.",
-    result: "Zero dropped jobs during simulated 40% packet-loss network partition events.",
+    tech: "PostgreSQL V2 Foundation",
+    badge: "PERSISTENCE EVOLUTION",
+    why: "Move authoritative state toward durable transactional storage with ACID guarantees.",
+    tradeoff: "Introduces external database dependency and connection pool lifecycle management.",
+    outcome: "Durable state, SELECT FOR UPDATE row-level locking, and SQL-level execution fencing for production clusters.",
   },
 ];
 
@@ -54,7 +61,7 @@ export const CaseStudyDecisions = () => {
       {/* Section Header */}
       <div className="space-y-2 pb-3 border-b border-neutral-900">
         <span className={`${mono.className} text-[11px] tracking-[0.25em] text-neutral-500 uppercase font-semibold block`}>
-          07 // ENGINEERING DECISIONS
+          12 // ARCHITECTURAL CHOICES
         </span>
         <h2 className={`${nasalization.className} text-2xl sm:text-3xl md:text-4xl font-bold text-white uppercase tracking-tight`}>
           TECHNICAL DECISIONS
@@ -62,17 +69,17 @@ export const CaseStudyDecisions = () => {
       </div>
 
       <p className="text-sm sm:text-base text-neutral-300 font-sans max-w-3xl leading-relaxed">
-        Why each technology was chosen, what operational trade-offs were accepted, and the verified result delivered in production.
+        Deliberate engineering trade-offs: why each architectural path was chosen, the operational costs accepted, and the delivered outcome.
       </p>
 
       {/* Decision Records Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-1">
         {DECISION_RECORDS.map((item) => (
           <div
             key={item.tech}
-            className="p-5 rounded-xl border border-neutral-800 bg-[#070709] hover:border-neutral-700 transition-colors flex flex-col justify-between space-y-4"
+            className="p-5 rounded-xl border border-neutral-800 bg-[#070709] hover:border-neutral-700 transition-colors flex flex-col justify-between space-y-3"
           >
-            <div className="space-y-3">
+            <div className="space-y-2.5">
               <div className="flex items-center justify-between pb-2 border-b border-neutral-900">
                 <h3 className={`${nasalization.className} text-sm sm:text-base font-bold text-white uppercase tracking-wide`}>
                   {item.tech}
@@ -87,30 +94,26 @@ export const CaseStudyDecisions = () => {
                 <span className="font-mono text-[10px] text-neutral-500 uppercase tracking-wider block font-semibold">
                   WHY
                 </span>
-                <p className="text-xs sm:text-[13px] text-neutral-300 font-sans leading-relaxed">
+                <p className="text-xs text-neutral-300 font-sans leading-relaxed">
                   {item.why}
                 </p>
               </div>
 
               {/* TRADE-OFF */}
-              <div className="space-y-0.5 pt-2 border-t border-neutral-900">
+              <div className="space-y-0.5 pt-1.5 border-t border-neutral-900">
                 <span className="font-mono text-[10px] text-amber-400/90 uppercase tracking-wider block font-semibold">
                   TRADE-OFF
                 </span>
-                <p className="text-xs sm:text-[13px] text-neutral-400 font-sans leading-relaxed font-light">
+                <p className="text-xs text-neutral-400 font-sans leading-relaxed font-light">
                   {item.tradeoff}
                 </p>
               </div>
             </div>
 
-            {/* RESULT */}
-            <div className="p-3 rounded-lg bg-neutral-900/50 border border-neutral-800/80 space-y-0.5">
-              <span className="font-mono text-[10px] text-emerald-400 uppercase tracking-wider block font-semibold">
-                RESULT
-              </span>
-              <p className="text-xs text-neutral-200 font-sans leading-relaxed">
-                {item.result}
-              </p>
+            {/* OUTCOME */}
+            <div className="pt-2 border-t border-neutral-900 font-mono text-[11px] text-neutral-300">
+              <span className="text-emerald-400 font-bold mr-1">OUTCOME:</span>
+              <span className="font-sans text-xs text-neutral-300">{item.outcome}</span>
             </div>
           </div>
         ))}

@@ -6,186 +6,205 @@ export const projectsData: Project[] = [
     slug: "runstack",
     name: "RunStack",
     title: "RunStack",
-    subtitle: "Distributed Deployment & Job Orchestration Platform",
+    subtitle: "Distributed Job Execution & Application Orchestration Platform",
     description:
-      "Distributed deployment and job orchestration platform designed for fault-tolerant task execution across heterogeneous worker nodes.",
+      "Lightweight distributed job execution and application orchestration platform built in Go, designed for deterministic scheduling, container isolation, and execution-fenced failure recovery.",
     category: "Distributed Systems & Infrastructure",
     role: "Lead Systems Architect & Core Developer",
     year: "2026",
     timeline: "Jan 2026 — Present",
-    status: "Active",
-    technologies: ["Go", "Docker Engine API", "Protobuf", "Linux cgroups"],
-    tech: ["Go","Docker"],
+    status: "Active Development",
+    technologies: ["Go", "Docker / Podman", "HTTP", "PostgreSQL", "Linux"],
+    tech: ["Go", "Docker"],
     problem:
-      "Modern compute workloads distributed across multi-node clouds suffer from inconsistent state coordination, worker starvation under load bursts, split-brain race conditions during node partitions, and unhandled task dropouts when compute nodes abruptly crash.",
+      "Running work across multiple machines introduces critical distributed coordination challenges: node dropouts during execution, worker starvation, stale workers reporting outdated results after recovery, and state desynchronization between desired application state and physical runtime state.",
     approach:
-      "Designed a decoupled, control-plane-driven cluster topology. An admission gateway verifies idempotent client manifests before submitting intent to a partitioned Kafka event log. A centralized scheduler computes node placement using real-time capacity heaps, while local Go daemons monitor cgroups, renew Redis-backed leases, and enforce deterministic task boundaries.",
+      "Designed a decoupled, control-plane-driven cluster topology. A trusted Control Plane owns authoritative state, deterministic round-robin scheduling, and reconciliation. Thin Go agents discover host nodes, claim tasks, isolate executions within Docker or Podman, and enforce ExecutionID fencing to reject stale results.",
     architecture: {
-      flowSummary: "Client (gRPC) → Control Plane → Scheduler → Job Registry → Node Daemon → Isolated Container Worker",
+      flowSummary: "CLI / HTTP → Control Plane (Registries & Schedulers) → Agent (Heartbeat & Poll) → Docker / Podman",
       layers: [
         {
-          name: "Client Layer",
-          role: "Workload Ingestion & Request Signing",
-          tech: "gRPC Client SDK / REST Gateway with SHA-256 Idempotency",
+          name: "Client / Operator Layer",
+          role: "Workload Ingestion & Application Specs",
+          tech: "CLI / HTTP Client REST API",
         },
         {
-          name: "Control Plane",
-          role: "Cluster Admission & Policy Validation",
-          tech: "Go / gRPC Service / Token-Bucket Rate Limiter",
+          name: "Control Plane API",
+          role: "Admission, Request Routing & Validation",
+          tech: "Go HTTP Server / net/http Router",
         },
         {
-          name: "Event Bus",
-          role: "Ordered Workload Dispatch & Buffer",
-          tech: "Apache Kafka Partitioned Log",
+          name: "Authoritative Registries",
+          role: "Centralized State Management",
+          tech: "In-Memory sync.RWMutex (V1) / PostgreSQL V2 Foundation",
         },
         {
-          name: "Scheduler",
-          role: "Capacity Scoring & Placement Matrix",
-          tech: "Go Concurrent Min-Heap / Resource Matcher",
+          name: "Job & Instance Schedulers",
+          role: "Deterministic Work Placement",
+          tech: "Sorted Online Node Ring / Persistent Round-Robin Cursor",
         },
         {
-          name: "State Engine",
-          role: "Distributed Locking & Lease Verification",
-          tech: "Redis 7.x Redlock + AOF Persistence",
+          name: "Application Reconciler",
+          role: "Desired vs Actual State Convergence",
+          tech: "Go Reconciler Loop / Instance Replacement Watchdog",
         },
         {
-          name: "Node Supervisor",
-          role: "Host Daemon & Heartbeat Prober",
-          tech: "Go Daemon / Docker Engine Socket",
+          name: "Node Agent",
+          role: "Host Daemon, Heartbeat & Polling Worker",
+          tech: "Go Daemon / Registration & Claim Loop",
         },
         {
-          name: "Worker Sandbox",
-          role: "Isolated Task Execution",
-          tech: "Docker Containers / Linux cgroups v2 / SIGKILL Watchdog",
+          name: "Container Runtime",
+          role: "Isolated Task & Instance Execution",
+          tech: "Docker / Podman CLI & Container API",
         },
       ],
     },
     challenges: [
       {
-        title: "Split-Brain & Lease Race Conditions",
+        title: "Node Failure & Recovery",
         description:
-          "During transient network partitions, two scheduler instances could attempt to dispatch the same heavy batch workload to separate nodes, causing duplicate resource reservation.",
+          "Compute instances can disappear while jobs are assigned or actively running, risking stalled tasks or duplicate concurrent execution.",
         solution:
-          "Implemented distributed Redlock mutexes in Redis with deterministic lease TTLs (5000ms) and conditional Compare-And-Swap (CAS) state updates in the Job Registry.",
+          "Engineered heartbeat monitoring (1000ms loop) with offline detection. Stalled jobs transition through a grace period back to PENDING for rescheduling.",
       },
       {
-        title: "Sub-Second Node Eviction & Workload Rescue",
+        title: "Stale Execution Results",
         description:
-          "Compute instances experiencing kernel freezes or network loss could stall assigned tasks indefinitely without notifying the control plane.",
+          "A recovered job reassigned to a new worker must strictly reject late-arriving results from an older partitioned execution attempt.",
         solution:
-          "Engineered a sliding-window failure detector on 1000ms ticks. If a node misses 3 consecutive heartbeats (3000ms threshold), it transitions to DEGRADED; at 5000ms it is EVICTED and active tasks are automatically requeued with exponential jitter.",
+          "Separated logical JobID from attempt ExecutionID. The Control Plane verifies the active ExecutionID and rejects stale submissions.",
       },
       {
-        title: "Goroutine Exhaustion Under Burst Traffic",
+        title: "Concurrent State Mutation",
         description:
-          "Unchecked incoming dispatch streams could spawn tens of thousands of goroutines, degrading scheduler garbage collection and increasing latency.",
+          "Claims, results, heartbeat updates, and scheduler operations must remain consistent without race conditions under parallel agent traffic.",
         solution:
-          "Adopted bounded worker pools with non-blocking channel selectors and drop-guards to regulate concurrency and maintain constant memory envelopes under high RPS.",
+          "Protected registry transitions with explicit state validation and sync.RWMutex read/write locking, verified with `go test -race`.",
       },
       {
-        title: "Graceful Termination During Rolling Deployments",
+        title: "Bounded Retries",
         description:
-          "Restarting node daemons during maintenance could sever executing worker containers mid-computation, corrupting persistent customer datasets.",
+          "Persistent infrastructure failures or failing application binaries could trigger infinite reschedule and retry loops.",
         solution:
-          "Trapped POSIX SIGTERM signals to initiate a 30-second drain mode: the node daemon rejects new leases, allows running containers to complete, and flushes output state before terminating.",
+          "Enforced a strict retry budget (`Attempts <= MaxRetries ? PENDING : FAILED`), bounding total lifetime executions to MaxRetries + 1.",
       },
     ],
     decisions: [
       {
         technology: "Go",
         reason:
-          "Chosen for its zero-overhead runtime, predictable garbage collection latencies, first-class goroutine concurrency primitives, and direct POSIX system call bindings.",
+          "Chosen for its first-class concurrency primitives, zero-dependency single binary deployment, and low memory overhead.",
         tradeoff:
-          "Requires manual goroutine pool budgeting and non-blocking leak guards rather than managed actor runtime abstractions.",
+          "Requires manual lifecycle management, goroutine budgeting, and explicit state synchronization.",
         outcome:
-          "Sub-millisecond scheduling dispatch with a predictable, constant memory envelope under high-volume burst traffic.",
+          "Predictable microsecond state coordination and clean portable agent binaries across heterogeneous Linux hosts.",
       },
       {
-        technology: "Kafka",
+        technology: "In-Memory Registries (V1)",
         reason:
-          "Selected over RabbitMQ for persistent partitioned event logs, allowing historical event replay during disaster recovery and guaranteed at-least-once message delivery.",
+          "Keeps initial runtime architecture lightweight, fast, and completely free of external database dependencies.",
         tradeoff:
-          "Higher operational footprint and stateful broker management compared to lightweight in-memory queues.",
+          "Control Plane restarts forfeit active in-memory state, requiring node and agent re-registration.",
         outcome:
-          "Zero workload loss during node partition failures, enabling safe offline queueing and partition replay.",
+          "Clean deterministic state machine foundations that map cleanly to durable PostgreSQL storage in V2.",
       },
       {
-        technology: "Redis",
+        technology: "HTTP Polling Architecture",
         reason:
-          "Used specifically for sub-millisecond distributed lock acquisition (Redlock) and ephemeral lease keys with atomic SET NX EX semantics.",
+          "Allows agents to operate behind NAT firewalls without requiring inbound listening ports or public IP addresses.",
         tradeoff:
-          "Requires strict clock drift synchronization across Redis instances to prevent premature lease expiration.",
+          "Execution dispatch latency is bounded by polling intervals rather than immediate push notifications.",
         outcome:
-          "Deterministic 5000ms distributed lease locking that eliminates split-brain dual dispatch entirely.",
+          "Simple, resilient network boundary requiring only outbound egress from worker agents to the Control Plane.",
       },
       {
-        technology: "Docker Engine API & cgroups v2",
+        technology: "ExecutionID Fencing",
         reason:
-          "Enables strict memory and CPU throttling per worker process, preventing rogue customer workloads from exhausting host resources.",
+          "Distinguishes the permanent logical job definition from individual physical execution attempts.",
         tradeoff:
-          "Demands host kernel cgroups v2 support and direct socket access with granular daemon isolation.",
+          "Demands per-attempt execution tracking, state generation counters, and rigorous fencing checks on completion.",
         outcome:
-          "Hard kernel-enforced multi-tenant resource boundaries with automated POSIX SIGKILL runaway task watchdogs.",
+          "Eliminates split-brain result corruption without requiring complex distributed consensus protocols.",
+      },
+      {
+        technology: "Deterministic Round-Robin",
+        reason:
+          "Ensures predictable, reproducible work distribution across all healthy ONLINE nodes via sorted IDs and persistent cursor.",
+        tradeoff:
+          "V1 does not factor in dynamic CPU/RAM utilization when choosing the target worker node.",
+        outcome:
+          "Deterministic testability and zero starvation across heterogeneous worker nodes.",
+      },
+      {
+        technology: "PostgreSQL V2 Foundation",
+        reason:
+          "Provides ACID transactions, row-level locking (`SELECT FOR UPDATE`), and SQL-level execution fencing for durable state.",
+        tradeoff:
+          "Introduces an external database dependency and connection pool lifecycle management.",
+        outcome:
+          "Durable persistence and rock-solid concurrent locking for production cluster state.",
       },
     ],
     results: [
-      "Zero dropped jobs recorded during simulated 40% packet-loss network partitions.",
-      "Sub-second node eviction window (3.2 seconds average detection to task rescue).",
-      "Passed `go test -race -count=100` across 500 simulated concurrent worker routines with zero race warnings.",
-      "Deterministic 24-hour request replay protection via SHA-256 idempotency cache.",
+      "Authoritative Control Plane: all job and instance state transitions are centrally validated and controlled.",
+      "Execution-Aware Fencing: stale results from orphaned or delayed executions are deterministically rejected.",
+      "Deterministic Scheduling: online nodes are sorted and assigned via a persistent round-robin cursor.",
+      "Bounded Failure Recovery: node heartbeats and execution timeouts return orphaned work to the scheduling pool.",
+      "Race-Safe Registries: synchronized state machines verified clean with Go race detector (`go test -race`).",
     ],
     metrics: [
       {
-        value: "0",
-        label: "RACE CONDITIONS",
-        description: "Zero race warnings across 500 simulated concurrent worker routines via `go test -race -count=100`.",
+        value: "01",
+        label: "CONTROL PLANE",
+        description: "Authoritative central state engine with explicit state transition validation and rejection of invalid states.",
       },
       {
-        value: "3.2s",
-        label: "EVICTION WINDOW",
-        description: "Average sliding-window heartbeat detection to automatic task rescue across worker nodes.",
+        value: "02",
+        label: "EXECUTION FENCING",
+        description: "Unique ExecutionID per attempt guarantees stale results from severed workers are rejected upon node recovery.",
       },
       {
-        value: "100%",
-        label: "PARTITION SURVIVAL",
-        description: "Zero dropped jobs recorded during simulated 40% packet-loss network partitions.",
+        value: "03",
+        label: "BOUNDED RETRIES",
+        description: "Strict Attempts <= MaxRetries budget prevents infinite failure retry loops across partitioned workers.",
       },
       {
-        value: "24h",
-        label: "IDEMPOTENCY CACHE",
-        description: "Deterministic duplicate execution protection via SHA-256 request signature caching.",
+        value: "04",
+        label: "DETERMINISTIC",
+        description: "Sorted online node ring with persistent cursor prevents starvation and provides predictable assignment.",
       },
     ],
     learnings: [
       {
         index: "01",
-        insight: "Distributed systems fail at boundaries, not only at components.",
+        insight: "Execution identity must be decoupled from job identity.",
         description:
-          "The most catastrophic failures in cluster orchestration happen between network transitions, clock skew, and partition recoveries—not inside individual service functions.",
+          "In distributed environments, assuming JobID == Execution leads directly to result corruption when nodes stall. Execution fencing is essential.",
       },
       {
         index: "02",
-        insight: "Observability is part of the core architecture, not an afterthought.",
+        insight: "Deterministic scheduling simplifies failure reasoning.",
         description:
-          "Without deterministic sliding-window heartbeat state tracking and structured transition telemetry, a control plane cannot reliably distinguish between a dead worker node and a transient network latency spike.",
+          "Sorting online node keys and maintaining a persistent cursor eliminates non-deterministic scheduling bugs during automated cluster recovery.",
       },
       {
         index: "03",
-        insight: "Graceful failure is a fundamental feature.",
+        insight: "Explicit trade-offs create durable architectures.",
         description:
-          "Systems must be engineered to fail deterministically. With 30-second POSIX SIGTERM drain loops, bounded worker channels, and idempotent retry keys, recovery is a routine operational state.",
+          "Prototyping state transitions in-memory with strict mutexes established the exact transactional boundaries needed for PostgreSQL V2.",
       },
     ],
-    githubUrl: "https://github.com/tushardevx01/runstack",
-    github_link: "https://github.com/tushardevx01/runstack",
-    liveUrl: "https://github.com/tushardevx01/runstack",
-    demo: "https://github.com/tushardevx01/runstack",
+    githubUrl: "https://github.com/Tushardevx01/Runstack",
+    github_link: "https://github.com/Tushardevx01/Runstack",
+    liveUrl: "https://github.com/Tushardevx01/Runstack",
+    demo: "https://github.com/Tushardevx01/Runstack",
   },
   {
     id: "project-aegis",
     slug: "project-aegis",
-    name: "Project Aegis",
-    title: "Project Aegis",
+    name: "Aegis",
+    title: "Aegis",
     subtitle: "Autonomous Infrastructure & Incident Recovery Engine",
     description:
       "Autonomous infrastructure resilience and incident remediation engine that parses system telemetry and executes self-healing workflows.",

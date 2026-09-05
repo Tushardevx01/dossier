@@ -4,52 +4,84 @@ import { nasalization, mono } from "@/app/fonts";
 import { AsciiDiagram } from "./AsciiDiagram";
 
 const SYSTEM_ARCHITECTURE_ASCII = `
-                             ┌─────────────────────────────────────────────┐
-                             │                CONTROL PLANE                │
-                             │                                             │
-                             │  gRPC API Gateway       Token-Bucket Rate   │
-                             │  Kafka Log Buffer       Min-Heap Scheduler  │
-                             │  Redis Redlock Engine   Lease Coordinator   │
-                             └──────────────────────┬──────────────────────┘
-                                                    │
-                                        Signed Workload Dispatch
-                                                    │
-                     ┌──────────────────────────────┴──────────────────────────────┐
-                     │                                                             │
-                     ▼                                                             ▼
-          ┌─────────────────────┐                                       ┌─────────────────────┐
-          │     NODE HOST A     │                                       │     NODE HOST B     │
-          │                     │                                       │                     │
-          │  Go Host Daemon     │                                       │  Go Host Daemon     │
-          │  Heartbeat Prober   │                                       │  Heartbeat Prober   │
-          │  Docker Socket      │                                       │  Docker Socket      │
-          └──────────┬──────────┘                                       └──────────┬──────────┘
-                     │                                                             │
-                     ▼                                                             ▼
-          ┌─────────────────────┐                                       ┌─────────────────────┐
-          │   WORKER SANDBOX    │                                       │   WORKER SANDBOX    │
-          │                     │                                       │                     │
-          │  Docker Container   │                                       │  Docker Container   │
-          │  cgroups v2 Throttl │                                       │  cgroups v2 Throttl │
-          │  SIGKILL Watchdog   │                                       │  SIGKILL Watchdog   │
-          └──────────┬──────────┘                                       └──────────┬──────────┘
-                     │                                                             │
-                     └──────────────────────────────┬──────────────────────────────┘
-                                                    ▼
-                                      RESULT RECEIPT / HEARTBEAT
-                                                    │
-                                                    ▼
-                                              CONTROL PLANE
+                              CLI
+                               │
+                               │ HTTP
+                               ▼
+        ┌─────────────────────────────────────────┐
+        │              CONTROL PLANE              │
+        │                                         │
+        │  HTTP API                               │
+        │      │                                  │
+        │      ├──── Node Registry                │
+        │      │                                  │
+        │      ├──── Job Registry                 │
+        │      │                                  │
+        │      ├──── Application Registry         │
+        │      │                                  │
+        │      ├──── Deployment Registry          │
+        │      │                                  │
+        │      ├──── Instance Registry            │
+        │      │                                  │
+        │      ├──── Job Scheduler                │
+        │      │                                  │
+        │      ├──── Instance Scheduler           │
+        │      │                                  │
+        │      └──── Instance Reconciler          │
+        │                                         │
+        └──────────────────┬──────────────────────┘
+                           │
+                           │ HTTP
+                           ▼
+                 ┌─────────────────────┐
+                 │        AGENT        │
+                 │                     │
+                 │ Registration        │
+                 │ Heartbeat           │
+                 │ Job Polling         │
+                 │ Job Claiming        │
+                 │ Job Execution       │
+                 │ Result Reporting    │
+                 │ Instance Execution  │
+                 └──────────┬──────────┘
+                            │
+                            ▼
+                    ┌───────────────┐
+                    │ Docker/Podman │
+                    └───────────────┘
 `;
 
-const DATA_FLOW_STEPS = [
-  { step: "01", title: "Job Submitted", detail: "Client signs manifest with SHA-256 and submits to gRPC admission gateway." },
-  { step: "02", title: "Job Registered", detail: "Control plane enforces token-bucket quota and commits intent to partitioned Kafka log." },
-  { step: "03", title: "Scheduler Selects Node", detail: "Concurrent min-heap evaluates real-time memory and CPU scores to pick the optimal host." },
-  { step: "04", title: "Agent Claims Execution", detail: "Node daemon acquires Redis Redlock mutex (5000ms TTL) to prevent split-brain dual dispatch." },
-  { step: "05", title: "Worker Executes", detail: "Daemon spawns Docker container sandbox constrained by hard Linux cgroups v2 limits." },
-  { step: "06", title: "Result Reported", detail: "Container terminates; exit status and execution logs are flushed back to the control plane." },
-  { step: "07", title: "Registry Updates State", detail: "Redis lease is committed, state transitions to COMPLETED, and receipt is cached for 24 hours." },
+const ARCHITECTURE_ANNOTATIONS = [
+  {
+    tag: "01",
+    label: "HTTP API Gateway",
+    detail: "Provides REST endpoints for job admission, app deployment manifests, node registrations, polling, and heartbeat reporting.",
+  },
+  {
+    tag: "02",
+    label: "Centralized Registries",
+    detail: "Maintains authoritative in-memory state (V1) protected by sync.RWMutex: Node, Job, Application, Deployment, and Instance stores.",
+  },
+  {
+    tag: "03",
+    label: "Deterministic Schedulers",
+    detail: "Dispatches jobs and instances to healthy online nodes using a sorted node ID ring and a persistent round-robin cursor.",
+  },
+  {
+    tag: "04",
+    label: "Application Reconciler",
+    detail: "Continuous control loop comparing desired instances from immutable deployments against actual runtime instance status.",
+  },
+  {
+    tag: "05",
+    label: "Thin Worker Agents",
+    detail: "Autonomous host daemons that report capabilities, pulse 1000ms heartbeats, claim work atomically, and run tasks locally.",
+  },
+  {
+    tag: "06",
+    label: "Container Runtime Sandbox",
+    detail: "Directly drives Docker or Podman on the host node for strict process isolation, CPU/memory quotas, and exit code extraction.",
+  },
 ];
 
 export const CaseStudyArchitecture = () => {
@@ -66,43 +98,36 @@ export const CaseStudyArchitecture = () => {
       </div>
 
       <p className="text-sm sm:text-base text-neutral-300 font-sans max-w-3xl leading-relaxed">
-        Decoupled cluster topology separating ingress validation, distributed message durability, concurrent placement scoring, and local kernel sandbox boundaries.
+        RunStack couples an authoritative control plane with lightweight worker agents over HTTP. State, scheduling, and reconciliation remain strictly centralized, while agents manage local execution.
       </p>
 
       {/* Large System Architecture ASCII Diagram */}
       <div className="pt-2">
         <AsciiDiagram
-          title="RUNSTACK TOPOLOGY ARCHITECTURE"
-          badge="PRODUCTION BLUEPRINT"
+          title="RUNSTACK ARCHITECTURAL TOPOLOGY"
+          badge="AUTHORITATIVE CONTROL PLANE"
           content={SYSTEM_ARCHITECTURE_ASCII}
-          caption="Full cluster interaction loop from gRPC ingestion down to host Docker sockets and cgroups v2."
+          caption="Unidirectional control plane topology with centralized registries, schedulers, and reconcilers driving thin host agents."
           className="border-neutral-800"
         />
       </div>
 
-      {/* 7-Step Compact Data Flow Explanation */}
-      <div className="pt-4 space-y-3">
-        <div className="flex items-center justify-between pb-2 border-b border-neutral-900 font-mono text-xs text-neutral-500 uppercase tracking-wider">
-          <span>STEP-BY-STEP DATA FLOW SEQUENCE</span>
-          <span>7 PHASES</span>
-        </div>
-
-        <div className="grid grid-cols-1 gap-2 font-mono text-xs">
-          {DATA_FLOW_STEPS.map((item) => (
-            <div
-              key={item.step}
-              className="p-3 rounded-lg border border-neutral-900 bg-neutral-950/60 flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4 hover:border-neutral-800 transition-colors"
-            >
-              <div className="flex items-center gap-2 shrink-0">
-                <span className="text-emerald-400 font-bold text-[11px]">{item.step}</span>
-                <span className="text-white font-semibold">{item.title}:</span>
-              </div>
-              <span className="text-neutral-400 font-sans text-xs sm:text-[13px] leading-relaxed">
-                {item.detail}
-              </span>
+      {/* Architecture Annotations Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 pt-2 font-mono text-xs">
+        {ARCHITECTURE_ANNOTATIONS.map((ann) => (
+          <div
+            key={ann.tag}
+            className="p-3.5 rounded-lg bg-neutral-950 border border-neutral-900 space-y-1.5"
+          >
+            <div className="flex items-center gap-2">
+              <span className="text-emerald-400 font-bold">{ann.tag} //</span>
+              <span className="text-neutral-200 font-medium">{ann.label}</span>
             </div>
-          ))}
-        </div>
+            <p className="text-neutral-400 font-sans text-xs leading-relaxed">
+              {ann.detail}
+            </p>
+          </div>
+        ))}
       </div>
     </section>
   );

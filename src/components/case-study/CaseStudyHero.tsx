@@ -101,6 +101,25 @@ export const CaseStudyHero = ({ project }: CaseStudyHeroProps) => {
         >
           {project.subtitle}. {project.description}
         </motion.p>
+
+        {/* Lightweight Platform Scope Badges */}
+        <motion.div variants={itemVariants} className="flex flex-wrap gap-2 pt-1 max-w-3xl">
+          {[
+            "One-Off Job Execution",
+            "Node Management",
+            "Long-Running App Deployment",
+            "Container Lifecycle",
+            "Service Routing",
+            "Failure Recovery",
+          ].map((scope) => (
+            <span
+              key={scope}
+              className="px-2.5 py-1 rounded-md bg-neutral-900 border border-neutral-800 text-[11px] font-mono text-neutral-300"
+            >
+              {scope}
+            </span>
+          ))}
+        </motion.div>
       </div>
 
       {/* Metadata 4-Column Strip */}
@@ -126,7 +145,7 @@ export const CaseStudyHero = ({ project }: CaseStudyHeroProps) => {
         <div className="space-y-1">
           <span className="text-[10px] text-neutral-500 block uppercase tracking-wider font-semibold">CORE STACK</span>
           <span className="text-neutral-200 font-medium block leading-tight">
-            {project.technologies.slice(0, 3).join(" · ")}
+            Go · Docker/Podman · PostgreSQL
           </span>
         </div>
       </motion.div>

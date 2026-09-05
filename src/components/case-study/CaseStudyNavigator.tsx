@@ -9,17 +9,26 @@ export interface NavSection {
 }
 
 const SECTIONS: NavSection[] = [
-  { id: "problem", number: "01", label: "Problem" },
-  { id: "approach", number: "02", label: "Approach" },
+  { id: "problem", number: "01", label: "The Problem" },
+  { id: "approach", number: "02", label: "The Approach" },
   { id: "architecture", number: "03", label: "Architecture" },
-  { id: "challenges", number: "04", label: "Challenges" },
-  { id: "rigor", number: "05", label: "Rigor" },
-  { id: "solutions", number: "06", label: "Solutions" },
-  { id: "decisions", number: "07", label: "Decisions" },
-  { id: "states", number: "08", label: "States" },
-  { id: "results", number: "09", label: "Results" },
-  { id: "flow", number: "10", label: "Flow" },
-  { id: "source", number: "11", label: "Source" },
+  { id: "execution", number: "04", label: "Job Execution" },
+  { id: "ownership", number: "05", label: "Ownership" },
+  { id: "challenges", number: "06", label: "Challenges" },
+  { id: "rigor", number: "07", label: "Technical Rigor" },
+  { id: "solutions", number: "08", label: "Solutions" },
+  { id: "node-lifecycle", number: "09", label: "Node Lifecycle" },
+  { id: "app-model", number: "10", label: "App Model" },
+  { id: "instance-health", number: "11", label: "Instance Health" },
+  { id: "decisions", number: "12", label: "Decisions" },
+  { id: "interaction", number: "13", label: "Interaction" },
+  { id: "container-lifecycle", number: "14", label: "Containers" },
+  { id: "security", number: "15", label: "Security" },
+  { id: "outcomes", number: "16", label: "Outcomes" },
+  { id: "tradeoffs", number: "17", label: "Trade-offs" },
+  { id: "validation", number: "18", label: "Validation" },
+  { id: "flow", number: "19", label: "Job To Result" },
+  { id: "source", number: "20", label: "Source Code" },
 ];
 
 export const CaseStudyNavigator = () => {
@@ -99,7 +108,7 @@ export const CaseStudyNavigator = () => {
       {/* Desktop Sticky Index Sidebar */}
       <aside
         aria-label="Case study document index"
-        className="hidden lg:block sticky top-28 self-start w-48 shrink-0 select-none"
+        className="hidden lg:block sticky top-28 self-start w-52 shrink-0 select-none max-h-[calc(100vh-8rem)] overflow-y-auto pr-1 no-scrollbar"
       >
         <div className="space-y-3.5">
           <div className="flex items-center gap-2 pb-2 border-b border-neutral-900 text-[10px] uppercase tracking-[0.2em] text-neutral-500 font-mono font-semibold">

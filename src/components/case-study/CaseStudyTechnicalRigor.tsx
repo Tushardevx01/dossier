@@ -5,38 +5,48 @@ import { nasalization, mono } from "@/app/fonts";
 const RIGOR_ITEMS = [
   {
     discipline: "CONCURRENCY",
-    practice: "Bounded Worker Pools & Drop-Guards",
-    evidence: "Zero race warnings across 500 routines via `go test -race -count=100`.",
+    practice: "sync.RWMutex locks on all state stores",
+    evidence: "Race-safe registry access across parallel worker polling and mutation loops.",
   },
   {
-    discipline: "STATE CONSISTENCY",
-    practice: "Distributed Redlock & Atomic CAS",
-    evidence: "Deterministic 5000ms lease TTLs prevent multi-master split-brain dual dispatch.",
+    discipline: "STATE",
+    practice: "Explicit transition state machine validation",
+    evidence: "Centralized control plane rejects invalid state jumps (e.g. FAILED → RUNNING).",
   },
   {
-    discipline: "NODE HEALTH",
-    practice: "Sliding-Window Failure Detector",
-    evidence: "1000ms heartbeat ticks; degraded at 3000ms, sub-second eviction at 5000ms.",
+    discipline: "EXECUTION",
+    practice: "ExecutionID fencing tokens",
+    evidence: "Stale execution results from evicted or stalled workers are rejected at admission.",
   },
   {
-    discipline: "GRACEFUL SHUTDOWN",
-    practice: "POSIX SIGTERM 30s Drain Sequence",
-    evidence: "Lease rejection + running container completion before process termination.",
+    discipline: "RECOVERY",
+    practice: "Node heartbeat timeout detector",
+    evidence: "1000ms heartbeat loop detects severed nodes and rescues orphaned work.",
   },
   {
-    discipline: "PROCESS ISOLATION",
-    practice: "Linux cgroups v2 Kernel Ceilings",
-    evidence: "Hard CPU bandwidth throttling & memory hard limits with SIGKILL watchdog.",
+    discipline: "RETRY",
+    practice: "Attempts <= MaxRetries budget check",
+    evidence: "Guarantees finite retry ceiling, preventing infinite execution loops.",
   },
   {
-    discipline: "IDEMPOTENCY",
-    practice: "SHA-256 Manifest Signature Caching",
-    evidence: "Deterministic duplicate execution rejection with 24-hour receipt replay window.",
+    discipline: "SCHEDULING",
+    practice: "Deterministic round-robin cursor",
+    evidence: "Online nodes sorted deterministically by ID to prevent worker starvation.",
   },
   {
     discipline: "OBSERVABILITY",
-    practice: "Structured Lifecycle Telemetry",
-    evidence: "Explicit transition tracing across admission, scoring, leasing, and exit phases.",
+    practice: "Structured slog logging & event history",
+    evidence: "JSON-formatted contextual logging with append-only job lifecycle events.",
+  },
+  {
+    discipline: "SHUTDOWN",
+    practice: "Context cancellation propagation",
+    evidence: "Clean agent process termination with inflight task signaling and socket release.",
+  },
+  {
+    discipline: "TESTING",
+    practice: "go test, go test -race, go vet",
+    evidence: "Automated test harness verifying state transitions, race safety, and integration.",
   },
 ];
 
@@ -46,7 +56,7 @@ export const CaseStudyTechnicalRigor = () => {
       {/* Section Header */}
       <div className="space-y-2 pb-3 border-b border-neutral-900">
         <span className={`${mono.className} text-[11px] tracking-[0.25em] text-neutral-500 uppercase font-semibold block`}>
-          05 // SYSTEM DISCIPLINE
+          07 // TECHNICAL RIGOR
         </span>
         <h2 className={`${nasalization.className} text-2xl sm:text-3xl md:text-4xl font-bold text-white uppercase tracking-tight`}>
           TECHNICAL RIGOR
@@ -54,7 +64,7 @@ export const CaseStudyTechnicalRigor = () => {
       </div>
 
       <p className="text-sm sm:text-base text-neutral-300 font-sans max-w-3xl leading-relaxed">
-        System guarantees enforced through disciplined runtime primitives, strict kernel constraints, and automated verification suites.
+        System guarantees enforced through disciplined concurrency primitives, explicit state guards, and automated verification suites.
       </p>
 
       {/* Technical Matrix Table */}
