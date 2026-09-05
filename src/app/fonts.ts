@@ -36,3 +36,4 @@ export const quentine = localFont({
   variable: "--font-quentine",
   display: "swap",
 });
+

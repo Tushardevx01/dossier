@@ -100,6 +100,79 @@ async function bootstrapEngineeringNotesTable() {
   `;
 }
 
+async function bootstrapCaseStudiesTable() {
+  if (!client) {
+    throw new Error('Database client is not initialized');
+  }
+
+  await client`
+    DO $$
+    BEGIN
+      IF NOT EXISTS (
+        SELECT 1
+        FROM information_schema.tables
+        WHERE table_schema = 'public'
+          AND table_name = 'case_studies'
+      ) THEN
+        CREATE TABLE case_studies (
+          id SERIAL PRIMARY KEY,
+          slug VARCHAR(255) NOT NULL UNIQUE,
+          title VARCHAR(255) NOT NULL,
+          subtitle TEXT NOT NULL,
+          excerpt TEXT NOT NULL,
+          content TEXT NOT NULL,
+          category VARCHAR(100) NOT NULL,
+          level VARCHAR(50) NOT NULL DEFAULT 'Advanced',
+          read_time INTEGER NOT NULL DEFAULT 8,
+          date TEXT NOT NULL,
+          tags JSONB NOT NULL DEFAULT '[]'::jsonb,
+          published BOOLEAN NOT NULL DEFAULT TRUE,
+          featured BOOLEAN NOT NULL DEFAULT FALSE,
+          what_i_learned JSONB NOT NULL DEFAULT '[]'::jsonb,
+          improvements JSONB NOT NULL DEFAULT '[]'::jsonb,
+          related_note_slugs JSONB DEFAULT '[]'::jsonb,
+          related_project_slug VARCHAR(255),
+          related_system_design_slug VARCHAR(255),
+          created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+          updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+        );
+      END IF;
+    END
+    $$;
+  `;
+}
+
+async function bootstrapApiKeysTable() {
+  if (!client) {
+    throw new Error('Database client is not initialized');
+  }
+
+  await client`
+    DO $$
+    BEGIN
+      IF NOT EXISTS (
+        SELECT 1
+        FROM information_schema.tables
+        WHERE table_schema = 'public'
+          AND table_name = 'api_keys'
+      ) THEN
+        CREATE TABLE api_keys (
+          id SERIAL PRIMARY KEY,
+          key_hash VARCHAR(255) NOT NULL UNIQUE,
+          name VARCHAR(100) NOT NULL,
+          permissions JSONB NOT NULL DEFAULT '{"analyze": true, "rateLimit": 10}'::jsonb,
+          active BOOLEAN NOT NULL DEFAULT TRUE,
+          last_used TIMESTAMPTZ,
+          usage_count INTEGER NOT NULL DEFAULT 0,
+          created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+          expires_at TIMESTAMPTZ
+        );
+      END IF;
+    END
+    $$;
+  `;
+}
+
 export function getDb(): Database {
   if (!db) {
     db = createDatabase();
@@ -113,10 +186,16 @@ export async function ensureDatabaseReady(): Promise<void> {
       db = createDatabase();
     }
 
-    bootstrapPromise = bootstrapEngineeringNotesTable().catch((error) => {
-      bootstrapPromise = null;
-      throw error;
-    });
+    bootstrapPromise = Promise.all([
+      bootstrapEngineeringNotesTable(),
+      bootstrapCaseStudiesTable(),
+      bootstrapApiKeysTable(),
+    ])
+      .then(() => undefined)
+      .catch((error) => {
+        bootstrapPromise = null;
+        throw error;
+      });
   }
 
   await bootstrapPromise;

@@ -1,27 +1,30 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/shared/JsonLd";
-import { projectsData } from "@/constant/projects";
 import { buildPageMetadata, absoluteUrl } from "@/lib/seo";
 import {
   generateBreadcrumbListStructuredData,
   generateCaseStudyStructuredData,
-  generateSoftwareApplicationStructuredData,
 } from "@/lib/structured-data";
-import { ProjectCaseStudy } from "@/components/case-study/ProjectCaseStudy";
+import { UniversalCaseStudy } from "@/components/case-study/UniversalCaseStudy";
+import {
+  getCaseStudyBySlug,
+  getAllCaseStudySlugs,
+  getAllCaseStudies,
+} from "@/lib/case-studies";
 import { Navbar, Footer, Background } from "@/components/common";
 
-interface ProjectPageProps {
+interface ProjectDetailPageProps {
   params: Promise<{ slug: string }>;
 }
 
 export const revalidate = 60;
 
-export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: ProjectDetailPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const project = projectsData.find((item) => item.slug === slug);
+  const caseStudy = await getCaseStudyBySlug(slug);
 
-  if (!project) {
+  if (!caseStudy) {
     return {
       title: "Project Not Found",
       robots: { index: false, follow: false },
@@ -29,39 +32,50 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   }
 
   return buildPageMetadata({
-    title: `${project.name} — Architecture & Case Study | Tushar Kanti Dey`,
-    description: `${project.subtitle}. ${project.problem}`,
-    path: `/projects/${project.slug}`,
+    title: `${caseStudy.title} — Architecture & Case Study | Tushar Kanti Dey`,
+    description: `${caseStudy.subtitle}. ${caseStudy.excerpt}`,
+    path: `/projects/${caseStudy.slug}`,
     type: "article",
-    keywords: [...project.tech, project.role, "case study", "software architecture", "Tushar Kanti Dey"],
+    keywords: [
+      ...caseStudy.tags,
+      caseStudy.category,
+      "case study",
+      "software architecture",
+      "Tushar Kanti Dey",
+    ],
   });
 }
 
-export function generateStaticParams() {
-  return projectsData.map((project) => ({ slug: project.slug }));
+export async function generateStaticParams() {
+  const slugs = await getAllCaseStudySlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
-export default async function ProjectDetailPage({ params }: ProjectPageProps) {
+export default async function ProjectDetailPage({ params }: ProjectDetailPageProps) {
   const { slug } = await params;
-  const projectIndex = projectsData.findIndex((item) => item.slug === slug);
+  const caseStudy = await getCaseStudyBySlug(slug);
 
-  if (projectIndex === -1) {
+  if (!caseStudy) {
     notFound();
   }
 
-  const project = projectsData[projectIndex];
-  const nextProject = projectsData[(projectIndex + 1) % projectsData.length];
+  const allCaseStudies = await getAllCaseStudies();
+  const currentIndex = allCaseStudies.findIndex((cs) => cs.slug === caseStudy.slug);
+  const nextCaseStudy =
+    allCaseStudies.length > 1 && currentIndex !== -1
+      ? allCaseStudies[(currentIndex + 1) % allCaseStudies.length]
+      : null;
 
   const projectSchema = generateCaseStudyStructuredData({
-    title: project.name,
-    description: project.description,
-    slug: project.slug,
+    title: caseStudy.title,
+    description: caseStudy.excerpt,
+    slug: caseStudy.slug,
   });
-  const softwareSchema = generateSoftwareApplicationStructuredData(project);
+
   const breadcrumbSchema = generateBreadcrumbListStructuredData([
     { name: "Tushar Kanti Dey", url: absoluteUrl("/") },
     { name: "Projects", url: absoluteUrl("/projects") },
-    { name: project.name, url: absoluteUrl(`/projects/${project.slug}`) },
+    { name: caseStudy.title, url: absoluteUrl(`/projects/${caseStudy.slug}`) },
   ]);
 
   return (
@@ -69,9 +83,8 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
       <Background />
       <Navbar />
       <JsonLd data={projectSchema} />
-      <JsonLd data={softwareSchema} />
       <JsonLd data={breadcrumbSchema} />
-      <ProjectCaseStudy project={project} nextProject={nextProject} />
+      <UniversalCaseStudy caseStudy={caseStudy} nextCaseStudy={nextCaseStudy} />
       <Footer />
     </div>
   );

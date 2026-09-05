@@ -63,7 +63,40 @@ export async function seedDatabase() {
       logger.info('api_keys table is available', { rows: keysResult.length });
     }
 
-    logger.info('The legacy hardcoded article source has been removed');
+    // Check & Seed case studies
+    const { caseStudies } = await import('@/db/schema');
+    const caseStudiesResult = await database
+      .select({ count: caseStudies.id })
+      .from(caseStudies);
+
+    logger.info('case_studies table is available', { rows: caseStudiesResult.length });
+
+    if (caseStudiesResult.length === 0) {
+      logger.info('Seeding case studies from static repository data');
+      const { caseStudiesData } = await import('@/lib/case-studies-data');
+      for (const record of caseStudiesData) {
+        await database.insert(caseStudies).values({
+          slug: record.slug,
+          title: record.title,
+          subtitle: record.subtitle,
+          excerpt: record.excerpt,
+          content: record.content,
+          category: record.category,
+          level: record.level,
+          readTime: record.readTime,
+          date: record.date,
+          tags: record.tags,
+          published: record.published,
+          featured: record.featured,
+          whatILearned: record.whatILearned,
+          improvements: record.improvements,
+          relatedNoteSlugs: record.relatedNoteSlugs,
+          relatedProjectSlug: record.relatedProjectSlug,
+          relatedSystemDesignSlug: record.relatedSystemDesignSlug,
+        }).onConflictDoNothing();
+      }
+      logger.info('Case studies seeded successfully');
+    }
   } catch (error) {
     logger.error('Database check failed', { error });
     process.exit(1);

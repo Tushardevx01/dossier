@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest",
     "db:generate": "drizzle-kit generate",
-    "db:seed": "tsx src/db/seed.ts",
+    "db:seed": "tsx --env-file=.env src/db/seed.ts",
+    "db:seed:case-studies": "tsx --env-file=.env scripts/migrate-case-studies.ts",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio"
   },

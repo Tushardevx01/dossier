@@ -18,11 +18,16 @@ const SANITIZE_CONFIG = {
     "a", "ul", "ol", "li", "blockquote", "pre", "code",
     "table", "thead", "tbody", "tr", "th", "td",
     "img", "figure", "figcaption", "div", "section", "article",
+    "header", "footer", "nav", "hr", "svg", "path", "polyline", "line",
   ],
   allowedAttributes: {
-    "*": ["class"],
+    "*": ["class", "id", "aria-hidden", "aria-label", "role"],
     "a": ["href", "title", "target", "rel"],
-    "img": ["src", "alt"],
+    "img": ["src", "alt", "width", "height"],
+    "svg": ["width", "height", "viewBox", "fill", "stroke", "stroke-width", "stroke-linecap", "stroke-linejoin"],
+    "path": ["d", "fill", "stroke"],
+    "polyline": ["points"],
+    "line": ["x1", "y1", "x2", "y2"],
   },
 };
 
