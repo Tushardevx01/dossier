@@ -41,12 +41,15 @@ export const CommandPalette = () => {
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
+  const isKeyboardNavRef = useRef(false);
+  const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const router = useRouter();
 
   const closePalette = useCallback(() => {
     setIsOpen(false);
     setSearch("");
     setSelectedIndex(0);
+    isKeyboardNavRef.current = false;
     // Restore focus without jumping viewport scroll
     if (previousFocusRef.current) {
       previousFocusRef.current.focus({ preventScroll: true });
@@ -55,6 +58,10 @@ export const CommandPalette = () => {
 
   const openPalette = useCallback(() => {
     previousFocusRef.current = document.activeElement as HTMLElement;
+    setSelectedIndex(0);
+    if (listRef.current) {
+      listRef.current.scrollTop = 0;
+    }
     setIsOpen(true);
   }, []);
 
@@ -64,7 +71,13 @@ export const CommandPalette = () => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
         setIsOpen((prev) => {
-          if (!prev) previousFocusRef.current = document.activeElement as HTMLElement;
+          if (!prev) {
+            previousFocusRef.current = document.activeElement as HTMLElement;
+            setSelectedIndex(0);
+            if (listRef.current) {
+              listRef.current.scrollTop = 0;
+            }
+          }
           return !prev;
         });
       } else if (e.key === "Escape" && isOpen) {
@@ -357,11 +370,13 @@ export const CommandPalette = () => {
 
   // Handle keyboard navigation within the list
   const handleInputKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "ArrowDown") {
+    if (e.key === "ArrowDown" || (e.key === "Tab" && !e.shiftKey)) {
       e.preventDefault();
+      isKeyboardNavRef.current = true;
       setSelectedIndex((prev) => (prev + 1) % (filteredCommands.length || 1));
-    } else if (e.key === "ArrowUp") {
+    } else if (e.key === "ArrowUp" || (e.key === "Tab" && e.shiftKey)) {
       e.preventDefault();
+      isKeyboardNavRef.current = true;
       setSelectedIndex((prev) =>
         prev === 0 ? Math.max(0, filteredCommands.length - 1) : prev - 1
       );
@@ -373,10 +388,41 @@ export const CommandPalette = () => {
     }
   };
 
-  // Keep selected item in view
+  // Scroll selected item into visible viewport whenever selectedIndex changes
+  useEffect(() => {
+    if (!isOpen) return;
+    const container = listRef.current;
+    const item = itemRefs.current[selectedIndex];
+    if (!container || !item) return;
+
+    const itemTop = item.offsetTop;
+    const itemBottom = itemTop + item.offsetHeight;
+    const containerTop = container.scrollTop;
+    const containerHeight = container.clientHeight;
+    const containerBottom = containerTop + containerHeight;
+    const padding = 6;
+
+    if (itemTop < containerTop + padding) {
+      container.scrollTop = Math.max(0, itemTop - padding);
+    } else if (itemBottom > containerBottom - padding) {
+      container.scrollTop = itemBottom - containerHeight + padding;
+    }
+  }, [selectedIndex, isOpen, filteredCommands.length]);
+
+  // Keep list scrolled to top and index at 0 when search query changes
   useEffect(() => {
     setSelectedIndex(0);
+    if (listRef.current) {
+      listRef.current.scrollTop = 0;
+    }
   }, [search]);
+
+  // Clamp selectedIndex if filtered list shrinks
+  useEffect(() => {
+    if (filteredCommands.length > 0 && selectedIndex >= filteredCommands.length) {
+      setSelectedIndex(filteredCommands.length - 1);
+    }
+  }, [filteredCommands.length, selectedIndex]);
 
   return (
     <>
@@ -428,6 +474,15 @@ export const CommandPalette = () => {
                 <input
                   ref={inputRef}
                   type="text"
+                  role="combobox"
+                  aria-expanded={isOpen}
+                  aria-autocomplete="list"
+                  aria-controls="command-palette-list"
+                  aria-activedescendant={
+                    filteredCommands[selectedIndex]
+                      ? `command-item-${filteredCommands[selectedIndex].id}`
+                      : undefined
+                  }
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   onKeyDown={handleInputKeyDown}
@@ -458,8 +513,14 @@ export const CommandPalette = () => {
 
               {/* Command List */}
               <div
+                id="command-palette-list"
                 ref={listRef}
-                className="overflow-y-auto p-2 space-y-1 flex-1 text-xs font-mono"
+                role="listbox"
+                aria-label="Commands"
+                onMouseMove={() => {
+                  isKeyboardNavRef.current = false;
+                }}
+                className="relative overflow-y-auto p-2 space-y-1 flex-1 text-xs font-mono"
               >
                 {filteredCommands.length === 0 ? (
                   <div className="p-8 text-center text-neutral-500">
@@ -472,12 +533,25 @@ export const CommandPalette = () => {
                     return (
                       <button
                         key={cmd.id}
+                        ref={(el) => {
+                          itemRefs.current[index] = el;
+                        }}
+                        id={`command-item-${cmd.id}`}
+                        role="option"
+                        aria-selected={isSelected}
                         onClick={cmd.action}
-                        onMouseEnter={() => setSelectedIndex(index)}
+                        onMouseMove={() => {
+                          if (isKeyboardNavRef.current) {
+                            isKeyboardNavRef.current = false;
+                          }
+                          if (selectedIndex !== index) {
+                            setSelectedIndex(index);
+                          }
+                        }}
                         className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center justify-between gap-3 transition-colors ${
                           isSelected
-                            ? "bg-neutral-800 text-white font-medium"
-                            : "text-neutral-300 hover:bg-neutral-900"
+                            ? "bg-neutral-800/90 text-white font-medium border border-neutral-700/80 shadow-sm"
+                            : "text-neutral-300 hover:bg-neutral-900/60 border border-transparent"
                         }`}
                       >
                         <div className="flex items-center gap-3 min-w-0">
@@ -487,9 +561,19 @@ export const CommandPalette = () => {
                             }`}
                           />
                           <div className="truncate">
-                            <span className="text-white block truncate">{cmd.label}</span>
+                            <span
+                              className={`block truncate ${
+                                isSelected ? "text-white font-medium" : "text-neutral-200"
+                              }`}
+                            >
+                              {cmd.label}
+                            </span>
                             {cmd.description && (
-                              <span className="text-[11px] text-neutral-500 block truncate">
+                              <span
+                                className={`text-[11px] block truncate ${
+                                  isSelected ? "text-neutral-300" : "text-neutral-500"
+                                }`}
+                              >
                                 {cmd.description}
                               </span>
                             )}
@@ -497,11 +581,17 @@ export const CommandPalette = () => {
                         </div>
 
                         <div className="flex items-center gap-2 flex-shrink-0">
-                          <span className="text-[10px] text-neutral-500 uppercase">
+                          <span
+                            className={`text-[10px] uppercase font-mono px-1.5 py-0.5 rounded ${
+                              isSelected
+                                ? "text-emerald-400 bg-emerald-950/60 border border-emerald-800/50"
+                                : "text-neutral-500 bg-neutral-900/80"
+                            }`}
+                          >
                             {cmd.category}
                           </span>
                           {isSelected && (
-                            <span className="text-[10px] text-emerald-400 font-mono">
+                            <span className="text-xs text-emerald-400 font-mono font-bold">
                               ↵
                             </span>
                           )}
@@ -525,7 +615,14 @@ export const CommandPalette = () => {
                     <kbd className="text-neutral-400">esc</kbd> to close
                   </span>
                 </div>
-                <span className="text-neutral-600">ENGINEERING PALETTE</span>
+                <div className="flex items-center gap-2 text-neutral-500">
+                  {filteredCommands.length > 0 && (
+                    <span className="text-[10px] text-neutral-400 font-mono">
+                      {selectedIndex + 1} / {filteredCommands.length}
+                    </span>
+                  )}
+                  <span className="hidden sm:inline text-neutral-600">· ENGINEERING PALETTE</span>
+                </div>
               </div>
             </motion.div>
           </div>
