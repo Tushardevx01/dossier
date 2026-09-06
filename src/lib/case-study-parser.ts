@@ -203,32 +203,99 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
     // Optional badge from section heading
     const badge = $sec.find(".border-b span.text-emerald-400, .border-b span.text-neutral-500").first().text().trim();
 
-    // Determine section type
+    // Determine section type (exact ID match takes precedence over loose title substring)
     const lowerId = id.toLowerCase();
     const lowerTitle = title.toLowerCase();
     let sectionType: ParsedSection["sectionType"] = "default";
 
-    if (lowerId === "problem" || lowerTitle.includes("problem")) {
+    if (lowerId === "problem") {
       sectionType = "problem";
-    } else if (lowerId === "approach" || lowerTitle.includes("approach")) {
+    } else if (lowerId === "approach") {
       sectionType = "approach";
-    } else if (lowerId === "architecture" || lowerTitle.includes("architecture") || lowerTitle.includes("topology")) {
+    } else if (
+      lowerId === "architecture" ||
+      lowerId === "data-model" ||
+      lowerId === "api-surface" ||
+      lowerId.includes("topology") ||
+      lowerId.includes("architecture")
+    ) {
       sectionType = "architecture";
-    } else if (lowerId === "challenges" || lowerTitle === "engineering challenges") {
+    } else if (lowerId === "challenges") {
       sectionType = "challenges";
-    } else if (lowerId === "solutions" || lowerTitle.includes("solutions") || lowerTitle.includes("deep-dives")) {
+    } else if (
+      lowerId === "solutions" ||
+      lowerId.includes("solution") ||
+      lowerId === "deep-dives"
+    ) {
       sectionType = "solutions";
-    } else if (lowerId === "decisions" || lowerTitle.includes("decisions") || lowerTitle.includes("trade-offs")) {
+    } else if (
+      lowerId === "decisions" ||
+      lowerId === "tradeoffs" ||
+      lowerId.includes("decision")
+    ) {
       sectionType = "decisions";
-    } else if (lowerId === "outcomes" || lowerId === "results" || lowerTitle.includes("results") || lowerTitle.includes("outcomes")) {
+    } else if (
+      lowerId === "outcomes" ||
+      lowerId === "results" ||
+      lowerId === "metrics"
+    ) {
       sectionType = "outcomes";
-    } else if (lowerId.includes("state") || lowerId.includes("interaction") || lowerTitle.includes("state machine")) {
+    } else if (
+      lowerId.includes("state") ||
+      lowerId.includes("interaction") ||
+      lowerId.includes("lifecycle")
+    ) {
       sectionType = "states";
-    } else if (lowerId.includes("flow") || lowerId.includes("lifecycle") || lowerId.includes("workflow") || lowerId.includes("execution")) {
+    } else if (
+      lowerId.includes("flow") ||
+      lowerId.includes("workflow") ||
+      lowerId.includes("execution") ||
+      lowerId.includes("pipeline")
+    ) {
       sectionType = "workflow";
-    } else if (lowerId.includes("security") || lowerTitle.includes("security")) {
+    } else if (lowerId.includes("security") || lowerId.includes("safety")) {
       sectionType = "security";
-    } else if (lowerId.includes("validation") || lowerId.includes("rigor")) {
+    } else if (
+      lowerId.includes("validation") ||
+      lowerId.includes("rigor") ||
+      lowerId.includes("evidence")
+    ) {
+      sectionType = "validation";
+    } else if (lowerTitle.includes("problem")) {
+      sectionType = "problem";
+    } else if (lowerTitle.includes("approach")) {
+      sectionType = "approach";
+    } else if (lowerTitle.includes("architecture") || lowerTitle.includes("topology")) {
+      sectionType = "architecture";
+    } else if (lowerTitle.includes("engineering challenges") || lowerTitle === "challenges") {
+      sectionType = "challenges";
+    } else if (
+      lowerTitle.includes("solutions") ||
+      lowerTitle.includes("deep-dives") ||
+      lowerTitle.includes("implementations grounded")
+    ) {
+      sectionType = "solutions";
+    } else if (
+      lowerTitle.includes("decisions") ||
+      lowerTitle.includes("trade-offs") ||
+      lowerTitle.includes("tradeoffs") ||
+      lowerTitle.includes("rationale") ||
+      lowerTitle.includes("why these technologies")
+    ) {
+      sectionType = "decisions";
+    } else if (
+      lowerTitle.includes("results") ||
+      lowerTitle.includes("outcomes") ||
+      lowerTitle.includes("measurable results") ||
+      lowerTitle.includes("verified implementation metrics") ||
+      lowerTitle.includes("engineering verification")
+    ) {
+      sectionType = "outcomes";
+    } else if (lowerTitle.includes("state machine") || lowerTitle.includes("states")) {
+      sectionType = "states";
+    } else if (lowerTitle.includes("security") || lowerTitle.includes("defensive")) {
+      sectionType = "security";
+    } else if (lowerTitle.includes("rigor") || lowerTitle.includes("validation")) {
       sectionType = "validation";
     }
 
@@ -236,7 +303,7 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
     let pattern: SectionPattern = "B";
     if (sectionType === "problem" || sectionType === "approach") {
       pattern = "A"; // Split layout
-    } else if (sectionType === "architecture") {
+    } else if (sectionType === "architecture" || sectionType === "validation") {
       pattern = "B"; // Full-width breakout
     } else if (sectionType === "states" || lowerId.includes("ownership")) {
       pattern = "D"; // Paired states / side-by-side
@@ -270,7 +337,7 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
           sectionType === "solutions" ||
           sectionType === "decisions" ||
           sectionType === "outcomes") &&
-        $p.closest(".grid > div, div.space-y-6 > div").length > 0
+        $p.closest(".grid > div, div.space-y-6 > div, div.space-y-4 > div").length > 0
       ) {
         return;
       }
@@ -293,6 +360,28 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
         constraints.push(text);
       }
     });
+    // Fallback for card-based constraints in problem sections
+    if (constraints.length === 0 && sectionType === "problem") {
+      $sec.find("div.grid > div, div.space-y-4 > div, div.p-4.rounded-xl, .rounded-xl.border, div.rounded-xl").each((_, el) => {
+        const $el = $(el);
+        if ($el.closest("pre, table").length > 0 || $el.find("pre, table").length > 0) return;
+        const cardTitle = $el
+          .find("h3, h4, span.font-bold, span.font-semibold, div.font-bold, span.text-emerald-400, span.text-neutral-200")
+          .first()
+          .text()
+          .trim();
+        const cardDesc = $el.find("p").first().text().trim();
+        const fullText = $el.text().trim().replace(/^•\s*/, "").replace(/\s+/g, " ");
+        if (cardTitle && cardDesc) {
+          const cleanDesc = cardDesc.replace(cardTitle, "").trim().replace(/^:\s*/, "");
+          const cleanTitle = cardTitle.replace(/:\s*$/, "").trim();
+          const item = cleanDesc ? `${cleanTitle}: ${cleanDesc}` : cleanTitle;
+          if (!constraints.includes(item)) constraints.push(item);
+        } else if (fullText && fullText.length > 10 && fullText.length < 500) {
+          if (!constraints.includes(fullText)) constraints.push(fullText);
+        }
+      });
+    }
 
     // Extract diagrams
     const diagrams: ParsedDiagram[] = [];
@@ -305,17 +394,29 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
     // Extract challenges (e.g. from challenges section cards)
     const challenges: ParsedChallenge[] = [];
     if (sectionType === "challenges") {
-      $sec.find("div.grid > div").each((cIdx, cardEl) => {
+      const $cards = $sec.find(
+        "div.grid > div, div.space-y-4 > div.p-5, div.space-y-4 > div.rounded-xl, div.space-y-6 > div.rounded-xl, div.space-y-6 > div.p-5"
+      );
+      $cards.each((cIdx, cardEl) => {
         const $c = $(cardEl);
-        const num = $c.find("span.text-emerald-400, span.font-mono").first().text().trim() || `0${cIdx + 1}`;
-        const tag = $c.find("span.text-neutral-500, span.text-emerald-400\\/90").first().text().trim();
+        // Avoid inner sub-cards
+        if ($c.parent().hasClass("grid") && $c.closest(".p-5, .rounded-xl").not($c).length > 0) return;
+
+        const num =
+          $c.find("span.text-emerald-400, span.font-mono, span.text-amber-400").first().text().trim() ||
+          `0${cIdx + 1}`;
+        const tag = $c
+          .find("span.text-neutral-500, span.text-emerald-400\\/90, span.text-amber-400, span.text-\\[10px\\]")
+          .first()
+          .text()
+          .trim();
         const cardTitle = $c.find("h3, h4").first().text().trim();
         const desc = $c.find("p").first().text().trim();
         if (cardTitle || desc) {
           challenges.push({
-            num: num.replace(/^\/\/\s*/, ""),
+            num: num.replace(/^\/\/\s*/, "").replace(/^CHALLENGE\s*/i, "").trim() || String(cIdx + 1).padStart(2, "0"),
             tag,
-            title: cardTitle,
+            title: cardTitle || tag || `Challenge ${cIdx + 1}`,
             desc,
           });
         }
@@ -325,25 +426,57 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
     // Extract solution records (Problem -> Constraint -> Solution -> Result)
     const solutions: ParsedSolutionRecord[] = [];
     if (sectionType === "solutions") {
-      $sec.find("> div.space-y-6 > div, > div > div.p-5, > div > div.p-6").each((sIdx, recEl) => {
+      const $recContainers = $sec.find(
+        "> div.space-y-6 > div, > div.space-y-4 > div, > div > div.p-5, > div > div.p-6, div.space-y-8 > div"
+      );
+      $recContainers.each((sIdx, recEl) => {
         const $r = $(recEl);
-        const recTitle = $r.find("h3").first().text().trim();
-        const num = $r.find("span.font-mono").first().text().trim().replace(/^\/\/\s*/, "") || `0${sIdx + 1}`;
+        if ($r.closest("pre").length > 0) return;
+
+        let recTitle = $r.find("h3, h4").first().text().trim();
+        if (!recTitle) {
+          recTitle = $r
+            .find("span.text-white.font-medium, span.text-white.font-semibold, span.font-semibold, div.text-emerald-400 span")
+            .first()
+            .text()
+            .trim();
+        }
         
+        let num = $r
+          .find("span.font-mono, span.text-emerald-400")
+          .first()
+          .text()
+          .trim()
+          .replace(/^\/\/\s*/, "");
+        if (!num || num.length > 10) num = String(sIdx + 1).padStart(2, "0");
+
         let problemText = "";
         let constraintText = "";
         let solutionText = "";
         let resultText = "";
 
-        $r.find("div.grid > div, div.space-y-1, div.space-y-1\\.5").each((_, blockEl) => {
+        $r.find("div.grid > div, div.space-y-1, div.space-y-1\\.5, div.space-y-3 > div").each((_, blockEl) => {
           const $b = $(blockEl);
           const label = $b.find("span").text().trim().toUpperCase();
           const pText = $b.find("p").text().trim();
           if (label.includes("PROBLEM")) problemText = pText;
           else if (label.includes("CONSTRAINT")) constraintText = pText;
-          else if (label.includes("SOLUTION")) solutionText = pText;
-          else if (label.includes("RESULT") || label.includes("OUTCOME")) resultText = pText;
+          else if (
+            label.includes("SOLUTION") ||
+            label.includes("RESPONSE") ||
+            label.includes("IMPLEMENTATION") ||
+            label.includes("ENGINEERED")
+          )
+            solutionText = pText;
+          else if (label.includes("RESULT") || label.includes("OUTCOME"))
+            resultText = pText;
         });
+
+        // Fallback for code-first solution records (like in Signifiya)
+        if (!solutionText && !problemText) {
+          const descP = $r.find("p").first().text().trim();
+          if (descP) solutionText = descP;
+        }
 
         let attachedDiagram: ParsedDiagram | undefined;
         const $pre = $r.find("pre");
@@ -352,10 +485,10 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
           totalDiagrams++;
         }
 
-        if (recTitle) {
+        if (recTitle || attachedDiagram) {
           solutions.push({
             num,
-            title: recTitle,
+            title: recTitle || `Implementation ${sIdx + 1}`,
             problem: problemText,
             constraint: constraintText,
             solution: solutionText,
@@ -369,28 +502,55 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
     // Extract decisions
     const decisions: ParsedDecisionRecord[] = [];
     if (sectionType === "decisions") {
-      $sec.find("div.grid > div").each((dIdx, cardEl) => {
+      const $decisionCards = $sec.find(
+        "div.grid > div.p-5, div.grid > div.rounded-xl, div.space-y-4 > div.p-5, div.space-y-4 > div.rounded-xl, div.space-y-6 > div.rounded-xl, div.grid > div"
+      );
+      $decisionCards.each((dIdx, cardEl) => {
         const $c = $(cardEl);
-        const tech = $c.find("h3").first().text().trim();
-        const area = $c.find("span.font-mono").first().text().trim();
+        // Exclude inner grid items that belong to a parent decision card
+        if ($c.parent().hasClass("grid") && $c.closest(".p-5, .rounded-xl").not($c).length > 0) return;
+
+        const tech = $c
+          .find("h3, span.text-white.font-medium, span.text-neutral-200.font-bold, span.text-white, span.font-bold, div.font-semibold")
+          .first()
+          .text()
+          .trim();
+        const area = $c
+          .find("span.font-mono, span.text-emerald-400, span.text-\\[10px\\]")
+          .first()
+          .text()
+          .trim();
+        
         let why = "";
         let tradeoff = "";
         let outcome = "";
 
-        $c.find("div").each((_, blockEl) => {
+        $c.find("div, p").each((_, blockEl) => {
           const $b = $(blockEl);
           const label = $b.find("span").text().trim().toUpperCase();
-          const pText = $b.find("p").text().trim();
-          if (label.includes("WHY") || label.includes("RATIONALE")) why = pText;
-          else if (label.includes("TRADE-OFF") || label.includes("TRADEOFF")) tradeoff = pText;
-          else if (label.includes("OUTCOME") || label.includes("RESULT")) outcome = pText;
+          const pText = $b.is("p") ? $b.text().trim() : $b.find("p").text().trim();
+          if (label.includes("WHY") || label.includes("RATIONALE")) {
+            if (pText && !why) why = pText;
+          } else if (label.includes("TRADE-OFF") || label.includes("TRADEOFF") || label.includes("TRADE")) {
+            if (pText && !tradeoff) tradeoff = pText;
+          } else if (label.includes("OUTCOME") || label.includes("RESULT") || label.includes("IMPACT")) {
+            if (pText && !outcome) outcome = pText;
+          }
         });
+
+        // Fallback for paragraph reading if not matched by label
+        if (!why) {
+          const paragraphs = $c.find("p").map((_, p) => $(p).text().trim()).get();
+          if (paragraphs.length > 0) why = paragraphs[0];
+          if (paragraphs.length > 1 && !tradeoff) tradeoff = paragraphs[1];
+          if (paragraphs.length > 2 && !outcome) outcome = paragraphs[2];
+        }
 
         if (tech) {
           decisions.push({
             num: String(dIdx + 1).padStart(2, "0"),
-            area,
-            tech,
+            area: area.replace(/^\/\/\s*/, "").replace(/DECISION\s*\d+\s*[//•:]*/i, "").trim() || "ARCHITECTURE",
+            tech: tech.replace(/^DECISION\s*\d+\s*[//•:]*/i, "").trim(),
             why,
             tradeoff,
             outcome,
@@ -402,10 +562,18 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
     // Extract outcomes / results
     const outcomes: ParsedOutcomeRecord[] = [];
     if (sectionType === "outcomes") {
-      $sec.find("div.grid > div").each((oIdx, cardEl) => {
+      const $outCards = $sec.find("div.grid > div, div.space-y-4 > div.rounded-xl, div.space-y-4 > div.p-5");
+      $outCards.each((oIdx, cardEl) => {
         const $c = $(cardEl);
-        const num = $c.find("span.text-2xl, span.text-3xl, span.font-bold").first().text().trim() || `0${oIdx + 1}`;
-        const cardTitle = $c.find("h3, h4").first().text().trim();
+        // Exclude inner nested divs
+        if ($c.parent().hasClass("grid") && $c.closest(".rounded-xl, .p-5").not($c).length > 0) return;
+
+        const num =
+          $c.find("div.text-3xl, div.text-4xl, span.text-2xl, span.text-3xl, span.text-4xl, span.font-bold, div.font-bold").first().text().trim() ||
+          String(oIdx + 1).padStart(2, "0");
+        const cardTitle =
+          $c.find("h3, h4, div.text-\\[11px\\], div.font-semibold, span.font-semibold, div.uppercase").first().text().trim() ||
+          `Result ${oIdx + 1}`;
         const desc = $c.find("p").first().text().trim();
         if (cardTitle || desc) {
           outcomes.push({
@@ -417,7 +585,7 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
       });
     }
 
-    // Extract tables
+    // Extract tables (both standard <table> elements and structured div-based matrix tables)
     const tables: ParsedTable[] = [];
     $sec.find("table").each((_, tblEl) => {
       const $tbl = $(tblEl);
@@ -440,23 +608,67 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
       }
     });
 
-    // Supporting items (e.g. architecture layers, runtime components)
+    // Also extract div-based tables (such as Technical Rigor matrices)
+    if (tables.length === 0) {
+      $sec.find(".rounded-xl.border, .border.overflow-hidden, .rounded-xl").each((_, contEl) => {
+        const $cont = $(contEl);
+        if ($cont.find("table, pre").length > 0) return;
+        const headers = $cont
+          .find("> div:first-child[class*=\"border-b\"] > div, .border-b.bg-neutral-950 > div")
+          .map((_, el) => $(el).text().trim())
+          .get()
+          .filter((t) => t.length > 0);
+
+        const rows: string[][] = [];
+        $cont.find(".divide-y > div").each((_, rowEl) => {
+          const cells = $(rowEl)
+            .children("div")
+            .map((_, c) => $(c).text().trim())
+            .get()
+            .filter((t) => t.length > 0);
+          if (cells.length > 1) rows.push(cells);
+        });
+
+        if (headers.length > 1 && rows.length > 0) {
+          tables.push({ headers, rows });
+        }
+      });
+    }
+
+    // Supporting items (e.g. architecture layers, runtime components, subsystem specifications)
     const supportingItems: ParsedSupportingItem[] = [];
-    if (sectionType === "architecture" || sectionType === "approach" || sectionType === "security") {
-      $sec.find("div.grid > div.p-4, div.grid > div.p-3\\.5").each((_, el) => {
+    $sec
+      .find("div.grid > div.p-4, div.grid > div.p-5, div.grid > div.p-3\\.5, div.grid > div.rounded-xl, div.grid > div.rounded-lg")
+      .each((sIdx, el) => {
         const $el = $(el);
-        const sTitle = $el.find("div.text-emerald-400, h3, span.text-neutral-200, div.flex span").last().text().trim();
+        if ($el.closest("pre, table").length > 0) return;
+        // Don't duplicate if parent is also matched
+        if ($el.closest(".rounded-xl, .p-5").not($el).length > 0) return;
+        // Skip if this section is already rendering these as challenges, decisions, or outcomes
+        if (
+          (sectionType === "challenges" && challenges.length > 0) ||
+          (sectionType === "decisions" && decisions.length > 0) ||
+          (sectionType === "outcomes" && outcomes.length > 0) ||
+          (sectionType === "solutions" && solutions.length > 0)
+        ) {
+          return;
+        }
+
+        const sTitle = $el
+          .find("div.text-emerald-400, h3, h4, span.text-neutral-200, div.font-semibold, span.font-bold, div.flex span")
+          .last()
+          .text()
+          .trim();
         const sDesc = $el.find("p").first().text().trim();
-        const sNum = $el.find("span.text-emerald-400").first().text().trim();
-        if (sTitle && sDesc) {
+        const sNum = $el.find("span.text-emerald-400, span.font-mono").first().text().trim();
+        if (sTitle && sDesc && sTitle !== sDesc) {
           supportingItems.push({
-            num: sNum.replace(/\/\/$/, "").trim(),
+            num: sNum.replace(/\/\/$/, "").trim() || String(sIdx + 1).padStart(2, "0"),
             title: sTitle,
             desc: sDesc,
           });
         }
       });
-    }
 
     // Create cleaned HTML for residual content
     const $clone = $sec.clone();

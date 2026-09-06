@@ -60,8 +60,20 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
         return (
           <div className="space-y-8">
             {/* Pattern A: Two-Column Layout (Problem Narrative Left, Key Constraints Right) */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-              <div className="lg:col-span-6 space-y-4 text-sm sm:text-base text-neutral-300 font-sans leading-relaxed">
+            <div
+              className={
+                sec.constraints.length > 0
+                  ? "grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
+                  : "space-y-4"
+              }
+            >
+              <div
+                className={
+                  sec.constraints.length > 0
+                    ? "lg:col-span-6 space-y-4 text-sm sm:text-base text-neutral-300 font-sans leading-relaxed"
+                    : "max-w-[760px] space-y-4 text-sm sm:text-base text-neutral-300 font-sans leading-relaxed"
+                }
+              >
                 {sec.intro.map((p, i) => (
                   <p key={i}>{p}</p>
                 ))}
@@ -372,6 +384,166 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
                 rows={tbl.rows}
               />
             ))}
+
+            {/* Supporting Items / Specifications */}
+            {sec.supportingItems.length > 0 && (
+              <div className="border-t border-neutral-800/80 pt-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {sec.supportingItems.map((item, i) => (
+                    <div
+                      key={i}
+                      className="p-4 rounded-lg bg-neutral-950/60 border border-neutral-800/80 space-y-1.5 hover:bg-neutral-900/20 transition-colors"
+                    >
+                      <div className="flex items-center gap-2">
+                        {item.num && (
+                          <span className="font-mono text-xs text-emerald-400 font-bold select-none">
+                            {item.num}
+                          </span>
+                        )}
+                        <h4 className="font-mono text-xs font-bold text-white uppercase tracking-wider">
+                          {item.title}
+                        </h4>
+                      </div>
+                      <p className="text-xs text-neutral-400 font-sans leading-relaxed font-light">
+                        {item.desc}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      case "validation": {
+        return (
+          <div className="space-y-8">
+            <div className="max-w-[760px] text-sm sm:text-base text-neutral-300 font-sans leading-relaxed space-y-4">
+              {sec.intro.map((p, i) => (
+                <p key={i}>{p}</p>
+              ))}
+              {sec.readingText.map((p, i) => (
+                <p key={i} className="text-neutral-400 text-xs sm:text-sm font-light">
+                  {p}
+                </p>
+              ))}
+            </div>
+
+            {/* Tables if any */}
+            {sec.tables.map((tbl, i) => (
+              <TechnicalMatrix
+                key={i}
+                headers={tbl.headers}
+                rows={tbl.rows}
+              />
+            ))}
+
+            {/* Diagrams if any */}
+            {sec.diagrams.map((diag, i) => (
+              <AsciiDiagram
+                key={diag.id || i}
+                title={diag.title}
+                badge={diag.badge}
+                caption={diag.caption}
+                ascii={diag.ascii}
+                rawHtml={diag.rawHtml}
+              />
+            ))}
+
+            {/* Supporting Items / Specifications */}
+            {sec.supportingItems.length > 0 && (
+              <div className="border-t border-neutral-800/80 pt-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {sec.supportingItems.map((item, i) => (
+                    <div
+                      key={i}
+                      className="p-4 rounded-lg bg-neutral-950/60 border border-neutral-800/80 space-y-1.5 hover:bg-neutral-900/20 transition-colors"
+                    >
+                      <div className="flex items-center gap-2">
+                        {item.num && (
+                          <span className="font-mono text-xs text-emerald-400 font-bold select-none">
+                            {item.num}
+                          </span>
+                        )}
+                        <h4 className="font-mono text-xs font-bold text-white uppercase tracking-wider">
+                          {item.title}
+                        </h4>
+                      </div>
+                      <p className="text-xs text-neutral-400 font-sans leading-relaxed font-light">
+                        {item.desc}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      case "security": {
+        return (
+          <div className="space-y-8">
+            <div className="max-w-[760px] text-sm sm:text-base text-neutral-300 font-sans leading-relaxed space-y-4">
+              {sec.intro.map((p, i) => (
+                <p key={i}>{p}</p>
+              ))}
+              {sec.readingText.map((p, i) => (
+                <p key={i} className="text-neutral-400 text-xs sm:text-sm font-light">
+                  {p}
+                </p>
+              ))}
+            </div>
+
+            {/* Diagrams if any */}
+            {sec.diagrams.map((diag, i) => (
+              <AsciiDiagram
+                key={diag.id || i}
+                title={diag.title}
+                badge={diag.badge}
+                caption={diag.caption}
+                ascii={diag.ascii}
+                rawHtml={diag.rawHtml}
+              />
+            ))}
+
+            {/* Tables if any */}
+            {sec.tables.map((tbl, i) => (
+              <TechnicalMatrix
+                key={i}
+                headers={tbl.headers}
+                rows={tbl.rows}
+              />
+            ))}
+
+            {/* Supporting Items / Specifications */}
+            {sec.supportingItems.length > 0 && (
+              <div className="border-t border-neutral-800/80 pt-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {sec.supportingItems.map((item, i) => (
+                    <div
+                      key={i}
+                      className="p-4 rounded-lg bg-neutral-950/60 border border-neutral-800/80 space-y-1.5 hover:bg-neutral-900/20 transition-colors"
+                    >
+                      <div className="flex items-center gap-2">
+                        {item.num && (
+                          <span className="font-mono text-xs text-emerald-400 font-bold select-none">
+                            {item.num}
+                          </span>
+                        )}
+                        <h4 className="font-mono text-xs font-bold text-white uppercase tracking-wider">
+                          {item.title}
+                        </h4>
+                      </div>
+                      <p className="text-xs text-neutral-400 font-sans leading-relaxed font-light">
+                        {item.desc}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         );
       }
@@ -442,9 +614,38 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
               ))
             )}
 
-            {/* If section has neither diagram nor tables nor challenges nor decisions, render cleaned raw content */}
+            {/* Supporting items / specs if any */}
+            {sec.supportingItems.length > 0 && (
+              <div className="border-t border-neutral-800/80 pt-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {sec.supportingItems.map((item, i) => (
+                    <div
+                      key={i}
+                      className="p-4 rounded-lg bg-neutral-950/60 border border-neutral-800/80 space-y-1.5 hover:bg-neutral-900/20 transition-colors"
+                    >
+                      <div className="flex items-center gap-2">
+                        {item.num && (
+                          <span className="font-mono text-xs text-emerald-400 font-bold select-none">
+                            {item.num}
+                          </span>
+                        )}
+                        <h4 className="font-mono text-xs font-bold text-white uppercase tracking-wider">
+                          {item.title}
+                        </h4>
+                      </div>
+                      <p className="text-xs text-neutral-400 font-sans leading-relaxed font-light">
+                        {item.desc}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* If section has neither diagram nor tables nor supporting items, render cleaned raw content */}
             {sec.diagrams.length === 0 &&
               sec.tables.length === 0 &&
+              sec.supportingItems.length === 0 &&
               sec.challenges.length === 0 &&
               sec.decisions.length === 0 &&
               sec.rawContentHtml && (
