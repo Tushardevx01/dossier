@@ -18,7 +18,8 @@ const SANITIZE_CONFIG = {
     "a", "ul", "ol", "li", "blockquote", "pre", "code",
     "table", "thead", "tbody", "tr", "th", "td",
     "img", "figure", "figcaption", "div", "section", "article",
-    "header", "footer", "nav", "hr", "svg", "path", "polyline", "line",
+    "header", "footer", "nav", "hr", "button",
+    "svg", "path", "polyline", "line", "circle", "rect", "ellipse",
   ],
   allowedAttributes: {
     "*": ["class", "id", "aria-hidden", "aria-label", "role"],
@@ -28,6 +29,18 @@ const SANITIZE_CONFIG = {
     "path": ["d", "fill", "stroke"],
     "polyline": ["points"],
     "line": ["x1", "y1", "x2", "y2"],
+    "circle": ["cx", "cy", "r", "fill", "stroke"],
+    "rect": ["x", "y", "width", "height", "rx", "ry", "fill", "stroke"],
+    "ellipse": ["cx", "cy", "rx", "ry", "fill", "stroke"],
+  },
+  // URL scheme allowlist: only http(s) and relative URLs survive.
+  // Blocks javascript:, data:, vbscript:, and every other scheme on all URL attributes.
+  // NOTE: "" must remain in the list - sanitize-html requires it for relative URLs
+  // (e.g. "#anchor" TOC links) to survive. See allowedSchemesByTag below for the
+  // per-tag exception allowing data: URIs on <img src> only.
+  allowedSchemes: ["http", "https", ""],
+  allowedSchemesByTag: {
+    img: ["http", "https", "", "data"],
   },
 };
 

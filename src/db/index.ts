@@ -11,7 +11,6 @@ import * as schema from './schema';
 
 // Database handle returned by `drizzle`
 type Database = ReturnType<typeof drizzle>;
-
 /**
  * Initialize Neon connection
  *
@@ -49,7 +48,10 @@ function createDatabase() {
   // Note: Neon's pooler automatically handles query pipelining for optimal concurrency
   client = neon(databaseUrl);
 
-  return drizzle(client, { schema });
+  // drizzle-orm v1 API: pass the client via config object.
+  // The relational query API (db.query.*) is not used in this codebase, so the
+  // schema is not passed here (relations must be declared explicitly in v1).
+  return drizzle({ client });
 }
 
 // Note: `Database` is defined above as ReturnType<typeof drizzle>

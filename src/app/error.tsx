@@ -14,22 +14,14 @@ interface ErrorProps {
   reset: () => void;
 }
 
-// Client-side error reporting (sends to API endpoint for server-side processing)
-async function reportError(error: Error & { digest?: string }) {
-  try {
-    const errorReport = {
-      name: error.name,
-      message: error.message,
-      digest: error.digest,
-      timestamp: new Date().toISOString(),
-      path: typeof window !== "undefined" ? window.location.pathname : "unknown",
-      userAgent: typeof navigator !== "undefined" ? navigator.userAgent : "unknown",
-    };
-
-    console.error("[Error Boundary]", JSON.stringify(errorReport));
-  } catch {
-    console.error("Failed to report error:", error.message);
-  }
+// Client-side error reporting (console only — no PII/stack traces are sent anywhere)
+function reportError(error: Error & { digest?: string }) {
+  // In production Next.js scrubs `error.message` (digest remains for correlation),
+  // so this never leaks internals in prod; in dev it aids local debugging.
+  console.error("[Error Boundary]", {
+    digest: error.digest,
+    path: typeof window !== "undefined" ? window.location.pathname : "unknown",
+  });
 }
 
 export default function Error({ error, reset }: ErrorProps) {
@@ -49,6 +41,7 @@ export default function Error({ error, reset }: ErrorProps) {
               viewBox="0 0 24 24"
               stroke="currentColor"
               strokeWidth={2}
+              aria-hidden="true"
             >
               <path
                 strokeLinecap="round"
@@ -67,18 +60,11 @@ export default function Error({ error, reset }: ErrorProps) {
           An unexpected error occurred. Please try again.
         </p>
 
-        {/* Error Details (Development Only) */}
-        {process.env.NODE_ENV === "development" && (
-          <div className="mb-6 p-4 bg-red-500/5 rounded-lg text-left">
-            <p className="text-sm font-mono text-red-400 break-all">
-              {error.message}
-            </p>
-            {error.digest && (
-              <p className="text-xs text-muted-foreground mt-2">
-                Error ID: {error.digest}
-              </p>
-            )}
-          </div>
+        {/* Error correlation ID (safe to display; no internals) */}
+        {error.digest && (
+          <p className="mb-6 text-xs text-muted-foreground font-mono">
+            Error ID: {error.digest}
+          </p>
         )}
 
         {/* Actions */}

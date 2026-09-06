@@ -1,17 +1,17 @@
 import localFont from "next/font/local";
 
-// Keep font exports stable without remote Google font fetches during builds.
-export const inter = {
-  className: "",
-  variable: "",
-} as const;
+/**
+ * Local font setup (next/font/local).
+ *
+ * Fonts are self-hosted from src/assets/fonts and preloaded by Next.js —
+ * no manual @font-face declarations, no layout shift (display: swap), and
+ * no remote font fetches during builds.
+ *
+ * Every font is used with `.className` at its call sites; the Tailwind
+ * `font-*` utilities additionally map to the CSS variables below.
+ */
 
-export const mono = {
-  className: "",
-  variable: "",
-} as const;
-
-// Nasalization for all main headings
+// Nasalization — all main headings (widely used across sections/pages)
 export const nasalization = localFont({
   src: [
     {
@@ -24,7 +24,7 @@ export const nasalization = localFont({
   display: "swap",
 });
 
-// Quentine specifically for my name
+// Quentine — display font used for the hero name only
 export const quentine = localFont({
   src: [
     {
@@ -37,3 +37,9 @@ export const quentine = localFont({
   display: "swap",
 });
 
+// Monospace accents (imports as `mono.className`)
+// Intentionally NOT a webfont: rendering resolves via the CSS stack
+// `var(--font-mono), monospace` so no extra font file is shipped.
+export const mono = {
+  className: "",
+} as const;

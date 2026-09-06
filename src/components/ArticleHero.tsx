@@ -1,6 +1,3 @@
-"use client";
-
-import { motion } from "motion/react";
 import { ArticlePost } from "@/lib/articleLoader";
 import { TagBadge } from "@/components/notes/TagBadge";
 
@@ -10,12 +7,7 @@ interface ArticleHeroProps {
 
 export function ArticleHero({ post }: ArticleHeroProps) {
   return (
-    <motion.div
-      className="pt-20 pb-20"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-    >
+    <div className="pt-20 pb-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb-style metadata */}
         <div className="flex items-center gap-3 mb-8">
@@ -61,6 +53,6 @@ export function ArticleHero({ post }: ArticleHeroProps) {
           <TagBadge type="category" label={post.category} />
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

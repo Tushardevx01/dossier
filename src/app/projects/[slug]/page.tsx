@@ -6,13 +6,14 @@ import {
   generateBreadcrumbListStructuredData,
   generateCaseStudyStructuredData,
 } from "@/lib/structured-data";
-import { UniversalCaseStudy } from "@/components/case-study/UniversalCaseStudy";
+import { CaseStudyClient } from "@/components/case-study/CaseStudyClient";
 import {
   getCaseStudyBySlug,
   getAllCaseStudySlugs,
   getAllCaseStudies,
 } from "@/lib/case-studies";
-import { Navbar, Footer, Background } from "@/components/common";
+import { sanitizeHtml } from "@/lib/sanitize";
+import { nasalization } from "@/app/fonts";
 
 interface ProjectDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -66,6 +67,10 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
       ? allCaseStudies[(currentIndex + 1) % allCaseStudies.length]
       : null;
 
+  // Sanitize on the server: the ~170KB HTML never ships unsanitized, and the
+  // client receives only the final string (no sanitizer in the client bundle).
+  const safeContentHtml = sanitizeHtml(caseStudy.content);
+
   const projectSchema = generateCaseStudyStructuredData({
     title: caseStudy.title,
     description: caseStudy.excerpt,
@@ -79,13 +84,32 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
   ]);
 
   return (
-    <div className="min-h-screen bg-black text-foreground relative">
-      <Background />
-      <Navbar />
+    <div className={`min-h-screen bg-black text-foreground relative ${nasalization.className}`}>
       <JsonLd data={projectSchema} />
       <JsonLd data={breadcrumbSchema} />
-      <UniversalCaseStudy caseStudy={caseStudy} nextCaseStudy={nextCaseStudy} />
-      <Footer />
+      <CaseStudyClient
+        contentHtml={safeContentHtml}
+        meta={{
+          slug: caseStudy.slug,
+          title: caseStudy.title,
+          subtitle: caseStudy.subtitle,
+          excerpt: caseStudy.excerpt,
+          category: caseStudy.category,
+          level: caseStudy.level,
+          readTime: caseStudy.readTime,
+          date: caseStudy.date,
+          tags: caseStudy.tags,
+        }}
+        nextCaseStudy={
+          nextCaseStudy
+            ? {
+                slug: nextCaseStudy.slug,
+                title: nextCaseStudy.title,
+                subtitle: nextCaseStudy.subtitle,
+              }
+            : null
+        }
+      />
     </div>
   );
 }
