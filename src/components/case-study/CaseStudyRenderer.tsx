@@ -213,6 +213,16 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
                 layers={sec.supportingItems}
               />
             ))}
+
+            {/* Tables if any (e.g. API endpoints, routing specifications) */}
+            {sec.tables.map((tbl, i) => (
+              <TechnicalMatrix
+                key={i}
+                title={tbl.title}
+                headers={tbl.headers}
+                rows={tbl.rows}
+              />
+            ))}
           </div>
         );
       }
@@ -235,6 +245,7 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
                   title={ch.title}
                   category={ch.tag}
                   problem={ch.desc}
+                  impact={ch.impact}
                 />
               ))}
             </div>
@@ -380,6 +391,7 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
             {sec.tables.map((tbl, i) => (
               <TechnicalMatrix
                 key={i}
+                title={tbl.title}
                 headers={tbl.headers}
                 rows={tbl.rows}
               />
@@ -434,6 +446,7 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
             {sec.tables.map((tbl, i) => (
               <TechnicalMatrix
                 key={i}
+                title={tbl.title}
                 headers={tbl.headers}
                 rows={tbl.rows}
               />
@@ -512,6 +525,7 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
             {sec.tables.map((tbl, i) => (
               <TechnicalMatrix
                 key={i}
+                title={tbl.title}
                 headers={tbl.headers}
                 rows={tbl.rows}
               />
@@ -582,6 +596,7 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
             {sec.tables.map((tbl, i) => (
               <TechnicalMatrix
                 key={i}
+                title={tbl.title}
                 headers={tbl.headers}
                 rows={tbl.rows}
               />

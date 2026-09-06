@@ -7,6 +7,7 @@ export interface ChallengeRecordProps {
   title: string;
   category?: string;
   problem: string;
+  impact?: string;
   constraint?: string;
   solution?: string;
   result?: string;
@@ -19,6 +20,7 @@ export const ChallengeRecord: React.FC<ChallengeRecordProps> = ({
   title,
   category,
   problem,
+  impact,
   constraint,
   solution,
   result,
@@ -60,6 +62,19 @@ export const ChallengeRecord: React.FC<ChallengeRecordProps> = ({
             </span>
             <p className="text-neutral-300 font-sans leading-relaxed">
               {problem}
+            </p>
+          </div>
+        )}
+
+        {impact && (
+          <div className="space-y-1">
+            <span
+              className={`${mono.className} font-mono text-[10px] uppercase tracking-wider text-amber-400 font-bold block select-none`}
+            >
+              IMPACT
+            </span>
+            <p className="text-neutral-300 font-sans leading-relaxed">
+              {impact}
             </p>
           </div>
         )}
