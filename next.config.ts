@@ -33,10 +33,6 @@ const nextConfig: NextConfig = {
     globalNotFound: true,
   },
 
-  // Standalone output for Docker only (set DOCKER_BUILD=true when building Docker image)
-  // Vercel uses default serverless output - do NOT enable standalone for Vercel
-  ...(process.env.DOCKER_BUILD === "true" ? { output: "standalone" } : {}),
-
   // No experimental features for deployment stability
 
   async headers() {

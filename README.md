@@ -19,7 +19,7 @@ The objective is to present professional work clearly, share engineering insight
 - **Performance-oriented implementation** with optimized rendering, caching strategies, and minimal client-side overhead
 - **Production-ready security** through input validation, rate limiting, sanitization, and hardened API routes
 - **Responsive and polished UI** with subtle animations and a modern user experience
-- **Containerized deployment** for consistent environments and streamlined delivery
+- **Production-ready deployment** with edge and serverless compatibility
 - **Observability built in** through structured logging, health checks, and error handling
 
 
@@ -31,7 +31,7 @@ The objective is to present professional work clearly, share engineering insight
 | **Frontend** | Next.js, React, TypeScript, Tailwind CSS, Framer Motion |
 | **Backend** | Node.js, Next.js Route Handlers |
 | **Database** | Neon Serverless Postgres, Drizzle ORM |
-| **Infrastructure** | Docker, Alpine Linux, Upstash Redis |
+| **Infrastructure** | Edge / Serverless, Upstash Redis |
 | **Testing** | Vitest, React Testing Library |
 | **Monitoring** | Structured logging, Sentry (optional), health probes |
 
@@ -137,32 +137,6 @@ npm run db:migrate    # Run pending migrations against the database
 npm run db:seed       # Seed the database with initial data
 npm run db:studio     # Open Drizzle Studio to view and manage data
 ```
-
----
-
-## Docker Deployment
-
-Build the image:
-```bash
-docker build -t tushardevx01 .
-```
-
-Run the container:
-```bash
-docker run \
-  --rm \
-  --name tushardevx01 \
-  -p 3000:3000 \
-  --env-file .env.local \
-  tushardevx01
-```
-
-Or use Docker Compose:
-```bash
-docker compose up --build
-```
-
-The container is built on Alpine Linux and runs as a non-root user to improve security.
 
 ---
 
