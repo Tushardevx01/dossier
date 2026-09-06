@@ -13,7 +13,8 @@ import {
   getAllCaseStudies,
 } from "@/lib/case-studies";
 import { sanitizeHtml } from "@/lib/sanitize";
-import { nasalization } from "@/app/fonts";
+import { projectsData } from "@/constant/projects";
+import { parseCaseStudyContent } from "@/lib/case-study-parser";
 
 interface WorkDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -70,6 +71,9 @@ export default async function WorkDetailPage({ params }: WorkDetailPageProps) {
   // Sanitize on the server: the ~170KB HTML never ships unsanitized, and the
   // client receives only the final string (no sanitizer in the client bundle).
   const safeContentHtml = sanitizeHtml(caseStudy.content);
+  const parsed = parseCaseStudyContent(safeContentHtml);
+  const matchingProject =
+    projectsData.find((p) => p.slug.toLowerCase() === caseStudy.slug.toLowerCase()) || null;
 
   const projectSchema = generateCaseStudyStructuredData({
     title: caseStudy.title,
@@ -84,11 +88,13 @@ export default async function WorkDetailPage({ params }: WorkDetailPageProps) {
   ]);
 
   return (
-    <div className={`min-h-screen bg-black text-foreground relative ${nasalization.className}`}>
+    <div className="min-h-screen bg-black text-foreground relative font-sans">
       <JsonLd data={projectSchema} />
       <JsonLd data={breadcrumbSchema} />
       <CaseStudyClient
+        parsed={parsed}
         contentHtml={safeContentHtml}
+        project={matchingProject}
         meta={{
           slug: caseStudy.slug,
           title: caseStudy.title,

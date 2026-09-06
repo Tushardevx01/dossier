@@ -38,8 +38,7 @@ export const quentine = localFont({
 });
 
 // Monospace accents (imports as `mono.className`)
-// Intentionally NOT a webfont: rendering resolves via the CSS stack
-// `var(--font-mono), monospace` so no extra font file is shipped.
+// Resolves via the CSS stack `var(--font-mono), monospace`
 export const mono = {
-  className: "",
+  className: "font-mono",
 } as const;
