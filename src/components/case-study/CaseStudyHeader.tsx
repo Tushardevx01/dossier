@@ -2,8 +2,9 @@ import React from "react";
 import Link from "next/link";
 import { FaGithub } from "react-icons/fa6";
 import { LuExternalLink, LuArrowLeft } from "react-icons/lu";
-import { nasalization, mono } from "@/app/fonts";
+import { nasalization } from "@/app/fonts";
 import { TechnicalLabel } from "./TechnicalLabel";
+import { TechBadge } from "@/lib/tech-icons";
 import { Project } from "@/types/project";
 
 export interface CaseStudyHeaderProps {
@@ -136,14 +137,9 @@ export const CaseStudyHeader: React.FC<CaseStudyHeaderProps> = ({
 
       {/* Action Links & Tech Pills */}
       <div className="flex flex-wrap items-center justify-between gap-4 pt-2">
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-2">
           {techStack.map((tech) => (
-            <span
-              key={tech}
-              className={`${mono.className} px-2.5 py-1 rounded bg-neutral-900/90 border border-neutral-800 text-neutral-300 text-xs`}
-            >
-              {tech}
-            </span>
+            <TechBadge key={tech} name={tech} />
           ))}
         </div>
 

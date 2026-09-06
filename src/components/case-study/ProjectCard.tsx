@@ -2,34 +2,10 @@
 
 import Link from "next/link";
 import { motion, useReducedMotion, type Variants } from "motion/react";
-import type { IconType } from "react-icons";
-import { FaDocker, FaGithub, FaReact } from "react-icons/fa6";
-import {
-  SiAppwrite,
-  SiClerk,
-  SiExpo,
-  SiExpress,
-  SiFramer,
-  SiGo,
-  SiJavascript,
-  SiLinux,
-  SiMongodb,
-  SiNestjs,
-  SiNextdotjs,
-  SiNodedotjs,
-  SiPostgresql,
-  SiPrometheus,
-  SiPython,
-  SiRedis,
-  SiSupabase,
-  SiTailwindcss,
-  SiTypescript,
-  SiWebrtc,
-  SiZod,
-} from "react-icons/si";
-
+import { FaGithub } from "react-icons/fa6";
 import { mono, nasalization } from "@/app/fonts";
 import { Project } from "@/types/project";
+import { getTechIcon, getTechColor } from "@/lib/tech-icons";
 
 interface ProjectCardProps {
   project: Project;
@@ -42,113 +18,6 @@ interface StatusConfig {
   ping: boolean;
   textClass: string;
   containerClass: string;
-}
-
-const techIconMap: Record<string, IconType> = {
-  go: SiGo,
-  golang: SiGo,
-  docker: FaDocker,
-  "docker engine api": FaDocker,
-  typescript: SiTypescript,
-  javascript: SiJavascript,
-  react: FaReact,
-  "next.js": SiNextdotjs,
-  nextjs: SiNextdotjs,
-  "node.js": SiNodedotjs,
-  nodejs: SiNodedotjs,
-  node: SiNodedotjs,
-  express: SiExpress,
-  "express.js": SiExpress,
-  nestjs: SiNestjs,
-  "tailwind css": SiTailwindcss,
-  tailwind: SiTailwindcss,
-  mongodb: SiMongodb,
-  postgresql: SiPostgresql,
-  postgres: SiPostgresql,
-  redis: SiRedis,
-  python: SiPython,
-  supabase: SiSupabase,
-  appwrite: SiAppwrite,
-  "framer motion": SiFramer,
-  github: FaGithub,
-  "github api": FaGithub,
-  "github graphql api": FaGithub,
-  "linux cgroups": SiLinux,
-  linux: SiLinux,
-  prometheus: SiPrometheus,
-  "prometheus metrics": SiPrometheus,
-  webrtc: SiWebrtc,
-  clerk: SiClerk,
-  "clerk auth": SiClerk,
-  expo: SiExpo,
-  "expo react native": SiExpo,
-  zod: SiZod,
-};
-
-const techColorMap: Record<string, string> = {
-  go: "#00ADD8",
-  golang: "#00ADD8",
-  docker: "#2496ED",
-  "docker engine api": "#2496ED",
-  typescript: "#3178C6",
-  javascript: "#F7DF1E",
-  react: "#61DAFB",
-  "next.js": "#FFFFFF",
-  nextjs: "#FFFFFF",
-  "node.js": "#5FA04E",
-  nodejs: "#5FA04E",
-  node: "#5FA04E",
-  express: "#FFFFFF",
-  "express.js": "#FFFFFF",
-  nestjs: "#E0234E",
-  "tailwind css": "#06B6D4",
-  tailwind: "#06B6D4",
-  mongodb: "#47A248",
-  postgresql: "#4169E1",
-  postgres: "#4169E1",
-  redis: "#DC382D",
-  python: "#3776AB",
-  supabase: "#3ECF8E",
-  appwrite: "#FD366E",
-  "framer motion": "#0055FF",
-  github: "#FFFFFF",
-  "github api": "#FFFFFF",
-  "github graphql api": "#FFFFFF",
-  "linux cgroups": "#FCC624",
-  linux: "#FCC624",
-  prometheus: "#E6522C",
-  "prometheus metrics": "#E6522C",
-  webrtc: "#FF5C5C",
-  clerk: "#6C47FF",
-  "clerk auth": "#6C47FF",
-  expo: "#FFFFFF",
-  "expo react native": "#FFFFFF",
-  zod: "#3E67B1",
-  protobuf: "#4285F4",
-  jwt: "#D63AFF",
-  nodemailer: "#00B4D8",
-  livekit: "#1F80E0",
-  twilio: "#F22F46",
-  "twilio sms": "#F22F46",
-  cheerio: "#E88C1F",
-};
-
-function getTechIcon(name: string): IconType | null {
-  const key = name.toLowerCase().trim();
-  if (techIconMap[key]) return techIconMap[key];
-  for (const [techKey, icon] of Object.entries(techIconMap)) {
-    if (key.includes(techKey)) return icon;
-  }
-  return null;
-}
-
-function getTechColor(name: string): string {
-  const key = name.toLowerCase().trim();
-  if (techColorMap[key]) return techColorMap[key];
-  for (const [techKey, color] of Object.entries(techColorMap)) {
-    if (key.includes(techKey)) return color;
-  }
-  return "#A3A3A3";
 }
 
 function getStatusConfig(status?: string, liveUrl?: string): StatusConfig {
