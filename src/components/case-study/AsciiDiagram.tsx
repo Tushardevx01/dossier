@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { LuCopy, LuCheck, LuTerminal } from "react-icons/lu";
-import { mono } from "@/app/fonts";
 
 export interface AsciiDiagramProps {
   title?: string;

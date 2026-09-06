@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { LuCopy, LuCheck, LuCode } from "react-icons/lu";
-import { mono } from "@/app/fonts";
 
 export interface CodeBlockProps {
   code: string;

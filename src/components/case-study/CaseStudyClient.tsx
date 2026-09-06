@@ -1,15 +1,13 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React from "react";
 import { CaseStudyRenderer } from "./CaseStudyRenderer";
-import { parseCaseStudyContent, type ParsedCaseStudy } from "@/lib/case-study-parser";
+import type { ParsedCaseStudy } from "@/lib/case-study-parser";
 import type { Project } from "@/types/project";
 
 export interface CaseStudyClientProps {
   /** Pre-parsed structured case study from Server Component */
   parsed?: ParsedCaseStudy;
-  /** Pre-sanitized article HTML fallback if parsed not provided */
-  contentHtml?: string;
   /** Serializable case-study metadata */
   meta: {
     slug: string;
@@ -39,21 +37,13 @@ export interface CaseStudyClientProps {
  */
 export const CaseStudyClient: React.FC<CaseStudyClientProps> = ({
   parsed,
-  contentHtml,
   meta,
   project,
   nextCaseStudy,
 }) => {
-  const parsedData = useMemo(() => {
-    if (parsed && parsed.sections.length > 0) {
-      return parsed;
-    }
-    return parseCaseStudyContent(contentHtml || "");
-  }, [parsed, contentHtml]);
-
   return (
     <CaseStudyRenderer
-      parsed={parsedData}
+      parsed={parsed!}
       meta={meta}
       project={project}
       nextCaseStudy={nextCaseStudy}

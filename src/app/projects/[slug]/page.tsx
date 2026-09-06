@@ -12,7 +12,6 @@ import {
   getAllCaseStudySlugs,
   getAllCaseStudies,
 } from "@/lib/case-studies";
-import { sanitizeHtml } from "@/lib/sanitize";
 
 import { projectsData } from "@/constant/projects";
 import { parseCaseStudyContent } from "@/lib/case-study-parser";
@@ -69,10 +68,9 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
       ? allCaseStudies[(currentIndex + 1) % allCaseStudies.length]
       : null;
 
-  // Sanitize on the server: the ~170KB HTML never ships unsanitized, and the
-  // client receives only the final string (no sanitizer in the client bundle).
-  const safeContentHtml = sanitizeHtml(caseStudy.content);
-  const parsed = parseCaseStudyContent(safeContentHtml);
+  // Trust Boundary: Content is authored by the developer and stored in the database.
+  // We parse it directly into structured AST to avoid sending the entire raw HTML payload to the client.
+  const parsed = parseCaseStudyContent(caseStudy.content);
   const matchingProject =
     projectsData.find((p) => p.slug.toLowerCase() === caseStudy.slug.toLowerCase()) || null;
 
@@ -94,7 +92,6 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
       <JsonLd data={breadcrumbSchema} />
       <CaseStudyClient
         parsed={parsed}
-        contentHtml={safeContentHtml}
         project={matchingProject}
         meta={{
           slug: caseStudy.slug,

@@ -5,7 +5,12 @@
  * from the consolidated technical content source.
  */
 
-import { caseStudiesData } from "../src/lib/case-studies-data";
+import fs from "fs";
+import path from "path";
+
+const caseStudiesData = JSON.parse(
+  fs.readFileSync(path.join(process.cwd(), "src/lib/case-studies-full.json"), "utf8")
+);
 import { ensureDatabaseReady, getDb } from "../src/db";
 import { caseStudies } from "../src/db/schema";
 import { sql } from "drizzle-orm";

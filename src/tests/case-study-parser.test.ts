@@ -1,12 +1,16 @@
 import { describe, it, expect } from "vitest";
-import { caseStudiesData } from "@/lib/case-studies-data";
+import fs from 'fs';
+import path from 'path';
+import type { CaseStudyRecord } from "@/lib/case-studies-meta";
+
+const caseStudiesData: CaseStudyRecord[] = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'src/lib/case-studies-full.json'), 'utf8'));
 import { parseCaseStudyContent } from "@/lib/case-study-parser";
 
 describe("Case Study Content Parser", () => {
   it("parses all 7 production case studies without errors", () => {
     expect(caseStudiesData.length).toBe(7);
 
-    caseStudiesData.forEach((cs) => {
+    caseStudiesData.forEach((cs: CaseStudyRecord) => {
       const parsed = parseCaseStudyContent(cs.content);
       expect(parsed.sections.length).toBeGreaterThan(0);
       expect(parsed.totalDiagrams).toBeGreaterThanOrEqual(0);

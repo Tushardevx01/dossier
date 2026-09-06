@@ -13,7 +13,9 @@
 import { eq } from 'drizzle-orm';
 import { ensureDatabaseReady, getDb } from '@/db';
 import { caseStudies, type CaseStudy } from '@/db/schema';
-import { caseStudiesData, type CaseStudyRecord } from '@/lib/case-studies-data';
+import { caseStudiesMeta, type CaseStudyRecord } from '@/lib/case-studies-meta';
+import fs from 'fs';
+import path from 'path';
 
 const SKIP_DB_BUILD = process.env.SKIP_DB_BUILD === 'true' || process.env.SKIP_DB === 'true';
 
@@ -50,7 +52,7 @@ function mapCaseStudyRow(row: CaseStudy): CaseStudyRecord {
  */
 export async function getAllCaseStudies(): Promise<CaseStudyRecord[]> {
   if (SKIP_DB_BUILD || !process.env.DATABASE_URL) {
-    return caseStudiesData.filter((cs) => cs.published);
+    return caseStudiesMeta.filter((cs) => cs.published);
   }
 
   try {
@@ -83,7 +85,7 @@ export async function getAllCaseStudies(): Promise<CaseStudyRecord[]> {
       .where(eq(caseStudies.published, true));
 
     if (rows.length === 0) {
-      return caseStudiesData.filter((cs) => cs.published);
+      return caseStudiesMeta.filter((cs) => cs.published);
     }
 
     return rows.map((row) => ({
@@ -100,7 +102,7 @@ export async function getAllCaseStudies(): Promise<CaseStudyRecord[]> {
     }));
   } catch (error) {
     console.warn('Failed to query case_studies from DB, falling back to static cache:', error);
-    return caseStudiesData.filter((cs) => cs.published);
+    return caseStudiesMeta.filter((cs) => cs.published);
   }
 }
 
@@ -111,7 +113,15 @@ export async function getCaseStudyBySlug(slug: string): Promise<CaseStudyRecord 
   const normalizedSlug = slug.trim().toLowerCase();
 
   if (SKIP_DB_BUILD || !process.env.DATABASE_URL) {
-    return caseStudiesData.find((cs) => cs.slug.toLowerCase() === normalizedSlug) || null;
+    const fullDataPath = path.join(process.cwd(), 'src/lib/case-studies-full.json');
+    try {
+      const fileData = fs.readFileSync(fullDataPath, 'utf8');
+      const caseStudiesFull: CaseStudyRecord[] = JSON.parse(fileData);
+      return caseStudiesFull.find((cs) => cs.slug.toLowerCase() === normalizedSlug) || null;
+    } catch (fsError) {
+      console.error('Failed to read case-studies-full.json', fsError);
+      return null;
+    }
   }
 
   try {
@@ -125,13 +135,29 @@ export async function getCaseStudyBySlug(slug: string): Promise<CaseStudyRecord 
 
     if (rows.length === 0) {
       // Check fallback data
-      return caseStudiesData.find((cs) => cs.slug.toLowerCase() === normalizedSlug) || null;
+      const fullDataPath = path.join(process.cwd(), 'src/lib/case-studies-full.json');
+    try {
+      const fileData = fs.readFileSync(fullDataPath, 'utf8');
+      const caseStudiesFull: CaseStudyRecord[] = JSON.parse(fileData);
+      return caseStudiesFull.find((cs) => cs.slug.toLowerCase() === normalizedSlug) || null;
+    } catch (fsError) {
+      console.error('Failed to read case-studies-full.json', fsError);
+      return null;
+    }
     }
 
     return mapCaseStudyRow(rows[0]);
   } catch (error) {
     console.warn(`Failed to fetch case study ${slug} from DB, falling back to static cache:`, error);
-    return caseStudiesData.find((cs) => cs.slug.toLowerCase() === normalizedSlug) || null;
+    const fullDataPath = path.join(process.cwd(), 'src/lib/case-studies-full.json');
+    try {
+      const fileData = fs.readFileSync(fullDataPath, 'utf8');
+      const caseStudiesFull: CaseStudyRecord[] = JSON.parse(fileData);
+      return caseStudiesFull.find((cs) => cs.slug.toLowerCase() === normalizedSlug) || null;
+    } catch (fsError) {
+      console.error('Failed to read case-studies-full.json', fsError);
+      return null;
+    }
   }
 }
 
@@ -143,7 +169,7 @@ export async function getCaseStudyBySlug(slug: string): Promise<CaseStudyRecord 
  */
 export async function getAllCaseStudySlugs(): Promise<string[]> {
   if (SKIP_DB_BUILD || !process.env.DATABASE_URL) {
-    return caseStudiesData.filter((cs) => cs.published).map((cs) => cs.slug);
+    return caseStudiesMeta.filter((cs) => cs.published).map((cs) => cs.slug);
   }
 
   try {
@@ -155,12 +181,12 @@ export async function getAllCaseStudySlugs(): Promise<string[]> {
       .where(eq(caseStudies.published, true));
 
     if (rows.length === 0) {
-      return caseStudiesData.filter((cs) => cs.published).map((cs) => cs.slug);
+      return caseStudiesMeta.filter((cs) => cs.published).map((cs) => cs.slug);
     }
 
     return rows.map((row) => row.slug);
   } catch (error) {
     console.warn('Failed to query case_studies slugs from DB, falling back to static cache:', error);
-    return caseStudiesData.filter((cs) => cs.published).map((cs) => cs.slug);
+    return caseStudiesMeta.filter((cs) => cs.published).map((cs) => cs.slug);
   }
 }

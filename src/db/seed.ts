@@ -73,7 +73,10 @@ export async function seedDatabase() {
 
     if (caseStudiesResult.length === 0) {
       logger.info('Seeding case studies from static repository data');
-      const { caseStudiesData } = await import('@/lib/case-studies-data');
+      const fs = await import('fs');
+      const path = await import('path');
+      const fullDataPath = path.join(process.cwd(), 'src/lib/case-studies-full.json');
+      const caseStudiesData = JSON.parse(fs.readFileSync(fullDataPath, 'utf8'));
       for (const record of caseStudiesData) {
         await database.insert(caseStudies).values({
           slug: record.slug,

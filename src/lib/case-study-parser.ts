@@ -123,7 +123,7 @@ function extractDiagram($: cheerio.CheerioAPI, $pre: cheerio.Cheerio<any>, index
   // Pre-code content heuristics for concrete source files & functions
   const preText = $pre.text().trim();
   const firstLine = preText.split("\n")[0].trim();
-  const commentMatch = firstLine.match(/^\/\/\s*([a-zA-Z0-9_\-\.\/]+)/);
+  const commentMatch = firstLine.match(/^\/\/\s*([a-zA-Z0-9_./-]+)/);
   if (commentMatch) {
     title = commentMatch[1];
   } else if (!title || title.startsWith("SYSTEM FLOW")) {
@@ -165,7 +165,7 @@ function extractDiagram($: cheerio.CheerioAPI, $pre: cheerio.Cheerio<any>, index
   }
 
   const $divs = $pre.children("div");
-  let ascii = "";
+  let ascii: string;
   if ($divs.length > 0) {
     ascii = $divs
       .map((_, el) => $(el).text())
@@ -460,7 +460,7 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
         const rawTitle = $c.find("h3, h4").first().text().trim();
         let title = rawTitle;
         let extractedNum = "";
-        const numMatch = rawTitle.match(/^(\d+)[\.\s\-:]+(.*)/);
+        const numMatch = rawTitle.match(/^(\d+)[.\s:-]+(.*)/);
         if (numMatch) {
           extractedNum = numMatch[1].padStart(2, "0");
           title = numMatch[2].trim();
