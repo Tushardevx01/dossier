@@ -24,11 +24,11 @@ export const DecisionRecord: React.FC<DecisionRecordProps> = ({
     <article
       className={`border border-neutral-800/80 bg-[#07070a]/90 rounded-lg p-5 sm:p-6 space-y-4 hover:border-neutral-700 transition-colors ${className}`}
     >
-      <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-neutral-800/80">
+      <div className="flex flex-wrap items-center justify-between gap-2 pb-1">
         <span
           className={`${mono.className} font-mono text-[11px] font-bold text-emerald-400 select-none`}
         >
-          DECISION {number} // {area}
+          DECISION {number} &bull; {area}
         </span>
         <h3 className="text-sm sm:text-base font-bold text-white uppercase tracking-wide">
           {technology}

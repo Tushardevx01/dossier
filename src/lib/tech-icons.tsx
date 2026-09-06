@@ -126,6 +126,7 @@ export const techIconMap: Record<string, IconType> = {
   "stream node sdk": LuVideo,
 
   // Protocols & Utilities
+  lucide: LuCode,
   http: LuGlobe,
   rest: LuGlobe,
   nodemailer: LuMail,
@@ -211,6 +212,7 @@ export const techColorMap: Record<string, string> = {
   "stream video sdk": "#005FFF",
   "stream node sdk": "#005FFF",
 
+  lucide: "#CBD5E1",
   http: "#00D26A",
   rest: "#00D26A",
   nodemailer: "#00B4D8",
@@ -252,12 +254,12 @@ export const TechBadge: React.FC<TechBadgeProps> = ({
 
   const sizeClasses =
     size === "md"
-      ? "px-3 py-1.5 text-xs gap-2"
-      : "px-2.5 py-1 text-xs gap-1.5";
+      ? "px-3.5 py-2 text-xs gap-2"
+      : "px-3 py-1.5 text-xs gap-2";
 
   return (
     <span
-      className={`inline-flex items-center rounded-md font-mono text-neutral-300 bg-neutral-900/80 border border-neutral-800/80 hover:border-neutral-700/80 transition-colors select-none ${sizeClasses} ${className}`}
+      className={`inline-flex items-center rounded-lg font-mono text-neutral-300 bg-[#0c0c0e] border border-neutral-800 hover:border-neutral-700 transition-colors select-none ${sizeClasses} ${className}`}
     >
       {Icon && (
         <Icon

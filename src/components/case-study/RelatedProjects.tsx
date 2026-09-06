@@ -24,7 +24,7 @@ export const RelatedProjects: React.FC<RelatedProjectsProps> = ({
             <span
               className={`${mono.className} text-[11px] font-mono uppercase tracking-wider text-emerald-400 font-semibold block`}
             >
-              NEXT PRODUCTION SYSTEM // CASE STUDY
+              NEXT PRODUCTION SYSTEM &bull; CASE STUDY
             </span>
             <h3 className="text-xl sm:text-2xl font-bold text-white uppercase group-hover:text-emerald-300 transition-colors">
               {nextCaseStudy.title}

@@ -125,8 +125,51 @@ function extractDiagram($: cheerio.CheerioAPI, $pre: cheerio.Cheerio<any>, index
     caption = $firstSpan.text().trim();
   }
 
-  const ascii = $pre.text();
-  const rawHtml = $pre.html() || "";
+  const $divs = $pre.children("div");
+  let ascii = "";
+  if ($divs.length > 0) {
+    ascii = $divs
+      .map((_, el) => $(el).text())
+      .get()
+      .join("\n");
+  } else {
+    ascii = $pre.text();
+  }
+  let rawHtml = $pre.html() || "";
+
+  // Defensive alignment check:
+  // 1. If line 0 is a top-border box (starts with ┌ or ╭) unindented while next line is indented, align it.
+  // 2. If line 0 is a short unindented title/label while a subsequent line has an indented stem (│, ↓, ▼), center it.
+  if ($divs.length > 1) {
+    const l0 = $divs.first().text();
+    const l1 = $divs.eq(1).text();
+    const l0Indent = l0.length - l0.trimStart().length;
+    const l1Indent = l1.length - l1.trimStart().length;
+    if (
+      (l0.trimStart().startsWith("┌") || l0.trimStart().startsWith("╭")) &&
+      l0Indent === 0 &&
+      l1Indent > 2
+    ) {
+      const padding = " ".repeat(l1Indent);
+      ascii = padding + ascii;
+      rawHtml = rawHtml.replace(/(<span[^>]*>)([┌╭])/, `$1${padding}$2`);
+    } else if (l0Indent === 0 && l0.trim().length > 0 && l0.trim().length < 25) {
+      const l0Trim = l0.trim();
+      for (let i = 1; i <= Math.min(3, $divs.length - 1); i++) {
+        const lineText = $divs.eq(i).text();
+        const stemIdx = lineText.search(/[│↓▼|]/);
+        if (stemIdx >= 4) {
+          const neededPadding = Math.max(0, Math.round(stemIdx - l0Trim.length / 2));
+          if (neededPadding > 2) {
+            const padding = " ".repeat(neededPadding);
+            ascii = padding + ascii;
+            rawHtml = rawHtml.replace(/(<span[^>]*>)([^<\s])/, `$1${padding}$2`);
+          }
+          break;
+        }
+      }
+    }
+  }
 
   return {
     id: `diagram-${index}`,

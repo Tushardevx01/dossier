@@ -34,7 +34,7 @@ export const ArchitectureDiagram: React.FC<ArchitectureDiagramProps> = ({
               <div key={idx} className="p-4 space-y-1.5 hover:bg-neutral-900/20 transition-colors">
                 <div className="flex items-center gap-2">
                   <span className={`${mono.className} font-mono text-xs text-emerald-400 font-bold`}>
-                    {layer.num || String(idx + 1).padStart(2, "0")} //
+                    {layer.num || String(idx + 1).padStart(2, "0")}
                   </span>
                   <span className="text-xs font-semibold text-white uppercase tracking-wide">
                     {layer.title}

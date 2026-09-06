@@ -21,14 +21,14 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
   className = "",
 }) => {
   return (
-    <div className={`space-y-3 pb-4 border-b border-neutral-800/80 ${className}`}>
+    <div className={`space-y-3 pb-2 ${className}`}>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-3">
           {number && (
             <span
               className={`${mono.className} font-mono text-xs sm:text-sm font-bold text-emerald-400 tracking-wider select-none`}
             >
-              {number} //
+              {number}
             </span>
           )}
           <h2

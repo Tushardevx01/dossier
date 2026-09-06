@@ -30,12 +30,12 @@ export const ChallengeRecord: React.FC<ChallengeRecordProps> = ({
       className={`border-l-2 border-neutral-800 hover:border-emerald-500/60 pl-5 sm:pl-7 py-2 space-y-4 transition-colors ${className}`}
     >
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-2 border-b border-neutral-900">
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-1">
         <div className="flex items-center gap-2.5">
           <span
             className={`${mono.className} font-mono text-xs font-bold text-emerald-400 select-none`}
           >
-            {number} // CHALLENGE
+            {number} CHALLENGE
           </span>
           <h3 className="text-base sm:text-lg font-bold text-white uppercase tracking-wide">
             {title}

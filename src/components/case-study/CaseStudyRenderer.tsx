@@ -74,7 +74,7 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
 
               {sec.constraints.length > 0 && (
                 <div className="lg:col-span-6 rounded-lg border border-neutral-800/80 bg-[#07070a] p-4 sm:p-5 space-y-3">
-                  <div className="flex items-center justify-between pb-2 border-b border-neutral-800/80">
+                  <div className="flex items-center justify-between pb-2">
                     <span
                       className={`${mono.className} text-[11px] font-mono uppercase tracking-wider text-emerald-400 font-semibold`}
                     >
@@ -156,7 +156,7 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
                       <div className="flex items-center gap-2">
                         {item.num && (
                           <span className="font-mono text-xs text-emerald-400 font-bold select-none">
-                            {item.num} //
+                            {item.num}
                           </span>
                         )}
                         <h4 className="font-mono text-xs font-bold text-white uppercase tracking-wider">

@@ -71,7 +71,10 @@ export const CaseStudyShell: React.FC<CaseStudyShellProps> = ({
   };
 
   return (
-    <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-12 sm:space-y-16">
+      {/* Full-width Executive Header */}
+      {header}
+
       <div className="flex flex-col lg:flex-row items-start gap-8 lg:gap-12 xl:gap-16 relative">
         {/* Sticky Index Navigator */}
         <CaseStudyIndex
@@ -83,8 +86,7 @@ export const CaseStudyShell: React.FC<CaseStudyShellProps> = ({
 
         {/* Main Editorial Case Study Flow */}
         <main className="flex-1 min-w-0 w-full">
-          {header}
-          <div className="mt-16 sm:mt-24 space-y-20 sm:space-y-28 lg:space-y-32">
+          <div className="space-y-20 sm:space-y-28 lg:space-y-32">
             {children}
           </div>
           {footer}
