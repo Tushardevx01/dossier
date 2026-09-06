@@ -127,11 +127,11 @@ export const CaseStudyIndex: React.FC<CaseStudyIndexProps> = ({
 
           <div className="pt-3 border-t border-neutral-800/80 flex items-center justify-between text-[11px] font-mono text-neutral-500">
             <Link
-              href="/work"
+              href="/#selected-work"
               className="inline-flex items-center gap-1 hover:text-emerald-400 transition-colors"
             >
               <LuArrowLeft className="w-3 h-3" />
-              <span>ALL WORK</span>
+              <span>SELECTED WORK</span>
             </Link>
             <span>{readTime}m read</span>
           </div>

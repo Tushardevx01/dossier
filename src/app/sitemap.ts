@@ -16,12 +16,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 1,
     },
-    {
-      url: `${baseUrl}/work`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.95,
-    },
     ...projectsData.map((project) => ({
       url: `${baseUrl}/work/${project.slug}`,
       lastModified: now,

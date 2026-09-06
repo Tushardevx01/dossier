@@ -84,7 +84,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
 
   const breadcrumbSchema = generateBreadcrumbListStructuredData([
     { name: "Tushar Kanti Dey", url: absoluteUrl("/") },
-    { name: "Projects", url: absoluteUrl("/projects") },
+    { name: "Selected Work", url: absoluteUrl("/#selected-work") },
     { name: caseStudy.title, url: absoluteUrl(`/projects/${caseStudy.slug}`) },
   ]);
 

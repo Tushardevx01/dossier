@@ -91,13 +91,14 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
+      { source: "/work", destination: "/#selected-work", permanent: false },
       { source: "/blog", destination: "/engineering-notes", permanent: true },
       { source: "/blog/:slug", destination: "/engineering-notes/:slug", permanent: true },
       { source: "/home", destination: "/", permanent: true },
-      { source: "/email", destination: "mailto:Tushar.Dey@gmail.com", permanent: true },
+      { source: "/email", destination: "mailto:thetushardev0@gmail.com", permanent: true },
       { source: "/directresume", destination: "/docs/Resume.pdf", permanent: true },
       { source: "/direct-resume", destination: "/docs/Resume.pdf", permanent: true },
-      { source: "/github", destination: "https://www.github.com/", permanent: true },
+      { source: "/github", destination: "https://www.github.com/tushardevx01", permanent: true },
     ];
   },
 };

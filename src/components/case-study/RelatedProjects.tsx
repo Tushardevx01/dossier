@@ -14,7 +14,7 @@ export interface RelatedProjectsProps {
 
 export const RelatedProjects: React.FC<RelatedProjectsProps> = ({
   nextCaseStudy,
-  allWorkUrl = "/work",
+  allWorkUrl = "/#selected-work",
 }) => {
   return (
     <footer className="pt-16 pb-16 border-t border-neutral-800/80 space-y-8">
@@ -50,7 +50,7 @@ export const RelatedProjects: React.FC<RelatedProjectsProps> = ({
           className="inline-flex items-center gap-1.5 hover:text-white transition-colors"
         >
           <LuArrowLeft className="w-3.5 h-3.5" />
-          <span>ALL CASE STUDIES</span>
+          <span>BACK TO SELECTED WORK</span>
         </Link>
         <span className="text-[11px] text-neutral-600">
           ENGINEERING DOSSIER &bull; TUSHAR KANTI DEY

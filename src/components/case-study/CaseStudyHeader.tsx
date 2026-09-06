@@ -39,11 +39,11 @@ export const CaseStudyHeader: React.FC<CaseStudyHeaderProps> = ({
       {/* Top Breadcrumb & Badge */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <Link
-          href="/work"
+          href="/#selected-work"
           className="inline-flex items-center gap-1.5 font-mono text-xs text-neutral-400 hover:text-emerald-400 transition-colors"
         >
           <LuArrowLeft className="w-3.5 h-3.5" />
-          <span>BACK TO DOSSIER</span>
+          <span>BACK TO SELECTED WORK</span>
         </Link>
 
         <div className="flex items-center gap-2">

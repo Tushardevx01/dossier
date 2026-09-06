@@ -83,7 +83,7 @@ export default async function WorkDetailPage({ params }: WorkDetailPageProps) {
 
   const breadcrumbSchema = generateBreadcrumbListStructuredData([
     { name: "Tushar Kanti Dey", url: absoluteUrl("/") },
-    { name: "Work", url: absoluteUrl("/work") },
+    { name: "Selected Work", url: absoluteUrl("/#selected-work") },
     { name: caseStudy.title, url: absoluteUrl(`/work/${caseStudy.slug}`) },
   ]);
 
