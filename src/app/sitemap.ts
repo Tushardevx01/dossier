@@ -1,54 +1,50 @@
 import type { MetadataRoute } from "next";
-import { projectsData } from "@/constant/projects";
-import { generateArticleStaticParams } from "@/lib/articleLoader";
 import { SITE_URL } from "@/lib/site";
+import { getAllCaseStudies } from "@/lib/case-studies";
+import { getAllArticles } from "@/lib/articleLoader";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = SITE_URL.replace(/\/$/, "");
-  const now = new Date();
 
-  const engineeringNotesSlugs = await generateArticleStaticParams();
+  const [caseStudies, articles] = await Promise.all([
+    getAllCaseStudies(),
+    getAllArticles(),
+  ]);
 
   return [
     {
       url: baseUrl,
-      lastModified: now,
+      lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 1,
     },
-    ...projectsData.map((project) => ({
-      url: `${baseUrl}/work/${project.slug}`,
-      lastModified: now,
+    ...caseStudies.map((cs) => ({
+      url: `${baseUrl}/work/${cs.slug}`,
+      lastModified: new Date(cs.updatedAt),
       changeFrequency: "monthly" as const,
       priority: 0.85,
     })),
     {
       url: `${baseUrl}/engineering-notes`,
-      lastModified: now,
+      lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.9,
     },
     {
       url: `${baseUrl}/projects`,
-      lastModified: now,
+      lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.8,
     },
-    ...projectsData.map((project) => ({
-      url: `${baseUrl}/projects/${project.slug}`,
-      lastModified: now,
-      changeFrequency: "monthly" as const,
-      priority: 0.75,
-    })),
-    ...engineeringNotesSlugs.map(({ slug }) => ({
-      url: `${baseUrl}/engineering-notes/${slug}`,
-      lastModified: now,
+    ...articles.map((article) => ({
+      url: `${baseUrl}/engineering-notes/${article.slug}`,
+      lastModified: new Date(article.date),
       changeFrequency: "weekly" as const,
       priority: 0.75,
     })),
     {
       url: `${baseUrl}/resume`,
-      lastModified: now,
+      lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
     },

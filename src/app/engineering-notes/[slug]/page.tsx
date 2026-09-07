@@ -25,6 +25,7 @@ export async function generateMetadata(
   if (!article) {
     return {
       title: "Article Not Found",
+      robots: { index: false, follow: false },
     };
   }
 

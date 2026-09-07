@@ -163,13 +163,6 @@ export interface CaseStudyMetadata {
   slug: string;
 }
 
-export interface BuildLogMetadata {
-  title: string;
-  description: string;
-  slug: string;
-  publishedAt: string;
-}
-
 export function generateArticleStructuredData(article: ArticleMetadata) {
   return {
     "@context": "https://schema.org",
@@ -216,32 +209,6 @@ export function generateCaseStudyStructuredData(caseStudy: CaseStudyMetadata) {
     mainEntityOfPage: {
       "@type": "WebPage",
       "@id": `${SITE_URL}/projects/${caseStudy.slug}`,
-    },
-  };
-}
-
-export function generateBuildLogStructuredData(entry: BuildLogMetadata) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    headline: entry.title,
-    description: entry.description,
-    url: `${SITE_URL}/build-log/${entry.slug}`,
-    datePublished: entry.publishedAt,
-    dateModified: entry.publishedAt,
-    author: {
-      "@type": "Person",
-      name: siteConfig.name,
-      url: SITE_URL,
-    },
-    publisher: {
-      "@type": "Person",
-      name: siteConfig.name,
-      url: SITE_URL,
-    },
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": `${SITE_URL}/build-log/${entry.slug}`,
     },
   };
 }

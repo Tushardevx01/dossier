@@ -1,5 +1,3 @@
-"use client";
-
 export const Background = () => {
   return (
     <div className="top-0 fixed -z-10 h-full w-full overflow-hidden">

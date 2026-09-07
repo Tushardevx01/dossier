@@ -33,19 +33,22 @@ export async function generateMetadata({ params }: ProjectDetailPageProps): Prom
     };
   }
 
-  return buildPageMetadata({
-    title: `${caseStudy.title} — Architecture & Case Study | Tushar Kanti Dey`,
-    description: `${caseStudy.subtitle}. ${caseStudy.excerpt}`,
-    path: `/projects/${caseStudy.slug}`,
-    type: "article",
-    keywords: [
-      ...caseStudy.tags,
-      caseStudy.category,
-      "case study",
-      "software architecture",
-      "Tushar Kanti Dey",
-    ],
-  });
+  return {
+    ...buildPageMetadata({
+      title: `${caseStudy.title} — Architecture & Case Study | Tushar Kanti Dey`,
+      description: `${caseStudy.subtitle}. ${caseStudy.excerpt}`,
+      path: `/projects/${caseStudy.slug}`,
+      type: "article",
+      keywords: [
+        ...caseStudy.tags,
+        caseStudy.category,
+        "case study",
+        "software architecture",
+        "Tushar Kanti Dey",
+      ],
+    }),
+    robots: { index: false, follow: false },
+  };
 }
 
 export async function generateStaticParams() {

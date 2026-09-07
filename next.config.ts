@@ -92,8 +92,8 @@ const nextConfig: NextConfig = {
       { source: "/blog/:slug", destination: "/engineering-notes/:slug", permanent: true },
       { source: "/home", destination: "/", permanent: true },
       { source: "/email", destination: "mailto:thetushardev0@gmail.com", permanent: true },
-      { source: "/directresume", destination: "/docs/Resume.pdf", permanent: true },
       { source: "/direct-resume", destination: "/docs/Resume.pdf", permanent: true },
+      { source: "/projects/:slug", destination: "/work/:slug", permanent: true },
       { source: "/github", destination: "https://www.github.com/tushardevx01", permanent: true },
     ];
   },

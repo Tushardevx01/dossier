@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { CaseStudyRenderer } from "./CaseStudyRenderer";
 import type { ParsedCaseStudy } from "@/lib/case-study-parser";

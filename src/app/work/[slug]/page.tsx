@@ -44,6 +44,7 @@ export async function generateMetadata({ params }: WorkDetailPageProps): Promise
       "software architecture",
       "Tushar Kanti Dey",
     ],
+    image: absoluteUrl(`/work/${caseStudy.slug}/opengraph-image`),
   });
 }
 

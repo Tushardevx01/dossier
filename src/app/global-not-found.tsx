@@ -1,6 +1,10 @@
 export default function GlobalNotFound() {
   return (
     <html lang="en" data-global-not-found="true">
+      <head>
+        <title>Page Not Found</title>
+        <meta name="robots" content="noindex, nofollow" />
+      </head>
       <body>
         <main
           style={{

@@ -8,6 +8,7 @@ export const size = {
   width: 1200,
   height: 630,
 };
+export const alt = "Engineering Notes";
 
 interface ImageRouteProps {
   params: Promise<{ slug: string }>;
