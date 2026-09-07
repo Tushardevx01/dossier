@@ -25,7 +25,7 @@ export const selfData = {
     "Open Source Contributor",
   ],
   desc: "Building premium web products with Next.js, TypeScript, and production-first thinking.",
-  bio: "I build scalable full stack products end-to-end, with a focus on Next.js, TypeScript, real-time experiences, and interfaces that convert under real traffic.",
+  bio: "I build scalable full-stack products end-to-end, connecting polished interfaces with reliable backend systems and real-time experiences. I work primarily with Next.js and TypeScript, with a focus on performance, thoughtful architecture, and building products that hold up under real-world traffic.",
   about: [
     "I work across the full stack from React interfaces to Node.js services and deployment workflows. Every decision I make is shaped by scale, maintainability, and how the product behaves after launch.",
 
