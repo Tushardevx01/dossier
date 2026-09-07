@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { LuCopy, LuCheck, LuTerminal } from "react-icons/lu";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 export interface AsciiDiagramProps {
   title?: string;
@@ -101,7 +102,7 @@ export const AsciiDiagram: React.FC<AsciiDiagramProps> = ({
                 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
               letterSpacing: "0px",
             }}
-            dangerouslySetInnerHTML={{ __html: rawHtml }}
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(rawHtml) }}
           />
         ) : (
           <pre

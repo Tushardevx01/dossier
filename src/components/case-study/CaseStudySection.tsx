@@ -3,7 +3,6 @@ import { SectionHeading } from "./SectionHeading";
 
 export interface CaseStudySectionProps {
   id: string;
-  number?: string;
   title?: string;
   subtitle?: string;
   badge?: string;
@@ -15,7 +14,6 @@ export interface CaseStudySectionProps {
 
 export const CaseStudySection: React.FC<CaseStudySectionProps> = ({
   id,
-  number,
   title,
   subtitle,
   badge,
@@ -33,7 +31,6 @@ export const CaseStudySection: React.FC<CaseStudySectionProps> = ({
       {title && (
         <SectionHeading
           id={id}
-          number={number}
           title={title}
           subtitle={subtitle}
           badge={badge}

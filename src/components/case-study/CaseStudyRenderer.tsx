@@ -15,6 +15,7 @@ import { RelatedProjects } from "./RelatedProjects";
 import type { ParsedCaseStudy, ParsedSection } from "@/lib/case-study-parser";
 import type { Project } from "@/types/project";
 import { mono } from "@/app/fonts";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 export interface CaseStudyRendererProps {
   parsed: ParsedCaseStudy;
@@ -666,7 +667,7 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
               sec.rawContentHtml && (
                 <div
                   className="case-study-content text-neutral-300 max-w-[760px] leading-relaxed text-sm sm:text-base space-y-4"
-                  dangerouslySetInnerHTML={{ __html: sec.rawContentHtml }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(sec.rawContentHtml) }}
                 />
               )}
           </div>
@@ -686,7 +687,6 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
         <CaseStudySection
           key={sec.id}
           id={sec.id}
-          number={sec.number}
           title={sec.title}
           badge={sec.badge}
           pattern={sec.pattern}

@@ -1,12 +1,30 @@
-import { describe, it, expect } from "vitest";
-import fs from 'fs';
-import path from 'path';
+import { describe, it, expect, beforeAll } from "vitest";
 import type { CaseStudyRecord } from "@/lib/case-studies-meta";
-
-const caseStudiesData: CaseStudyRecord[] = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'src/lib/case-studies-full.json'), 'utf8'));
+import { getCaseStudyBySlug } from "@/lib/case-studies";
 import { parseCaseStudyContent } from "@/lib/case-study-parser";
 
-describe("Case Study Content Parser", () => {
+const SKIP_DB = !process.env.DATABASE_URL;
+
+const slugs = [
+  "runstack",
+  "aegis",
+  "carepulse",
+  "fenix",
+  "signifiya",
+  "webscope",
+  "subscription-tracker",
+];
+
+describe.skipIf(SKIP_DB)("Case Study Content Parser", () => {
+  let caseStudiesData: CaseStudyRecord[];
+
+  beforeAll(async () => {
+    const results = await Promise.all(
+      slugs.map((slug) => getCaseStudyBySlug(slug))
+    );
+    caseStudiesData = results.filter(Boolean) as CaseStudyRecord[];
+  });
+
   it("parses all 7 production case studies without errors", () => {
     expect(caseStudiesData.length).toBe(7);
 
@@ -15,7 +33,6 @@ describe("Case Study Content Parser", () => {
       expect(parsed.sections.length).toBeGreaterThan(0);
       expect(parsed.totalDiagrams).toBeGreaterThanOrEqual(0);
 
-      // Verify every section has an id, number, and title
       parsed.sections.forEach((sec, idx) => {
         expect(sec.id).toBeTruthy();
         expect(sec.number).toBe(String(idx + 1).padStart(2, "0"));
@@ -24,8 +41,8 @@ describe("Case Study Content Parser", () => {
     });
   });
 
-  it("extracts RunStack diagrams and ASCII art completely", () => {
-    const runstack = caseStudiesData.find((cs) => cs.slug === "runstack");
+  it("extracts RunStack diagrams and ASCII art completely", async () => {
+    const runstack = await getCaseStudyBySlug("runstack");
     expect(runstack).toBeDefined();
     if (!runstack) return;
 
@@ -38,14 +55,13 @@ describe("Case Study Content Parser", () => {
     expect(problemSec?.constraints.length).toBeGreaterThanOrEqual(5);
     expect(problemSec?.diagrams.length).toBeGreaterThanOrEqual(1);
 
-    // Verify ASCII characters are preserved
     const diag = problemSec?.diagrams[0];
     expect(diag?.ascii).toContain("DISTRIBUTED EXECUTION");
     expect(diag?.ascii).toContain("COORDINATION");
   });
 
-  it("extracts Engineering Challenges and Solutions cleanly", () => {
-    const runstack = caseStudiesData.find((cs) => cs.slug === "runstack");
+  it("extracts Engineering Challenges and Solutions cleanly", async () => {
+    const runstack = await getCaseStudyBySlug("runstack");
     if (!runstack) return;
 
     const parsed = parseCaseStudyContent(runstack.content);
@@ -59,8 +75,8 @@ describe("Case Study Content Parser", () => {
     expect(solutionsSec?.solutions[0].title).toContain("NODE FAILURE & RECOVERY");
   });
 
-  it("extracts Technical Decisions and Measurable Outcomes", () => {
-    const runstack = caseStudiesData.find((cs) => cs.slug === "runstack");
+  it("extracts Technical Decisions and Measurable Outcomes", async () => {
+    const runstack = await getCaseStudyBySlug("runstack");
     if (!runstack) return;
 
     const parsed = parseCaseStudyContent(runstack.content);
@@ -73,8 +89,8 @@ describe("Case Study Content Parser", () => {
     expect(outcomesSec?.outcomes.length).toBe(6);
   });
 
-  it("extracts all structured sections cleanly from Subscription Tracker", () => {
-    const subTracker = caseStudiesData.find((cs) => cs.slug === "subscription-tracker");
+  it("extracts all structured sections cleanly from Subscription Tracker", async () => {
+    const subTracker = await getCaseStudyBySlug("subscription-tracker");
     expect(subTracker).toBeDefined();
     if (!subTracker) return;
 
@@ -82,13 +98,11 @@ describe("Case Study Content Parser", () => {
     expect(parsed.sections.length).toBe(16);
     expect(parsed.totalDiagrams).toBeGreaterThanOrEqual(15);
 
-    // Problem constraints
     const problemSec = parsed.sections.find((s) => s.id === "problem");
     expect(problemSec).toBeDefined();
     expect(problemSec?.constraints.length).toBe(7);
     expect(problemSec?.diagrams.length).toBeGreaterThanOrEqual(1);
 
-    // Challenges
     const challengesSec = parsed.sections.find((s) => s.id === "challenges");
     expect(challengesSec).toBeDefined();
     expect(challengesSec?.challenges.length).toBe(5);
@@ -99,7 +113,6 @@ describe("Case Study Content Parser", () => {
       expect(ch.impact).toBeTruthy();
     });
 
-    // Decisions
     const decisionsSec = parsed.sections.find((s) => s.id === "decisions");
     expect(decisionsSec).toBeDefined();
     expect(decisionsSec?.decisions.length).toBe(5);
@@ -113,14 +126,12 @@ describe("Case Study Content Parser", () => {
       expect(dec.outcome.length).toBeGreaterThan(10);
     });
 
-    // Technical Rigor Table
     const rigorSec = parsed.sections.find((s) => s.id === "rigor");
     expect(rigorSec).toBeDefined();
     expect(rigorSec?.tables.length).toBeGreaterThanOrEqual(1);
     expect(rigorSec?.tables[0].headers.length).toBeGreaterThan(0);
     expect(rigorSec?.tables[0].rows.length).toBeGreaterThan(0);
 
-    // API Surface Tables
     const apiSec = parsed.sections.find((s) => s.id === "api-surface");
     expect(apiSec).toBeDefined();
     expect(apiSec?.tables.length).toBe(2);
