@@ -2,8 +2,6 @@
 
 A production-grade portfolio built with Next.js, showcasing clean architecture, strong engineering practices, and a focus on performance, security, and maintainability.
 
-
-
 ## Overview
 
 This project is more than a portfolio website; it is a practical demonstration of scalable software design in a real-world application. It combines content delivery, contact workflows, deployment readiness, and observability in a single, well-structured codebase.
