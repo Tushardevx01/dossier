@@ -83,26 +83,31 @@ function mapPost(note: NotePostRow): ArticlePost {
 export async function getAllNotes(): Promise<ArticleMetadata[]> {
   if (SKIP_DB_BUILD) return [];
 
-  await ensureDatabaseReady();
-  const db = getDb();
+  try {
+    await ensureDatabaseReady();
+    const db = getDb();
 
-  const notes = await db
-    .select({
-      slug: engineeringNotes.slug,
-      id: engineeringNotes.id,
-      title: engineeringNotes.title,
-      subtitle: engineeringNotes.subtitle,
-      excerpt: engineeringNotes.excerpt,
-      date: engineeringNotes.date,
-      readTime: engineeringNotes.readTime,
-      category: engineeringNotes.category,
-      level: engineeringNotes.level,
-    })
-    .from(engineeringNotes)
-    .where(eq(engineeringNotes.published, true))
-    .orderBy(desc(engineeringNotes.featured), desc(engineeringNotes.createdAt), desc(engineeringNotes.id));
+    const notes = await db
+      .select({
+        slug: engineeringNotes.slug,
+        id: engineeringNotes.id,
+        title: engineeringNotes.title,
+        subtitle: engineeringNotes.subtitle,
+        excerpt: engineeringNotes.excerpt,
+        date: engineeringNotes.date,
+        readTime: engineeringNotes.readTime,
+        category: engineeringNotes.category,
+        level: engineeringNotes.level,
+      })
+      .from(engineeringNotes)
+      .where(eq(engineeringNotes.published, true))
+      .orderBy(desc(engineeringNotes.featured), desc(engineeringNotes.createdAt), desc(engineeringNotes.id));
 
-  return notes.map(mapMetadata);
+    return notes.map(mapMetadata);
+  } catch (error) {
+    console.warn('Failed to query engineering_notes from DB, returning empty list:', error);
+    return [];
+  }
 }
 
 /**
@@ -111,38 +116,44 @@ export async function getAllNotes(): Promise<ArticleMetadata[]> {
 export async function getNoteBySlug(slug: string): Promise<ArticlePost | null> {
   if (SKIP_DB_BUILD) return null;
 
-  await ensureDatabaseReady();
-  const db = getDb();
-  const normalizedSlug = slug.trim().toLowerCase();
+  try {
+    await ensureDatabaseReady();
+    const db = getDb();
+    const normalizedSlug = slug.trim().toLowerCase();
 
-  const note = await db
-    .select({
-      slug: engineeringNotes.slug,
-      id: engineeringNotes.id,
-      title: engineeringNotes.title,
-      subtitle: engineeringNotes.subtitle,
-      excerpt: engineeringNotes.excerpt,
-      date: engineeringNotes.date,
-      content: engineeringNotes.content,
-      readTime: engineeringNotes.readTime,
-      category: engineeringNotes.category,
-      level: engineeringNotes.level,
-      whatILearned: engineeringNotes.whatILearned,
-      improvements: engineeringNotes.improvements,
-      relatedNoteSlugs: engineeringNotes.relatedNoteSlugs,
-      relatedProjectSlug: engineeringNotes.relatedProjectSlug,
-      relatedSystemDesignSlug: engineeringNotes.relatedSystemDesignSlug,
-    })
-    .from(engineeringNotes)
-    .where(and(eq(engineeringNotes.slug, normalizedSlug), eq(engineeringNotes.published, true)))
-    .limit(1)
-      .then((rows: Array<{ slug: string; id: number; title: string; subtitle: string; excerpt: string; date: string; content: string; readTime: number; category: ArticleCategory; level: ArticleDifficulty; whatILearned: string[] | null; improvements: string[] | null; relatedNoteSlugs: string[] | null; relatedProjectSlug: string | null; relatedSystemDesignSlug: string | null; }>) => rows[0]);
+    const rows = await db
+      .select({
+        slug: engineeringNotes.slug,
+        id: engineeringNotes.id,
+        title: engineeringNotes.title,
+        subtitle: engineeringNotes.subtitle,
+        excerpt: engineeringNotes.excerpt,
+        date: engineeringNotes.date,
+        content: engineeringNotes.content,
+        readTime: engineeringNotes.readTime,
+        category: engineeringNotes.category,
+        level: engineeringNotes.level,
+        whatILearned: engineeringNotes.whatILearned,
+        improvements: engineeringNotes.improvements,
+        relatedNoteSlugs: engineeringNotes.relatedNoteSlugs,
+        relatedProjectSlug: engineeringNotes.relatedProjectSlug,
+        relatedSystemDesignSlug: engineeringNotes.relatedSystemDesignSlug,
+      })
+      .from(engineeringNotes)
+      .where(and(eq(engineeringNotes.slug, normalizedSlug), eq(engineeringNotes.published, true)))
+      .limit(1);
 
-  if (!note) {
+    const note = rows[0];
+
+    if (!note) {
+      return null;
+    }
+
+    return mapPost(note as NotePostRow);
+  } catch (error) {
+    console.warn(`Failed to query note ${slug} from DB:`, error);
     return null;
   }
-
-  return mapPost(note as NotePostRow);
 }
 
 /**
@@ -151,27 +162,32 @@ export async function getNoteBySlug(slug: string): Promise<ArticlePost | null> {
 export async function getFeaturedNotes(limit = 6): Promise<ArticleMetadata[]> {
   if (SKIP_DB_BUILD) return [];
 
-  await ensureDatabaseReady();
-  const db = getDb();
+  try {
+    await ensureDatabaseReady();
+    const db = getDb();
 
-  const notes = await db
-    .select({
-      slug: engineeringNotes.slug,
-      id: engineeringNotes.id,
-      title: engineeringNotes.title,
-      subtitle: engineeringNotes.subtitle,
-      excerpt: engineeringNotes.excerpt,
-      date: engineeringNotes.date,
-      readTime: engineeringNotes.readTime,
-      category: engineeringNotes.category,
-      level: engineeringNotes.level,
-    })
-    .from(engineeringNotes)
-    .where(and(eq(engineeringNotes.published, true), eq(engineeringNotes.featured, true)))
-    .orderBy(desc(engineeringNotes.createdAt))
-    .limit(limit);
+    const notes = await db
+      .select({
+        slug: engineeringNotes.slug,
+        id: engineeringNotes.id,
+        title: engineeringNotes.title,
+        subtitle: engineeringNotes.subtitle,
+        excerpt: engineeringNotes.excerpt,
+        date: engineeringNotes.date,
+        readTime: engineeringNotes.readTime,
+        category: engineeringNotes.category,
+        level: engineeringNotes.level,
+      })
+      .from(engineeringNotes)
+      .where(and(eq(engineeringNotes.published, true), eq(engineeringNotes.featured, true)))
+      .orderBy(desc(engineeringNotes.createdAt))
+      .limit(limit);
 
-  return notes.map(mapMetadata);
+    return notes.map(mapMetadata);
+  } catch (error) {
+    console.warn('Failed to query featured notes from DB:', error);
+    return [];
+  }
 }
 
 /**
@@ -184,33 +200,38 @@ export async function getRelatedNotes(
 ): Promise<ArticleMetadata[]> {
   if (SKIP_DB_BUILD) return [];
 
-  await ensureDatabaseReady();
-  const db = getDb();
+  try {
+    await ensureDatabaseReady();
+    const db = getDb();
 
-  const notes = await db
-    .select({
-      slug: engineeringNotes.slug,
-      id: engineeringNotes.id,
-      title: engineeringNotes.title,
-      subtitle: engineeringNotes.subtitle,
-      excerpt: engineeringNotes.excerpt,
-      date: engineeringNotes.date,
-      readTime: engineeringNotes.readTime,
-      category: engineeringNotes.category,
-      level: engineeringNotes.level,
-    })
-    .from(engineeringNotes)
-    .where(
-      and(
-        eq(engineeringNotes.published, true),
-        eq(engineeringNotes.category, category),
-        sql`${engineeringNotes.slug} != ${excludeSlug}`
+    const notes = await db
+      .select({
+        slug: engineeringNotes.slug,
+        id: engineeringNotes.id,
+        title: engineeringNotes.title,
+        subtitle: engineeringNotes.subtitle,
+        excerpt: engineeringNotes.excerpt,
+        date: engineeringNotes.date,
+        readTime: engineeringNotes.readTime,
+        category: engineeringNotes.category,
+        level: engineeringNotes.level,
+      })
+      .from(engineeringNotes)
+      .where(
+        and(
+          eq(engineeringNotes.published, true),
+          eq(engineeringNotes.category, category),
+          sql`${engineeringNotes.slug} != ${excludeSlug}`
+        )
       )
-    )
-    .orderBy(desc(engineeringNotes.createdAt))
-    .limit(limit);
+      .orderBy(desc(engineeringNotes.createdAt))
+      .limit(limit);
 
-  return notes.map(mapMetadata);
+    return notes.map(mapMetadata);
+  } catch (error) {
+    console.warn('Failed to query related notes from DB:', error);
+    return [];
+  }
 }
 
 /**
@@ -219,16 +240,21 @@ export async function getRelatedNotes(
 export async function getCategories(): Promise<ArticleCategory[]> {
   if (SKIP_DB_BUILD) return [];
 
-  await ensureDatabaseReady();
-  const db = getDb();
+  try {
+    await ensureDatabaseReady();
+    const db = getDb();
 
-  const categories = (await db
-    .selectDistinct({ category: engineeringNotes.category })
-    .from(engineeringNotes)
-    .where(eq(engineeringNotes.published, true))
-    .orderBy(engineeringNotes.category)) as Array<{ category: string }>;
+    const categories = (await db
+      .selectDistinct({ category: engineeringNotes.category })
+      .from(engineeringNotes)
+      .where(eq(engineeringNotes.published, true))
+      .orderBy(engineeringNotes.category)) as Array<{ category: string }>;
 
-  return categories.map((row: { category: string }) => row.category as ArticleCategory);
+    return categories.map((row: { category: string }) => row.category as ArticleCategory);
+  } catch (error) {
+    console.warn('Failed to query categories from DB:', error);
+    return [];
+  }
 }
 
 /**
@@ -237,26 +263,31 @@ export async function getCategories(): Promise<ArticleCategory[]> {
 export async function getNotesByCategory(category: ArticleCategory): Promise<ArticleMetadata[]> {
   if (SKIP_DB_BUILD) return [];
 
-  await ensureDatabaseReady();
-  const db = getDb();
+  try {
+    await ensureDatabaseReady();
+    const db = getDb();
 
-  const notes = await db
-    .select({
-      slug: engineeringNotes.slug,
-      id: engineeringNotes.id,
-      title: engineeringNotes.title,
-      subtitle: engineeringNotes.subtitle,
-      excerpt: engineeringNotes.excerpt,
-      date: engineeringNotes.date,
-      readTime: engineeringNotes.readTime,
-      category: engineeringNotes.category,
-      level: engineeringNotes.level,
-    })
-    .from(engineeringNotes)
-    .where(and(eq(engineeringNotes.published, true), eq(engineeringNotes.category, category)))
-    .orderBy(desc(engineeringNotes.createdAt));
+    const notes = await db
+      .select({
+        slug: engineeringNotes.slug,
+        id: engineeringNotes.id,
+        title: engineeringNotes.title,
+        subtitle: engineeringNotes.subtitle,
+        excerpt: engineeringNotes.excerpt,
+        date: engineeringNotes.date,
+        readTime: engineeringNotes.readTime,
+        category: engineeringNotes.category,
+        level: engineeringNotes.level,
+      })
+      .from(engineeringNotes)
+      .where(and(eq(engineeringNotes.published, true), eq(engineeringNotes.category, category)))
+      .orderBy(desc(engineeringNotes.createdAt));
 
-  return notes.map(mapMetadata);
+    return notes.map(mapMetadata);
+  } catch (error) {
+    console.warn('Failed to query notes by category from DB:', error);
+    return [];
+  }
 }
 
 /**
@@ -265,16 +296,21 @@ export async function getNotesByCategory(category: ArticleCategory): Promise<Art
 export async function getNoteCount(): Promise<number> {
   if (SKIP_DB_BUILD) return 0;
 
-  await ensureDatabaseReady();
-  const db = getDb();
+  try {
+    await ensureDatabaseReady();
+    const db = getDb();
 
-  const result = await db
-    .select({ count: sql<number>`count(*)` })
-    .from(engineeringNotes)
-    .where(eq(engineeringNotes.published, true))
-    .then((rows: Array<{ count: number }>) => rows[0]);
+    const result = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(engineeringNotes)
+      .where(eq(engineeringNotes.published, true))
+      .then((rows: Array<{ count: number }>) => rows[0]);
 
-  return result?.count ?? 0;
+    return result?.count ?? 0;
+  } catch (error) {
+    console.warn('Failed to query note count from DB:', error);
+    return 0;
+  }
 }
 
 /**
@@ -283,13 +319,18 @@ export async function getNoteCount(): Promise<number> {
 export async function getAllNoteSlugs(): Promise<{ slug: string }[]> {
   if (SKIP_DB_BUILD) return [];
 
-  await ensureDatabaseReady();
-  const db = getDb();
+  try {
+    await ensureDatabaseReady();
+    const db = getDb();
 
-  const notes = (await db
-    .select({ slug: engineeringNotes.slug })
-    .from(engineeringNotes)
-    .where(eq(engineeringNotes.published, true))) as Array<{ slug: string }>;
+    const notes = (await db
+      .select({ slug: engineeringNotes.slug })
+      .from(engineeringNotes)
+      .where(eq(engineeringNotes.published, true))) as Array<{ slug: string }>;
 
-  return notes.map((row: { slug: string }) => ({ slug: String(row.slug).trim().toLowerCase() }));
+    return notes.map((row: { slug: string }) => ({ slug: String(row.slug).trim().toLowerCase() }));
+  } catch (error) {
+    console.warn('Failed to query note slugs from DB:', error);
+    return [];
+  }
 }

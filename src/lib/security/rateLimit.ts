@@ -110,14 +110,7 @@ async function checkRedisRateLimit(
       error: error instanceof Error ? error.message : String(error),
     });
 
-    if (process.env.NODE_ENV === "production") {
-      return {
-        allowed: false,
-        remaining: 0,
-        retryAfterSeconds: Math.ceil(windowMs / 1000),
-      };
-    }
-
+    // Always fall back to memory rate limiting — never block requests
     return checkMemoryRateLimit(key, maxRequests, windowMs);
   }
 }

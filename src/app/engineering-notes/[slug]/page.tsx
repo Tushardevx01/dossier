@@ -17,26 +17,33 @@ interface GenerateMetadataParams {
 export async function generateMetadata(
   { params }: GenerateMetadataParams
 ): Promise<Metadata> {
-  const { slug } = await params;
-  const normalizedSlug = slug.trim().toLowerCase();
+  try {
+    const { slug } = await params;
+    const normalizedSlug = slug.trim().toLowerCase();
 
-  const article = await getArticle(normalizedSlug);
+    const article = await getArticle(normalizedSlug);
 
-  if (!article) {
+    if (!article) {
+      return {
+        title: "Article Not Found",
+        robots: { index: false, follow: false },
+      };
+    }
+
+    return buildPageMetadata({
+      title: `${article.title} | Tushar Kanti Dey`,
+      description: article.description,
+      path: `/engineering-notes/${normalizedSlug}`,
+      type: "article",
+      keywords: [article.category, "engineering", "software development", "Tushar Kanti Dey"],
+      image: absoluteUrl(`/engineering-notes/${normalizedSlug}/opengraph-image`),
+    });
+  } catch {
     return {
-      title: "Article Not Found",
+      title: "Engineering Notes | Tushar Kanti Dey",
       robots: { index: false, follow: false },
     };
   }
-
-  return buildPageMetadata({
-    title: `${article.title} | Tushar Kanti Dey`,
-    description: article.description,
-    path: `/engineering-notes/${normalizedSlug}`,
-    type: "article",
-    keywords: [article.category, "engineering", "software development", "Tushar Kanti Dey"],
-    image: absoluteUrl(`/engineering-notes/${normalizedSlug}/opengraph-image`),
-  });
 }
 
 export async function generateStaticParams() {
