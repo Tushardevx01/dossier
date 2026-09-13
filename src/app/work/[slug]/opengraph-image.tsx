@@ -16,10 +16,16 @@ interface ImageRouteProps {
 
 export default async function Image({ params }: ImageRouteProps) {
   const { slug } = await params;
-  const caseStudy = await getCaseStudyBySlug(slug);
 
-  const title = caseStudy?.title ?? "Case Study";
-  const category = caseStudy?.category ?? "Architecture";
+  let title = "Case Study";
+  let category = "Architecture";
+  try {
+    const caseStudy = await getCaseStudyBySlug(slug);
+    title = caseStudy?.title ?? title;
+    category = caseStudy?.category ?? category;
+  } catch {
+    // Graceful fallback: render generic OG image if DB is unavailable
+  }
 
   return new ImageResponse(
     (

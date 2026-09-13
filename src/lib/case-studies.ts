@@ -14,8 +14,6 @@ import { eq } from 'drizzle-orm';
 import { ensureDatabaseReady, getDb } from '@/db';
 import { caseStudies, type CaseStudy } from '@/db/schema';
 import { caseStudiesMeta, type CaseStudyRecord } from '@/lib/case-studies-meta';
-import fs from 'fs';
-import path from 'path';
 
 const SKIP_DB_BUILD = process.env.SKIP_DB_BUILD === 'true' || process.env.SKIP_DB === 'true';
 
@@ -112,16 +110,13 @@ export async function getAllCaseStudies(): Promise<CaseStudyRecord[]> {
 export async function getCaseStudyBySlug(slug: string): Promise<CaseStudyRecord | null> {
   const normalizedSlug = slug.trim().toLowerCase();
 
+  // Static fallback helper — uses the in-memory meta array (which has empty
+  // content, but prevents crashes when the DB is unreachable).
+  const findInStaticMeta = (): CaseStudyRecord | null =>
+    caseStudiesMeta.find((cs) => cs.slug.toLowerCase() === normalizedSlug && cs.published) ?? null;
+
   if (SKIP_DB_BUILD || !process.env.DATABASE_URL) {
-    const fullDataPath = path.join(process.cwd(), 'src/lib/case-studies-full.json');
-    try {
-      const fileData = fs.readFileSync(fullDataPath, 'utf8');
-      const caseStudiesFull: CaseStudyRecord[] = JSON.parse(fileData);
-      return caseStudiesFull.find((cs) => cs.slug.toLowerCase() === normalizedSlug) || null;
-    } catch (fsError) {
-      console.error('Failed to read case-studies-full.json', fsError);
-      return null;
-    }
+    return findInStaticMeta();
   }
 
   try {
@@ -134,30 +129,13 @@ export async function getCaseStudyBySlug(slug: string): Promise<CaseStudyRecord 
       .limit(1);
 
     if (rows.length === 0) {
-      // Check fallback data
-      const fullDataPath = path.join(process.cwd(), 'src/lib/case-studies-full.json');
-    try {
-      const fileData = fs.readFileSync(fullDataPath, 'utf8');
-      const caseStudiesFull: CaseStudyRecord[] = JSON.parse(fileData);
-      return caseStudiesFull.find((cs) => cs.slug.toLowerCase() === normalizedSlug) || null;
-    } catch (fsError) {
-      console.error('Failed to read case-studies-full.json', fsError);
-      return null;
-    }
+      return findInStaticMeta();
     }
 
     return mapCaseStudyRow(rows[0]);
   } catch (error) {
     console.warn(`Failed to fetch case study ${slug} from DB, falling back to static cache:`, error);
-    const fullDataPath = path.join(process.cwd(), 'src/lib/case-studies-full.json');
-    try {
-      const fileData = fs.readFileSync(fullDataPath, 'utf8');
-      const caseStudiesFull: CaseStudyRecord[] = JSON.parse(fileData);
-      return caseStudiesFull.find((cs) => cs.slug.toLowerCase() === normalizedSlug) || null;
-    } catch (fsError) {
-      console.error('Failed to read case-studies-full.json', fsError);
-      return null;
-    }
+    return findInStaticMeta();
   }
 }
 

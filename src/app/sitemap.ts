@@ -6,10 +6,17 @@ import { getAllArticles } from "@/lib/articleLoader";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = SITE_URL.replace(/\/$/, "");
 
-  const [caseStudies, articles] = await Promise.all([
-    getAllCaseStudies(),
-    getAllArticles(),
-  ]);
+  let caseStudies: Awaited<ReturnType<typeof getAllCaseStudies>> = [];
+  let articles: Awaited<ReturnType<typeof getAllArticles>> = [];
+
+  try {
+    [caseStudies, articles] = await Promise.all([
+      getAllCaseStudies(),
+      getAllArticles(),
+    ]);
+  } catch {
+    // Graceful degradation: return a minimal sitemap if DB is unreachable
+  }
 
   return [
     {

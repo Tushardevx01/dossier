@@ -39,7 +39,6 @@ export async function validateApiKey(apiKey: string): Promise<ApiKeyValidation> 
   try {
     const db = getDb();
     const hashedKey = createHash("sha256").update(normalizedApiKey).digest("hex");
-
     const result = await db
       .select({
         id: apiKeys.id,
