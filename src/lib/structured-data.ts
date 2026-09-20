@@ -120,7 +120,7 @@ export function generateSoftwareApplicationStructuredData(project: Project) {
   return {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "@id": `${SITE_URL}/projects/${project.slug}#software-application`,
+    "@id": `${SITE_URL}/work/${project.slug}#software-application`,
     name: project.name,
     description: project.description,
     applicationCategory: "WebApplication",
@@ -128,7 +128,7 @@ export function generateSoftwareApplicationStructuredData(project: Project) {
     creator: {
       "@id": PERSON_ID,
     },
-    url: `${SITE_URL}/projects/${project.slug}`,
+    url: `${SITE_URL}/work/${project.slug}`,
     sameAs: [project.github_link, ...(project.demo ? [project.demo] : [])],
     keywords: project.tech.join(", "),
   };
@@ -195,7 +195,7 @@ export function generateCaseStudyStructuredData(caseStudy: CaseStudyMetadata) {
     "@type": "Article",
     headline: `${caseStudy.title} Case Study`,
     description: caseStudy.description,
-    url: `${SITE_URL}/projects/${caseStudy.slug}`,
+    url: `${SITE_URL}/work/${caseStudy.slug}`,
     author: {
       "@type": "Person",
       name: siteConfig.name,
@@ -208,7 +208,7 @@ export function generateCaseStudyStructuredData(caseStudy: CaseStudyMetadata) {
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `${SITE_URL}/projects/${caseStudy.slug}`,
+      "@id": `${SITE_URL}/work/${caseStudy.slug}`,
     },
   };
 }

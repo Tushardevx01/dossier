@@ -40,10 +40,9 @@ export const ContactFormSchema = z.object({
     .max(3000, "Message must be 3000 characters or less")
     .transform((val) => val.trim()),
 
-  // Honeypot field - must be empty
+  // Honeypot field - should be empty, silently captured in service layer if filled
   website: z
     .string()
-    .max(0, "Invalid submission")
     .optional()
     .default(""),
 });

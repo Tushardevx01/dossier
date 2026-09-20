@@ -8,7 +8,7 @@ export function proxy(request: NextRequest) {
 
   response.headers.set("X-Request-ID", crypto.randomUUID());
 
-  if (request.nextUrl.pathname === "/" && !request.cookies.has(getCsrfCookieName())) {
+  if (!request.cookies.has(getCsrfCookieName()) && !request.nextUrl.pathname.startsWith("/api/")) {
     response.cookies.set(getCsrfCookieName(), generateCsrfToken(), {
       path: "/",
       maxAge: 86400,

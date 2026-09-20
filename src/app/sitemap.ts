@@ -3,6 +3,12 @@ import { SITE_URL } from "@/lib/site";
 import { getAllCaseStudies } from "@/lib/case-studies";
 import { getAllArticles } from "@/lib/articleLoader";
 
+function safeDate(value: string | Date | null | undefined, fallback = new Date()): Date {
+  if (!value) return fallback;
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? fallback : parsed;
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = SITE_URL.replace(/\/$/, "");
 
@@ -27,7 +33,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     ...caseStudies.map((cs) => ({
       url: `${baseUrl}/work/${cs.slug}`,
-      lastModified: new Date(cs.updatedAt),
+      lastModified: safeDate(cs.updatedAt),
       changeFrequency: "monthly" as const,
       priority: 0.85,
     })),
@@ -45,7 +51,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     ...articles.map((article) => ({
       url: `${baseUrl}/engineering-notes/${article.slug}`,
-      lastModified: new Date(article.date),
+      lastModified: safeDate(article.date),
       changeFrequency: "weekly" as const,
       priority: 0.75,
     })),

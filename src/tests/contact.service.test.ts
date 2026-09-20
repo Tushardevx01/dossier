@@ -104,4 +104,28 @@ describe("contact service", () => {
     }
     expect(mockedSendEmail).not.toHaveBeenCalled();
   });
+
+  it("silently absorbs honeypot bot submissions without sending emails", async () => {
+    const result = await processContactSubmission(
+      {
+        requestId: "req-bot",
+        clientIdentifier: "127.0.0.1",
+        body: {
+          senderName: "SpamBot",
+          senderEmail: "bot@spam.com",
+          reasonToContact: "Collaboration",
+          senderMsg: "Spam message",
+          website: "https://spam.com",
+        },
+      },
+      {
+        emailApiKey: "api-key",
+        emailFrom: "thetushardev0@gmail.com",
+        emailPassword: "app-password",
+      }
+    );
+
+    expect(result.success).toBe(true);
+    expect(mockedSendEmail).not.toHaveBeenCalled();
+  });
 });

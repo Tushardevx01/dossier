@@ -50,6 +50,12 @@ export async function generateStaticParams() {
   return await generateArticleStaticParams();
 }
 
+function toSafeIsoDate(value: string | null | undefined, fallback = new Date()): string {
+  if (!value) return fallback.toISOString();
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? fallback.toISOString() : parsed.toISOString();
+}
+
 export default async function EngineeringNotesArticlePage({
   params,
 }: {
@@ -68,7 +74,7 @@ export default async function EngineeringNotesArticlePage({
     title: article.title,
     description: article.description,
     slug: normalizedSlug,
-    publishedAt: new Date(article.date).toISOString(),
+    publishedAt: toSafeIsoDate(article.date),
   });
 
   const breadcrumbStructuredData = generateBreadcrumbListStructuredData([

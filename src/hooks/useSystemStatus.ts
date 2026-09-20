@@ -17,10 +17,12 @@ const formatTime = () =>
     second: "2-digit",
   });
 
+const INITIAL_LOG_TIME = "12:00:00";
+
 export const useSystemStatus = () => {
   const [telemetryIndex, setTelemetryIndex] = useState(0);
-  const [logs, setLogs] = useState<RuntimeLogLine[]>(
-    runtimeLogSeed.slice(0, 4).map((line) => ({ ...line, time: formatTime() }))
+  const [logs, setLogs] = useState<RuntimeLogLine[]>(() =>
+    runtimeLogSeed.slice(0, 4).map((line) => ({ ...line, time: INITIAL_LOG_TIME }))
   );
 
   useEffect(() => {

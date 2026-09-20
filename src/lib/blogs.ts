@@ -71,7 +71,7 @@ function mapPost(note: NotePostRow): ArticlePost {
     content: note.content,
     whatILearned: normalizeArray(note.whatILearned),
     improvements: normalizeArray(note.improvements),
-    relatedNoteSlugs: note.relatedNoteSlugs ?? undefined,
+    relatedNoteSlugs: note.relatedNoteSlugs ? normalizeArray(note.relatedNoteSlugs) : undefined,
     relatedProjectSlug: note.relatedProjectSlug ?? undefined,
     relatedSystemDesignSlug: note.relatedSystemDesignSlug ?? undefined,
   };
@@ -180,7 +180,7 @@ export async function getFeaturedNotes(limit = 6): Promise<ArticleMetadata[]> {
       })
       .from(engineeringNotes)
       .where(and(eq(engineeringNotes.published, true), eq(engineeringNotes.featured, true)))
-      .orderBy(desc(engineeringNotes.createdAt))
+      .orderBy(desc(engineeringNotes.createdAt), desc(engineeringNotes.id))
       .limit(limit);
 
     return notes.map(mapMetadata);
@@ -224,7 +224,7 @@ export async function getRelatedNotes(
           sql`${engineeringNotes.slug} != ${excludeSlug}`
         )
       )
-      .orderBy(desc(engineeringNotes.createdAt))
+      .orderBy(desc(engineeringNotes.createdAt), desc(engineeringNotes.id))
       .limit(limit);
 
     return notes.map(mapMetadata);
@@ -281,7 +281,7 @@ export async function getNotesByCategory(category: ArticleCategory): Promise<Art
       })
       .from(engineeringNotes)
       .where(and(eq(engineeringNotes.published, true), eq(engineeringNotes.category, category)))
-      .orderBy(desc(engineeringNotes.createdAt));
+      .orderBy(desc(engineeringNotes.createdAt), desc(engineeringNotes.id));
 
     return notes.map(mapMetadata);
   } catch (error) {
@@ -326,7 +326,8 @@ export async function getAllNoteSlugs(): Promise<{ slug: string }[]> {
     const notes = (await db
       .select({ slug: engineeringNotes.slug })
       .from(engineeringNotes)
-      .where(eq(engineeringNotes.published, true))) as Array<{ slug: string }>;
+      .where(eq(engineeringNotes.published, true))
+      .orderBy(engineeringNotes.id)) as Array<{ slug: string }>;
 
     return notes.map((row: { slug: string }) => ({ slug: String(row.slug).trim().toLowerCase() }));
   } catch (error) {

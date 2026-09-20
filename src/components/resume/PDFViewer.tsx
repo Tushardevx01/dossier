@@ -19,7 +19,6 @@ export default function PDFViewer({ pdfUrl }: PDFViewerProps) {
   const viewerRef = useRef<HTMLDivElement | null>(null);
   const [numPages, setNumPages] = useState<number>(0);
   const [containerWidth, setContainerWidth] = useState<number>(0);
-  const [scaledWidth, setScaledWidth] = useState<number>(0);
   const [loadingError, setLoadingError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -35,10 +34,7 @@ export default function PDFViewer({ pdfUrl }: PDFViewerProps) {
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    const maxWidth = Math.max(containerWidth - 32, 200);
-    setScaledWidth(maxWidth);
-  }, [containerWidth]);
+  const scaledWidth = Math.max(containerWidth - 32, 200);
 
   const PDFLoading = () => (
     <div className="flex h-full w-full items-center justify-center rounded-lg bg-background/80 p-8">

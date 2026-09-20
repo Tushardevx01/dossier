@@ -17,7 +17,7 @@ export const selfData = {
   },
   email: "thetushardev0@gmail.com",
   roles: [
-    "Full Stack Developer and DevOps Engineer ",
+    "Full Stack Developer and DevOps Engineer",
     "Next.js Developer",
     "Product Engineer",
     "Real-Time App Developer",

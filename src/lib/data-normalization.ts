@@ -41,14 +41,37 @@ export function normalizeArray(value: unknown): string[] {
 
   // String - attempt JSON parse
   if (typeof value === 'string') {
-    // Empty string or doesn't look like JSON array
-    if (!value.trim() || !value.trim().startsWith('[')) {
+    const trimmed = value.trim();
+    if (!trimmed) {
       return [];
     }
 
+    // If wrapped in accidental outer quotes e.g. '"[...]"'
+    if (
+      (trimmed.startsWith('"') && trimmed.endsWith('"')) ||
+      (trimmed.startsWith("'") && trimmed.endsWith("'"))
+    ) {
+      const unwrapped = trimmed.slice(1, -1).trim();
+      if (unwrapped.startsWith("[")) {
+        try {
+          const parsedUnwrapped = JSON.parse(unwrapped);
+          if (Array.isArray(parsedUnwrapped)) {
+            return parsedUnwrapped.filter((item): item is string => typeof item === "string");
+          }
+        } catch {
+          // continue to standard parse
+        }
+      }
+    }
+
     try {
-      const parsed = JSON.parse(value);
-      
+      let parsed = JSON.parse(trimmed);
+
+      // Handle double-stringified JSON (e.g. '"[\"item1\", \"item2\"]"')
+      if (typeof parsed === 'string' && parsed.trim().startsWith('[')) {
+        parsed = JSON.parse(parsed.trim());
+      }
+
       // Check if parse result is an array
       if (Array.isArray(parsed)) {
         return parsed.filter((item): item is string => typeof item === 'string');
