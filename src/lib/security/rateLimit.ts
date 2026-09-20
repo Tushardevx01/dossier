@@ -54,7 +54,7 @@ async function checkMemoryRateLimit(
     return {
       allowed: false,
       remaining: 0,
-      retryAfterSeconds: Math.ceil((current.resetAt - now) / 1000),
+      retryAfterSeconds: Math.max(1, Math.ceil((current.resetAt - now) / 1000)),
     };
   }
 
@@ -62,7 +62,7 @@ async function checkMemoryRateLimit(
   return {
     allowed: true,
     remaining: Math.max(maxRequests - current.count, 0),
-    retryAfterSeconds: Math.ceil((current.resetAt - now) / 1000),
+    retryAfterSeconds: Math.max(0, Math.ceil((current.resetAt - now) / 1000)),
   };
 }
 

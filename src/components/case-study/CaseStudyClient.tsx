@@ -41,7 +41,7 @@ export const CaseStudyClient: React.FC<CaseStudyClientProps> = ({
 }) => {
   return (
     <CaseStudyRenderer
-      parsed={parsed!}
+      parsed={parsed || { sections: [], totalDiagrams: 0 }}
       meta={meta}
       project={project}
       nextCaseStudy={nextCaseStudy}

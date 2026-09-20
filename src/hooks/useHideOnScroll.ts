@@ -33,12 +33,12 @@ export function useHideOnScroll(
     const currentY = window.scrollY;
     const pastThreshold = currentY > threshold;
 
-    setIsScrolled(pastThreshold);
+    setIsScrolled((prev) => (prev !== pastThreshold ? pastThreshold : prev));
 
     if (currentY < lastScrollY.current || currentY < threshold) {
-      setIsVisible(true);
+      setIsVisible((prev) => (!prev ? true : prev));
     } else if (currentY > lastScrollY.current && pastThreshold) {
-      setIsVisible(false);
+      setIsVisible((prev) => (prev ? false : prev));
     }
 
     lastScrollY.current = currentY;

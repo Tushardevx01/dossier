@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 import { selfData } from "@/constant";
@@ -132,7 +132,7 @@ export const CommandPalette = () => {
               if (el) {
                 const navOffset = 80;
                 const elementPosition = el.getBoundingClientRect().top;
-                const offsetPosition = elementPosition + window.pageYOffset - navOffset;
+                const offsetPosition = elementPosition + window.scrollY - navOffset;
                 window.scrollTo({
                   top: Math.max(0, offsetPosition),
                   behavior: "smooth",
@@ -160,7 +160,8 @@ export const CommandPalette = () => {
     [closePalette, router]
   );
 
-  const commands: CommandItem[] = [
+  const commands: CommandItem[] = useMemo(
+    () => [
     // Navigation
     {
       id: "nav-home",
@@ -356,17 +357,19 @@ export const CommandPalette = () => {
       },
       keywords: ["linkedin", "profile", "connect", "network"],
     },
-  ];
+  ], [navigateTo, copyEmail]);
 
-  const filteredCommands = commands.filter((cmd) => {
-    if (!search.trim()) return true;
+  const filteredCommands = useMemo(() => {
+    if (!search.trim()) return commands;
     const query = search.toLowerCase();
-    return (
-      cmd.label.toLowerCase().includes(query) ||
-      (cmd.description && cmd.description.toLowerCase().includes(query)) ||
-      cmd.keywords.some((k) => k.toLowerCase().includes(query))
-    );
-  });
+    return commands.filter((cmd) => {
+      return (
+        cmd.label.toLowerCase().includes(query) ||
+        (cmd.description && cmd.description.toLowerCase().includes(query)) ||
+        cmd.keywords.some((k) => k.toLowerCase().includes(query))
+      );
+    });
+  }, [commands, search]);
 
   // Handle keyboard navigation within the list
   const handleInputKeyDown = (e: React.KeyboardEvent) => {
