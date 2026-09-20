@@ -38,18 +38,32 @@ export async function GET(_request: NextRequest, context: RouteContext) {
     );
   }
 
+  let safeRedirectUrl: URL | null = null;
+  try {
+    const parsed = new URL(credential.objectLink);
+    if (parsed.protocol === "http:" || parsed.protocol === "https:") {
+      safeRedirectUrl = parsed;
+    }
+  } catch {
+    safeRedirectUrl = null;
+  }
+
   const key = extractR2Key(credential.objectLink);
 
   try {
     const r2Obj = await getR2Object(key);
 
     if (r2Obj && r2Obj.body) {
-      const filename = `${credential.slug || `certificate-${credential.id}`}.pdf`;
+      const rawBase = credential.slug || `certificate-${credential.id}`;
+      const safeFilename = `${rawBase.replace(/[^a-zA-Z0-9_.-]/g, "_").replace(/\.+/g, ".")}.pdf`;
       const isInline = _request.nextUrl.searchParams.get("inline") === "true";
       const disposition = isInline ? "inline" : "attachment";
       const headers = new Headers();
       headers.set("Content-Type", r2Obj.contentType || "application/pdf");
-      headers.set("Content-Disposition", `${disposition}; filename="${filename}"`);
+      headers.set(
+        "Content-Disposition",
+        `${disposition}; filename="${safeFilename}"; filename*=UTF-8''${encodeURIComponent(safeFilename)}`
+      );
       headers.set("Access-Control-Allow-Origin", "*");
       headers.set("Cache-Control", "public, max-age=86400, stale-while-revalidate=604800");
       if (r2Obj.contentLength) {
@@ -65,14 +79,28 @@ export async function GET(_request: NextRequest, context: RouteContext) {
       return new NextResponse(r2Obj.body as unknown as BodyInit, { headers, status: 200 });
     }
 
+    if (!safeRedirectUrl) {
+      return NextResponse.json(
+        { success: false, error: { code: "INVALID_ASSET_URL", message: "Certificate asset URL is invalid" } },
+        { status: 502 }
+      );
+    }
+
     // Fallback: Redirect directly to public R2 URL
-    return NextResponse.redirect(credential.objectLink, 302);
+    return NextResponse.redirect(safeRedirectUrl.toString(), 302);
   } catch (error) {
     logger.error("Failed to stream certificate from R2, redirecting to public URL", {
       key,
       error: error instanceof Error ? error.message : String(error),
     });
 
-    return NextResponse.redirect(credential.objectLink, 302);
+    if (!safeRedirectUrl) {
+      return NextResponse.json(
+        { success: false, error: { code: "FETCH_FAILED", message: "Failed to retrieve certificate asset" } },
+        { status: 502 }
+      );
+    }
+
+    return NextResponse.redirect(safeRedirectUrl.toString(), 302);
   }
 }

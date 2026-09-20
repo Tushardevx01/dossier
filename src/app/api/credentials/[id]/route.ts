@@ -270,32 +270,9 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
     );
   }
 
-  const r2DeletionErrors: string[] = [];
-
-  // 1. Delete associated R2 files
-  if (existing.objectLink) {
-    const res = await deleteFromR2(existing.objectLink);
-    if (!res.success && isR2Configured()) {
-      r2DeletionErrors.push(`Failed to remove certificate file: ${res.key}`);
-    }
-  }
-
-  // 2. Delete DB record
+  // 1. Delete DB record first to protect against orphaned asset loss
   try {
     await deleteCredential(numId);
-
-    revalidatePath("/credentials");
-    revalidatePath(`/credentials/${numId}`);
-    if (existing.slug) revalidatePath(`/credentials/${existing.slug}`);
-    revalidatePath("/");
-    revalidatePath("/api/credentials");
-    revalidatePath("/api/credentials/count");
-
-    return NextResponse.json({
-      success: true,
-      message: "Credential deleted successfully",
-      warnings: r2DeletionErrors.length > 0 ? r2DeletionErrors : undefined,
-    });
   } catch (error) {
     logger.error("Failed to delete credential record from DB", {
       id: numId,
@@ -308,10 +285,31 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
         error: {
           code: "DELETE_FAILED",
           message: "Failed to delete credential record",
-          warnings: r2DeletionErrors,
         },
       },
       { status: 500 }
     );
   }
+
+  // 2. Clean up associated R2 asset after DB deletion succeeds
+  const r2DeletionErrors: string[] = [];
+  if (existing.objectLink) {
+    const res = await deleteFromR2(existing.objectLink);
+    if (!res.success && isR2Configured()) {
+      r2DeletionErrors.push(`Failed to remove certificate file: ${res.key}`);
+    }
+  }
+
+  revalidatePath("/credentials");
+  revalidatePath(`/credentials/${numId}`);
+  if (existing.slug) revalidatePath(`/credentials/${existing.slug}`);
+  revalidatePath("/");
+  revalidatePath("/api/credentials");
+  revalidatePath("/api/credentials/count");
+
+  return NextResponse.json({
+    success: true,
+    message: "Credential deleted successfully",
+    warnings: r2DeletionErrors.length > 0 ? r2DeletionErrors : undefined,
+  });
 }

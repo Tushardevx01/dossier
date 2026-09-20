@@ -5,7 +5,7 @@
  * Uses SHA-256 hashing for secure key storage and comparison.
  */
 
-import { createHash } from "node:crypto";
+import { createHash, timingSafeEqual } from "node:crypto";
 import { getDb } from '@/db';
 import { apiKeys } from '@/db/schema';
 import { eq } from 'drizzle-orm';
@@ -121,7 +121,9 @@ export async function validateAdminRequest(
   // 1. Check direct ADMIN_API_KEY environment variable if defined
   const adminSecret = process.env.ADMIN_API_KEY?.trim();
   if (adminSecret && adminSecret.length > 0) {
-    if (apiKey === adminSecret) {
+    const keyHash = createHash("sha256").update(apiKey).digest();
+    const adminHash = createHash("sha256").update(adminSecret).digest();
+    if (timingSafeEqual(keyHash, adminHash)) {
       return { authorized: true };
     }
   }

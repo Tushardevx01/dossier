@@ -23,6 +23,12 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "**.r2.dev",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
 
@@ -33,7 +39,9 @@ const nextConfig: NextConfig = {
     globalNotFound: true,
   },
 
-  // No experimental features for deployment stability
+  outputFileTracingIncludes: {
+    "/api/pdf-worker": ["./node_modules/pdfjs-dist/build/pdf.worker.min.mjs"],
+  },
 
   async headers() {
     const isDev = process.env.NODE_ENV !== "production";
@@ -52,9 +60,10 @@ const nextConfig: NextConfig = {
       "form-action 'self'",
       `script-src ${scriptSrc}`,
       "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: blob: https://tushardevx01.tech https://github-readme-activity-graph.vercel.app https://camo.githubusercontent.com",
+      "img-src 'self' data: blob: https://tushardevx01.tech https://github-readme-activity-graph.vercel.app https://camo.githubusercontent.com https://*.r2.dev https://*.cloudflarestorage.com",
       "font-src 'self' data:",
-      "connect-src 'self' https://vitals.vercel-insights.com",
+      "connect-src 'self' https://vitals.vercel-insights.com https://*.r2.dev https://*.cloudflarestorage.com",
+      "worker-src 'self' blob:",
       "upgrade-insecure-requests",
     ].join("; ");
 

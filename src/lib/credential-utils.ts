@@ -20,14 +20,15 @@ export function slugifyTitle(title: string): string {
 
 /**
  * Format a date in uppercase editorial style: "23 AUG 2026".
+ * Uses UTC to avoid timezone shifts and React hydration mismatches.
  */
 export function formatEditorialDate(dateInput: Date | string): string {
   try {
     const d = new Date(dateInput);
     if (isNaN(d.getTime())) return String(dateInput);
-    const day = String(d.getDate()).padStart(2, "0");
-    const month = d.toLocaleString("en-US", { month: "short" }).toUpperCase();
-    const year = d.getFullYear();
+    const day = String(d.getUTCDate()).padStart(2, "0");
+    const month = d.toLocaleString("en-US", { month: "short", timeZone: "UTC" }).toUpperCase();
+    const year = d.getUTCFullYear();
     return `${day} ${month} ${year}`;
   } catch {
     return String(dateInput);
@@ -36,6 +37,7 @@ export function formatEditorialDate(dateInput: Date | string): string {
 
 /**
  * Format a date in standard full style: "August 23, 2026".
+ * Uses UTC to avoid timezone shifts and React hydration mismatches.
  */
 export function formatFullDate(dateInput: Date | string): string {
   try {
@@ -45,6 +47,7 @@ export function formatFullDate(dateInput: Date | string): string {
       month: "long",
       day: "numeric",
       year: "numeric",
+      timeZone: "UTC",
     });
   } catch {
     return String(dateInput);
@@ -53,6 +56,7 @@ export function formatFullDate(dateInput: Date | string): string {
 
 /**
  * Format validity expiration style: "August 2028".
+ * Uses UTC to avoid timezone shifts and React hydration mismatches.
  */
 export function formatValidityDate(dateInput: Date | string): string {
   try {
@@ -61,6 +65,7 @@ export function formatValidityDate(dateInput: Date | string): string {
     return d.toLocaleDateString("en-US", {
       month: "long",
       year: "numeric",
+      timeZone: "UTC",
     });
   } catch {
     return String(dateInput);

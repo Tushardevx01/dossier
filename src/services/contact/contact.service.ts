@@ -18,7 +18,7 @@ import {
   CONTACT_RATE_LIMIT_MAX_REQUESTS,
   CONTACT_RATE_LIMIT_WINDOW_MS,
 } from "@/config";
-import { validateContactForm } from "./contact.schema";
+import { validateContactForm } from "@/db/schema";
 import { checkRateLimit, createRateLimitKey } from "./contact.rateLimit";
 import { sendEmail } from "@/services/email/email.transport";
 import { renderContactEmail, renderContactNotificationEmail } from "@/services/email/email.templates";

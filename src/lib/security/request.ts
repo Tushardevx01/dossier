@@ -16,7 +16,12 @@ function normalizeClientIp(value: string | null | undefined): string | null {
 }
 
 function shouldTrustForwardedHeaders(): boolean {
-  return process.env.VERCEL === "1" || process.env.TRUST_PROXY_HEADERS === "true";
+  return (
+    process.env.VERCEL === "1" ||
+    process.env.TRUST_PROXY_HEADERS === "true" ||
+    process.env.NODE_ENV !== "production" ||
+    Boolean(process.env.CF_PAGES || process.env.CLOUDFLARE_ACCOUNT_ID)
+  );
 }
 
 function firstHeaderValue(value: string | null | undefined): string | null {
@@ -102,6 +107,20 @@ export function extractClientIdentifier(request: RequestLike): string {
   if (shouldTrustForwardedHeaders()) {
     const forwardedIp = extractForwardedClientIp(request.headers);
     if (forwardedIp) return forwardedIp;
+  }
+
+  // Fallback: If IP cannot be determined, isolate clients by combining UA and Accept-Language
+  // to avoid a global rate-limit lock-out across all users.
+  const ua = request.headers.get("user-agent") || "";
+  const acceptLang = request.headers.get("accept-language") || "";
+  if (ua || acceptLang) {
+    const clientFingerprint = `${ua}:${acceptLang}`;
+    let hash = 5381;
+    for (let i = 0; i < clientFingerprint.length; i++) {
+      hash = ((hash << 5) + hash) + clientFingerprint.charCodeAt(i);
+      hash |= 0;
+    }
+    return `ua_${Math.abs(hash).toString(36)}`;
   }
 
   return "unknown";
