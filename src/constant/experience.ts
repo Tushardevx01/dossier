@@ -31,7 +31,7 @@ export const experienceData = [
       "Git",
       "Vercel",
     ],
-    url: "https://https://cycoders.in",
+    url: "https://cycoders.in",
   },
   {
     role: "Designer & Developer",

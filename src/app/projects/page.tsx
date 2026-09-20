@@ -34,7 +34,7 @@ export default function ProjectsPage() {
               <h2 className="text-2xl sm:text-3xl font-semibold text-white">{project.name}</h2>
               <p className="mt-3 text-neutral-400 leading-relaxed">{project.description}</p>
               <div className="mt-6 flex flex-wrap gap-4 text-sm text-neutral-300">
-                <Link href={`/projects/${project.slug}`} className="underline underline-offset-4 hover:text-white">
+                <Link href={`/work/${project.slug}`} className="underline underline-offset-4 hover:text-white">
                   View project details
                 </Link>
                 <a href={project.github_link} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 hover:text-white">

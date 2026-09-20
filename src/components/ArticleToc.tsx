@@ -21,19 +21,23 @@ function toHeadingId(value: string): string {
     .replace(/\s+/g, "-");
 }
 
+const DEFAULT_HEADING_LEVELS = [2, 3];
+
 export function ArticleToc({
   containerSelector = ".article-content",
-  headingLevels = [2, 3],
+  headingLevels = DEFAULT_HEADING_LEVELS,
 }: ArticleTocProps) {
   const [headings, setHeadings] = useState<Heading[]>([]);
+  const levelsKey = headingLevels.join(",");
 
   useEffect(() => {
     const container = document.querySelector(containerSelector);
     if (!container) return;
 
+    const levels = levelsKey ? levelsKey.split(",").map(Number) : DEFAULT_HEADING_LEVELS;
     const headingElements = Array.from(
       container.querySelectorAll(
-        headingLevels.map((level) => `h${level}`).join(",")
+        levels.map((level) => `h${level}`).join(",")
       )
     ).filter((el): el is HTMLHeadingElement => el instanceof HTMLHeadingElement);
 
@@ -48,7 +52,7 @@ export function ArticleToc({
     });
 
     setHeadings(extracted);
-  }, [containerSelector, headingLevels]);
+  }, [containerSelector, levelsKey]);
 
   if (headings.length === 0) return null;
 

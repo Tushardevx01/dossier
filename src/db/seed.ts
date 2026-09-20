@@ -76,7 +76,13 @@ export async function seedDatabase() {
       const fs = await import('fs');
       const path = await import('path');
       const fullDataPath = path.join(process.cwd(), 'src/lib/case-studies-full.json');
-      const caseStudiesData = JSON.parse(fs.readFileSync(fullDataPath, 'utf8'));
+      let caseStudiesData = [];
+      if (fs.existsSync(fullDataPath)) {
+        caseStudiesData = JSON.parse(fs.readFileSync(fullDataPath, 'utf8'));
+      } else {
+        const { caseStudiesMeta } = await import('@/lib/case-studies-meta');
+        caseStudiesData = caseStudiesMeta;
+      }
       for (const record of caseStudiesData) {
         await database.insert(caseStudies).values({
           slug: record.slug,

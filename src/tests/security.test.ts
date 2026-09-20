@@ -9,6 +9,7 @@ import {
 import { generateCsrfToken as generateEdgeCsrfToken } from "@/lib/security/csrf.edge";
 import { getCsrfCookieName } from "@/lib/security/csrf.client";
 import { extractClientIdentifier, isTrustedOrigin } from "@/lib/security/request";
+import { logger } from "@/lib/logger";
 
 describe("security helpers", () => {
   afterEach(() => {
@@ -82,5 +83,14 @@ describe("security helpers", () => {
 
     expect(headers["Access-Control-Allow-Origin"]).toBe("https://www.tushardevx01.tech");
     expect(headers.Vary).toBe("Origin");
+  });
+
+  it("safely handles circular references in logging metadata without infinite recursion", () => {
+    const circular: Record<string, unknown> = { name: "test", email: "secret@example.com" };
+    circular.self = circular;
+
+    expect(() => {
+      logger.info("testing circular structure", { data: circular });
+    }).not.toThrow();
   });
 });

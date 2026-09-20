@@ -7,10 +7,13 @@
 
 import fs from "fs";
 import path from "path";
+import { caseStudiesMeta } from "../src/lib/case-studies-meta";
 
-const caseStudiesData = JSON.parse(
-  fs.readFileSync(path.join(process.cwd(), "src/lib/case-studies-full.json"), "utf8")
-);
+const fullDataPath = path.join(process.cwd(), "src/lib/case-studies-full.json");
+const caseStudiesData = fs.existsSync(fullDataPath)
+  ? JSON.parse(fs.readFileSync(fullDataPath, "utf8"))
+  : caseStudiesMeta;
+
 import { ensureDatabaseReady, getDb } from "../src/db";
 import { caseStudies } from "../src/db/schema";
 import { sql } from "drizzle-orm";

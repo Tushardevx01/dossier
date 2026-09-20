@@ -44,13 +44,17 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
 }) => {
   const sections = parsed.sections;
 
-  // Build nav sections for CaseStudyIndex
-  const navSections = sections.map((sec) => ({
-    id: sec.id,
-    number: sec.number,
-    label:
-      sec.title.length > 25 ? sec.title.slice(0, 23) + "..." : sec.title,
-  }));
+  // Build nav sections for CaseStudyIndex (memoized to keep references stable across renders)
+  const navSections = React.useMemo(
+    () =>
+      sections.map((sec) => ({
+        id: sec.id,
+        number: sec.number,
+        label:
+          sec.title.length > 25 ? sec.title.slice(0, 23) + "..." : sec.title,
+      })),
+    [sections]
+  );
 
   // Render individual sections based on type and pattern
   const renderSectionContent = (sec: ParsedSection) => {

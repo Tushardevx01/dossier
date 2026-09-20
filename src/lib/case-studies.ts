@@ -10,7 +10,7 @@
  * - getCaseStudyBySlug():  full record including content (detail pages only)
  */
 
-import { eq } from 'drizzle-orm';
+import { asc, eq } from 'drizzle-orm';
 import { ensureDatabaseReady, getDb } from '@/db';
 import { caseStudies, type CaseStudy } from '@/db/schema';
 import { caseStudiesMeta, type CaseStudyRecord } from '@/lib/case-studies-meta';
@@ -80,7 +80,8 @@ export async function getAllCaseStudies(): Promise<CaseStudyRecord[]> {
         updatedAt: caseStudies.updatedAt,
       })
       .from(caseStudies)
-      .where(eq(caseStudies.published, true));
+      .where(eq(caseStudies.published, true))
+      .orderBy(asc(caseStudies.id));
 
     if (rows.length === 0) {
       return caseStudiesMeta.filter((cs) => cs.published);
@@ -156,7 +157,8 @@ export async function getAllCaseStudySlugs(): Promise<string[]> {
     const rows = await db
       .select({ slug: caseStudies.slug })
       .from(caseStudies)
-      .where(eq(caseStudies.published, true));
+      .where(eq(caseStudies.published, true))
+      .orderBy(asc(caseStudies.id));
 
     if (rows.length === 0) {
       return caseStudiesMeta.filter((cs) => cs.published).map((cs) => cs.slug);

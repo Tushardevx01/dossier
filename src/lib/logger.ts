@@ -21,26 +21,31 @@ const PII_KEYS = ["email", "password", "token", "apiKey", "secret", "authorizati
 const EMAIL_REGEX = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
 
 /**
- * Strips PII from a value recursively
+ * Strips PII from a value recursively with cycle detection
  */
-function maskPII(value: unknown): unknown {
+function maskPII(value: unknown, seen = new WeakSet<object>()): unknown {
   if (typeof value === "string") {
     // Mask emails in strings
     const masked = value.replace(EMAIL_REGEX, "[MASKED_EMAIL]");
     return masked;
   }
 
-  if (Array.isArray(value)) {
-    return value.map(maskPII);
-  }
-
   if (value !== null && typeof value === "object") {
+    if (seen.has(value as object)) {
+      return "[CIRCULAR]";
+    }
+    seen.add(value as object);
+
+    if (Array.isArray(value)) {
+      return value.map((item) => maskPII(item, seen));
+    }
+
     const maskedObj: Record<string, unknown> = {};
     for (const [key, val] of Object.entries(value as Record<string, unknown>)) {
       if (PII_KEYS.some((pii) => key.toLowerCase().includes(pii.toLowerCase()))) {
         maskedObj[key] = "[MASKED]";
       } else {
-        maskedObj[key] = maskPII(val);
+        maskedObj[key] = maskPII(val, seen);
       }
     }
     return maskedObj;

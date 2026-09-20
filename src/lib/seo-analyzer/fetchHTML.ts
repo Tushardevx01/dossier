@@ -206,6 +206,7 @@ export async function fetchHTML(urlString: string): Promise<FetchResult | Analyz
 
     let url = validation.url!;
     const { controller, clear } = createTimeoutController(FETCH_TIMEOUT_MS);
+    const visitedUrls = new Set<string>([url.toString()]);
 
     try {
         for (let redirectCount = 0; redirectCount < MAX_REDIRECTS; redirectCount += 1) {
@@ -244,6 +245,17 @@ export async function fetchHTML(urlString: string): Promise<FetchResult | Analyz
                         details: `Failed to fetch ${url.toString()}`,
                     };
                 }
+
+                const nextUrlStr = nextValidation.url.toString();
+                if (visitedUrls.has(nextUrlStr)) {
+                    clear();
+                    return {
+                        code: "FETCH_FAILED",
+                        message: "Redirect loop detected",
+                        details: `Redirect loop encountered: ${nextUrlStr} was already visited`,
+                    };
+                }
+                visitedUrls.add(nextUrlStr);
 
                 url = nextValidation.url;
                 continue;
@@ -297,7 +309,7 @@ export async function fetchHTML(urlString: string): Promise<FetchResult | Analyz
 
             return {
                 html,
-                finalUrl: response.url, // May differ after redirects
+                finalUrl: url.toString(),
                 statusCode: response.status,
                 headers,
             };
