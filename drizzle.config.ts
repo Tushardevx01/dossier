@@ -11,7 +11,7 @@ const config = {
   out: './migrations',
   dialect: 'postgresql',
   dbCredentials: {
-    connectionString: process.env.DATABASE_URL || '',
+    url: process.env.DATABASE_URL || '',
   },
   // Print all SQL statements to console during development
   verbose: process.env.NODE_ENV === 'development',

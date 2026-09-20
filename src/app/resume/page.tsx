@@ -3,6 +3,10 @@ import { ResumePage } from "@/components/resume/ResumePage";
 import { resumeKeywords } from "@/constant";
 import { buildPageMetadata } from "@/lib/seo";
 
+import { getCredentialsCount } from "@/lib/credentials";
+
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   ...buildPageMetadata({
     title: "Resume | Tushar Kanti Dey",
@@ -14,6 +18,7 @@ export const metadata: Metadata = {
   }),
 };
 
-export default function Resume() {
-  return <ResumePage />;
+export default async function Resume() {
+  const credentialCount = await getCredentialsCount();
+  return <ResumePage credentialCount={credentialCount} />;
 }

@@ -20,6 +20,7 @@ import {
   LuSmartphone,
   LuGlobe,
   LuWorkflow,
+  LuAward,
 } from "react-icons/lu";
 
 interface CommandItem {
@@ -225,6 +226,15 @@ export const CommandPalette = () => {
       icon: LuCompass,
       action: () => navigateTo("/#contact"),
       keywords: ["contact", "email", "collaborate", "hire", "message"],
+    },
+    {
+      id: "nav-credentials",
+      label: "Credentials",
+      category: "Navigation",
+      description: "Verified academic qualifications & technical certifications",
+      icon: LuAward,
+      action: () => navigateTo("/credentials"),
+      keywords: ["credentials", "certifications", "degree", "education", "certificates", "qualification"],
     },
     {
       id: "nav-notes",

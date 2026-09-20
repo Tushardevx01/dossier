@@ -175,6 +175,65 @@ async function bootstrapApiKeysTable() {
   `;
 }
 
+async function bootstrapCredentialsTable() {
+  if (!client) {
+    throw new Error('Database client is not initialized');
+  }
+
+  await client`
+    DO $$
+    BEGIN
+      IF NOT EXISTS (
+        SELECT 1
+        FROM information_schema.tables
+        WHERE table_schema = 'public'
+          AND table_name = 'credentials'
+      ) THEN
+        CREATE TABLE credentials (
+          id SERIAL PRIMARY KEY,
+          title VARCHAR(255) NOT NULL,
+          slug VARCHAR(255) NOT NULL UNIQUE,
+          issuer VARCHAR(255) NOT NULL,
+          issue_date TIMESTAMPTZ NOT NULL,
+          object_link TEXT NOT NULL,
+          credential_link TEXT,
+          description TEXT,
+          created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+          updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+        );
+      ELSE
+        IF NOT EXISTS (
+          SELECT 1
+          FROM information_schema.columns
+          WHERE table_name = 'credentials'
+            AND column_name = 'issue_date'
+        ) THEN
+          ALTER TABLE credentials ADD COLUMN issue_date TIMESTAMPTZ;
+        END IF;
+
+        IF NOT EXISTS (
+          SELECT 1
+          FROM information_schema.columns
+          WHERE table_name = 'credentials'
+            AND column_name = 'object_link'
+        ) THEN
+          ALTER TABLE credentials ADD COLUMN object_link TEXT;
+        END IF;
+
+        IF NOT EXISTS (
+          SELECT 1
+          FROM information_schema.columns
+          WHERE table_name = 'credentials'
+            AND column_name = 'credential_link'
+        ) THEN
+          ALTER TABLE credentials ADD COLUMN credential_link TEXT;
+        END IF;
+      END IF;
+    END
+    $$;
+  `;
+}
+
 export function getDb(): Database {
   if (!db) {
     db = createDatabase();
@@ -192,6 +251,7 @@ export async function ensureDatabaseReady(): Promise<void> {
       bootstrapEngineeringNotesTable(),
       bootstrapCaseStudiesTable(),
       bootstrapApiKeysTable(),
+      bootstrapCredentialsTable(),
     ])
       .then(() => undefined)
       .catch((error) => {

@@ -16,8 +16,10 @@ export interface ApiKeyValidation {
   valid: boolean;
   keyId?: number;
   permissions?: {
-    analyze: boolean;
-    rateLimit: number;
+    analyze?: boolean;
+    rateLimit?: number;
+    admin?: boolean;
+    credentials?: boolean;
   };
   error?: string;
 }
@@ -96,7 +98,53 @@ export function extractApiKey(request: Request): string | null {
     return token.length > 0 ? token : null;
   }
 
-  // Also check X-API-Key header
+// Also check X-API-Key header
   const apiKey = request.headers.get("x-api-key")?.trim();
   return apiKey && apiKey.length > 0 ? apiKey : null;
+}
+
+/**
+ * Validate that an incoming request possesses administrative privileges.
+ * Checks against ADMIN_API_KEY environment secret or validated database API keys.
+ */
+export async function validateAdminRequest(
+  request: Request
+): Promise<{ authorized: boolean; error?: string }> {
+  const apiKey = extractApiKey(request);
+  if (!apiKey) {
+    return {
+      authorized: false,
+      error: "Authentication required. Provide Authorization: Bearer <key> or X-API-Key header",
+    };
+  }
+
+  // 1. Check direct ADMIN_API_KEY environment variable if defined
+  const adminSecret = process.env.ADMIN_API_KEY?.trim();
+  if (adminSecret && adminSecret.length > 0) {
+    if (apiKey === adminSecret) {
+      return { authorized: true };
+    }
+  }
+
+  // 2. Validate against api_keys table in database
+  const keyValidation = await validateApiKey(apiKey);
+  if (!keyValidation.valid) {
+    return {
+      authorized: false,
+      error: keyValidation.error || "Invalid administrator credentials",
+    };
+  }
+
+  // Check role-based capabilities
+  if (
+    keyValidation.permissions?.admin === true ||
+    keyValidation.permissions?.credentials === true
+  ) {
+    return { authorized: true };
+  }
+
+  return {
+    authorized: false,
+    error: "Insufficient permissions. Admin or credentials capability required",
+  };
 }

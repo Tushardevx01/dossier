@@ -39,7 +39,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
+import { AnalyzeRequestSchema } from "@/db/schema";
 import { analyzeSEO, isAnalysisError, validateUrl } from "@/lib/seo-analyzer";
 import { logger } from "@/lib/logger";
 import { checkRateLimit, createRateLimitKey } from "@/lib/security/rateLimit";
@@ -49,11 +49,6 @@ import { validateApiKey, extractApiKey } from "@/lib/security/auth";
 // Use Node.js runtime for Cheerio compatibility
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-
-// Request validation schema
-const AnalyzeRequestSchema = z.object({
-  url: z.string().min(1, "URL is required").max(2048, "URL too long"),
-});
 
 const MAX_BODY_BYTES = 4096;
 

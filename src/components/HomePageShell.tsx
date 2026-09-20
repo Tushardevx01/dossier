@@ -24,7 +24,7 @@ const Contact = dynamic(() => import("@/components/sections/Contact").then((mod)
 
 const PRELOADER_DURATION_MS = 1500;
 
-export function HomePageShell() {
+export function HomePageShell({ credentialCount }: { credentialCount?: number } = {}) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -56,7 +56,7 @@ export function HomePageShell() {
   return (
     <div className="min-h-screen relative">
       <Background />
-      <Navbar />
+      <Navbar credentialCount={credentialCount} />
       <main>
         <Hero />
         <About />

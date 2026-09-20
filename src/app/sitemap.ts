@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site";
 import { getAllCaseStudies } from "@/lib/case-studies";
 import { getAllArticles } from "@/lib/articleLoader";
+import { getAllCredentials, slugifyTitle } from "@/lib/credentials";
 
 function safeDate(value: string | Date | null | undefined, fallback = new Date()): Date {
   if (!value) return fallback;
@@ -14,11 +15,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   let caseStudies: Awaited<ReturnType<typeof getAllCaseStudies>> = [];
   let articles: Awaited<ReturnType<typeof getAllArticles>> = [];
+  let credentialsList: Awaited<ReturnType<typeof getAllCredentials>> = [];
 
   try {
-    [caseStudies, articles] = await Promise.all([
+    [caseStudies, articles, credentialsList] = await Promise.all([
       getAllCaseStudies(),
       getAllArticles(),
+      getAllCredentials(),
     ]);
   } catch {
     // Graceful degradation: return a minimal sitemap if DB is unreachable
@@ -54,6 +57,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: safeDate(article.date),
       changeFrequency: "weekly" as const,
       priority: 0.75,
+    })),
+    {
+      url: `${baseUrl}/credentials`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    ...credentialsList.map((cred) => ({
+      url: `${baseUrl}/credentials/${cred.slug || slugifyTitle(cred.title)}`,
+      lastModified: safeDate(cred.updatedAt || cred.createdAt),
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
     })),
     {
       url: `${baseUrl}/resume`,

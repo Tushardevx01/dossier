@@ -19,6 +19,8 @@ import {
   generateWebsiteStructuredData,
 } from "@/lib/structured-data";
 
+import { getCredentialsCount } from "@/lib/credentials";
+
 export const revalidate = 60;
 
 export const metadata: Metadata = {
@@ -28,7 +30,10 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const latestNotes = (await getAllArticles()).slice(0, 6);
+  const [latestNotes, credentialCount] = await Promise.all([
+    getAllArticles().then((notes) => notes.slice(0, 6)),
+    getCredentialsCount(),
+  ]);
   const featuredProject = projectsData[0];
 
   const homepageSchemas = [
@@ -44,7 +49,7 @@ export default async function Home() {
       {homepageSchemas.map((schema, index) => (
         <JsonLd key={index} data={schema} />
       ))}
-      <HomePageShell />
+      <HomePageShell credentialCount={credentialCount} />
     </>
   );
 }
