@@ -38,8 +38,8 @@ export default async function CredentialsPage() {
       <Navbar credentialCount={credentialsList.length} />
       <JsonLd data={breadcrumbsSchema} />
 
-      {/* Header Section (matching Engineering Notes layout & proportions) */}
-      <section className="max-w-4xl mx-auto px-4 sm:px-6 pt-24 sm:pt-32 pb-10 sm:pb-12">
+      {/* Header Section (matching 2-column grid layout & proportions) */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 pt-24 sm:pt-32 pb-10 sm:pb-12">
         <h1
           className={`${nasalization.className} text-4xl sm:text-6xl lg:text-7xl font-semibold text-white mb-5 sm:mb-6 tracking-tight leading-tight`}
         >

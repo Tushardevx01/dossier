@@ -72,3 +72,22 @@ export function formatValidityDate(dateInput: Date | string): string {
   }
 }
 
+/**
+ * Format a date in card style: "Aug 26, 2026".
+ * Uses UTC to avoid timezone shifts and React hydration mismatches.
+ */
+export function formatCardDate(dateInput: Date | string): string {
+  try {
+    const d = new Date(dateInput);
+    if (isNaN(d.getTime())) return String(dateInput);
+    return d.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      timeZone: "UTC",
+    });
+  } catch {
+    return String(dateInput);
+  }
+}
+
