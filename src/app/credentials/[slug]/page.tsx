@@ -93,7 +93,7 @@ export default async function CredentialDetailPage({ params }: PageProps) {
       <main className="max-w-[720px] mx-auto px-4 sm:px-6 md:px-8 pt-28 sm:pt-32 pb-24 sm:pb-32 w-full">
 
         {/* Page Header */}
-        <div className="flex items-center justify-between pb-5 mb-8 sm:mb-10 border-b border-neutral-800/80">
+        <div className="flex items-center justify-between mb-8 sm:mb-10">
           <Link
             href="/credentials"
             className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-neutral-400 hover:text-white transition-colors group"
