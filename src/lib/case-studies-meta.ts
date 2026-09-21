@@ -220,8 +220,8 @@ export const caseStudiesMeta: CaseStudyRecord[] = [
       "Client-Side Array Crashes from Schema Deviations: Implemented defensive data parser (defensiveHandler.ts) with safeArrayParse, runtime type guards, and atomic state fallbacks."
     ],
     "improvements": [
-      "Custom Kotlin Config Plugin: undefined",
-      "Supabase PostgreSQL RLS Policies: undefined"
+      "Custom Kotlin Config Plugin",
+      "Supabase PostgreSQL RLS Policies"
     ],
     "relatedNoteSlugs": [],
     "relatedProjectSlug": "webscope",
@@ -258,8 +258,8 @@ export const caseStudiesMeta: CaseStudyRecord[] = [
       "Decoupled AI Resilience: Pre-computes deterministic heuristic insights locally with strict 6s AI timeout fallbacks."
     ],
     "improvements": [
-      "Axios + Cheerio: undefined",
-      "Prisma + PostgreSQL: undefined"
+      "Axios + Cheerio",
+      "Prisma + PostgreSQL"
     ],
     "relatedNoteSlugs": [],
     "relatedProjectSlug": "subscription-tracker",
@@ -300,10 +300,10 @@ export const caseStudiesMeta: CaseStudyRecord[] = [
       "Edge Rate & Bot Mitigation: Mounted Arcjet middleware globally to reject bots (403) and rate limits (429) prior to database execution."
     ],
     "improvements": [
-      "Upstash Workflow: undefined",
-      "Mongoose Pre-Save Hooks: undefined",
-      "Mongoose Session Transactions: undefined",
-      "Arcjet Middleware: undefined"
+      "Upstash Workflow",
+      "Mongoose Pre-Save Hooks",
+      "Mongoose Session Transactions",
+      "Arcjet Middleware"
     ],
     "relatedNoteSlugs": [],
     "relatedProjectSlug": "runstack",

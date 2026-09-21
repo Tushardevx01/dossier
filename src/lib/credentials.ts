@@ -109,10 +109,14 @@ export async function getCredentialBySlug(slug: string): Promise<Credential | nu
 
     if (rows.length > 0) return rows[0];
 
-    // 2. Fallback: match by slugified title across records
-    const all = await db.select().from(credentials);
-    const matched = all.find((c) => slugifyTitle(c.title) === normalized);
-    return matched ?? null;
+    // 2. Fallback: try matching lowercase title directly
+    const fallbackRows = await db
+      .select()
+      .from(credentials)
+      .where(sql`lower(${credentials.title}) = ${normalized}`)
+      .limit(1);
+      
+    return fallbackRows[0] ?? null;
   } catch (error) {
     logger.warn("Failed to query credential by slug from DB", {
       slug,
@@ -166,25 +170,33 @@ export async function getAllCredentialSlugs(): Promise<string[]> {
  * Insert a new credential record into the database.
  */
 export async function createCredential(data: NewCredential): Promise<Credential> {
-  await ensureDatabaseReady();
-  const db = getDb();
+  try {
+    await ensureDatabaseReady();
+    const db = getDb();
 
-  const slug = data.slug || slugifyTitle(data.title);
+    const slug = data.slug || slugifyTitle(data.title);
 
-  const [inserted] = await db
-    .insert(credentials)
-    .values({
-      ...data,
-      slug,
-      updatedAt: new Date(),
-    })
-    .returning();
+    const [inserted] = await db
+      .insert(credentials)
+      .values({
+        ...data,
+        slug,
+        updatedAt: new Date(),
+      })
+      .returning();
 
-  if (!inserted) {
-    throw new Error("Failed to insert credential record");
+    if (!inserted) {
+      throw new Error("Failed to insert credential record");
+    }
+
+    return inserted;
+  } catch (error) {
+    if (error instanceof Error && error.message.includes('unique constraint')) {
+      throw new Error(`Credential with slug "${data.slug || slugifyTitle(data.title)}" already exists`, { cause: error });
+    }
+    logger.error('Failed to create credential', { error });
+    throw new Error('Failed to create credential', { cause: error });
   }
-
-  return inserted;
 }
 
 /**
@@ -194,38 +206,51 @@ export async function updateCredential(
   id: number,
   data: Partial<NewCredential>
 ): Promise<Credential | null> {
-  await ensureDatabaseReady();
-  const db = getDb();
+  try {
+    await ensureDatabaseReady();
+    const db = getDb();
 
-  const updatePayload: Partial<NewCredential> = {
-    ...data,
-    updatedAt: new Date(),
-  };
+    const updatePayload: Partial<NewCredential> = {
+      ...data,
+      updatedAt: new Date(),
+    };
 
-  if (data.title && !data.slug) {
-    updatePayload.slug = slugifyTitle(data.title);
+    if (data.title && !data.slug) {
+      updatePayload.slug = slugifyTitle(data.title);
+    }
+
+    const [updated] = await db
+      .update(credentials)
+      .set(updatePayload)
+      .where(eq(credentials.id, id))
+      .returning();
+
+    return updated ?? null;
+  } catch (error) {
+    if (error instanceof Error && error.message.includes('unique constraint')) {
+      throw new Error('Credential slug already exists', { cause: error });
+    }
+    logger.error('Failed to update credential', { id, error });
+    throw new Error('Failed to update credential', { cause: error });
   }
-
-  const [updated] = await db
-    .update(credentials)
-    .set(updatePayload)
-    .where(eq(credentials.id, id))
-    .returning();
-
-  return updated ?? null;
 }
 
 /**
  * Delete a credential record by ID. Returns the deleted record or null.
  */
 export async function deleteCredential(id: number): Promise<Credential | null> {
-  await ensureDatabaseReady();
-  const db = getDb();
+  try {
+    await ensureDatabaseReady();
+    const db = getDb();
 
-  const [deleted] = await db
-    .delete(credentials)
-    .where(eq(credentials.id, id))
-    .returning();
+    const [deleted] = await db
+      .delete(credentials)
+      .where(eq(credentials.id, id))
+      .returning();
 
-  return deleted ?? null;
+    return deleted ?? null;
+  } catch (error) {
+    logger.error('Failed to delete credential', { id, error });
+    throw new Error('Failed to delete credential', { cause: error });
+  }
 }

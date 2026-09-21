@@ -64,7 +64,6 @@ export async function GET(_request: NextRequest, context: RouteContext) {
         "Content-Disposition",
         `${disposition}; filename="${safeFilename}"; filename*=UTF-8''${encodeURIComponent(safeFilename)}`
       );
-      headers.set("Access-Control-Allow-Origin", "*");
       headers.set("Cache-Control", "public, max-age=86400, stale-while-revalidate=604800");
       if (r2Obj.contentLength) {
         headers.set("Content-Length", String(r2Obj.contentLength));

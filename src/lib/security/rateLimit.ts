@@ -74,11 +74,9 @@ async function checkRedisRateLimit(
   const redis = getRedisClient();
   if (!redis) {
     if (process.env.NODE_ENV === "production") {
-      logger.warn("Redis rate limiting unavailable in production; using process-local fallback", {
-        key,
-      });
+      logger.error("Redis rate limiting unavailable in production. Failing closed to prevent bypass.", { key });
+      return { allowed: false, remaining: 0, retryAfterSeconds: windowMs / 1000 };
     }
-
     return checkMemoryRateLimit(key, maxRequests, windowMs);
   }
 
@@ -88,29 +86,31 @@ async function checkRedisRateLimit(
   try {
     const pipeline = redis.pipeline();
     pipeline.incr(redisKey);
+    // Setting expire on every request creates a sliding window and prevents the race condition
+    // where a key never gets an expiration.
+    pipeline.expire(redisKey, windowSeconds);
     pipeline.ttl(redisKey);
 
-    const [count, ttl] = await pipeline.exec<[number, number]>();
-
-    if (count === 1 || ttl === -1) {
-      await redis.expire(redisKey, windowSeconds);
-    }
+    const [count, , ttl] = await pipeline.exec<[number, number, number]>();
 
     const retryAfterSeconds = ttl > 0 ? ttl : windowSeconds;
-    const remaining = Math.max(maxRequests - count, 0);
+    const remaining = Math.max(maxRequests - (count as number), 0);
 
-    if (count > maxRequests) {
-      return { allowed: false, remaining: 0, retryAfterSeconds };
-    }
-
-    return { allowed: true, remaining, retryAfterSeconds };
+    return {
+      allowed: (count as number) <= maxRequests,
+      remaining,
+      retryAfterSeconds,
+    };
   } catch (error) {
-    logger.error("Redis rate limit failure, using memory fallback", {
+    logger.error("Redis rate limit check failed", {
       key,
       error: error instanceof Error ? error.message : String(error),
     });
 
-    // Always fall back to memory rate limiting — never block requests
+    if (process.env.NODE_ENV === "production") {
+      logger.error("Failing closed on Redis error in production");
+      return { allowed: false, remaining: 0, retryAfterSeconds: windowSeconds };
+    }
     return checkMemoryRateLimit(key, maxRequests, windowMs);
   }
 }

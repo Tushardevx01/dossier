@@ -43,22 +43,26 @@ export async function seedDatabase() {
       .from(apiKeys);
 
     if (keysResult.length === 0) {
-      logger.info('Seeding API keys');
+      if (process.env.NODE_ENV === 'production') {
+        logger.warn('Skipping test API key seed in production');
+      } else {
+        logger.info('Seeding API keys');
 
-      const testKey = 'test-api-key-12345';
-      const hashedKey = createHash('sha256').update(testKey).digest('hex');
+        const testKey = process.env.SEED_API_KEY || 'test-api-key-12345';
+        const hashedKey = createHash('sha256').update(testKey).digest('hex');
 
-      await database.insert(apiKeys).values({
-        keyHash: hashedKey,
-        name: 'Test API Key',
-        permissions: {
-          analyze: true,
-          rateLimit: 10,
-        },
-        active: true,
-      });
+        await database.insert(apiKeys).values({
+          keyHash: hashedKey,
+          name: 'Test API Key',
+          permissions: {
+            analyze: true,
+            rateLimit: 10,
+          },
+          active: true,
+        });
 
-      logger.info('API keys seeded');
+        logger.info('API keys seeded');
+      }
     } else {
       logger.info('api_keys table is available', { rows: keysResult.length });
     }
@@ -83,27 +87,29 @@ export async function seedDatabase() {
         const { caseStudiesMeta } = await import('@/lib/case-studies-meta');
         caseStudiesData = caseStudiesMeta;
       }
-      for (const record of caseStudiesData) {
-        await database.insert(caseStudies).values({
-          slug: record.slug,
-          title: record.title,
-          subtitle: record.subtitle,
-          excerpt: record.excerpt,
-          content: record.content,
-          category: record.category,
-          level: record.level,
-          readTime: record.readTime,
-          date: record.date,
-          tags: record.tags,
-          published: record.published,
-          featured: record.featured,
-          whatILearned: record.whatILearned,
-          improvements: record.improvements,
-          relatedNoteSlugs: record.relatedNoteSlugs,
-          relatedProjectSlug: record.relatedProjectSlug,
-          relatedSystemDesignSlug: record.relatedSystemDesignSlug,
-        }).onConflictDoNothing();
-      }
+      await database.transaction(async (tx) => {
+        for (const record of caseStudiesData) {
+          await tx.insert(caseStudies).values({
+            slug: record.slug,
+            title: record.title,
+            subtitle: record.subtitle,
+            excerpt: record.excerpt,
+            content: record.content,
+            category: record.category,
+            level: record.level,
+            readTime: record.readTime,
+            date: record.date,
+            tags: record.tags,
+            published: record.published,
+            featured: record.featured,
+            whatILearned: record.whatILearned,
+            improvements: record.improvements,
+            relatedNoteSlugs: record.relatedNoteSlugs,
+            relatedProjectSlug: record.relatedProjectSlug,
+            relatedSystemDesignSlug: record.relatedSystemDesignSlug,
+          }).onConflictDoNothing();
+        }
+      });
       logger.info('Case studies seeded successfully');
     }
   } catch (error) {

@@ -22,6 +22,7 @@ import { validateCsrfToken, getCsrfCookieName } from "@/lib/security/csrf.server
 import { getCorsHeaders, getSecurityHeaders, mergeHeaders } from "@/lib/security/corsHeaders";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 // ─── Response Helpers ───────────────────────────────────────────────────────
 

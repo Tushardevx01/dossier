@@ -30,12 +30,24 @@ import { logger } from "@/lib/logger";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+import { checkRateLimit, createRateLimitKey } from "@/lib/security/rateLimit";
+import { extractClientIdentifier } from "@/lib/security/request";
+
 /**
  * GET /api/credentials
  * Returns all verified credentials directly from the database.
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const ip = extractClientIdentifier(request);
+    const rlKey = createRateLimitKey("credentials_get", ip);
+    const rl = await checkRateLimit(rlKey, 60, 60000); // 60 per minute
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { success: false, error: "Too many requests" },
+        { status: 429, headers: { "Retry-After": String(rl.retryAfterSeconds) } }
+      );
+    }
     const list = await getAllCredentials();
     return NextResponse.json({
       success: true,
@@ -220,7 +232,7 @@ export async function POST(request: NextRequest) {
           { status: 500 }
         );
       }
-    } catch (err) {
+    } catch {
       // Clean up any uploaded files on general error
       await Promise.allSettled(uploadedR2Keys.map((key) => deleteFromR2(key)));
 
@@ -229,7 +241,7 @@ export async function POST(request: NextRequest) {
           success: false,
           error: {
             code: "UPLOAD_ERROR",
-            message: err instanceof Error ? err.message : "Failed to process upload",
+            message: "Invalid file or payload",
           },
         },
         { status: 400 }

@@ -70,10 +70,14 @@ const verifiedStaticActivity = [
 
 export async function GET() {
   const username = "tushardevx01";
-  const headers = {
-    "User-Agent": "dossier-portfolio-agent",
+  const headers: Record<string, string> = {
     Accept: "application/vnd.github.v3+json",
+    "User-Agent": "tushardevx01-portfolio",
   };
+
+  if (process.env.GITHUB_TOKEN) {
+    headers["Authorization"] = `token ${process.env.GITHUB_TOKEN}`;
+  }
 
   try {
     const [userRes, reposRes, eventsRes] = await Promise.allSettled([

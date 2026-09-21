@@ -19,7 +19,6 @@ function shouldTrustForwardedHeaders(): boolean {
   return (
     process.env.VERCEL === "1" ||
     process.env.TRUST_PROXY_HEADERS === "true" ||
-    process.env.NODE_ENV !== "production" ||
     Boolean(process.env.CF_PAGES || process.env.CLOUDFLARE_ACCOUNT_ID)
   );
 }

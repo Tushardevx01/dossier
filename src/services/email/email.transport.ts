@@ -61,7 +61,7 @@ export async function sendEmail(
       html: message.html,
       replyTo: message.replyTo,
       headers: {
-        "X-Entity-Ref-ID": "newmail",
+        "X-Entity-Ref-ID": crypto.randomUUID(),
       },
     });
 
@@ -71,5 +71,7 @@ export async function sendEmail(
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
     logger.error("Failed to send email", { error: errorMessage });
     return { success: false, error: errorMessage };
+  } finally {
+    transport.close();
   }
 }

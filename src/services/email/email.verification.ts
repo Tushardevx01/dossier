@@ -34,23 +34,18 @@ export async function verifyEmailAddress(
   try {
     // Use POST request with Authorization header instead of query parameter
     // This prevents API key exposure in logs, referrer headers, and browser history
-    const response = await fetch(
-      "https://api.quickemailverification.com/v1/verify",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          // Alternative: Use Authorization header if API supports it
-          // "Authorization": `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-          email: email,
-          apikey: apiKey, // API expects this in request body
-        }),
-        signal: controller.signal,
-        cache: "no-store",
-      }
-    );
+    const url = new URL("https://api.quickemailverification.com/v1/verify");
+    url.searchParams.append("email", email);
+    url.searchParams.append("apikey", apiKey);
+    
+    const response = await fetch(url.toString(), {
+      method: "GET",
+      headers: {
+        "Accept": "application/json",
+      },
+      signal: controller.signal,
+      cache: "no-store",
+    });
 
     if (!response.ok) {
       logger.warn("Email verification API returned non-OK status", {

@@ -10,8 +10,9 @@
  * - getCaseStudyBySlug():  full record including content (detail pages only)
  */
 
-import { asc, eq } from 'drizzle-orm';
+import { asc, eq, and } from 'drizzle-orm';
 import { ensureDatabaseReady, getDb } from '@/db';
+import { sanitizeHtml } from '@/lib/sanitize';
 import { caseStudies, type CaseStudy } from '@/db/schema';
 import { caseStudiesMeta, type CaseStudyRecord } from '@/lib/case-studies-meta';
 
@@ -24,7 +25,7 @@ function mapCaseStudyRow(row: CaseStudy): CaseStudyRecord {
     title: row.title,
     subtitle: row.subtitle,
     excerpt: row.excerpt,
-    content: row.content,
+    content: sanitizeHtml(row.content),
     category: row.category,
     level: row.level,
     readTime: row.readTime,
@@ -126,7 +127,7 @@ export async function getCaseStudyBySlug(slug: string): Promise<CaseStudyRecord 
     const rows = await db
       .select()
       .from(caseStudies)
-      .where(eq(caseStudies.slug, normalizedSlug))
+      .where(and(eq(caseStudies.slug, normalizedSlug), eq(caseStudies.published, true)))
       .limit(1);
 
     if (rows.length === 0) {

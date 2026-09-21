@@ -39,9 +39,11 @@ export function readCsrfTokenFromCookieString(cookieString: string): string | nu
   }
 
   const cookieValue = cookieString
-    .split("; ")
-    .find((row) => row.startsWith(`${CSRF_COOKIE_NAME}=`))
-    ?.slice(`${CSRF_COOKIE_NAME}=`.length);
+    .split(/;\s*/)
+    .find((row) => row.trimStart().startsWith(`${CSRF_COOKIE_NAME}=`))
+    ?.split("=")
+    .slice(1)
+    .join("=");
 
   if (!cookieValue) {
     return null;

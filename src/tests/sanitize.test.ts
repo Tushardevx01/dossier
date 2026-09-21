@@ -19,17 +19,6 @@ describe("sanitizeHtml", () => {
     expect(sanitizeHtml(input)).toBe(input);
   });
 
-  it("preserves inline SVG primitives used by case-study icons", () => {
-    const input =
-      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><rect width="18" height="11" x="3" y="11" rx="2"></rect><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M4 14a1 1 0 0 1-.78-1.63"></path><line x1="12" x2="12" y1="8" y2="12"></line><polyline points="12 6 12 12 16 14"></polyline></svg>';
-    const output = sanitizeHtml(input);
-    expect(output).toContain("<circle");
-    expect(output).toContain("<rect");
-    expect(output).toContain("<ellipse");
-    expect(output).toContain("<path");
-    expect(output).toContain("<line");
-    expect(output).toContain("<polyline");
-  });
 
   it("strips script tags entirely", () => {
     const output = sanitizeHtml('<p>ok</p><script>alert(1)</script>');
@@ -104,12 +93,14 @@ describe("sanitizeHtml", () => {
     }
   });
 
-  it("allows data: URIs on img src but not on anchor href", () => {
-    const img = sanitizeHtml('<img src="data:image/png;base64,iVBORw0KGgo=" alt="chart">');
-    expect(img).toContain("data:image/png;base64");
+  describe("allowed schemes", () => {
+    it("strips data: URIs from img to prevent DoS", () => {
+      const img = sanitizeHtml('<img src="data:image/png;base64,iVBORw0KGgo=" alt="chart">');
+      expect(img).toBe('<img alt="chart" />'); // src removed
 
-    const anchor = sanitizeHtml('<a href="data:image/png;base64,iVBORw0KGgo=">x</a>');
-    expect(anchor).not.toContain("data:");
+      const anchor = sanitizeHtml('<a href="data:image/png;base64,iVBORw0KGgo=">x</a>');
+      expect(anchor).toBe("<a>x</a>");
+    });
   });
 });
 

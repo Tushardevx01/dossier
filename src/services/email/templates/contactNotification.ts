@@ -101,7 +101,7 @@ export function generateContactNotificationEmail(data: ContactNotificationData):
                 </tr>
                 <tr>
                   <td class="stack-cell stack-label" style="width:34%;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.06);font-size:12px;line-height:1.4;letter-spacing:1px;text-transform:uppercase;font-weight:700;color:#A7B0C0;">📧 Email</td>
-                  <td class="stack-cell stack-value" style="padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.06);font-size:16px;line-height:1.5;font-weight:600;color:#F8FAFC;word-break:break-word;"><a href="mailto:${safeEmail}" style="color:#F59E0B;text-decoration:none;">${safeEmail}</a></td>
+                  <td class="stack-cell stack-value" style="padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.06);font-size:16px;line-height:1.5;font-weight:600;color:#F8FAFC;word-break:break-word;"><a href="mailto:${encodeURIComponent(safeEmail)}" style="color:#F59E0B;text-decoration:none;">${safeEmail}</a></td>
                 </tr>
                 <tr>
                   <td class="stack-cell stack-label" style="width:34%;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.06);font-size:12px;line-height:1.4;letter-spacing:1px;text-transform:uppercase;font-weight:700;color:#A7B0C0;">📂 Reason</td>
@@ -125,7 +125,7 @@ export function generateContactNotificationEmail(data: ContactNotificationData):
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
                   <td align="center" class="cta-wrap" style="padding-top:20px;">
-                    <a href="mailto:${safeEmail}" class="reply-btn" style="display:inline-block;width:220px;height:48px;line-height:48px;border-radius:12px;background:linear-gradient(135deg,#F59E0B,#FB7185);color:#ffffff;font-size:15px;font-weight:700;text-decoration:none;box-shadow:0 8px 24px rgba(245,158,11,0.28);">Reply to Sender →</a>
+                    <a href="mailto:${encodeURIComponent(safeEmail)}" class="reply-btn" style="display:inline-block;width:220px;height:48px;line-height:48px;border-radius:12px;background:linear-gradient(135deg,#F59E0B,#FB7185);color:#ffffff;font-size:15px;font-weight:700;text-decoration:none;box-shadow:0 8px 24px rgba(245,158,11,0.28);">Reply to Sender →</a>
                   </td>
                 </tr>
                 <tr>

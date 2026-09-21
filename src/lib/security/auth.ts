@@ -53,37 +53,39 @@ export async function validateApiKey(apiKey: string): Promise<ApiKeyValidation> 
       .limit(1);
 
     if (result.length === 0) {
+      await new Promise(r => setTimeout(r, 50 + Math.random() * 50));
       return { valid: false, error: "Invalid credentials" };
     }
 
     const key = result[0];
 
-    if (!key.active) {
-      return { valid: false, error: "Invalid credentials" };
-    }
-
-    if (key.expiresAt && new Date() > key.expiresAt) {
+    if (!key.active || (key.expiresAt && new Date() > key.expiresAt)) {
+      await new Promise(r => setTimeout(r, 50 + Math.random() * 50));
       return { valid: false, error: "Invalid credentials" };
     }
 
     // Update last used and usage count
-    await db
-      .update(apiKeys)
-      .set({
-        lastUsed: new Date(),
-        usageCount: sql`${apiKeys.usageCount} + 1`,
-      })
-      .where(eq(apiKeys.id, key.id));
+    try {
+      await db
+        .update(apiKeys)
+        .set({
+          lastUsed: new Date(),
+          usageCount: sql`${apiKeys.usageCount} + 1`,
+        })
+        .where(eq(apiKeys.id, key.id));
+    } catch (err) {
+      logger.error("Failed to update API key usage stats", { error: err });
+      // do not fail authentication if analytics update fails
+    }
 
     return {
       valid: true,
       keyId: key.id,
-      permissions: key.permissions,
+      permissions: key.permissions as Record<string, boolean>,
     };
   } catch (error) {
-    logger.error("API key validation failed", {
-      error: error instanceof Error ? error.message : String(error),
-    });
+    logger.error("Database error validating API key", { error });
+    await new Promise(r => setTimeout(r, 50 + Math.random() * 50));
     return { valid: false, error: "Authentication service unavailable" };
   }
 }

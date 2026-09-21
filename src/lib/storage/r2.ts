@@ -96,18 +96,27 @@ export function extractR2Key(keyOrUrl: string): string {
     return "";
   }
 
-  const trimmed = keyOrUrl.trim();
+  let trimmed = keyOrUrl.trim();
 
   if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
     try {
       const url = new URL(trimmed);
-      return url.pathname.replace(/^\/+/, "");
+      trimmed = url.pathname;
     } catch {
-      return trimmed;
+      return "";
     }
   }
 
-  return trimmed.replace(/^\/+/, "");
+  // Normalize and block traversal
+  trimmed = trimmed.replace(/^\/+/, "");
+  const segments = trimmed.split("/").filter(s => s !== "." && s !== "..");
+  const clean = segments.join("/");
+
+  // Enforce prefix (assuming all usage is within 'credentials/')
+  if (!clean.startsWith("credentials/")) {
+    return "";
+  }
+  return clean;
 }
 
 /**

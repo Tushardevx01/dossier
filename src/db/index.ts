@@ -34,8 +34,12 @@ function createDatabase() {
       // short-circuit DB calls when SKIP_DB_BUILD is enabled.
       client = null;
       // Return a minimal stub that won't be used during build-time static rendering.
-      // Use `unknown` first to avoid `any` usage.
-      return {} as unknown as Database;
+      return new Proxy({}, {
+        get: (_, prop) => {
+          if (prop === 'then') return undefined; // allow async/await check
+          throw new Error(`DB unavailable during build (SKIP_DB_BUILD=true). Accessing: ${String(prop)}`);
+        }
+      }) as unknown as Database;
     }
 
     throw new Error(
@@ -236,26 +240,40 @@ async function bootstrapCredentialsTable() {
 
 export function getDb(): Database {
   if (!db) {
-    db = createDatabase();
+    if (SKIP_DB_BUILD) {
+      db = createDatabase();
+    } else {
+      throw new Error('Call ensureDatabaseReady() before getDb()');
+    }
   }
   return db;
 }
 
+let isBootstrapping = false;
+
 export async function ensureDatabaseReady(): Promise<void> {
+  if (SKIP_DB_BUILD) return;
+
   if (!bootstrapPromise) {
+    if (isBootstrapping) {
+      // Wait for the active bootstrap to finish
+      // but this is handled by just awaiting bootstrapPromise.
+    }
+    isBootstrapping = true;
+    
     if (!db) {
       db = createDatabase();
     }
 
-    bootstrapPromise = Promise.all([
-      bootstrapEngineeringNotesTable(),
-      bootstrapCaseStudiesTable(),
-      bootstrapApiKeysTable(),
-      bootstrapCredentialsTable(),
-    ])
-      .then(() => undefined)
+    bootstrapPromise = (async () => {
+      await bootstrapEngineeringNotesTable();
+      await bootstrapCaseStudiesTable();
+      await bootstrapApiKeysTable();
+      await bootstrapCredentialsTable();
+    })()
       .catch((error) => {
         bootstrapPromise = null;
+        isBootstrapping = false;
         throw error;
       });
   }

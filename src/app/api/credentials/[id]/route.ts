@@ -178,14 +178,14 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
         await Promise.allSettled(newlyUploadedKeys.map((k) => deleteFromR2(k)));
         throw dbErr;
       }
-    } catch (err) {
+    } catch {
       await Promise.allSettled(newlyUploadedKeys.map((k) => deleteFromR2(k)));
       return NextResponse.json(
         {
           success: false,
           error: {
             code: "UPDATE_FAILED",
-            message: err instanceof Error ? err.message : "Failed to update credential",
+            message: "Failed to update credential",
           },
         },
         { status: 400 }
@@ -220,13 +220,13 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
         success: true,
         data: updated,
       });
-    } catch (err) {
+    } catch {
       return NextResponse.json(
         {
           success: false,
           error: {
             code: "VALIDATION_FAILED",
-            message: err instanceof Error ? err.message : "Invalid update payload",
+            message: "Invalid update payload",
           },
         },
         { status: 400 }
