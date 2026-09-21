@@ -9,9 +9,12 @@ export default function CredentialLoading() {
       <main className="max-w-[720px] mx-auto px-4 sm:px-6 md:px-8 pt-28 sm:pt-32 pb-24 sm:pb-32 w-full">
 
         {/* Header Skeleton */}
-        <div className="flex items-center justify-between mb-8 sm:mb-10 animate-pulse">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-8 sm:mb-10 animate-pulse">
           <div className="h-4 w-32 bg-neutral-800 rounded" />
-          <div className="h-5 w-24 bg-neutral-800 rounded" />
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <div className="h-6 w-28 bg-neutral-800 rounded" />
+            <div className="h-6 w-20 bg-neutral-800 rounded" />
+          </div>
         </div>
 
         {/* Certificate Preview Skeleton */}

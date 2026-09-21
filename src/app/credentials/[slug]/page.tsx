@@ -5,6 +5,7 @@ import {
   LuArrowLeft,
   LuAward,
   LuCalendar,
+  LuExternalLink,
 } from "react-icons/lu";
 
 import { Navbar, Footer, Background } from "@/components/common";
@@ -93,7 +94,7 @@ export default async function CredentialDetailPage({ params }: PageProps) {
       <main className="max-w-[720px] mx-auto px-4 sm:px-6 md:px-8 pt-28 sm:pt-32 pb-24 sm:pb-32 w-full">
 
         {/* Page Header */}
-        <div className="flex items-center justify-between mb-8 sm:mb-10">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-8 sm:mb-10">
           <Link
             href="/credentials"
             className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-neutral-400 hover:text-white transition-colors group"
@@ -102,10 +103,23 @@ export default async function CredentialDetailPage({ params }: PageProps) {
             <span>Certifications</span>
           </Link>
 
-          {/* Status indicator */}
-          <div className="flex items-center gap-2 text-xs font-mono">
+          {/* Header Actions & Status */}
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            {cred.credentialLink && (
+              <a
+                href={cred.credentialLink.startsWith("http") ? cred.credentialLink : `https://${cred.credentialLink}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded text-xs font-mono tracking-wider uppercase text-neutral-300 hover:text-white bg-neutral-900/80 hover:bg-neutral-800 border border-neutral-800 hover:border-neutral-700 transition-colors"
+              >
+                <span>View Credential</span>
+                <LuExternalLink className="w-3.5 h-3.5 text-neutral-400" />
+              </a>
+            )}
+
+            {/* Status indicator */}
             <span
-              className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[11px] font-mono tracking-wider uppercase ${
+              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-[11px] font-mono tracking-wider uppercase ${
                 isVerified
                   ? "text-emerald-400/90 bg-emerald-950/30 border border-emerald-900/40"
                   : "text-neutral-400 bg-neutral-900/60 border border-neutral-800/80"
