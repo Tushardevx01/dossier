@@ -42,7 +42,7 @@ function parseInlineMarkdown(text: string): string {
         codeContent
       )}</code>`
     );
-    return `__CODE_PLACEHOLDER_${idx}__`;
+    return `@@CODE_PLACEHOLDER_${idx}@@`;
   });
 
   // 2. Links: [label](url)
@@ -75,9 +75,9 @@ function parseInlineMarkdown(text: string): string {
   result = result.replace(/(^|[^\w*])\*([^*\n]+)\*([^\w*]|$)/g, '$1<em class="italic text-neutral-200">$2</em>$3');
   result = result.replace(/(^|[^\w_])_([^_\n]+)_([^\w_]|$)/g, '$1<em class="italic text-neutral-200">$2</em>$3');
 
-  // 5. Restore code placeholders
+  // 5. Restore code placeholders safely (using function replacer to prevent $1, $& pattern expansions)
   codePlaceholders.forEach((codeHtml, idx) => {
-    result = result.replace(`__CODE_PLACEHOLDER_${idx}__`, codeHtml);
+    result = result.replace(`@@CODE_PLACEHOLDER_${idx}@@`, () => codeHtml);
   });
 
   return result;
@@ -120,6 +120,7 @@ export function renderMarkdownToHtml(markdown: string | null | undefined): strin
 
   let i = 0;
   while (i < lines.length) {
+    const prevI = i;
     const line = lines[i];
     const trimmed = line.trim();
 
@@ -300,6 +301,16 @@ export function renderMarkdownToHtml(markdown: string | null | undefined): strin
           pText
         )}</p>`
       );
+    }
+
+    // Failsafe: guarantee loop progress if an unexpected or malformed line was not consumed
+    if (i === prevI) {
+      htmlBlocks.push(
+        `<p class="text-sm sm:text-base text-neutral-300 leading-relaxed my-4">${parseInlineMarkdown(
+          trimmed
+        )}</p>`
+      );
+      i++;
     }
   }
 
