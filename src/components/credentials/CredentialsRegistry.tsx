@@ -29,36 +29,28 @@ export function CredentialsRegistry({ credentials }: CredentialsRegistryProps) {
     return credentials.filter((cred) => cred.issuer?.trim() === selectedIssuer);
   }, [credentials, selectedIssuer]);
 
-  const formattedCount = `${String(credentials.length).padStart(2, "0")} RECORDS`;
-
   return (
     <>
       {/* Filter / Registry Controls Row */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 mb-8 sm:mb-10">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-neutral-800">
-          <div className="flex flex-wrap gap-2">
-            {issuers.map((item) => {
-              const isSelected = selectedIssuer === item;
-              return (
-                <button
-                  key={item}
-                  type="button"
-                  onClick={() => setSelectedIssuer(item)}
-                  className={`px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-md text-xs font-mono transition-opacity duration-200 uppercase tracking-wider ${
-                    isSelected
-                      ? "bg-zinc-800 text-zinc-100 border border-zinc-700"
-                      : "border border-zinc-800 bg-zinc-950/40 text-zinc-400 hover:opacity-85"
-                  }`}
-                >
-                  {item}
-                </button>
-              );
-            })}
-          </div>
-
-          <div className="text-xs font-mono uppercase tracking-widest text-neutral-400 shrink-0 self-start sm:self-auto">
-            {formattedCount}
-          </div>
+        <div className="flex flex-wrap gap-2 pb-5 border-b border-neutral-800">
+          {issuers.map((item) => {
+            const isSelected = selectedIssuer === item;
+            return (
+              <button
+                key={item}
+                type="button"
+                onClick={() => setSelectedIssuer(item)}
+                className={`px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-md text-xs font-mono transition-opacity duration-200 uppercase tracking-wider ${
+                  isSelected
+                    ? "bg-zinc-800 text-zinc-100 border border-zinc-700"
+                    : "border border-zinc-800 bg-zinc-950/40 text-zinc-400 hover:opacity-85"
+                }`}
+              >
+                {item}
+              </button>
+            );
+          })}
         </div>
       </section>
 

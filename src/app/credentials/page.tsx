@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { LuArrowLeft } from "react-icons/lu";
 
 import { nasalization } from "@/app/fonts";
 import { Navbar, Footer, Background } from "@/components/common";
@@ -42,22 +40,6 @@ export default async function CredentialsPage() {
 
       {/* Header Section (matching Engineering Notes layout & proportions) */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 pt-24 sm:pt-32 pb-10 sm:pb-12">
-        <div className="mb-6 sm:mb-8">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-xs font-mono text-neutral-400 hover:text-white transition-colors duration-200 group"
-          >
-            <LuArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
-            <span>cd ..</span>
-          </Link>
-        </div>
-
-        <div className="flex items-center gap-3 mb-4 sm:mb-5">
-          <span className="text-xs uppercase tracking-widest text-neutral-500 font-medium">
-            Registry / Verified Records
-          </span>
-        </div>
-
         <h1
           className={`${nasalization.className} text-4xl sm:text-6xl lg:text-7xl font-semibold text-white mb-5 sm:mb-6 tracking-tight leading-tight`}
         >
