@@ -91,23 +91,6 @@ export default async function CredentialDetailPage({ params }: PageProps) {
       <JsonLd data={breadcrumbsSchema} />
 
       <main className="max-w-[720px] mx-auto px-4 sm:px-6 md:px-8 pt-28 sm:pt-32 pb-24 sm:pb-32 w-full">
-        {/* Breadcrumb */}
-        <nav
-          aria-label="Breadcrumb"
-          className="mb-6 sm:mb-8 text-xs font-mono text-neutral-400 flex items-center flex-wrap gap-2"
-        >
-          <Link href="/" className="hover:text-white transition-colors">
-            Home
-          </Link>
-          <span className="text-neutral-600">›</span>
-          <Link href="/credentials" className="hover:text-white transition-colors">
-            Certifications
-          </Link>
-          <span className="text-neutral-600">›</span>
-          <span className="text-neutral-300 truncate max-w-[200px] sm:max-w-none">
-            {cred.title}
-          </span>
-        </nav>
 
         {/* Page Header */}
         <div className="flex items-center justify-between pb-5 mb-8 sm:mb-10 border-b border-neutral-800/80">
