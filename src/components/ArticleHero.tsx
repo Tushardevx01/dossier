@@ -7,7 +7,7 @@ interface ArticleHeroProps {
 
 export function ArticleHero({ post }: ArticleHeroProps) {
   return (
-    <div className="pt-20 pb-20">
+    <div className="pt-28 sm:pt-32 pb-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb-style metadata */}
         <div className="flex items-center gap-3 mb-8">
