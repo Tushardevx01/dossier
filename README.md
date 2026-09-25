@@ -4,7 +4,6 @@ A production-grade engineering portfolio and technical dossier built with **Next
 
 🌐 **Live Website**: [tushardevx01.tech](https://www.tushardevx01.tech)
 
----
 
 ## Architecture & Engineering Highlights
 
@@ -24,7 +23,6 @@ A production-grade engineering portfolio and technical dossier built with **Next
   - Dynamic OpenGraph image generation (`@vercel/og`) for case studies and articles.
   - Structured application logging and health check probes.
 
----
 
 ## Technology Stack
 
@@ -37,7 +35,6 @@ A production-grade engineering portfolio and technical dossier built with **Next
 | **Email & Delivery** | Nodemailer, QuickEmailVerification API |
 | **Testing & Quality** | Vitest 5, React Testing Library, ESLint 10, TypeScript Strict Mode |
 
----
 
 ## Project Structure
 
@@ -67,7 +64,6 @@ src/
 └── types/                   # Domain TypeScript definitions and Zod schemas
 ```
 
----
 
 ## Getting Started
 
@@ -108,7 +104,6 @@ src/
    ```
    Open [http://localhost:3000](http://localhost:3000) in your browser.
 
----
 
 ## Available Scripts
 
@@ -127,7 +122,6 @@ src/
 
 > **Tip for CI/Offline Builds**: Set `SKIP_DB_BUILD=true npm run build` to compile the static application when a live database connection is unavailable.
 
----
 
 ## API Endpoints
 
@@ -147,7 +141,6 @@ src/
 | `GET` | `/api/version` | Deployment version and environment metadata | Public |
 | `GET` | `/api/pdf-worker` | Dedicated asset server for `react-pdf` worker | Cached |
 
----
 
 ## Security Practices
 
@@ -157,7 +150,6 @@ src/
 - **Sanitized User Input**: Contact form inputs and markdown renderings are sanitized against CRLF header injections and malicious HTML tags using `sanitize-html`.
 - **Sliding Window Rate Limiting**: Distributed rate-limiting powered by Upstash Redis prevents denial-of-service and brute-force attempts on mutation endpoints.
 
----
 
 ## Author
 
@@ -165,11 +157,10 @@ src/
 Full-Stack & Cloud Infrastructure Engineer
 
 - 🌐 **Portfolio**: [tushardevx01.tech](https://www.tushardevx01.tech)
-- 🐙 **GitHub**: [@Tushardevx01](https://github.com/Tushardevx01)
-- 💼 **LinkedIn**: [tusharkantidey](https://www.linkedin.com/in/tusharkantidey/)
+- 🐙 **GitHub**: [Tushardevx01](https://github.com/Tushardevx01)
+- 💼 **LinkedIn**: [tusharkantidey](https://www.linkedin.com/in/tushardevx01/)
 - 📧 **Email**: [thetushardev0@gmail.com](mailto:thetushardev0@gmail.com)
 
----
 
 ## License
 
