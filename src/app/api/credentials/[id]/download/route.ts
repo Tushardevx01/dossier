@@ -55,7 +55,16 @@ export async function GET(_request: NextRequest, context: RouteContext) {
 
     if (r2Obj && r2Obj.body) {
       const rawBase = credential.slug || `certificate-${credential.id}`;
-      const safeFilename = `${rawBase.replace(/[^a-zA-Z0-9_.-]/g, "_").replace(/\.+/g, ".")}.pdf`;
+      let extension = "pdf";
+      const ct = (r2Obj.contentType || "").toLowerCase();
+      if (ct.includes("png") || key.endsWith(".png")) {
+        extension = "png";
+      } else if (ct.includes("jpeg") || ct.includes("jpg") || key.endsWith(".jpg") || key.endsWith(".jpeg")) {
+        extension = "jpg";
+      } else if (ct.includes("webp") || key.endsWith(".webp")) {
+        extension = "webp";
+      }
+      const safeFilename = `${rawBase.replace(/[^a-zA-Z0-9_.-]/g, "_").replace(/\.+/g, ".")}.${extension}`;
       const isInline = _request.nextUrl.searchParams.get("inline") === "true";
       const disposition = isInline ? "inline" : "attachment";
       const headers = new Headers();

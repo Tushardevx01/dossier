@@ -6,7 +6,7 @@
  */
 
 import { createHash, timingSafeEqual } from "node:crypto";
-import { getDb } from '@/db';
+import { ensureDatabaseReady, getDb } from '@/db';
 import { apiKeys } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { sql } from "drizzle-orm";
@@ -38,7 +38,12 @@ export async function validateApiKey(apiKey: string): Promise<ApiKeyValidation> 
     return { valid: false, error: "Invalid credentials" };
   }
 
+  if (!process.env.DATABASE_URL) {
+    return { valid: false, error: "Authentication service unavailable" };
+  }
+
   try {
+    await ensureDatabaseReady();
     const db = getDb();
     const hashedKey = createHash("sha256").update(normalizedApiKey).digest("hex");
     const result = await db

@@ -250,7 +250,7 @@ export const ContactFormSchema = z.object({
     .string()
     .min(1, "Name is required")
     .max(80, "Name must be 80 characters or less")
-    .transform((val) => val.trim()),
+    .transform((val) => val.replace(/[\r\n\t]+/g, " ").trim()),
 
   senderEmail: z
     .string()

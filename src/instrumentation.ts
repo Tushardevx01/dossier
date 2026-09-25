@@ -24,7 +24,9 @@ function validateEnvironment(): EnvValidationResult {
   };
 
   // Required environment variables
+  const isSkipDb = process.env.SKIP_DB_BUILD === "true" || process.env.SKIP_DB === "true";
   const requiredEnv = [
+    ...(isSkipDb ? [] : [{ key: "DATABASE_URL", description: "Neon PostgreSQL connection string" }]),
     { key: "QEV_API_KEY", description: "QuickEmailVerification API Key" },
     { key: "EMAIL_FROM", description: "Email sender address" },
     { key: "EMAIL_PASSWORD", description: "Email password/app password" },

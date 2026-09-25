@@ -77,6 +77,16 @@ export async function GET(request: NextRequest) {
  * Protected: Admin authorization required.
  */
 export async function POST(request: NextRequest) {
+  const ip = extractClientIdentifier(request);
+  const rlKey = createRateLimitKey("credentials_admin_post", ip);
+  const rl = await checkRateLimit(rlKey, 30, 60000);
+  if (!rl.allowed) {
+    return NextResponse.json(
+      { success: false, error: "Too many requests" },
+      { status: 429, headers: { "Retry-After": String(rl.retryAfterSeconds) } }
+    );
+  }
+
   // 1. Authorize admin
   const auth = await validateAdminRequest(request);
   if (!auth.authorized) {

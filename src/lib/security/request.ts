@@ -61,10 +61,10 @@ function resolveRequestOrigin(headers: Headers): string | null {
 
 function extractForwardedClientIp(headers: Headers): string | null {
   const headerCandidates = [
-    headers.get("x-vercel-forwarded-for"),
-    headers.get("x-forwarded-for"),
     headers.get("cf-connecting-ip"),
+    headers.get("x-vercel-forwarded-for"),
     headers.get("x-real-ip"),
+    headers.get("x-forwarded-for"),
   ];
 
   for (const value of headerCandidates) {

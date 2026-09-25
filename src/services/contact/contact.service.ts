@@ -154,7 +154,7 @@ export async function processContactSubmission(
       sendEmail(
       {
         to: { name: "Tushar Kanti Dey", address: config.emailFrom },
-        subject: `New Collaboration Request from ${formData.senderName} - ${formData.reasonToContact}`,
+        subject: `New Collaboration Request from ${formData.senderName.replace(/[\r\n\t]+/g, " ").trim()} - ${formData.reasonToContact}`,
         html: ownerHtmlContent,
         replyTo: formData.senderEmail,
       },

@@ -266,10 +266,12 @@ export async function ensureDatabaseReady(): Promise<void> {
     }
 
     bootstrapPromise = (async () => {
-      await bootstrapEngineeringNotesTable();
-      await bootstrapCaseStudiesTable();
-      await bootstrapApiKeysTable();
-      await bootstrapCredentialsTable();
+      await Promise.all([
+        bootstrapEngineeringNotesTable(),
+        bootstrapCaseStudiesTable(),
+        bootstrapApiKeysTable(),
+        bootstrapCredentialsTable(),
+      ]);
     })()
       .catch((error) => {
         bootstrapPromise = null;

@@ -14,7 +14,7 @@ import { buildPageMetadata, absoluteUrl } from "@/lib/seo";
 import { generateBreadcrumbListStructuredData } from "@/lib/structured-data";
 import {
   getCredentialBySlugOrId,
-  getAllCredentials,
+  getCredentialsCount,
   getAllCredentialSlugs,
 } from "@/lib/credentials";
 import {
@@ -67,9 +67,9 @@ export default async function CredentialDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  const [cred, allCreds] = await Promise.all([
+  const [cred, credentialCount] = await Promise.all([
     getCredentialBySlugOrId(slug),
-    getAllCredentials(),
+    getCredentialsCount(),
   ]);
 
   if (!cred) {
@@ -88,7 +88,7 @@ export default async function CredentialDetailPage({ params }: PageProps) {
   return (
     <div className="min-h-screen bg-black text-white selection:bg-primary/20 relative flex flex-col justify-between">
       <Background />
-      <Navbar credentialCount={allCreds.length} />
+      <Navbar credentialCount={credentialCount} />
       <JsonLd data={breadcrumbsSchema} />
 
       <main className="max-w-[720px] mx-auto px-4 sm:px-6 md:px-8 pt-28 sm:pt-32 pb-24 sm:pb-32 w-full">

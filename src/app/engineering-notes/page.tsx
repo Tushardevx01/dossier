@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { nasalization } from "@/app/fonts";
+import { Footer } from "@/components/common";
 import { NotesListClient } from "@/components/NotesListClient";
 import NotesBackHandler from "@/components/NotesBackHandler";
 import { JsonLd } from "@/components/shared/JsonLd";
@@ -46,6 +47,7 @@ export default async function EngineeringNotesPage() {
       </section>
 
       <NotesListClient posts={posts} categories={categories} />
+      <Footer />
     </div>
   );
 }

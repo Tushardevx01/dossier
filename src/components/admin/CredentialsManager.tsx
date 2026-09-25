@@ -119,8 +119,13 @@ export function CredentialsManager() {
         formData.append("title", title);
         formData.append("issuer", issuer);
         formData.append("issueDate", issueDate);
-        if (credentialLink) formData.append("credentialLink", credentialLink);
-        if (description) formData.append("description", description);
+        if (editingId) {
+          formData.append("credentialLink", credentialLink || "");
+          formData.append("description", description || "");
+        } else {
+          if (credentialLink) formData.append("credentialLink", credentialLink);
+          if (description) formData.append("description", description);
+        }
         if (certFile) formData.append("certificateFile", certFile);
 
         const url = editingId ? `/api/credentials/${editingId}` : "/api/credentials";

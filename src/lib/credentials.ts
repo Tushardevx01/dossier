@@ -5,6 +5,7 @@
  * Aligns with existing patterns in src/lib/blogs.ts and src/lib/case-studies.ts.
  */
 
+import { cache } from "react";
 import { eq, desc, sql } from "drizzle-orm";
 import { ensureDatabaseReady, getDb } from "@/db";
 import { credentials, type Credential, type NewCredential } from "@/db/schema";
@@ -19,7 +20,7 @@ const SKIP_DB_BUILD = process.env.SKIP_DB_BUILD === "true" || process.env.SKIP_D
  * Retrieve all credentials ordered by issued date (newest first) and ID.
  * Returns empty array if database is empty or unavailable.
  */
-export async function getAllCredentials(): Promise<Credential[]> {
+export const getAllCredentials = cache(async (): Promise<Credential[]> => {
   if (SKIP_DB_BUILD) return [];
 
   try {
@@ -36,13 +37,13 @@ export async function getAllCredentials(): Promise<Credential[]> {
     });
     return [];
   }
-}
+});
 
 /**
  * Retrieve the total count of credential records in the database.
  * Executes an efficient COUNT(*) query without fetching whole rows.
  */
-export async function getCredentialsCount(): Promise<number> {
+export const getCredentialsCount = cache(async (): Promise<number> => {
   if (SKIP_DB_BUILD) return 0;
 
   try {
@@ -60,12 +61,12 @@ export async function getCredentialsCount(): Promise<number> {
     });
     return 0;
   }
-}
+});
 
 /**
  * Retrieve a single credential by its primary key ID.
  */
-export async function getCredentialById(id: number): Promise<Credential | null> {
+export const getCredentialById = cache(async (id: number): Promise<Credential | null> => {
   if (SKIP_DB_BUILD || !Number.isInteger(id) || id <= 0) return null;
 
   try {
@@ -86,12 +87,12 @@ export async function getCredentialById(id: number): Promise<Credential | null> 
     });
     return null;
   }
-}
+});
 
 /**
  * Retrieve a single credential by its URL slug or title slug.
  */
-export async function getCredentialBySlug(slug: string): Promise<Credential | null> {
+export const getCredentialBySlug = cache(async (slug: string): Promise<Credential | null> => {
   if (SKIP_DB_BUILD || !slug?.trim()) return null;
 
   const normalized = slug.trim().toLowerCase();
@@ -124,12 +125,12 @@ export async function getCredentialBySlug(slug: string): Promise<Credential | nu
     });
     return null;
   }
-}
+});
 
 /**
  * Retrieve a credential by either slug or numeric ID (handles backward compatibility).
  */
-export async function getCredentialBySlugOrId(slugOrId: string | number): Promise<Credential | null> {
+export const getCredentialBySlugOrId = cache(async (slugOrId: string | number): Promise<Credential | null> => {
   if (SKIP_DB_BUILD || slugOrId === undefined || slugOrId === null) return null;
 
   const stringVal = String(slugOrId).trim();
@@ -144,7 +145,7 @@ export async function getCredentialBySlugOrId(slugOrId: string | number): Promis
 
   // Otherwise, lookup by slug
   return await getCredentialBySlug(stringVal);
-}
+});
 
 /**
  * Retrieve all valid credential slugs for static params generation.

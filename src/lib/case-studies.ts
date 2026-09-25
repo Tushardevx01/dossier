@@ -10,6 +10,7 @@
  * - getCaseStudyBySlug():  full record including content (detail pages only)
  */
 
+import { cache } from 'react';
 import { asc, eq, and } from 'drizzle-orm';
 import { ensureDatabaseReady, getDb } from '@/db';
 import { sanitizeHtml } from '@/lib/sanitize';
@@ -49,7 +50,7 @@ function mapCaseStudyRow(row: CaseStudy): CaseStudyRecord {
  * Listing query: intentionally excludes the `content` column (~170KB per
  * record). Detail pages must use getCaseStudyBySlug() to fetch full content.
  */
-export async function getAllCaseStudies(): Promise<CaseStudyRecord[]> {
+export const getAllCaseStudies = cache(async (): Promise<CaseStudyRecord[]> => {
   if (SKIP_DB_BUILD || !process.env.DATABASE_URL) {
     return caseStudiesMeta.filter((cs) => cs.published);
   }
@@ -104,12 +105,12 @@ export async function getAllCaseStudies(): Promise<CaseStudyRecord[]> {
     console.warn('Failed to query case_studies from DB, falling back to static cache:', error);
     return caseStudiesMeta.filter((cs) => cs.published);
   }
-}
+});
 
 /**
  * Get a single case study by slug (full record, including content).
  */
-export async function getCaseStudyBySlug(slug: string): Promise<CaseStudyRecord | null> {
+export const getCaseStudyBySlug = cache(async (slug: string): Promise<CaseStudyRecord | null> => {
   const normalizedSlug = slug.trim().toLowerCase();
 
   // Static fallback helper — uses the in-memory meta array (which has empty
@@ -139,7 +140,7 @@ export async function getCaseStudyBySlug(slug: string): Promise<CaseStudyRecord 
     console.warn(`Failed to fetch case study ${slug} from DB, falling back to static cache:`, error);
     return findInStaticMeta();
   }
-}
+});
 
 /**
  * Get all valid case study slugs for static params generation.

@@ -25,11 +25,11 @@ const SANITIZE_CONFIG = {
     "a": ["href", "title", "target", "rel"],
     "img": ["src", "alt", "width", "height"],
   },
-  // URL scheme allowlist: only http(s) and relative URLs survive.
+  // URL scheme allowlist: only http(s), mailto, and relative URLs survive.
   // Blocks javascript:, data:, vbscript:, and every other scheme on all URL attributes.
   // NOTE: "" must remain in the list - sanitize-html requires it for relative URLs
   // (e.g. "#anchor" TOC links) to survive.
-  allowedSchemes: ["http", "https", ""],
+  allowedSchemes: ["http", "https", "mailto", ""],
 };
 
 /**

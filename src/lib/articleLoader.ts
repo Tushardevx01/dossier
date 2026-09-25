@@ -7,6 +7,8 @@
  * IMPORTANT: All functions are now ASYNC and must be called with await.
  */
 
+import { cache } from "react";
+
 import {
   getAllNotes,
   getNoteBySlug,
@@ -30,9 +32,9 @@ export type { ArticleMetadata, ArticlePost, CategoryFilter };
  * ASYNC - Must be called with await
  * @example const posts = await getAllArticles();
  */
-export async function getAllArticles(): Promise<ArticleMetadata[]> {
+export const getAllArticles = cache(async (): Promise<ArticleMetadata[]> => {
   return getAllNotes();
-}
+});
 
 /**
  * Get a single article by slug with full content
@@ -40,9 +42,9 @@ export async function getAllArticles(): Promise<ArticleMetadata[]> {
  * ASYNC - Must be called with await
  * @example const post = await getArticle('my-article-slug');
  */
-export async function getArticle(slug: string): Promise<ArticlePost | null> {
+export const getArticle = cache(async (slug: string): Promise<ArticlePost | null> => {
   return getNoteBySlug(slug);
-}
+});
 
 /**
  * Get all available categories

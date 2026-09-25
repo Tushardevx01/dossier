@@ -20,8 +20,6 @@ export interface VerificationResult {
 
 /**
  * Verify email address via QuickEmailVerification API
- *
- * SECURITY: API key is sent in Authorization header instead of query parameter
  */
 export async function verifyEmailAddress(
   email: string,
@@ -32,8 +30,6 @@ export async function verifyEmailAddress(
   const timeoutId = setTimeout(() => controller.abort(), VERIFICATION_TIMEOUT_MS);
 
   try {
-    // Use POST request with Authorization header instead of query parameter
-    // This prevents API key exposure in logs, referrer headers, and browser history
     const url = new URL("https://api.quickemailverification.com/v1/verify");
     url.searchParams.append("email", email);
     url.searchParams.append("apikey", apiKey);
@@ -42,6 +38,7 @@ export async function verifyEmailAddress(
       method: "GET",
       headers: {
         "Accept": "application/json",
+        "Authorization": `Bearer ${apiKey}`,
       },
       signal: controller.signal,
       cache: "no-store",

@@ -8,6 +8,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 import { getCredentialById, updateCredential, deleteCredential } from "@/lib/credentials";
 import { UpdateJsonSchema } from "@/db/schema";
 import { validateAdminRequest } from "@/lib/security/auth";
@@ -22,6 +23,8 @@ import {
   DEFAULT_MAX_CERT_SIZE,
 } from "@/lib/storage/validation";
 import { logger } from "@/lib/logger";
+import { checkRateLimit, createRateLimitKey } from "@/lib/security/rateLimit";
+import { extractClientIdentifier } from "@/lib/security/request";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -75,6 +78,16 @@ export async function GET(_request: NextRequest, context: RouteContext) {
  * Updates an existing credential. Handles multipart form replacements or JSON updates.
  */
 export async function PATCH(request: NextRequest, context: RouteContext) {
+  const ip = extractClientIdentifier(request);
+  const rlKey = createRateLimitKey("credentials_admin_patch", ip);
+  const rl = await checkRateLimit(rlKey, 30, 60000);
+  if (!rl.allowed) {
+    return NextResponse.json(
+      { success: false, error: { code: "RATE_LIMITED", message: "Too many requests" } },
+      { status: 429, headers: { "Retry-After": String(rl.retryAfterSeconds) } }
+    );
+  }
+
   const auth = await validateAdminRequest(request);
   if (!auth.authorized) {
     return NextResponse.json(
@@ -176,16 +189,27 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
       } catch (dbErr) {
         // Rollback: delete new files if DB update failed
         await Promise.allSettled(newlyUploadedKeys.map((k) => deleteFromR2(k)));
-        throw dbErr;
+        logger.error("Database error updating credential", { id: numId, error: dbErr });
+        return NextResponse.json(
+          {
+            success: false,
+            error: {
+              code: "DATABASE_ERROR",
+              message: dbErr instanceof Error ? dbErr.message : "Failed to persist credential updates",
+            },
+          },
+          { status: 500 }
+        );
       }
-    } catch {
+    } catch (uploadErr) {
       await Promise.allSettled(newlyUploadedKeys.map((k) => deleteFromR2(k)));
+      logger.error("Error processing multipart credential payload", { id: numId, error: uploadErr });
       return NextResponse.json(
         {
           success: false,
           error: {
             code: "UPDATE_FAILED",
-            message: "Failed to update credential",
+            message: uploadErr instanceof Error ? uploadErr.message : "Failed to update credential",
           },
         },
         { status: 400 }
@@ -220,16 +244,30 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
         success: true,
         data: updated,
       });
-    } catch {
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: {
+              code: "VALIDATION_FAILED",
+              issues: err.issues,
+            },
+          },
+          { status: 400 }
+        );
+      }
+
+      logger.error("Failed to update credential via JSON", { id: numId, error: err });
       return NextResponse.json(
         {
           success: false,
           error: {
-            code: "VALIDATION_FAILED",
-            message: "Invalid update payload",
+            code: "DATABASE_ERROR",
+            message: err instanceof Error ? err.message : "Failed to update credential",
           },
         },
-        { status: 400 }
+        { status: 500 }
       );
     }
   }
@@ -245,6 +283,16 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
  * Deletes credential record from DB and deletes all associated R2 storage objects.
  */
 export async function DELETE(request: NextRequest, context: RouteContext) {
+  const ip = extractClientIdentifier(request);
+  const rlKey = createRateLimitKey("credentials_admin_delete", ip);
+  const rl = await checkRateLimit(rlKey, 30, 60000);
+  if (!rl.allowed) {
+    return NextResponse.json(
+      { success: false, error: { code: "RATE_LIMITED", message: "Too many requests" } },
+      { status: 429, headers: { "Retry-After": String(rl.retryAfterSeconds) } }
+    );
+  }
+
   const auth = await validateAdminRequest(request);
   if (!auth.authorized) {
     return NextResponse.json(

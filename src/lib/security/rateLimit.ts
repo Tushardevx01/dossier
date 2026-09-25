@@ -86,20 +86,22 @@ async function checkRedisRateLimit(
   try {
     const pipeline = redis.pipeline();
     pipeline.incr(redisKey);
-    // Setting expire on every request creates a sliding window and prevents the race condition
-    // where a key never gets an expiration.
-    pipeline.expire(redisKey, windowSeconds);
     pipeline.ttl(redisKey);
 
-    const [count, , ttl] = await pipeline.exec<[number, number, number]>();
+    const [count, ttl] = await pipeline.exec<[number, number]>();
 
-    const retryAfterSeconds = ttl > 0 ? ttl : windowSeconds;
+    // Set expiration on first hit or if key has no expiration set
+    if ((count as number) === 1 || (ttl as number) === -1) {
+      await redis.expire(redisKey, windowSeconds);
+    }
+
+    const effectiveTtl = (ttl as number) > 0 ? (ttl as number) : windowSeconds;
     const remaining = Math.max(maxRequests - (count as number), 0);
 
     return {
       allowed: (count as number) <= maxRequests,
       remaining,
-      retryAfterSeconds,
+      retryAfterSeconds: effectiveTtl,
     };
   } catch (error) {
     logger.error("Redis rate limit check failed", {
