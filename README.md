@@ -1,188 +1,176 @@
-# Tushar Kanti Dey — Personal Portfolio
+# Tushar Kanti Dey — Technical Portfolio & Dossier
 
-A production-grade portfolio built with Next.js, showcasing clean architecture, strong engineering practices, and a focus on performance, security, and maintainability.
+A production-grade engineering portfolio and technical dossier built with **Next.js 16**, **React 19**, **Drizzle ORM**, and **Cloudflare R2**. Designed with clean architecture, strict type safety, defensive security practices, and high-performance server-side data fetching.
 
-## Overview
+🌐 **Live Website**: [tushardevx01.tech](https://www.tushardevx01.tech)
 
-This project is more than a portfolio website; it is a practical demonstration of scalable software design in a real-world application. It combines content delivery, contact workflows, deployment readiness, and observability in a single, well-structured codebase.
+---
 
-The objective is to present professional work clearly, share engineering insights through structured content, and maintain a high standard of quality across every layer of the stack.
+## Architecture & Engineering Highlights
 
+- **Next.js 16 & React 19**: App Router architecture utilizing Turbopack, Server Components, Route Handlers, and Edge Proxy middleware (`src/proxy.ts`).
+- **Serverless PostgreSQL & Drizzle ORM**: Neon Serverless Postgres database integration with automated parallelized table bootstrapping, migrations, and Drizzle Studio support.
+- **Request Deduplication**: `React.cache()` wrapping across all server data loaders (`getArticle`, `getAllCaseStudies`, `getCredentialBySlug`), eliminating duplicate queries between `generateMetadata()` and page component rendering.
+- **Cloudflare R2 Object Storage**: S3-compatible asset management for verified certificates, degrees, and documents with dynamic MIME-type detection and streaming downloads.
+- **Defensive Security & Rate Limiting**:
+  - Sliding-window rate limiting backed by Upstash Redis with graceful in-memory fallback.
+  - Timing-safe cryptographic comparison for API keys via `crypto.timingSafeEqual`.
+  - Proxy-aware IP extraction prioritizing edge headers (`cf-connecting-ip`, `x-vercel-forwarded-for`).
+  - SMTP CRLF header injection protection and strict Markdown HTML sanitization.
+  - Strict Content Security Policy (CSP), frame denial, and nosniff headers.
+- **Interactive UI & Observability**:
+  - Interactive terminal emulator with command history and shell navigation.
+  - Interactive PDF resume viewer powered by `react-pdf` and custom worker streaming.
+  - Dynamic OpenGraph image generation (`@vercel/og`) for case studies and articles.
+  - Structured application logging and health check probes.
 
-
-## Highlights
-
-- **Scalable architecture** with clear separation of concerns across routing, components, services, and utilities
-- **TypeScript-first development** for improved reliability and reduced runtime errors
-- **Performance-oriented implementation** with optimized rendering, caching strategies, and minimal client-side overhead
-- **Production-ready security** through input validation, rate limiting, sanitization, and hardened API routes
-- **Responsive and polished UI** with subtle animations and a modern user experience
-- **Production-ready deployment** with edge and serverless compatibility
-- **Observability built in** through structured logging, health checks, and error handling
-
-
+---
 
 ## Technology Stack
 
-| Layer | Technology |
-|-------|-----------|
-| **Frontend** | Next.js, React, TypeScript, Tailwind CSS, Framer Motion |
-| **Backend** | Node.js, Next.js Route Handlers |
-| **Database** | Neon Serverless Postgres, Drizzle ORM |
-| **Infrastructure** | Edge / Serverless, Upstash Redis |
-| **Testing** | Vitest, React Testing Library |
-| **Monitoring** | Structured logging, Sentry (optional), health probes |
+| Layer | Technologies |
+|---|---|
+| **Framework & Core** | Next.js 16 (App Router, Turbopack), React 19, TypeScript 5 |
+| **Styling & Animation** | Tailwind CSS 3, Motion (`motion`), Lucide & React Icons |
+| **Database & ORM** | Neon Serverless PostgreSQL (`@neondatabase/serverless`), Drizzle ORM |
+| **Storage & Caching** | Cloudflare R2 (`@aws-sdk/client-s3`), Upstash Redis (`@upstash/redis`) |
+| **Email & Delivery** | Nodemailer, QuickEmailVerification API |
+| **Testing & Quality** | Vitest 5, React Testing Library, ESLint 10, TypeScript Strict Mode |
 
-
+---
 
 ## Project Structure
 
 ```text
 src/
-├── app/                 # App Router segments and API routes
-├── components/          # Reusable UI components and page sections
-├── services/            # Business logic for contact and email workflows
-├── lib/                 # Shared utilities, security, logging, and env validation
-├── constant/            # Structured content, metadata, and portfolio data
-├── hooks/               # Custom React hooks
-└── types/               # TypeScript interfaces and domain models
+├── app/                     # Next.js App Router routes, layouts, and API handlers
+│   ├── api/                 # Secure Route Handlers (contact, credentials, health, SEO)
+│   ├── credentials/         # Verifiable credentials listing and detail pages
+│   ├── engineering-notes/   # Technical articles and engineering deep dives
+│   ├── projects/            # Canonical work & project showcases
+│   ├── resume/              # Interactive PDF resume viewer
+│   ├── work/                # Detailed system architecture case studies
+│   ├── robots.ts            # Dynamic robots.txt generation
+│   └── sitemap.ts           # Dynamic XML sitemap generator
+├── components/              # Reusable UI sections, layouts, and interactive terminal
+│   ├── common/              # Navbar, Footer, Background, and shared shells
+│   ├── home/                # Hero, Terminal, Experience, Contact, Tech Stack
+│   ├── resume/              # PDF document renderer and toolbar controls
+│   └── ui/                  # Accessible UI primitives and animations
+├── constant/                # Structured static data, project specs, and case study manifests
+├── content/                 # Markdown engineering articles and technical notes
+├── db/                      # Drizzle ORM schemas, DB client pool, and seed data
+├── hooks/                   # Custom React hooks (keyboard shortcuts, media queries)
+├── lib/                     # Core utilities: security, R2 storage, sanitization, cache loaders
+├── services/                # Business logic services (contact email, verification)
+├── tests/                   # Vitest unit & integration test suites
+└── types/                   # Domain TypeScript definitions and Zod schemas
 ```
 
 ---
-
-## Engineering Approach
-
-### Clean Architecture
-- Clear separation between presentation, business logic, and infrastructure
-- Single responsibility across components and services
-- Consistent design boundaries for long-term maintainability
-
-### Type Safety
-- Full TypeScript coverage with strict configuration enabled
-- Centralized domain types to reduce ambiguity and runtime failures
-
-### Performance
-- Route-level caching where appropriate
-- Server-first rendering with minimal client-side JavaScript
-- Optimized image delivery and efficient asset handling
-
-### Security
-- Startup-time environment validation
-- Server-only secret handling
-- CSP headers, request validation, rate limiting, and input sanitization
-
-### Developer Experience
-- Clear troubleshooting paths and actionable error messages
-- Structured logging for debugging and diagnostics
-- Health endpoints for deployment verification
-
-
 
 ## Getting Started
 
 ### Prerequisites
-- Node.js 18 or newer
-- npm or yarn
+- Node.js 18+ (Node.js 20+ recommended)
+- npm, pnpm, or yarn
 
-### Local Development
+### Local Setup
 
-1. Install dependencies:
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Tushardevx01/dossier.git
+   cd dossier
+   ```
+
+2. **Install dependencies:**
    ```bash
    npm ci
    ```
 
-2. Configure environment variables:
+3. **Configure Environment Variables:**
    ```bash
    cp .env.example .env.local
    ```
-   Required variables include `DATABASE_URL`, `QEV_API_KEY`, `EMAIL_FROM`, and `EMAIL_PASSWORD`.
+   Fill in your PostgreSQL `DATABASE_URL`, email SMTP credentials, and optional Upstash Redis / Cloudflare R2 credentials.
 
-   Optional production variables include `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`, and `SENTRY_DSN`.
-
-3. Set up the database:
+4. **Initialize Database:**
    ```bash
-   npm run db:generate
-   npm run db:migrate
-   npm run db:seed
+   npm run db:generate           # Generate Drizzle migration files
+   npm run db:migrate            # Apply migrations to database
+   npm run db:seed               # Seed initial database credentials
+   npm run db:seed:case-studies  # Seed architectural case studies
    ```
 
-4. Start the development server:
+5. **Start Development Server:**
    ```bash
    npm run dev
    ```
-   The application will be available at `http://localhost:3000`.
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## Production Commands
+## Available Scripts
 
-```bash
-npm run lint
-npm run typecheck
-npm run build
-npm run start
-```
+| Command | Description |
+|---|---|
+| `npm run dev` | Start Next.js development server with Turbopack |
+| `npm run build` | Compile and generate optimized production bundle |
+| `npm run start` | Start Next.js production server |
+| `npm test` | Run Vitest test suite (`vitest --run`) |
+| `npm run lint` | Run ESLint across codebase |
+| `npm run typecheck` | Run TypeScript compiler check (`tsc --noEmit`) |
+| `npm run db:generate` | Generate database migrations via Drizzle Kit |
+| `npm run db:migrate` | Execute pending database migrations |
+| `npm run db:seed` | Seed database with initial credentials |
+| `npm run db:studio` | Launch Drizzle Studio database UI |
 
-
-
-## Database Management
-
-The project uses Drizzle ORM with Neon Serverless Postgres for type-safe database interactions.
-
-```bash
-npm run db:generate   # Generate migration files based on schema changes
-npm run db:migrate    # Run pending migrations against the database
-npm run db:seed       # Seed the database with initial data
-npm run db:studio     # Open Drizzle Studio to view and manage data
-```
-
----
-
-## Security and Performance
-
-### API Hardening
-- Strict content-type validation
-- Payload size limits
-- Same-origin verification for sensitive operations
-- Automatic rejection of malformed requests
-
-### Rate Limiting
-- Distributed rate limiting with Redis in production
-- In-memory fallback during development
-- Protection against misuse and denial-of-service attempts
-
-### Response Optimization
-- Minimal API response payloads
-- Reduced implementation detail exposure in production
-- Fast, lightweight health checks
-
-### Observability
-- Structured error logging
-- Optional Sentry integration for monitoring
-- Readiness endpoints for container orchestration
+> **Tip for CI/Offline Builds**: Set `SKIP_DB_BUILD=true npm run build` to compile the static application when a live database connection is unavailable.
 
 ---
 
 ## API Endpoints
 
-| Method | Endpoint | Purpose |
-|--------|----------|---------|
-| `POST` | `/api/send` | Secure contact form submission |
-| `POST` | `/api/analyze` | SEO analysis for content |
-| `GET` | `/api/health` | Deployment readiness check |
-| `GET` | `/api/version` | Deployment metadata |
-
-All endpoints enforce request validation and rate limiting.
+| Method | Endpoint | Description | Auth / Security |
+|---|---|---|---|
+| `POST` | `/api/send` | Contact form submission with SMTP delivery | Rate limited (5/min), QEV validated, CRLF sanitized |
+| `POST` | `/api/analyze` | Real-time content SEO and readability analysis | Rate limited, JSON schema validated |
+| `GET` | `/api/credentials` | Fetch paginated, verified credentials list | Rate limited, public cache headers |
+| `POST` | `/api/credentials` | Create credential & upload asset to Cloudflare R2 | Rate limited, `ADMIN_API_KEY` protected |
+| `GET` | `/api/credentials/:id` | Fetch detailed credential information | Public |
+| `PATCH` | `/api/credentials/:id` | Update credential fields or replace R2 asset | Rate limited, `ADMIN_API_KEY` protected |
+| `DELETE` | `/api/credentials/:id` | Delete credential and remove R2 objects | Rate limited, `ADMIN_API_KEY` protected |
+| `GET` | `/api/credentials/:id/download` | Stream certificate asset with dynamic MIME detection | Rate limited |
+| `GET` | `/api/credentials/count` | Lightweight badge count query | Cached |
+| `GET` | `/api/github` | Edge-cached GitHub activity and profile stats | Stale-while-revalidate cached |
+| `GET` | `/api/health` | Service readiness probe and DB health check | Public |
+| `GET` | `/api/version` | Deployment version and environment metadata | Public |
+| `GET` | `/api/pdf-worker` | Dedicated asset server for `react-pdf` worker | Cached |
 
 ---
 
-## About the Author
+## Security Practices
+
+- **Strict CSP & Headers**: Mitigates XSS, clickjacking, and MIME-sniffing through comprehensive security headers configured in `next.config.ts`.
+- **IP Spoofing Protection**: Validates reverse-proxy headers (`cf-connecting-ip`, `x-vercel-forwarded-for`) before falling back to untrusted client headers.
+- **Timing-Safe Auth**: Admin API key verification utilizes `crypto.timingSafeEqual` with SHA-256 hashed buffers to defeat side-channel timing attacks.
+- **Sanitized User Input**: Contact form inputs and markdown renderings are sanitized against CRLF header injections and malicious HTML tags using `sanitize-html`.
+- **Sliding Window Rate Limiting**: Distributed rate-limiting powered by Upstash Redis prevents denial-of-service and brute-force attempts on mutation endpoints.
+
+---
+
+## Author
 
 **Tushar Kanti Dey**  
-Full-Stack Software Engineer focused on scalable systems, platform engineering, and production infrastructure.
+Full-Stack & Cloud Infrastructure Engineer
 
-- 📧 Email: [thetushardev0@gmail.com](mailto:thetushardev0@gmail.com)
-- 🔗 GitHub: [Tushardevx01](https://github.com/Tushardevx01)
-- 📸 Instagram: [@tushardevx01](https://www.instagram.com/tushardevx01/)
-- 🌐 Portfolio: [tushardevx01.tech](https://www.tushardevx01.tech)
+- 🌐 **Portfolio**: [tushardevx01.tech](https://www.tushardevx01.tech)
+- 🐙 **GitHub**: [@Tushardevx01](https://github.com/Tushardevx01)
+- 💼 **LinkedIn**: [tusharkantidey](https://www.linkedin.com/in/tusharkantidey/)
+- 📧 **Email**: [thetushardev0@gmail.com](mailto:thetushardev0@gmail.com)
 
+---
+
+## License
+
+This project is open-source under the [MIT License](LICENSE).
