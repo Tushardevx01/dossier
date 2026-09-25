@@ -475,16 +475,16 @@ export const CommandPalette = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.18, ease: "easeOut" }}
-            className="fixed inset-0 z-[100] flex items-start justify-center pt-16 sm:pt-24 px-4 bg-black/80 backdrop-blur-md"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md"
             onClick={closePalette}
             role="dialog"
             aria-modal="true"
             aria-label="Command Palette"
           >
             <motion.div
-              initial={{ opacity: 0, scale: 0.96, y: -16 }}
+              initial={{ opacity: 0, scale: 0.96, y: -8 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.97, y: -10 }}
+              exit={{ opacity: 0, scale: 0.97, y: -8 }}
               transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
               onClick={(e) => e.stopPropagation()}
               className="w-full max-w-2xl bg-[#09090b] border border-neutral-800 rounded-xl overflow-hidden shadow-2xl flex flex-col max-h-[80vh]"

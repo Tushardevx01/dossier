@@ -158,7 +158,7 @@ Full-Stack & Cloud Infrastructure Engineer
 
 - 🌐 **Portfolio**: [tushardevx01.tech](https://www.tushardevx01.tech)
 - 🐙 **GitHub**: [Tushardevx01](https://github.com/Tushardevx01)
-- 💼 **LinkedIn**: [tusharkantidey](https://www.linkedin.com/in/tushardevx01/)
+- 💼 **LinkedIn**: [tushar kanti dey](https://www.linkedin.com/in/tushardevx01/)
 - 📧 **Email**: [thetushardev0@gmail.com](mailto:thetushardev0@gmail.com)
 
 
