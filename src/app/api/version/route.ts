@@ -17,6 +17,7 @@ interface VersionInfo {
   name: string;
   version: string;
   buildTime?: string;
+  commitSha?: string;
 }
 
 export async function GET() {
@@ -24,6 +25,7 @@ export async function GET() {
     name: packageJson.name || "tushardevx01-portfolio",
     version: packageJson.version || "1.0.0",
     buildTime: process.env.BUILD_TIME,
+    commitSha: process.env.VERCEL_GIT_COMMIT_SHA,
   };
 
   // Remove undefined values

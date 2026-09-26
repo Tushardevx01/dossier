@@ -191,6 +191,8 @@ export async function sendEmail(
           code: fbErrObj?.code,
           command: fbErrObj?.command,
           response: fbErrObj?.response,
+          port: fallbackPort,
+        });
         const fbDiagnostic = `[User: ${cleanFrom}, PassLen: ${cleanPass.length}, PassHint: ${cleanPass.slice(0, 2)}***${cleanPass.slice(-2)}] - ${fbErrorMessage}`;
         return { success: false, error: fbDiagnostic };
       }
