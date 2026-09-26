@@ -56,6 +56,7 @@ function errorResponse(error: AppError, requestId: string) {
     {
       error: error.message,
       code: error.code,
+      details: error.meta?.details,
       requestId,
     },
     error.statusCode,

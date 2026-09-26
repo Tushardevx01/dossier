@@ -165,10 +165,11 @@ export async function processContactSubmission(
     ]);
 
     if (!userEmailResult.success || !ownerEmailResult.success) {
+      const details = ownerEmailResult.error || userEmailResult.error;
       logger.error("Email send failed", { requestId, userError: userEmailResult.error, ownerError: ownerEmailResult.error, clientIdentifier });
       return {
         success: false,
-        error: Errors.internal("Failed to send email", { requestId }),
+        error: Errors.internal("Failed to send email", { requestId, details }),
       };
     }
 
