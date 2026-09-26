@@ -117,12 +117,14 @@ export async function processContactSubmission(
 
     // 4. Start email verification as a best-effort side effect.
     // It must never block or fail submission.
-    void runEmailVerificationBestEffort(
-      formData.senderEmail,
-      config.emailApiKey,
-      requestId,
-      clientIdentifier
-    );
+    if (config.emailApiKey) {
+      void runEmailVerificationBestEffort(
+        formData.senderEmail,
+        config.emailApiKey,
+        requestId,
+        clientIdentifier
+      );
+    }
 
     // 5. Render and send emails
     const htmlContent = renderContactEmail({

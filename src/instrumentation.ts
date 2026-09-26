@@ -27,13 +27,13 @@ function validateEnvironment(): EnvValidationResult {
   const isSkipDb = process.env.SKIP_DB_BUILD === "true" || process.env.SKIP_DB === "true";
   const requiredEnv = [
     ...(isSkipDb ? [] : [{ key: "DATABASE_URL", description: "Neon PostgreSQL connection string" }]),
-    { key: "QEV_API_KEY", description: "QuickEmailVerification API Key" },
     { key: "EMAIL_FROM", description: "Email sender address" },
     { key: "EMAIL_PASSWORD", description: "Email password/app password" },
   ];
 
   // Optional but recommended environment variables
   const optionalEnv = [
+    { key: "QEV_API_KEY", description: "QuickEmailVerification API Key" },
     { key: "UPSTASH_REDIS_REST_URL", description: "Upstash Redis URL (for distributed rate limiting)" },
     { key: "UPSTASH_REDIS_REST_TOKEN", description: "Upstash Redis Token" },
     { key: "LOG_LEVEL", description: "Logging level (debug|info|warn|error)" },

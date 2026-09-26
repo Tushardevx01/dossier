@@ -1,6 +1,11 @@
 import { SITE_URL } from "@/lib/site";
 
 const TRUSTED_ORIGIN = new URL(SITE_URL).origin;
+const TRUSTED_ORIGINS = new Set([
+  TRUSTED_ORIGIN,
+  "https://tushardevx01.tech",
+  "https://www.tushardevx01.tech",
+]);
 
 type RequestLike = {
   headers: Headers;
@@ -81,20 +86,23 @@ export function isTrustedOrigin(headers: Headers): boolean {
     return false;
   }
 
-  const requestOrigin = resolveRequestOrigin(headers);
-  if (requestOrigin) {
-    try {
-      return new URL(originHeader).origin === requestOrigin || new URL(originHeader).origin === TRUSTED_ORIGIN;
-    } catch {
-      return false;
-    }
-  }
-
+  let originToTest: string;
   try {
-    return new URL(originHeader).origin === TRUSTED_ORIGIN;
+    originToTest = new URL(originHeader).origin;
   } catch {
     return false;
   }
+
+  if (TRUSTED_ORIGINS.has(originToTest)) {
+    return true;
+  }
+
+  const requestOrigin = resolveRequestOrigin(headers);
+  if (requestOrigin && originToTest === requestOrigin) {
+    return true;
+  }
+
+  return false;
 }
 
 export function extractClientIdentifier(request: RequestLike): string {
