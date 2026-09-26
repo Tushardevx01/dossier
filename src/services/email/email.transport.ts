@@ -250,7 +250,8 @@ export async function sendEmail(
       response: errObj?.response,
       port: defaultPort,
     });
-    return { success: false, error: errorMessage };
+    const diagnostic = `[From: ${cleanFrom}, Pass: ${cleanPass.slice(0, 2)}***${cleanPass.slice(-2)} (len:${cleanPass.length})] - ${errorMessage}`;
+    return { success: false, error: diagnostic };
   } finally {
     try {
       transport.close();
