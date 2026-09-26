@@ -115,6 +115,48 @@ function isNetworkError(error: unknown): boolean {
 }
 
 /**
+ * Send email via Resend HTTP API.
+ * Preferred modern alternative for serverless platforms (Vercel) without SMTP hurdles.
+ */
+async function sendViaResend(
+  message: EmailMessage,
+  apiKey: string,
+  fromEmail: string
+): Promise<SendEmailResult> {
+  try {
+    const sender = process.env.RESEND_FROM || `Tushar Kanti Dey <onboarding@resend.dev>`;
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: sender,
+        to: message.to.address,
+        subject: message.subject,
+        html: message.html,
+        reply_to: message.replyTo,
+      }),
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      const errorMsg = data?.message || data?.error || `Resend error (${response.status})`;
+      logger.error("Failed to send email via Resend", { error: errorMsg });
+      return { success: false, error: String(errorMsg) };
+    }
+
+    logger.info("Email sent successfully via Resend", { messageId: data.id });
+    return { success: true, messageId: data.id };
+  } catch (err) {
+    const errorMsg = err instanceof Error ? err.message : "Unknown Resend error";
+    logger.error("Failed to send email via Resend", { error: errorMsg });
+    return { success: false, error: errorMsg };
+  }
+}
+
+/**
  * Send an email via configured transport with IPv4 resolution and fallback port support.
  */
 export async function sendEmail(
@@ -122,6 +164,10 @@ export async function sendEmail(
   config: EmailConfig
 ): Promise<SendEmailResult> {
   const { from: cleanFrom, password: cleanPass } = sanitizeConfig(config);
+
+  if (process.env.RESEND_API_KEY) {
+    return sendViaResend(message, process.env.RESEND_API_KEY, cleanFrom);
+  }
 
   const smtpHost = process.env.SMTP_HOST || "smtp.gmail.com";
   const resolvedHost = await resolveIpv4Host(smtpHost);
