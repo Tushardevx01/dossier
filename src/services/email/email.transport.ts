@@ -193,8 +193,7 @@ export async function sendEmail(
           response: fbErrObj?.response,
           port: fallbackPort,
         });
-        const fbDiagnostic = `[User: ${cleanFrom}, PassLen: ${cleanPass.length}, PassHint: ${cleanPass.slice(0, 2)}***${cleanPass.slice(-2)}] - ${fbErrorMessage}`;
-        return { success: false, error: fbDiagnostic };
+        return { success: false, error: fbErrorMessage };
       }
     }
 
@@ -205,8 +204,7 @@ export async function sendEmail(
       response: errObj?.response,
       port: defaultPort,
     });
-    const diagnostic = `[User: ${cleanFrom}, PassLen: ${cleanPass.length}, PassHint: ${cleanPass.slice(0, 2)}***${cleanPass.slice(-2)}] - ${errorMessage}`;
-    return { success: false, error: diagnostic };
+    return { success: false, error: errorMessage };
   } finally {
     try {
       transport.close();
