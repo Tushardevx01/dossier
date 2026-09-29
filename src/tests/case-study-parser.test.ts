@@ -140,4 +140,73 @@ describe.skipIf(SKIP_DB)("Case Study Content Parser", () => {
     expect(apiSec?.tables[0].rows.length).toBe(6);
     expect(apiSec?.tables[1].rows.length).toBe(7);
   });
+
+  it("extracts schema validation supportingItems cleanly from CarePulse without overflow", async () => {
+    const carepulse = await getCaseStudyBySlug("carepulse");
+    expect(carepulse).toBeDefined();
+    if (!carepulse) return;
+
+    const parsed = parseCaseStudyContent(carepulse.content);
+    const valSec = parsed.sections.find((s) => s.id === "validation");
+    expect(valSec).toBeDefined();
+    expect(valSec?.supportingItems.length).toBe(5);
+
+    const userForm = valSec?.supportingItems[0];
+    expect(userForm?.title).toBe("UserFormValidation");
+    expect(userForm?.badge).toBe("Patient Onboarding Step 1");
+    expect(userForm?.tag).toBe("name, email, phone");
+    expect(userForm?.desc).toContain("RFC email standards");
+
+    const scheduleForm = valSec?.supportingItems[3];
+    expect(scheduleForm?.title).toBe("ScheduleAppointmentSchema");
+    expect(scheduleForm?.badge).toBe("Administrative Confirmation");
+    expect(scheduleForm?.tag).toContain("cancellationReason (optional)");
+
+    const cancelForm = valSec?.supportingItems[4];
+    expect(cancelForm?.title).toBe("CancelAppointmentSchema");
+    expect(cancelForm?.badge).toBe("Administrative Cancellation");
+    expect(cancelForm?.tag).toBe("cancellationReason (required)");
+  });
+
+  it("ensures no titles, badges, or records contain decorative // symbols", () => {
+    caseStudiesData.forEach((cs) => {
+      const parsed = parseCaseStudyContent(cs.content);
+      parsed.sections.forEach((sec) => {
+        expect(sec.title).not.toContain("//");
+        if (sec.badge) expect(sec.badge).not.toContain("//");
+        if (sec.intro) expect(sec.intro).not.toContain("//");
+        if (sec.readingText) expect(sec.readingText).not.toContain("//");
+
+        sec.diagrams.forEach((d) => {
+          expect(d.title).not.toContain("//");
+          if (d.badge) expect(d.badge).not.toContain("//");
+        });
+
+        sec.challenges.forEach((c) => {
+          expect(c.title).not.toContain("//");
+          expect(c.num).not.toContain("//");
+          if (c.tag) expect(c.tag).not.toContain("//");
+        });
+
+        sec.decisions.forEach((d) => {
+          expect(d.tech).not.toContain("//");
+          expect(d.area).not.toContain("//");
+          expect(d.num).not.toContain("//");
+        });
+
+        sec.solutions.forEach((s) => {
+          expect(s.title).not.toContain("//");
+          expect(s.num).not.toContain("//");
+        });
+
+        sec.supportingItems.forEach((si) => {
+          expect(si.title).not.toContain("//");
+          if (si.num) expect(si.num).not.toContain("//");
+          if (si.badge) expect(si.badge).not.toContain("//");
+          if (si.tag) expect(si.tag).not.toContain("//");
+        });
+      });
+    });
+  });
 });
+

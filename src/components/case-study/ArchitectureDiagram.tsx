@@ -31,16 +31,16 @@ export const ArchitectureDiagram: React.FC<ArchitectureDiagramProps> = ({
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-neutral-900/80">
             {layers.map((layer, idx) => (
-              <div key={idx} className="p-4 space-y-1.5 hover:bg-neutral-900/20 transition-colors">
-                <div className="flex items-center gap-2">
-                  <span className={`${mono.className} font-mono text-xs text-emerald-400 font-bold`}>
+              <div key={idx} className="p-4 space-y-1.5 hover:bg-neutral-900/20 transition-colors overflow-hidden min-w-0">
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className={`${mono.className} font-mono text-xs text-emerald-400 font-bold shrink-0`}>
                     {layer.num || String(idx + 1).padStart(2, "0")}
                   </span>
-                  <span className="text-xs font-semibold text-white uppercase tracking-wide">
+                  <span className="text-xs font-semibold text-white uppercase tracking-wide truncate">
                     {layer.title}
                   </span>
                 </div>
-                <p className="text-xs text-neutral-400 font-sans leading-relaxed">
+                <p className="text-xs text-neutral-400 font-sans leading-relaxed break-words">
                   {layer.desc}
                 </p>
               </div>

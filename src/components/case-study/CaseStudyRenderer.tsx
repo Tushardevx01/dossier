@@ -10,10 +10,104 @@ import { DecisionRecord } from "./DecisionRecord";
 import { MetricGrid } from "./MetricGrid";
 import { TechnicalMatrix } from "./TechnicalMatrix";
 import { RelatedProjects } from "./RelatedProjects";
-import type { ParsedCaseStudy, ParsedSection } from "@/lib/case-study-parser";
+import type { ParsedCaseStudy, ParsedSection, ParsedSupportingItem } from "@/lib/case-study-parser";
 import type { Project } from "@/types/project";
 import { mono } from "@/app/fonts";
 import { sanitizeHtml } from "@/lib/sanitize";
+
+const SupportingItemsGrid: React.FC<{ items: ParsedSupportingItem[] }> = ({ items }) => {
+  if (!items || items.length === 0) return null;
+
+  return (
+    <div className="border-t border-neutral-800/80 pt-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {items.map((item, i) => {
+          // Defensive normalization in case of unmigrated data or legacy payloads:
+          // If num is a long identifier (e.g. ScheduleAppointmentSchema, UserFormValidation),
+          // treat it as the primary title rather than a step number.
+          const isNumCodeOrName =
+            Boolean(item.num) &&
+            item.num!.length > 6 &&
+            !/^(step|stage|state|tier|takeaway|model)\s*\d+/i.test(item.num!);
+
+          const showTitle = isNumCodeOrName ? item.num! : item.title;
+          const showNum = isNumCodeOrName
+            ? undefined
+            : item.num && item.num.toLowerCase() !== item.title.toLowerCase()
+              ? item.num
+              : undefined;
+
+          // If title was actually a key list (when num was an identifier), promote it to tag
+          const showTag =
+            item.tag ||
+            (isNumCodeOrName && item.title !== item.num ? item.title : undefined);
+
+          const showBadge =
+            item.badge && item.badge !== showTitle ? item.badge : undefined;
+
+          return (
+            <div
+              key={i}
+              className="p-4 rounded-lg bg-neutral-950/60 border border-neutral-800/80 flex flex-col justify-between gap-3 hover:bg-neutral-900/20 transition-colors overflow-hidden"
+            >
+              <div className="space-y-2.5 min-w-0">
+                {/* Meta row if badge exists */}
+                {showBadge && (
+                  <div className="flex items-center justify-between gap-2 flex-wrap min-w-0">
+                    {showNum && (
+                      <span className="font-mono text-xs text-emerald-400 font-bold select-none shrink-0">
+                        {showNum}
+                      </span>
+                    )}
+                    <span className="text-[10px] font-mono text-neutral-400 bg-neutral-900/90 border border-neutral-800/80 px-2 py-0.5 rounded select-none">
+                      {showBadge}
+                    </span>
+                  </div>
+                )}
+
+                {/* Primary Title */}
+                <div className="flex items-center gap-2 min-w-0">
+                  {showNum && !showBadge && (
+                    <span className="font-mono text-xs text-emerald-400 font-bold select-none shrink-0">
+                      {showNum}
+                    </span>
+                  )}
+                  <h4
+                    className={`font-mono text-xs sm:text-sm font-bold tracking-wide break-words ${
+                      showNum && !showBadge ? "text-white" : "text-emerald-400"
+                    }`}
+                  >
+                    {showTitle}
+                  </h4>
+                </div>
+
+                {item.desc && (
+                  <p className="text-xs text-neutral-400 font-sans leading-relaxed font-light break-words">
+                    {item.desc}
+                  </p>
+                )}
+              </div>
+
+              {showTag && (
+                <div className="pt-2.5 border-t border-neutral-900/80 flex flex-col gap-1 text-xs font-mono min-w-0">
+                  <span className="text-neutral-500 uppercase tracking-wider text-[10px] select-none">
+                    Keys:
+                  </span>
+                  <span
+                    className="text-neutral-300 font-mono text-[11px] leading-relaxed break-words"
+                    title={showTag}
+                  >
+                    {showTag}
+                  </span>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
 
 export interface CaseStudyRendererProps {
   parsed: ParsedCaseStudy;
@@ -167,18 +261,18 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
               <div className="border-t border-neutral-800/80 pt-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   {sec.supportingItems.map((item, i) => (
-                    <div key={i} className="space-y-2">
-                      <div className="flex items-center gap-2">
-                        {item.num && (
-                          <span className="font-mono text-xs text-emerald-400 font-bold select-none">
+                    <div key={i} className="space-y-2 min-w-0">
+                      <div className="flex items-center gap-2 min-w-0">
+                        {item.num && item.num.toLowerCase() !== item.title.toLowerCase() && (
+                          <span className="font-mono text-xs text-emerald-400 font-bold select-none shrink-0">
                             {item.num}
                           </span>
                         )}
-                        <h4 className="font-mono text-xs font-bold text-white uppercase tracking-wider">
+                        <h4 className="font-mono text-xs font-bold text-white uppercase tracking-wider break-words min-w-0">
                           {item.title}
                         </h4>
                       </div>
-                      <p className="text-xs text-neutral-400 font-sans leading-relaxed font-light">
+                      <p className="text-xs text-neutral-400 font-sans leading-relaxed font-light break-words">
                         {item.desc}
                       </p>
                     </div>
@@ -401,32 +495,7 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
             ))}
 
             {/* Supporting Items / Specifications */}
-            {sec.supportingItems.length > 0 && (
-              <div className="border-t border-neutral-800/80 pt-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                  {sec.supportingItems.map((item, i) => (
-                    <div
-                      key={i}
-                      className="p-4 rounded-lg bg-neutral-950/60 border border-neutral-800/80 space-y-1.5 hover:bg-neutral-900/20 transition-colors"
-                    >
-                      <div className="flex items-center gap-2">
-                        {item.num && (
-                          <span className="font-mono text-xs text-emerald-400 font-bold select-none">
-                            {item.num}
-                          </span>
-                        )}
-                        <h4 className="font-mono text-xs font-bold text-white uppercase tracking-wider">
-                          {item.title}
-                        </h4>
-                      </div>
-                      <p className="text-xs text-neutral-400 font-sans leading-relaxed font-light">
-                        {item.desc}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+            <SupportingItemsGrid items={sec.supportingItems} />
           </div>
         );
       }
@@ -468,32 +537,7 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
             ))}
 
             {/* Supporting Items / Specifications */}
-            {sec.supportingItems.length > 0 && (
-              <div className="border-t border-neutral-800/80 pt-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                  {sec.supportingItems.map((item, i) => (
-                    <div
-                      key={i}
-                      className="p-4 rounded-lg bg-neutral-950/60 border border-neutral-800/80 space-y-1.5 hover:bg-neutral-900/20 transition-colors"
-                    >
-                      <div className="flex items-center gap-2">
-                        {item.num && (
-                          <span className="font-mono text-xs text-emerald-400 font-bold select-none">
-                            {item.num}
-                          </span>
-                        )}
-                        <h4 className="font-mono text-xs font-bold text-white uppercase tracking-wider">
-                          {item.title}
-                        </h4>
-                      </div>
-                      <p className="text-xs text-neutral-400 font-sans leading-relaxed font-light">
-                        {item.desc}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+            <SupportingItemsGrid items={sec.supportingItems} />
           </div>
         );
       }
@@ -535,32 +579,7 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
             ))}
 
             {/* Supporting Items / Specifications */}
-            {sec.supportingItems.length > 0 && (
-              <div className="border-t border-neutral-800/80 pt-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                  {sec.supportingItems.map((item, i) => (
-                    <div
-                      key={i}
-                      className="p-4 rounded-lg bg-neutral-950/60 border border-neutral-800/80 space-y-1.5 hover:bg-neutral-900/20 transition-colors"
-                    >
-                      <div className="flex items-center gap-2">
-                        {item.num && (
-                          <span className="font-mono text-xs text-emerald-400 font-bold select-none">
-                            {item.num}
-                          </span>
-                        )}
-                        <h4 className="font-mono text-xs font-bold text-white uppercase tracking-wider">
-                          {item.title}
-                        </h4>
-                      </div>
-                      <p className="text-xs text-neutral-400 font-sans leading-relaxed font-light">
-                        {item.desc}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+            <SupportingItemsGrid items={sec.supportingItems} />
           </div>
         );
       }
@@ -633,32 +652,7 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
             )}
 
             {/* Supporting items / specs if any */}
-            {sec.supportingItems.length > 0 && (
-              <div className="border-t border-neutral-800/80 pt-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                  {sec.supportingItems.map((item, i) => (
-                    <div
-                      key={i}
-                      className="p-4 rounded-lg bg-neutral-950/60 border border-neutral-800/80 space-y-1.5 hover:bg-neutral-900/20 transition-colors"
-                    >
-                      <div className="flex items-center gap-2">
-                        {item.num && (
-                          <span className="font-mono text-xs text-emerald-400 font-bold select-none">
-                            {item.num}
-                          </span>
-                        )}
-                        <h4 className="font-mono text-xs font-bold text-white uppercase tracking-wider">
-                          {item.title}
-                        </h4>
-                      </div>
-                      <p className="text-xs text-neutral-400 font-sans leading-relaxed font-light">
-                        {item.desc}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+            <SupportingItemsGrid items={sec.supportingItems} />
 
             {/* If section has neither diagram nor tables nor supporting items, render cleaned raw content */}
             {sec.diagrams.length === 0 &&

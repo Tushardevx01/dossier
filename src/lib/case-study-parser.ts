@@ -62,6 +62,8 @@ export interface ParsedSupportingItem {
   num?: string;
   title: string;
   desc: string;
+  badge?: string;
+  tag?: string;
 }
 
 export type SectionPattern = "A" | "B" | "C" | "D" | "default";
@@ -105,6 +107,24 @@ export interface ParsedCaseStudy {
 }
 
 /**
+ * Strips or cleans decorative terminal-style double slashes ("//") from titles,
+ * numbers, badges, and category labels while preserving formatting.
+ */
+export function cleanDecorativeSlashes(input: string | undefined | null): string {
+  if (!input) return "";
+  let s = input.trim();
+  // Strip leading //
+  s = s.replace(/^\/\/\s*/, "");
+  // Strip trailing //
+  s = s.replace(/\s*\/\/\s*$/, "");
+  // Strip category suffixes like " // ARCHITECTURE", " // DESIGN", " // SPEC"
+  s = s.replace(/\s*\/\/\s*(ARCHITECTURE|DESIGN|SPEC|SYSTEM|PATTERN|DIAGRAM)$/i, "");
+  // Replace internal " // " with " — "
+  s = s.replace(/\s*\/\/\s*/g, " — ");
+  return s.trim();
+}
+
+/**
  * Extract clean ASCII diagram data from a container element
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -144,6 +164,7 @@ function extractDiagram($: cheerio.CheerioAPI, $pre: cheerio.Cheerio<any>, index
     }
   }
   if (!title) title = `SYSTEM FLOW ${index + 1}`;
+  title = cleanDecorativeSlashes(title);
 
   let badge = $container.find("span.text-\\[10px\\]").first().text().trim();
   if (!badge) {
@@ -155,6 +176,7 @@ function extractDiagram($: cheerio.CheerioAPI, $pre: cheerio.Cheerio<any>, index
   if (!badge && (firstLine.includes("const ") || firstLine.includes("function ") || firstLine.includes("export "))) {
     badge = "SOURCE CODE";
   }
+  badge = cleanDecorativeSlashes(badge);
   
   // Caption in bottom border
   let caption = "";
@@ -236,11 +258,18 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
     const $sec = $(secEl);
     const id = $sec.attr("id") || `section-${idx}`;
     const rawHeading = $sec.find("h2, h3").first().text().trim();
-    const title = rawHeading.replace(/^\s*\d+[\s/.-]*/, "").trim() || id.toUpperCase();
+    const title = cleanDecorativeSlashes(rawHeading.replace(/^\s*\d+[\s/.-]*/, "").trim()) || id.toUpperCase();
     const number = String(idx + 1).padStart(2, "0");
 
-    // Optional badge from section heading
-    const badge = $sec.find(".border-b span.text-emerald-400, .border-b span.text-neutral-500").first().text().trim();
+    // Optional badge from section heading (scoped only to direct section header container, not inner cards)
+    let badge: string | undefined = undefined;
+    const $headerDiv = $sec.children("div.border-b, div").first();
+    if ($headerDiv.length > 0 && $headerDiv.find("h2, h3").length > 0) {
+      const rawBadge = $headerDiv.find("span.text-emerald-400, span.text-neutral-500, span.text-\\[10px\\]").first().text().trim();
+      if (rawBadge && rawBadge !== rawHeading) {
+        badge = cleanDecorativeSlashes(rawBadge) || undefined;
+      }
+    }
 
     // Determine section type (exact ID match takes precedence over loose title substring)
     const lowerId = id.toLowerCase();
@@ -458,12 +487,12 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
         if ($c.parent().hasClass("grid") && $c.closest(".p-5, .rounded-xl").not($c).length > 0) return;
 
         const rawTitle = $c.find("h3, h4").first().text().trim();
-        let title = rawTitle;
+        let title = cleanDecorativeSlashes(rawTitle);
         let extractedNum = "";
         const numMatch = rawTitle.match(/^(\d+)[.\s:-]+(.*)/);
         if (numMatch) {
           extractedNum = numMatch[1].padStart(2, "0");
-          title = numMatch[2].trim();
+          title = cleanDecorativeSlashes(numMatch[2]);
         }
 
         let num = extractedNum;
@@ -474,16 +503,18 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
             .first()
             .text()
             .trim();
-          num = rawNum.replace(/^\/\/\s*/, "").replace(/^CHALLENGE\s*/i, "").trim();
+          const cleanNum = cleanDecorativeSlashes(rawNum).replace(/^CHALLENGE\s*/i, "").trim();
+          const slashNumMatch = cleanNum.match(/^(\d+)/);
+          num = slashNumMatch ? slashNumMatch[1].padStart(2, "0") : cleanNum;
         }
         if (!num || num.length > 5) num = String(cIdx + 1).padStart(2, "0");
 
-        let tag = $c
+        let tag = cleanDecorativeSlashes($c
           .find("span.text-neutral-500, span.text-emerald-400\\/90, span.text-\\[10px\\]")
           .filter((_, el) => !$(el).text().toLowerCase().includes("impact"))
           .first()
           .text()
-          .trim();
+          .trim());
 
         if (!tag || tag.toLowerCase().includes("impact")) {
           const titleUpper = title.toUpperCase();
@@ -543,9 +574,12 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
           .find("span.font-mono, span.text-emerald-400")
           .first()
           .text()
-          .trim()
-          .replace(/^\/\/\s*/, "");
+          .trim();
+        const numMatch = num.match(/^(\d+)/);
+        num = numMatch ? numMatch[1].padStart(2, "0") : cleanDecorativeSlashes(num);
         if (!num || num.length > 10) num = String(sIdx + 1).padStart(2, "0");
+
+        recTitle = cleanDecorativeSlashes(recTitle.replace(/^\d+\s*[\/•:-]*\s*/, "")).trim();
 
         let problemText = "";
         let constraintText = "";
@@ -600,28 +634,35 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
     const decisions: ParsedDecisionRecord[] = [];
     if (sectionType === "decisions") {
       const $decisionCards = $sec.find(
-        "div.grid > div.p-5, div.grid > div.rounded-xl, div.space-y-4 > div.p-5, div.space-y-4 > div.rounded-xl, div.space-y-6 > div.rounded-xl, div.grid > div"
+        "div.space-y-4 > div.p-5, div.space-y-4 > div.rounded-xl, div.grid > div.p-5, div.grid > div.rounded-xl, div.space-y-6 > div.rounded-xl"
       );
       $decisionCards.each((dIdx, cardEl) => {
         const $c = $(cardEl);
-        // Exclude inner grid items that belong to a parent decision card
-        if ($c.parent().hasClass("grid") && $c.closest(".p-5, .rounded-xl").not($c).length > 0) return;
+        // Exclude inner nested divs that belong to a parent decision card
+        if ($c.parents(".p-5, .rounded-xl").length > 0) return;
 
-        const tech = $c
-          .find("h3, span.text-white.font-medium, span.text-neutral-200.font-bold, span.text-white, span.font-bold, div.font-semibold")
+        // Number and Area from the header span (e.g. "01 // ARCHITECTURAL DECISION")
+        const $headerSpan = $c.find("span.text-emerald-400, span.font-mono").first();
+        const rawHeader = $headerSpan.text().trim();
+        const numMatch = rawHeader.match(/^(\d+)/);
+        const cardNum = numMatch ? numMatch[1].padStart(2, "0") : String(dIdx + 1).padStart(2, "0");
+
+        let area = cleanDecorativeSlashes(
+          rawHeader.replace(/^\d+\s*(?:\/\/|—|–|-|\.|\/|•|:)*\s*/, "").replace(/^DECISION\s*\d*\s*[:•-]?\s*/i, "")
+        ).trim() || "ARCHITECTURAL DECISION";
+
+        // Tech title: Look for white medium / bold text distinct from rawHeader
+        let tech = $c
+          .find("span.text-white.font-medium, h3, h4, span.text-neutral-200.font-bold, span.text-white, span.font-bold, div.font-semibold")
+          .filter((_, el) => $(el).text().trim() !== rawHeader)
           .first()
           .text()
           .trim();
+        tech = cleanDecorativeSlashes(tech.replace(/^DECISION\s*\d*\s*[//•:]*/i, "")).trim();
+
         const isFieldLabel = (t: string) =>
           /^(decision|rationale|trade-off|tradeoff|alternative|why|outcome|impact):?/i.test(t.trim());
 
-        let area = $c
-          .find("span.font-mono, span.text-emerald-400, span.text-\\[10px\\]")
-          .filter((_, el) => !isFieldLabel($(el).text()))
-          .first()
-          .text()
-          .trim();
-        
         let why = "";
         let tradeoff = "";
         let outcome = "";
@@ -676,9 +717,9 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
 
         if (tech) {
           decisions.push({
-            num: String(dIdx + 1).padStart(2, "0"),
-            area: area.replace(/^\/\/\s*/, "").replace(/DECISION\s*\d+\s*[//•:]*/i, "").trim(),
-            tech: tech.replace(/^DECISION\s*\d+\s*[//•:]*/i, "").trim(),
+            num: cardNum,
+            area: cleanDecorativeSlashes(area),
+            tech: cleanDecorativeSlashes(tech),
             why,
             tradeoff,
             outcome,
@@ -718,21 +759,21 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
     $sec.find("table").each((_, tblEl) => {
       const $tbl = $(tblEl);
       const $wrap = $tbl.closest(".overflow-x-auto, .rounded-xl, .border");
-      let tableTitle = $wrap.prev().find("h3, h4, span.font-semibold, div.font-semibold").first().text().trim();
+      let tableTitle = cleanDecorativeSlashes($wrap.prev().find("h3, h4, span.font-semibold, div.font-semibold").first().text().trim());
       if (!tableTitle) {
-        tableTitle = $wrap.parent().find("h3, h4").first().text().trim();
+        tableTitle = cleanDecorativeSlashes($wrap.parent().find("h3, h4").first().text().trim());
       }
 
       const headers: string[] = [];
       $tbl.find("thead th, tr:first-child th").each((_, th) => {
-        headers.push($(th).text().trim());
+        headers.push(cleanDecorativeSlashes($(th).text().trim()));
       });
 
       const rows: string[][] = [];
       $tbl.find("tbody tr, tr:not(:first-child)").each((_, tr) => {
         const cells: string[] = [];
         $(tr).find("td, th").each((_, td) => {
-          cells.push($(td).text().trim());
+          cells.push(cleanDecorativeSlashes($(td).text().trim()));
         });
         if (cells.length > 0) rows.push(cells);
       });
@@ -749,7 +790,7 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
         if ($cont.find("table, pre").length > 0) return;
         const headers = $cont
           .find("> div:first-child[class*=\"border-b\"] > div, .border-b.bg-neutral-950 > div")
-          .map((_, el) => $(el).text().trim())
+          .map((_, el) => cleanDecorativeSlashes($(el).text().trim()))
           .get()
           .filter((t) => t.length > 0);
 
@@ -757,14 +798,14 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
         $cont.find(".divide-y > div").each((_, rowEl) => {
           const cells = $(rowEl)
             .children("div")
-            .map((_, c) => $(c).text().trim())
+            .map((_, c) => cleanDecorativeSlashes($(c).text().trim()))
             .get()
             .filter((t) => t.length > 0);
           if (cells.length > 1) rows.push(cells);
         });
 
         if (headers.length > 1 && rows.length > 0) {
-          const tableTitle = $cont.prev().find("h3, h4, span.font-semibold").first().text().trim();
+          const tableTitle = cleanDecorativeSlashes($cont.prev().find("h3, h4, span.font-semibold").first().text().trim());
           tables.push({ title: tableTitle || undefined, headers, rows });
         }
       });
@@ -789,18 +830,94 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
           return;
         }
 
-        const sTitle = $el
-          .find("div.text-emerald-400, h3, h4, span.text-neutral-200, div.font-semibold, span.font-bold, div.flex span")
-          .last()
-          .text()
-          .trim();
-        const sDesc = $el.find("p").first().text().trim();
-        const sNum = $el.find("span.text-emerald-400, span.font-mono").first().text().trim();
-        if (sTitle && sDesc && sTitle !== sDesc) {
+        const sHeading = cleanDecorativeSlashes($el.find("h3, h4").first().text().trim());
+        const $emerald = $el.find("span.text-emerald-400, span.font-mono").first();
+        const rawEmerald = $emerald.text().trim();
+
+        let rawNum = "";
+        let emeraldTitle = "";
+        const emeraldMatch = rawEmerald.match(/^(\d+)\s*(?:\/\/|—|–|-|\.)\s*(.*)$/);
+        if (emeraldMatch) {
+          rawNum = emeraldMatch[1];
+          emeraldTitle = cleanDecorativeSlashes(emeraldMatch[2]);
+        } else {
+          rawNum = cleanDecorativeSlashes(rawEmerald);
+        }
+
+        const cardSub = cleanDecorativeSlashes($el.find("div.text-white.font-medium, div.text-white").first().text().trim());
+        const badge = cleanDecorativeSlashes(
+          $el.find("span.text-\\[10px\\], span.text-neutral-500.font-mono").first().text().trim()
+        );
+
+        // Check for validated keys / secondary tags
+        const $rightSpan = $el
+          .find("div.text-right span.text-neutral-300, div.text-right span.text-xs, span.text-neutral-300.text-xs")
+          .last();
+        let tag = cleanDecorativeSlashes($rightSpan.text().trim());
+        if (!tag) {
+          const $keySpan = $el
+            .find("span:contains(\"Keys:\"), span:contains(\"Validated:\")")
+            .parent()
+            .find("span.text-neutral-300, span.text-neutral-200")
+            .last();
+          tag = cleanDecorativeSlashes($keySpan.text().trim());
+        }
+        if (!tag && cardSub) {
+          tag = cardSub;
+        }
+
+        const sDesc = cleanDecorativeSlashes($el.find("p").first().text().trim());
+
+        const isNumericOrStep = (s: string) => {
+          if (!s) return false;
+          if (/^\d+([A-Z])?\.?$/i.test(s)) return true;
+          if (/^(step|stage|state|tier|takeaway|model)\s*\d+/i.test(s)) return true;
+          if (s.length <= 4) return true;
+          return false;
+        };
+
+        let title = "";
+        let num: string | undefined = undefined;
+
+        if (emeraldTitle) {
+          title = emeraldTitle;
+          num = rawNum;
+        } else if (sHeading) {
+          title = sHeading;
+          if (rawNum && isNumericOrStep(rawNum) && rawNum.toLowerCase() !== sHeading.toLowerCase()) {
+            num = rawNum;
+          }
+        } else if (rawNum && !isNumericOrStep(rawNum)) {
+          title = rawNum;
+        } else {
+          const fallbackTitle = cleanDecorativeSlashes($el
+            .find("div.text-emerald-400, span.text-neutral-200, div.font-semibold, span.font-bold")
+            .last()
+            .text()
+            .trim());
+          title = fallbackTitle || rawNum || `Item ${sIdx + 1}`;
+          if (rawNum && rawNum.toLowerCase() !== title.toLowerCase() && isNumericOrStep(rawNum)) {
+            num = rawNum;
+          }
+        }
+
+        if (!num && isNumericOrStep(rawNum) && rawNum.toLowerCase() !== title.toLowerCase()) {
+          num = rawNum;
+        }
+
+        if (num && title && num.toLowerCase() === title.toLowerCase()) {
+          num = undefined;
+        }
+
+        title = cleanDecorativeSlashes(title);
+
+        if (title || sDesc) {
           supportingItems.push({
-            num: sNum.replace(/\/\/$/, "").trim() || String(sIdx + 1).padStart(2, "0"),
-            title: sTitle,
+            num: num || undefined,
+            title: title || rawNum || String(sIdx + 1).padStart(2, "0"),
             desc: sDesc,
+            badge: (badge && badge !== title && badge !== tag) ? badge : undefined,
+            tag: (tag && tag !== title) ? tag : undefined,
           });
         }
       });
@@ -808,6 +925,18 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
     // Create cleaned HTML for residual content
     const $clone = $sec.clone();
     $clone.find("h2, h3").first().closest(".border-b").remove();
+    // Clean residual HTML content: remove decorative // from text nodes outside pre/code
+    $clone.find("*").each((_, el) => {
+      if ($(el).is("pre, code, script, style") || $(el).closest("pre, code").length > 0) return;
+      $(el).contents().each((_, node) => {
+        if (node.type === "text") {
+          const original = (node as any).data;
+          if (original && original.includes("//") && !original.includes("http://") && !original.includes("https://")) {
+            (node as any).data = cleanDecorativeSlashes(original);
+          }
+        }
+      });
+    });
     // Keep internal markup intact for fallback
     const rawContentHtml = $clone.html() || "";
 
