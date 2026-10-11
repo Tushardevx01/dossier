@@ -118,9 +118,9 @@ export function cleanDecorativeSlashes(input: string | undefined | null): string
   // Strip trailing //
   s = s.replace(/\s*\/\/\s*$/, "");
   // Strip category suffixes like " // ARCHITECTURE", " // DESIGN", " // SPEC"
-  s = s.replace(/\s*\/\/\s*(ARCHITECTURE|DESIGN|SPEC|SYSTEM|PATTERN|DIAGRAM)$/i, "");
-  // Replace internal " // " with " — "
-  s = s.replace(/\s*\/\/\s*/g, " — ");
+  s = s.replace(/\s*(?<!:)\/\/\s*(ARCHITECTURE|DESIGN|SPEC|SYSTEM|PATTERN|DIAGRAM)$/i, "");
+  // Replace internal " // " with " — " without corrupting URLs (e.g. https://)
+  s = s.replace(/\s*(?<!:)\/\/\s*/g, " — ");
   return s.trim();
 }
 
@@ -160,7 +160,7 @@ function extractDiagram(
   }
 
   // Pre-code content heuristics for concrete source files & functions
-  const preText = $pre.text().trim();
+  const preText = $pre.text().trim().replace(/\r\n/g, "\n");
   const firstLine = preText.split("\n")[0].trim();
   const commentMatch = firstLine.match(/^\/\/\s*([a-zA-Z0-9_./-]+)/);
   if (commentMatch) {
@@ -943,13 +943,13 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
     const supportingItems: ParsedSupportingItem[] = [];
     $sec
       .find(
-        "div.grid > div.p-4, div.grid > div.p-5, div.grid > div.p-3\\.5, div.grid > div.rounded-xl, div.grid > div.rounded-lg"
+        "div.grid > div.p-4, div.grid > div.p-5, div.grid > div.p-3\\.5, div.grid > div.p-3, div.grid > div.rounded-xl, div.grid > div.rounded-lg"
       )
       .each((sIdx, el) => {
         const $el = $(el);
-        if ($el.closest("pre, table").length > 0) return;
+        if ($el.closest("pre, table").length > 0 || $el.find("pre, table").length > 0) return;
         // Don't duplicate if parent is also matched
-        if ($el.closest(".rounded-xl, .p-5").not($el).length > 0) return;
+        if ($el.closest(".rounded-xl, .p-5, .p-4").not($el).length > 0) return;
         // Skip if this section is already rendering these as challenges, decisions, or outcomes
         if (
           (sectionType === "challenges" && challenges.length > 0) ||
@@ -960,8 +960,27 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
           return;
         }
 
-        const sHeading = cleanDecorativeSlashes($el.find("h3, h4").first().text().trim());
-        const $emerald = $el.find("span.text-emerald-400, span.font-mono").first();
+        let sHeading = cleanDecorativeSlashes($el.find("h3, h4").first().text().trim());
+        const $strong = $el.find("strong.text-white, strong").first();
+        if (!sHeading && $strong.length > 0) {
+          sHeading = cleanDecorativeSlashes($strong.text().replace(/:$/, "").trim());
+        }
+        if (!sHeading) {
+          const $boldTitle = $el
+            .find(
+              ".border-b span.text-white.font-bold, .border-b span.font-bold, div.flex span.text-white.font-bold"
+            )
+            .not(".text-\\[10px\\]")
+            .first();
+          if ($boldTitle.length > 0) {
+            sHeading = cleanDecorativeSlashes($boldTitle.text().trim());
+          }
+        }
+
+        const $emerald = $el
+          .find("span.text-emerald-400, span.text-emerald-500, span.font-mono")
+          .not("span.text-\\[10px\\]")
+          .first();
         const rawEmerald = $emerald.text().trim();
 
         let rawNum: string;
@@ -1000,13 +1019,18 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
           tag = cardSub;
         }
 
-        const sDesc = cleanDecorativeSlashes($el.find("p").first().text().trim());
+        let sDesc = cleanDecorativeSlashes($el.find("p").first().text().trim());
+        if ($strong.length > 0 && sDesc.startsWith($strong.text().trim())) {
+          sDesc = cleanDecorativeSlashes(
+            sDesc.slice($strong.text().trim().length).replace(/^:\s*/, "")
+          );
+        }
 
         const isNumericOrStep = (s: string) => {
           if (!s) return false;
           if (/^\d+([A-Z])?\.?$/i.test(s)) return true;
           if (/^(step|stage|state|tier|takeaway|model)\s*\d+/i.test(s)) return true;
-          if (s.length <= 4) return true;
+          if (/^\d+$/.test(s)) return true;
           return false;
         };
 
@@ -1033,6 +1057,7 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
               .find(
                 "div.text-emerald-400, span.text-neutral-200, div.font-semibold, span.font-bold"
               )
+              .not(".text-\\[10px\\]")
               .last()
               .text()
               .trim()
