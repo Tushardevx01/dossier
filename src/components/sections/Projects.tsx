@@ -13,11 +13,7 @@ export const Projects = () => {
   const isInView = useInView(ref, { once: true, margin: "-80px", amount: 0.1 });
 
   return (
-    <section
-      id="selected-work"
-      ref={ref}
-      className="py-24 relative scroll-mt-24"
-    >
+    <section id="selected-work" ref={ref} className="py-24 relative scroll-mt-24">
       <div id="projects" className="absolute -top-20" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
@@ -31,8 +27,7 @@ export const Projects = () => {
             className={`${nasalization.className} text-3xl sm:text-4xl md:text-5xl font-bold`}
             style={{ color: "hsl(var(--foreground))" }}
           >
-            Selected{" "}
-            <span style={{ color: "hsl(var(--primary) / 0.85)" }}>Work.</span>
+            Selected <span style={{ color: "hsl(var(--primary) / 0.85)" }}>Work.</span>
           </h2>
           <p
             className={`${mono.className} text-sm`}
@@ -46,11 +41,7 @@ export const Projects = () => {
         {projects.length > 0 && (
           <div className="grid gap-6 md:grid-cols-2">
             {projects.map((project, index) => (
-              <ProjectCard
-                key={project.slug || project.name}
-                project={project}
-                index={index}
-              />
+              <ProjectCard key={project.slug || project.name} project={project} index={index} />
             ))}
           </div>
         )}

@@ -8,9 +8,9 @@ import "server-only";
  */
 
 import { createHash, timingSafeEqual } from "node:crypto";
-import { ensureDatabaseReady, getDb } from '@/server/db';
-import { apiKeys } from '@/server/db/schema';
-import { eq } from 'drizzle-orm';
+import { ensureDatabaseReady, getDb } from "@/server/db";
+import { apiKeys } from "@/server/db/schema";
+import { eq } from "drizzle-orm";
 import { sql } from "drizzle-orm";
 import { logger } from "@/lib/logger";
 
@@ -60,14 +60,14 @@ export async function validateApiKey(apiKey: string): Promise<ApiKeyValidation> 
       .limit(1);
 
     if (result.length === 0) {
-      await new Promise(r => setTimeout(r, 50 + Math.random() * 50));
+      await new Promise((r) => setTimeout(r, 50 + Math.random() * 50));
       return { valid: false, error: "Invalid credentials" };
     }
 
     const key = result[0];
 
     if (!key.active || (key.expiresAt && new Date() > key.expiresAt)) {
-      await new Promise(r => setTimeout(r, 50 + Math.random() * 50));
+      await new Promise((r) => setTimeout(r, 50 + Math.random() * 50));
       return { valid: false, error: "Invalid credentials" };
     }
 
@@ -92,7 +92,7 @@ export async function validateApiKey(apiKey: string): Promise<ApiKeyValidation> 
     };
   } catch (error) {
     logger.error("Database error validating API key", { error });
-    await new Promise(r => setTimeout(r, 50 + Math.random() * 50));
+    await new Promise((r) => setTimeout(r, 50 + Math.random() * 50));
     return { valid: false, error: "Authentication service unavailable" };
   }
 }
@@ -107,7 +107,7 @@ export function extractApiKey(request: Request): string | null {
     return token.length > 0 ? token : null;
   }
 
-// Also check X-API-Key header
+  // Also check X-API-Key header
   const apiKey = request.headers.get("x-api-key")?.trim();
   return apiKey && apiKey.length > 0 ? apiKey : null;
 }

@@ -1,4 +1,10 @@
-import type { HealthStatus, LogLevel, RuntimeLogSeed, ServiceHealthTile, TelemetryItem } from "@/types/system";
+import type {
+  HealthStatus,
+  LogLevel,
+  RuntimeLogSeed,
+  ServiceHealthTile,
+  TelemetryItem,
+} from "@/types/system";
 
 export const telemetrySeed: TelemetryItem[] = [
   { uptime: 99.6, rps: 1420, errorRate: 0.9, latency: 190 },

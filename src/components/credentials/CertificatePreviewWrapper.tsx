@@ -4,8 +4,7 @@ import dynamic from "next/dynamic";
 import type { Credential } from "@/server/db/schema";
 
 const DynamicCertificatePreview = dynamic(
-  () =>
-    import("./CertificatePreview").then((mod) => mod.CertificatePreview),
+  () => import("./CertificatePreview").then((mod) => mod.CertificatePreview),
   {
     ssr: false,
     loading: () => (

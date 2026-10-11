@@ -26,7 +26,8 @@ interface GitHubEventResponse {
 const verifiedStaticRepos = [
   {
     name: "runstack",
-    description: "Distributed deployment and job orchestration platform in Go with Kafka, Redis, and Docker.",
+    description:
+      "Distributed deployment and job orchestration platform in Go with Kafka, Redis, and Docker.",
     language: "Go",
     url: "https://github.com/tushardevx01/runstack",
     stars: 0,
@@ -35,7 +36,8 @@ const verifiedStaticRepos = [
   },
   {
     name: "aegis",
-    description: "Autonomous infrastructure resilience and self-healing incident remediation engine.",
+    description:
+      "Autonomous infrastructure resilience and self-healing incident remediation engine.",
     language: "TypeScript",
     url: "https://github.com/tushardevx01/aegis",
     stars: 0,
@@ -131,7 +133,9 @@ export async function GET() {
       const eventsData = (await eventsRes.value.json()) as GitHubEventResponse[];
       if (Array.isArray(eventsData) && eventsData.length > 0) {
         const pushEvents = eventsData
-          .filter((e) => e.type === "PushEvent" && e.payload?.commits && e.payload.commits.length > 0)
+          .filter(
+            (e) => e.type === "PushEvent" && e.payload?.commits && e.payload.commits.length > 0
+          )
           .slice(0, 4)
           .map((e) => {
             const commit = e.payload.commits![0];

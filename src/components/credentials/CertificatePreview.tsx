@@ -35,9 +35,7 @@ export function CertificatePreview({ credential }: CertificatePreviewProps) {
   const [pdfError, setPdfError] = useState<string | null>(null);
 
   const displayImage =
-    credential.objectLink && isImageUrl(credential.objectLink)
-      ? credential.objectLink
-      : null;
+    credential.objectLink && isImageUrl(credential.objectLink) ? credential.objectLink : null;
 
   // Use same-origin inline download URL for PDF to guarantee zero CORS issues
   const pdfUrl = credential.objectLink

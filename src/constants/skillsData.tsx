@@ -130,9 +130,7 @@ export const skillsData: SkillsDataProps[] = [
   },
   {
     title: "Web3",
-    data: [
-      { title: "Web3.js", logoComponent: SiWeb3Dotjs, color: "#F16822" },
-    ],
+    data: [{ title: "Web3.js", logoComponent: SiWeb3Dotjs, color: "#F16822" }],
   },
   {
     title: "DevOps & Tools",

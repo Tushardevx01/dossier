@@ -5,11 +5,7 @@ import {
   validateCredentialFile,
   generateSafeStorageKey,
 } from "@/server/storage/validation";
-import {
-  extractR2Key,
-  getPublicUrl,
-  isR2Configured,
-} from "@/server/storage/r2";
+import { extractR2Key, getPublicUrl, isR2Configured } from "@/server/storage/r2";
 import { validateAdminRequest } from "@/server/security/auth";
 
 describe("Credential Storage Validation", () => {
@@ -20,22 +16,35 @@ describe("Credential Storage Validation", () => {
   });
 
   it("detects PNG magic bytes accurately", () => {
-    const pngBuffer = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00, 0x00, 0x00]);
+    const pngBuffer = Buffer.from([
+      0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00, 0x00, 0x00,
+    ]);
     const result = detectMimeFromMagicBytes(pngBuffer);
     expect(result).toEqual({ mimeType: "image/png", extension: "png" });
   });
 
   it("detects JPEG magic bytes accurately", () => {
-    const jpegBuffer = Buffer.from([0xff, 0xd8, 0xff, 0xe0, 0x00, 0x10, 0x4a, 0x46, 0x49, 0x46, 0x00, 0x01]);
+    const jpegBuffer = Buffer.from([
+      0xff, 0xd8, 0xff, 0xe0, 0x00, 0x10, 0x4a, 0x46, 0x49, 0x46, 0x00, 0x01,
+    ]);
     const result = detectMimeFromMagicBytes(jpegBuffer);
     expect(result).toEqual({ mimeType: "image/jpeg", extension: "jpg" });
   });
 
   it("detects WEBP magic bytes accurately", () => {
     const webpBuffer = Buffer.from([
-      0x52, 0x49, 0x46, 0x46, // RIFF
-      0x20, 0x00, 0x00, 0x00,
-      0x57, 0x45, 0x42, 0x50, // WEBP
+      0x52,
+      0x49,
+      0x46,
+      0x46, // RIFF
+      0x20,
+      0x00,
+      0x00,
+      0x00,
+      0x57,
+      0x45,
+      0x42,
+      0x50, // WEBP
     ]);
     const result = detectMimeFromMagicBytes(webpBuffer);
     expect(result).toEqual({ mimeType: "image/webp", extension: "webp" });
@@ -43,16 +52,16 @@ describe("Credential Storage Validation", () => {
 
   it("rejects invalid or corrupted magic bytes even with valid extension", async () => {
     const fakePdf = Buffer.from("NOT_A_REAL_PDF_HEADER_CONTENT");
-    await expect(
-      validateCredentialFile(fakePdf, { allowedTypes: ["pdf"] })
-    ).rejects.toThrow(/File content does not match any accepted format/);
+    await expect(validateCredentialFile(fakePdf, { allowedTypes: ["pdf"] })).rejects.toThrow(
+      /File content does not match any accepted format/
+    );
   });
 
   it("rejects files exceeding size limit", async () => {
     const bigBuffer = Buffer.alloc(200);
-    await expect(
-      validateCredentialFile(bigBuffer, { maxSizeBytes: 100 })
-    ).rejects.toThrow(/File size exceeds/);
+    await expect(validateCredentialFile(bigBuffer, { maxSizeBytes: 100 })).rejects.toThrow(
+      /File size exceeds/
+    );
   });
 
   it("generates safe, normalized R2 storage keys", () => {
@@ -266,7 +275,8 @@ describe("Credential Schema Validation", () => {
   it("supports large long-form markdown documents without artificial character limits", async () => {
     const { CredentialJsonSchema } = await import("@/schemas");
 
-    const largeMarkdown = "# Large Document\n\n" + "This is a detailed technical write-up. ".repeat(500);
+    const largeMarkdown =
+      "# Large Document\n\n" + "This is a detailed technical write-up. ".repeat(500);
     const payload = {
       title: "Agentic AI Certified Foundations Associate",
       issuer: "Oracle University",
@@ -328,7 +338,9 @@ This is an **agentic certification** article with *italic* text and \`inline_cod
     expect(html).toContain("<td");
     expect(html).toContain("<pre");
     expect(html).toContain("<hr");
-    expect(html).toContain('<a href="https://example.com" target="_blank" rel="noopener noreferrer"');
+    expect(html).toContain(
+      '<a href="https://example.com" target="_blank" rel="noopener noreferrer"'
+    );
   });
 
   it("sanitizes malicious script tags and event handlers to prevent XSS", async () => {
@@ -363,5 +375,3 @@ This is an **agentic certification** article with *italic* text and \`inline_cod
     expect(clean).not.toContain("- Bullet");
   });
 });
-
-

@@ -13,7 +13,11 @@ export const Skills = () => {
   const [showAdditional, setShowAdditional] = useState(false);
 
   return (
-    <section id="tech" ref={ref} className="py-24 relative overflow-hidden control-grid scroll-mt-24">
+    <section
+      id="tech"
+      ref={ref}
+      className="py-24 relative overflow-hidden control-grid scroll-mt-24"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           className="mb-16 space-y-2"
@@ -27,8 +31,12 @@ export const Skills = () => {
           >
             Technology <span style={{ color: "hsl(var(--primary) / 0.85)" }}>Matrix.</span>
           </h2>
-          <p className="text-base text-muted-foreground max-w-2xl" style={{ color: "hsl(var(--foreground) / 0.6)" }}>
-            Technologies grouped by architecture layer, with each tool tied to an operational use case.
+          <p
+            className="text-base text-muted-foreground max-w-2xl"
+            style={{ color: "hsl(var(--foreground) / 0.6)" }}
+          >
+            Technologies grouped by architecture layer, with each tool tied to an operational use
+            case.
           </p>
         </motion.div>
 
@@ -49,7 +57,12 @@ export const Skills = () => {
             tierDelay={0.3}
           />
 
-          <motion.div className="space-y-6" initial={false} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
+          <motion.div
+            className="space-y-6"
+            initial={false}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+          >
             <motion.button
               onClick={() => setShowAdditional((prev) => !prev)}
               whileHover={{ scale: 1.02 }}
@@ -63,7 +76,9 @@ export const Skills = () => {
               aria-expanded={showAdditional}
               aria-controls="additional-tech-stack"
             >
-              <span className="text-sm font-medium">{showAdditional ? "Hide" : "View"} Additional Technologies</span>
+              <span className="text-sm font-medium">
+                {showAdditional ? "Hide" : "View"} Additional Technologies
+              </span>
               <motion.svg
                 width="16"
                 height="16"

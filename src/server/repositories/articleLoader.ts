@@ -17,11 +17,7 @@ import {
   getCategories,
   getAllNoteSlugs,
 } from "@/server/repositories/blogs";
-import type {
-  ArticleMetadata,
-  ArticlePost,
-  CategoryFilter,
-} from "@/types/article";
+import type { ArticleMetadata, ArticlePost, CategoryFilter } from "@/types/article";
 
 // Re-export types so consumers import from one place
 export type { ArticleMetadata, ArticlePost, CategoryFilter };
@@ -68,4 +64,3 @@ export async function getArticleCategories(): Promise<CategoryFilter[]> {
 export async function generateArticleStaticParams(): Promise<{ slug: string }[]> {
   return getAllNoteSlugs();
 }
-

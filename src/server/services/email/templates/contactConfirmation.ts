@@ -33,9 +33,7 @@ function escapeHtml(text: string): string {
 /**
  * Generate contact confirmation email HTML
  */
-export function generateContactConfirmationEmail(
-  data: ContactConfirmationData
-): string {
+export function generateContactConfirmationEmail(data: ContactConfirmationData): string {
   const { name, inquiryType, message } = data;
 
   const safeName = escapeHtml(name || "");
@@ -50,8 +48,10 @@ export function generateContactConfirmationEmail(
   function smallIntroFor(reason: string) {
     if (!reason) return "I’ve received your message and will review it personally.";
     const r = reason.toLowerCase();
-    if (r.includes("project")) return "I’ve received your message — I’d be glad to learn more about your project.";
-    if (r.includes("collab") || r.includes("collaboration")) return "I’ve received your message — looking forward to exploring ideas together.";
+    if (r.includes("project"))
+      return "I’ve received your message — I’d be glad to learn more about your project.";
+    if (r.includes("collab") || r.includes("collaboration"))
+      return "I’ve received your message — looking forward to exploring ideas together.";
     return "I’ve received your message and will review it personally.";
   }
 
@@ -130,7 +130,7 @@ export function generateContactConfirmationEmail(
                 <tr>
                   <td>
                     <h1 style="margin:0 0 12px 0;font-size:20px;color:#f5f5f5;font-weight:700;">Thanks for reaching out</h1>
-                    <p style="margin:0 0 12px 0;color:#f5f5f5;font-size:15px;">Hello ${safeName || 'there'},</p>
+                    <p style="margin:0 0 12px 0;color:#f5f5f5;font-size:15px;">Hello ${safeName || "there"},</p>
                     <p style="margin:0 0 14px 0;color:#a1a1aa;font-size:14px;">${escapeHtml(smallIntroFor(safeInquiryType || ""))}</p>
                     <p style="margin:0 0 18px 0;color:#a1a1aa;font-size:14px;">I usually reply within <strong style="color:#f5f5f5;">24–48 hours</strong>. I appreciate your interest and look forward to connecting.</p>
                   </td>

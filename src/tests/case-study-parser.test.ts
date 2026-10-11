@@ -19,9 +19,7 @@ describe.skipIf(SKIP_DB)("Case Study Content Parser", () => {
   let caseStudiesData: CaseStudyRecord[];
 
   beforeAll(async () => {
-    const results = await Promise.all(
-      slugs.map((slug) => getCaseStudyBySlug(slug))
-    );
+    const results = await Promise.all(slugs.map((slug) => getCaseStudyBySlug(slug)));
     caseStudiesData = results.filter(Boolean) as CaseStudyRecord[];
   });
 
@@ -209,4 +207,3 @@ describe.skipIf(SKIP_DB)("Case Study Content Parser", () => {
     });
   });
 });
-

@@ -23,11 +23,11 @@ export function generatePersonStructuredData() {
       "@type": "PostalAddress",
       addressLocality: "Kolkata",
       addressRegion: "West Bengal",
-      addressCountry: "IN"
+      addressCountry: "IN",
     },
     alumniOf: {
       "@type": "CollegeOrUniversity",
-      name: "Adamas University"
+      name: "Adamas University",
     },
     sameAs: [
       siteConfig.social.linkedin,
@@ -35,7 +35,7 @@ export function generatePersonStructuredData() {
       siteConfig.social.instagram,
       siteConfig.social.twitter,
       "https://dev.to/tushardevx01",
-      "https://www.tushardevx01.tech/azmth"
+      "https://www.tushardevx01.tech/azmth",
     ],
     knowsAbout: [
       "Next.js",
@@ -47,7 +47,7 @@ export function generatePersonStructuredData() {
       "Observability",
       "Real-time systems",
       "Web performance",
-      "Scalable architecture"
+      "Scalable architecture",
     ],
   };
 }
@@ -134,9 +134,7 @@ export function generateSoftwareApplicationStructuredData(project: Project) {
   };
 }
 
-export function generateBreadcrumbListStructuredData(
-  items: Array<{ name: string; url: string }>
-) {
+export function generateBreadcrumbListStructuredData(items: Array<{ name: string; url: string }>) {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -236,10 +234,7 @@ export function generateResumeStructuredData() {
         addressRegion: selfData.current_location.state,
         addressCountry: selfData.current_location.country,
       },
-      sameAs: [
-        siteConfig.social.github,
-        siteConfig.social.linkedin,
-      ],
+      sameAs: [siteConfig.social.github, siteConfig.social.linkedin],
     },
     dateModified: new Date().toISOString(),
     fileFormat: "application/pdf",

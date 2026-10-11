@@ -14,7 +14,7 @@ export function CredentialsRegistry({ credentials }: CredentialsRegistryProps) {
 
   const filteredCredentials = useMemo(() => {
     if (!searchQuery.trim()) return credentials;
-    
+
     const query = searchQuery.toLowerCase();
     return credentials.filter((cred) => {
       return (
@@ -57,7 +57,8 @@ export function CredentialsRegistry({ credentials }: CredentialsRegistryProps) {
               No credentials recorded yet.
             </h2>
             <p className="text-sm text-neutral-400 max-w-md mx-auto leading-relaxed">
-              Verified certifications and credential documents will appear here once added to the database.
+              Verified certifications and credential documents will appear here once added to the
+              database.
             </p>
           </div>
         ) : filteredCredentials.length === 0 ? (

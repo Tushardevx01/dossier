@@ -48,7 +48,9 @@ export function CredentialIdCopy({ credentialId, inline = false }: CredentialIdC
           className="text-neutral-400 hover:text-white transition-colors focus:outline-none ml-0.5"
         >
           {copied ? (
-            <span className="text-[10px] text-emerald-400 tracking-wider font-semibold">COPIED</span>
+            <span className="text-[10px] text-emerald-400 tracking-wider font-semibold">
+              COPIED
+            </span>
           ) : (
             <LuCopy className="w-3.5 h-3.5 opacity-70 hover:opacity-100" />
           )}

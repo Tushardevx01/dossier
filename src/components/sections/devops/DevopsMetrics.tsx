@@ -17,8 +17,12 @@ export const DevopsMetrics = ({ telemetry }: DevopsMetricsProps) => {
         <div className="flex items-center justify-between gap-3">
           <div>
             <p className="system-label">Cluster State</p>
-            <p className={`${nasalization.className} text-2xl sm:text-3xl text-white mt-2`}>Operational</p>
-            <p className={`${mono.className} text-xs text-white/45 mt-2`}>global-control-plane / v1.3.8</p>
+            <p className={`${nasalization.className} text-2xl sm:text-3xl text-white mt-2`}>
+              Operational
+            </p>
+            <p className={`${mono.className} text-xs text-white/45 mt-2`}>
+              global-control-plane / v1.3.8
+            </p>
           </div>
           <div className="flex items-center gap-2">
             <span className="status-dot bg-emerald-400 animate-pulse" />
@@ -28,10 +32,22 @@ export const DevopsMetrics = ({ telemetry }: DevopsMetricsProps) => {
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        <MetricCard label="Uptime %" value={`${telemetry.uptime.toFixed(2)}%`} valueClassName="text-emerald-300" />
+        <MetricCard
+          label="Uptime %"
+          value={`${telemetry.uptime.toFixed(2)}%`}
+          valueClassName="text-emerald-300"
+        />
         <MetricCard label="Requests/sec" value={`${telemetry.rps}`} valueClassName="text-sky-300" />
-        <MetricCard label="Error Rate" value={`${telemetry.errorRate.toFixed(1)}%`} valueClassName="text-amber-300" />
-        <MetricCard label="Latency" value={`${telemetry.latency}ms`} valueClassName="text-violet-300" />
+        <MetricCard
+          label="Error Rate"
+          value={`${telemetry.errorRate.toFixed(1)}%`}
+          valueClassName="text-amber-300"
+        />
+        <MetricCard
+          label="Latency"
+          value={`${telemetry.latency}ms`}
+          valueClassName="text-violet-300"
+        />
       </div>
 
       <div className="rounded-xl border border-white/10 bg-black/30 p-4">
@@ -82,7 +98,12 @@ const MetricCard = ({ label, value, valueClassName }: MetricCardProps) => {
   return (
     <div className="rounded-lg border border-white/10 bg-black/30 p-3.5">
       <p className="system-label">{label}</p>
-      <motion.p key={value} initial={{ opacity: 0.6 }} animate={{ opacity: 1 }} className={`${nasalization.className} mt-2 text-xl ${valueClassName}`}>
+      <motion.p
+        key={value}
+        initial={{ opacity: 0.6 }}
+        animate={{ opacity: 1 }}
+        className={`${nasalization.className} mt-2 text-xl ${valueClassName}`}
+      >
         {value}
       </motion.p>
     </div>

@@ -7,10 +7,7 @@ import "server-only";
  * Separated from transport for easy testing and modification.
  */
 
-import {
-  generateContactConfirmationEmail,
-  generateContactNotificationEmail,
-} from "./templates";
+import { generateContactConfirmationEmail, generateContactNotificationEmail } from "./templates";
 
 export interface ContactEmailData {
   userName: string;

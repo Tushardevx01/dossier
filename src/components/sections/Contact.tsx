@@ -26,13 +26,11 @@ export const Contact = () => {
             className={`text-4xl md:text-5xl lg:text-6xl font-semibold mb-5 relative tracking-tight ${nasalization.className}`}
             style={{ color: "hsl(var(--primary))" }}
           >
-            Open{" "}
-            <span style={{ color: "hsl(var(--foreground) / 0.5)" }}>Channel.</span>
+            Open <span style={{ color: "hsl(var(--foreground) / 0.5)" }}>Channel.</span>
           </h2>
-          <p
-            className="text-base md:text-lg text-white/60 max-w-2xl mx-auto leading-relaxed"
-          >
-            Open to full-time engineering roles and focused collaborations where architecture quality, delivery ownership, and production reliability matter.
+          <p className="text-base md:text-lg text-white/60 max-w-2xl mx-auto leading-relaxed">
+            Open to full-time engineering roles and focused collaborations where architecture
+            quality, delivery ownership, and production reliability matter.
           </p>
         </div>
 
@@ -43,9 +41,7 @@ export const Contact = () => {
           {/* Contact Information */}
           <div className="space-y-12">
             {/* Contact List */}
-            <div
-              className="space-y-6"
-            >
+            <div className="space-y-6">
               <h3
                 className="text-base font-semibold tracking-[0.16em] uppercase"
                 style={{ color: "hsl(var(--foreground))" }}
@@ -79,16 +75,9 @@ interface ContactItemProps {
   href?: string;
 }
 
-const ContactItem: React.FC<ContactItemProps> = ({
-  icon: Icon,
-  label,
-  value,
-  href,
-}) => {
+const ContactItem: React.FC<ContactItemProps> = ({ icon: Icon, label, value, href }) => {
   const content = (
-    <div
-      className="p-5 rounded-xl transition-all duration-300 hover:bg-white/5 group cursor-pointer border border-white/10 bg-white/[0.02] hover:border-white/20"
-    >
+    <div className="p-5 rounded-xl transition-all duration-300 hover:bg-white/5 group cursor-pointer border border-white/10 bg-white/[0.02] hover:border-white/20">
       <div className="flex items-start space-x-4">
         <div
           className="p-2.5 rounded-lg mt-0.5 flex-shrink-0"

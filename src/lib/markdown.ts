@@ -46,34 +46,37 @@ function parseInlineMarkdown(text: string): string {
   });
 
   // 2. Links: [label](url)
-  result = result.replace(
-    /\[([^\]]+)\]\(([^)]+)\)/g,
-    (_match, label, url) => {
-      const trimmedUrl = url.trim();
-      const safeUrl =
-        trimmedUrl.startsWith("http://") ||
-        trimmedUrl.startsWith("https://") ||
-        trimmedUrl.startsWith("/") ||
-        trimmedUrl.startsWith("#")
-          ? escapeHtml(trimmedUrl)
-          : "#";
+  result = result.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_match, label, url) => {
+    const trimmedUrl = url.trim();
+    const safeUrl =
+      trimmedUrl.startsWith("http://") ||
+      trimmedUrl.startsWith("https://") ||
+      trimmedUrl.startsWith("/") ||
+      trimmedUrl.startsWith("#")
+        ? escapeHtml(trimmedUrl)
+        : "#";
 
-      const isExternal = safeUrl.startsWith("http://") || safeUrl.startsWith("https://");
-      const targetRel = isExternal ? ' target="_blank" rel="noopener noreferrer"' : "";
+    const isExternal = safeUrl.startsWith("http://") || safeUrl.startsWith("https://");
+    const targetRel = isExternal ? ' target="_blank" rel="noopener noreferrer"' : "";
 
-      return `<a href="${safeUrl}"${targetRel} class="text-white underline underline-offset-4 decoration-neutral-600 hover:decoration-white transition-colors">${parseInlineMarkdown(
-        label
-      )}</a>`;
-    }
-  );
+    return `<a href="${safeUrl}"${targetRel} class="text-white underline underline-offset-4 decoration-neutral-600 hover:decoration-white transition-colors">${parseInlineMarkdown(
+      label
+    )}</a>`;
+  });
 
   // 3. Bold: **text** or __text__
   result = result.replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-white">$1</strong>');
   result = result.replace(/__(.*?)__/g, '<strong class="font-semibold text-white">$1</strong>');
 
   // 4. Italic: *text* or _text_ (excluding inside words)
-  result = result.replace(/(^|[^\w*])\*([^*\n]+)\*([^\w*]|$)/g, '$1<em class="italic text-neutral-200">$2</em>$3');
-  result = result.replace(/(^|[^\w_])_([^_\n]+)_([^\w_]|$)/g, '$1<em class="italic text-neutral-200">$2</em>$3');
+  result = result.replace(
+    /(^|[^\w*])\*([^*\n]+)\*([^\w*]|$)/g,
+    '$1<em class="italic text-neutral-200">$2</em>$3'
+  );
+  result = result.replace(
+    /(^|[^\w_])_([^_\n]+)_([^\w_]|$)/g,
+    '$1<em class="italic text-neutral-200">$2</em>$3'
+  );
 
   // 5. Restore code placeholders safely (using function replacer to prevent $1, $& pattern expansions)
   codePlaceholders.forEach((codeHtml, idx) => {
@@ -89,7 +92,10 @@ function parseInlineMarkdown(text: string): string {
 function isTableSeparator(line: string): boolean {
   const trimmed = line.trim();
   if (!trimmed.startsWith("|") && !trimmed.includes("|")) return false;
-  const parts = trimmed.split("|").map((p) => p.trim()).filter(Boolean);
+  const parts = trimmed
+    .split("|")
+    .map((p) => p.trim())
+    .filter(Boolean);
   if (parts.length === 0) return false;
   return parts.every((p) => /^:?-+:?$/.test(p));
 }
@@ -251,9 +257,7 @@ export function renderMarkdownToHtml(markdown: string | null | undefined): strin
         listItems.push(itemText);
         i++;
       }
-      const itemsHtml = listItems
-        .map((item) => `<li>${parseInlineMarkdown(item)}</li>`)
-        .join("");
+      const itemsHtml = listItems.map((item) => `<li>${parseInlineMarkdown(item)}</li>`).join("");
       htmlBlocks.push(
         `<ul class="my-4 space-y-2 text-sm sm:text-base text-neutral-300 list-disc list-inside">${itemsHtml}</ul>`
       );
@@ -268,9 +272,7 @@ export function renderMarkdownToHtml(markdown: string | null | undefined): strin
         listItems.push(itemText);
         i++;
       }
-      const itemsHtml = listItems
-        .map((item) => `<li>${parseInlineMarkdown(item)}</li>`)
-        .join("");
+      const itemsHtml = listItems.map((item) => `<li>${parseInlineMarkdown(item)}</li>`).join("");
       htmlBlocks.push(
         `<ol class="my-4 space-y-2 text-sm sm:text-base text-neutral-300 list-decimal list-inside">${itemsHtml}</ol>`
       );

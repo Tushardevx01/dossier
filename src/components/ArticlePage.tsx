@@ -79,7 +79,9 @@ function TakeawaysSection({ takeaways }: { takeaways: string[] }) {
             key={i}
             className="flex gap-4 p-4 rounded-lg border border-zinc-800/50 bg-zinc-900/20 hover:bg-zinc-900/40 transition-colors"
           >
-            <span className="text-cyan-400 font-bold mt-1 flex-shrink-0" aria-hidden="true">•</span>
+            <span className="text-cyan-400 font-bold mt-1 flex-shrink-0" aria-hidden="true">
+              •
+            </span>
             <p className="text-base text-zinc-300 leading-relaxed">{point}</p>
           </div>
         ))}
@@ -96,7 +98,11 @@ function TakeawaysSection({ takeaways }: { takeaways: string[] }) {
  * - A JSON stringified array: string
  * - Null/undefined/empty
  */
-function ImprovementsSection({ improvements }: { improvements: string[] | string | null | undefined }) {
+function ImprovementsSection({
+  improvements,
+}: {
+  improvements: string[] | string | null | undefined;
+}) {
   // Normalize improvements: handle both array and stringified cases
   const normalizedImprovements = normalizeStringArray(improvements);
 
@@ -115,7 +121,9 @@ function ImprovementsSection({ improvements }: { improvements: string[] | string
             key={i}
             className="flex gap-4 p-4 rounded-lg border border-zinc-800/50 bg-zinc-900/20 hover:bg-zinc-900/40 transition-colors"
           >
-            <span className="text-amber-400 font-bold mt-1 flex-shrink-0" aria-hidden="true">→</span>
+            <span className="text-amber-400 font-bold mt-1 flex-shrink-0" aria-hidden="true">
+              →
+            </span>
             <p className="text-base text-zinc-300 leading-relaxed">{point}</p>
           </div>
         ))}
@@ -174,16 +182,15 @@ function ArticleFooter() {
             replace
             className="inline-flex items-center gap-2 text-sm uppercase tracking-widest font-medium text-zinc-400 hover:text-white transition-colors group"
           >
-            <span className="group-hover:-translate-x-1 transition-transform" aria-hidden="true">←</span>
+            <span className="group-hover:-translate-x-1 transition-transform" aria-hidden="true">
+              ←
+            </span>
             Back to Notes
           </Link>
 
           <div className="text-xs text-zinc-600">
             Engineering insights by{" "}
-            <Link
-              href="/"
-              className="text-zinc-400 hover:text-white transition-colors"
-            >
+            <Link href="/" className="text-zinc-400 hover:text-white transition-colors">
               Tushar Kanti Dey
             </Link>
           </div>

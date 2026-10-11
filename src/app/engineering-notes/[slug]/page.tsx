@@ -5,7 +5,10 @@ import { ArticlePage } from "@/components/ArticlePage";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { generateArticleStaticParams, getArticle } from "@/server/repositories/articleLoader";
 import { buildPageMetadata, absoluteUrl } from "@/lib/seo";
-import { generateArticleStructuredData, generateBreadcrumbListStructuredData } from "@/lib/structured-data";
+import {
+  generateArticleStructuredData,
+  generateBreadcrumbListStructuredData,
+} from "@/lib/structured-data";
 import "prismjs/themes/prism-tomorrow.css";
 
 export const revalidate = 60;
@@ -14,9 +17,7 @@ interface GenerateMetadataParams {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateMetadata(
-  { params }: GenerateMetadataParams
-): Promise<Metadata> {
+export async function generateMetadata({ params }: GenerateMetadataParams): Promise<Metadata> {
   try {
     const { slug } = await params;
     const normalizedSlug = slug.trim().toLowerCase();

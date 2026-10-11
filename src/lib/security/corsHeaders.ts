@@ -30,7 +30,8 @@ export function getCorsHeaders(origin?: string | null): Record<string, string> {
   const isAllowedOrigin = requestOrigin === TRUSTED_ORIGIN;
 
   return {
-    "Access-Control-Allow-Origin": isAllowedOrigin && requestOrigin ? requestOrigin : TRUSTED_ORIGIN,
+    "Access-Control-Allow-Origin":
+      isAllowedOrigin && requestOrigin ? requestOrigin : TRUSTED_ORIGIN,
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, X-Requested-With",
     "Access-Control-Max-Age": "86400", // 24 hours

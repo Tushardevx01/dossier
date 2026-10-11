@@ -12,14 +12,14 @@ import "server-only";
  * - getCaseStudyBySlug():  full record including content (detail pages only)
  */
 
-import { cache } from 'react';
-import { asc, eq, and } from 'drizzle-orm';
-import { ensureDatabaseReady, getDb } from '@/server/db';
-import { sanitizeHtml } from '@/lib/sanitize';
-import { caseStudies, type CaseStudy } from '@/server/db/schema';
-import { caseStudiesMeta, type CaseStudyRecord } from '@/lib/case-studies-meta';
+import { cache } from "react";
+import { asc, eq, and } from "drizzle-orm";
+import { ensureDatabaseReady, getDb } from "@/server/db";
+import { sanitizeHtml } from "@/lib/sanitize";
+import { caseStudies, type CaseStudy } from "@/server/db/schema";
+import { caseStudiesMeta, type CaseStudyRecord } from "@/lib/case-studies-meta";
 
-const SKIP_DB_BUILD = process.env.SKIP_DB_BUILD === 'true' || process.env.SKIP_DB === 'true';
+const SKIP_DB_BUILD = process.env.SKIP_DB_BUILD === "true" || process.env.SKIP_DB === "true";
 
 function mapCaseStudyRow(row: CaseStudy): CaseStudyRecord {
   return {
@@ -95,7 +95,7 @@ export const getAllCaseStudies = cache(async (): Promise<CaseStudyRecord[]> => {
       ...row,
       // Placeholder for the excluded content column; full content is only
       // ever fetched via getCaseStudyBySlug().
-      content: '',
+      content: "",
       tags: Array.isArray(row.tags) ? row.tags : [],
       whatILearned: Array.isArray(row.whatILearned) ? row.whatILearned : [],
       improvements: Array.isArray(row.improvements) ? row.improvements : [],
@@ -104,7 +104,7 @@ export const getAllCaseStudies = cache(async (): Promise<CaseStudyRecord[]> => {
       updatedAt: row.updatedAt.toISOString(),
     }));
   } catch (error) {
-    console.warn('Failed to query case_studies from DB, falling back to static cache:', error);
+    console.warn("Failed to query case_studies from DB, falling back to static cache:", error);
     return caseStudiesMeta.filter((cs) => cs.published);
   }
 });
@@ -139,7 +139,10 @@ export const getCaseStudyBySlug = cache(async (slug: string): Promise<CaseStudyR
 
     return mapCaseStudyRow(rows[0]);
   } catch (error) {
-    console.warn(`Failed to fetch case study ${slug} from DB, falling back to static cache:`, error);
+    console.warn(
+      `Failed to fetch case study ${slug} from DB, falling back to static cache:`,
+      error
+    );
     return findInStaticMeta();
   }
 });
@@ -170,7 +173,10 @@ export async function getAllCaseStudySlugs(): Promise<string[]> {
 
     return rows.map((row) => row.slug);
   } catch (error) {
-    console.warn('Failed to query case_studies slugs from DB, falling back to static cache:', error);
+    console.warn(
+      "Failed to query case_studies slugs from DB, falling back to static cache:",
+      error
+    );
     return caseStudiesMeta.filter((cs) => cs.published).map((cs) => cs.slug);
   }
 }

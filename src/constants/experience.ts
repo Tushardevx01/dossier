@@ -24,13 +24,7 @@ export const experienceData = [
       "Delivered full-stack feature sets from schema design through deployment without handoff gaps.",
       "Mentored contributors on architecture boundaries and practical production readiness patterns.",
     ],
-    technologies: [
-      "TypeScript",
-      "Node.js",
-      "Supabase",
-      "Git",
-      "Vercel",
-    ],
+    technologies: ["TypeScript", "Node.js", "Supabase", "Git", "Vercel"],
     url: "https://cycoders.in",
   },
   {
@@ -44,15 +38,7 @@ export const experienceData = [
       "Converted design assets into production-grade TypeScript implementations with minimal drift.",
       "Improved collaboration quality between design and engineering by using explicit implementation specs.",
     ],
-    technologies: [
-      "Figma",
-      "GIMP",
-      "Inkscape",
-      "TypeScript",
-      "Supabase",
-      "Docker",
-      "Google Cloud",
-    ],
+    technologies: ["Figma", "GIMP", "Inkscape", "TypeScript", "Supabase", "Docker", "Google Cloud"],
     url: "https://www.namespace.world/",
   },
 ];

@@ -1,9 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  sanitizeHtml,
-  sanitizeText,
-  containsSuspiciousPatterns,
-} from "@/lib/sanitize";
+import { sanitizeHtml, sanitizeText, containsSuspiciousPatterns } from "@/lib/sanitize";
 
 describe("sanitizeHtml", () => {
   it("returns empty string for non-string or empty input", () => {
@@ -19,9 +15,8 @@ describe("sanitizeHtml", () => {
     expect(sanitizeHtml(input)).toBe(input);
   });
 
-
   it("strips script tags entirely", () => {
-    const output = sanitizeHtml('<p>ok</p><script>alert(1)</script>');
+    const output = sanitizeHtml("<p>ok</p><script>alert(1)</script>");
     expect(output).not.toContain("<script");
     expect(output).not.toContain("alert(1)");
     expect(output).toContain("<p>ok</p>");

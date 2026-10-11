@@ -1,17 +1,15 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
-  content: [
-    "./src/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+  content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
     extend: {
       fontFamily: {
-        inter: ['var(--font-inter)', 'sans-serif'],
-        mono: ['var(--font-mono)', 'monospace'], 
-        nasalization: ['var(--font-nasalization)', 'sans-serif'],
-        quentine: ['var(--font-quentine)', 'serif'],
-        sans: ['var(--font-inter)', 'sans-serif'],
+        inter: ["var(--font-inter)", "sans-serif"],
+        mono: ["var(--font-mono)", "monospace"],
+        nasalization: ["var(--font-nasalization)", "sans-serif"],
+        quentine: ["var(--font-quentine)", "serif"],
+        sans: ["var(--font-inter)", "sans-serif"],
       },
       borderRadius: {
         lg: "var(--radius)",

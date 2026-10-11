@@ -33,8 +33,11 @@ canvas {
 
 @layer base {
   :root {
-    --font-inter: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --font-inter:
+      -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono:
+      ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
+      monospace;
 
     --background: 0 0% 0%;
     --foreground: 220 8% 94%;
@@ -91,24 +94,12 @@ canvas {
     /* Ultra-Dark Shadow System - Deep, rich shadows */
     --shadow-2xs: 0px 2px 4px 0px hsl(245 80% 1% / 0.8);
     --shadow-xs: 0px 2px 4px 0px hsl(245 80% 1% / 0.8);
-    --shadow-sm:
-      0px 3px 6px 0px hsl(245 70% 1% / 0.9),
-      0px 1px 3px -1px hsl(210 40% 25% / 0.2);
-    --shadow:
-      0px 3px 6px 0px hsl(245 70% 1% / 0.9),
-      0px 1px 3px -1px hsl(210 40% 25% / 0.2);
-    --shadow-md:
-      0px 4px 8px 0px hsl(245 70% 1% / 0.95),
-      0px 2px 4px -1px hsl(210 40% 25% / 0.25);
-    --shadow-lg:
-      0px 6px 12px 0px hsl(245 70% 0.5% / 1),
-      0px 4px 8px -2px hsl(210 40% 25% / 0.3);
-    --shadow-xl:
-      0px 8px 16px 0px hsl(245 80% 0.5% / 1),
-      0px 6px 12px -3px hsl(210 40% 25% / 0.35);
-    --shadow-2xl:
-      0px 12px 24px 0px hsl(245 90% 0% / 1),
-      0px 4px 8px 0px hsl(210 50% 30% / 0.4);
+    --shadow-sm: 0px 3px 6px 0px hsl(245 70% 1% / 0.9), 0px 1px 3px -1px hsl(210 40% 25% / 0.2);
+    --shadow: 0px 3px 6px 0px hsl(245 70% 1% / 0.9), 0px 1px 3px -1px hsl(210 40% 25% / 0.2);
+    --shadow-md: 0px 4px 8px 0px hsl(245 70% 1% / 0.95), 0px 2px 4px -1px hsl(210 40% 25% / 0.25);
+    --shadow-lg: 0px 6px 12px 0px hsl(245 70% 0.5% / 1), 0px 4px 8px -2px hsl(210 40% 25% / 0.3);
+    --shadow-xl: 0px 8px 16px 0px hsl(245 80% 0.5% / 1), 0px 6px 12px -3px hsl(210 40% 25% / 0.35);
+    --shadow-2xl: 0px 12px 24px 0px hsl(245 90% 0% / 1), 0px 4px 8px 0px hsl(210 50% 30% / 0.4);
 
     /* Dark Glass Effects - Enhanced Obsidian-like surfaces */
     --glass-bg: hsl(245 30% 3% / 0.9);
@@ -123,19 +114,23 @@ canvas {
     --glass-backdrop-intense: blur(24px) saturate(200%);
 
     /* Glass Shimmer Effect */
-    --glass-shimmer: linear-gradient(110deg,
-        transparent 25%,
-        hsl(210 60% 70% / 0.1) 50%,
-        hsl(220 80% 80% / 0.15) 55%,
-        transparent 75%);
+    --glass-shimmer: linear-gradient(
+      110deg,
+      transparent 25%,
+      hsl(210 60% 70% / 0.1) 50%,
+      hsl(220 80% 80% / 0.15) 55%,
+      transparent 75%
+    );
 
     /* Dark Luxury Gradient - Mysterious depth */
-    --luxury-gradient: linear-gradient(135deg,
-        hsl(210 60% 25% / 0.15) 0%,
-        hsl(245 40% 15% / 0.08) 25%,
-        hsl(220 30% 20% / 0.06) 50%,
-        hsl(210 45% 20% / 0.12) 75%,
-        hsl(210 60% 25% / 0.18) 100%);
+    --luxury-gradient: linear-gradient(
+      135deg,
+      hsl(210 60% 25% / 0.15) 0%,
+      hsl(245 40% 15% / 0.08) 25%,
+      hsl(220 30% 20% / 0.06) 50%,
+      hsl(210 45% 20% / 0.12) 75%,
+      hsl(210 60% 25% / 0.18) 100%
+    );
 
     /* Enhanced Dark Hover States */
     --hover-primary: 220 20% 92%;
@@ -144,18 +139,19 @@ canvas {
 
     /* Dark Premium Typography Effects */
     --text-glow: 0px 0px 16px hsl(210 60% 60% / 0.5);
-    --text-shadow-luxury:
-      0px 2px 6px hsl(245 100% 0% / 1), 0px 0px 12px hsl(210 40% 35% / 0.3);
+    --text-shadow-luxury: 0px 2px 6px hsl(245 100% 0% / 1), 0px 0px 12px hsl(210 40% 35% / 0.3);
 
     /* Enhanced Dark Spacing */
     --tracking-normal: 0.05rem;
     --spacing: 0.25rem;
 
     /* Additional Dark Premium Variables */
-    --shimmer: linear-gradient(90deg,
-        transparent 0%,
-        hsl(210 60% 45% / 0.15) 50%,
-        transparent 100%);
+    --shimmer: linear-gradient(
+      90deg,
+      transparent 0%,
+      hsl(210 60% 45% / 0.15) 50%,
+      transparent 100%
+    );
 
     --premium-border: 1px solid hsl(210 30% 25% / 0.3);
     --luxury-hover-glow: 0px 0px 20px hsl(210 60% 45% / 0.4);
@@ -260,7 +256,6 @@ canvas {
 }
 
 @layer components {
-
   /* Performance optimizations */
   .will-change-transform {
     will-change: transform;
@@ -406,15 +401,12 @@ canvas {
 
   /* Timeline dot animation */
   .timeline-dot {
-    background: linear-gradient(45deg,
-        hsl(var(--primary)),
-        hsl(var(--secondary)));
+    background: linear-gradient(45deg, hsl(var(--primary)), hsl(var(--secondary)));
     box-shadow: 0 0 20px hsl(var(--primary) / 0.5);
     animation: pulse-glow 2s ease-in-out infinite;
   }
 
   @keyframes pulse-glow {
-
     0%,
     100% {
       box-shadow: 0 0 20px hsl(var(--primary) / 0.5);
@@ -464,7 +456,6 @@ canvas {
 
   /* Floating orb animations */
   @keyframes float {
-
     0%,
     100% {
       transform: translateY(0px) rotate(0deg);
@@ -498,7 +489,6 @@ canvas {
 
   /* Pulse effect */
   @keyframes pulse {
-
     0%,
     100% {
       opacity: 0.5;
@@ -592,10 +582,12 @@ canvas {
     left: 0;
     right: 0;
     height: 2px;
-    background: linear-gradient(90deg,
-        hsl(var(--primary)),
-        hsl(var(--secondary)),
-        hsl(var(--accent)));
+    background: linear-gradient(
+      90deg,
+      hsl(var(--primary)),
+      hsl(var(--secondary)),
+      hsl(var(--accent))
+    );
     opacity: 0.6;
   }
 
@@ -739,10 +731,12 @@ canvas {
     transform: translate(-50%, -50%);
     width: 700px;
     height: 500px;
-    background: radial-gradient(ellipse at center,
-        hsl(275 60% 45% / 0.12) 0%,
-        hsl(220 40% 30% / 0.08) 40%,
-        transparent 70%);
+    background: radial-gradient(
+      ellipse at center,
+      hsl(275 60% 45% / 0.12) 0%,
+      hsl(220 40% 30% / 0.08) 40%,
+      transparent 70%
+    );
     pointer-events: none;
     z-index: 0;
   }
@@ -763,7 +757,9 @@ canvas {
     border: 1px solid hsl(275 30% 20% / 0.5);
     border-radius: 1rem;
     padding: 1.5rem;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    transition:
+      border-color 0.3s ease,
+      box-shadow 0.3s ease;
     will-change: box-shadow;
   }
 
@@ -785,7 +781,10 @@ canvas {
     font-weight: 400;
     padding: 0.25rem 0.65rem;
     border-radius: 9999px;
-    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease;
     white-space: nowrap;
   }
 
@@ -820,11 +819,13 @@ canvas {
     left: 0;
     right: 0;
     height: 2px;
-    background: linear-gradient(90deg,
-        transparent,
-        hsl(275 60% 50% / 0.5),
-        hsl(220 60% 60% / 0.4),
-        transparent);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      hsl(275 60% 50% / 0.5),
+      hsl(220 60% 60% / 0.4),
+      transparent
+    );
   }
 
   /* Outline CTA button for hero */
@@ -841,7 +842,10 @@ canvas {
     font-size: 0.85rem;
     font-weight: 500;
     letter-spacing: 0.04em;
-    transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+    transition:
+      border-color 0.3s ease,
+      background 0.3s ease,
+      box-shadow 0.3s ease;
     cursor: pointer;
     position: relative;
     z-index: 1;
@@ -863,7 +867,9 @@ canvas {
     color: hsl(var(--foreground) / 0.85);
     padding: 0.75rem 1rem;
     border-left: 2px solid hsl(275 40% 45% / 0.4);
-    transition: border-color 0.3s ease, color 0.3s ease;
+    transition:
+      border-color 0.3s ease,
+      color 0.3s ease;
   }
 
   .about-bullet:hover {
@@ -950,4 +956,3 @@ canvas {
     background: rgba(255, 255, 255, 0.3);
   }
 }
-

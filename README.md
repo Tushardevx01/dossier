@@ -22,8 +22,6 @@ Engineered with strict type safety, zero-leak server boundaries, automated defen
 
 </div>
 
-
-
 ## 📑 Table of Contents
 
 - [Overview & Architecture](#-overview--architecture)
@@ -41,8 +39,6 @@ Engineered with strict type safety, zero-leak server boundaries, automated defen
 - [Author & Connect](#-author--connect)
 - [License](#-license)
 
-
-
 ## 🏛️ Overview & Architecture
 
 Dossier is designed as an architectural showcase of production full-stack engineering standards:
@@ -55,25 +51,21 @@ Dossier is designed as an architectural showcase of production full-stack engine
 - **Cloudflare R2 Object Storage**: S3-compatible cloud storage for immutable verification assets, digital documents, and credential files with dynamic MIME validation.
 - **Comprehensive Metadata & Structured Data**: Built-in JSON-LD schemas (`Person`, `WebSite`, `Organization`, `TechArticle`, `SoftwareApplication`, `BreadcrumbList`) adhering to Schema.org standards.
 
-
-
 ## 🛠️ Tech Stack
 
-| Layer | Technology | Purpose |
-|---|---|---|
-| **Core Framework** | [Next.js 16 (App Router)](https://nextjs.org/) | Hybrid SSR/SSG/ISR with Turbopack bundler |
-| **UI & Runtime** | [React 19](https://react.dev/) | React Server Components, Actions, and Hooks |
-| **Language** | [TypeScript 5](https://www.typescriptlang.org/) | Strict type checking with zero compiler bypass |
-| **Styling & Design** | [Tailwind CSS](https://tailwindcss.com/) + [Radix UI](https://www.radix-ui.com/) | Accessible design tokens, dark luxury theme, fluid typography |
-| **Animations** | [Motion](https://motion.dev/) | Hardware-accelerated transitions & scroll interactions |
-| **Database & ORM** | [Neon PostgreSQL](https://neon.tech/) + [Drizzle ORM](https://orm.drizzle.team/) | Serverless database with typed schema migrations |
-| **Asset Storage** | [Cloudflare R2](https://developers.cloudflare.com/r2/) (`@aws-sdk/client-s3`) | S3-compatible global object storage |
-| **Caching & Limiting** | [Upstash Redis](https://upstash.com/) (`@upstash/redis`) | Atomic Lua-script sliding-window rate limiting |
-| **Email Service** | [Nodemailer](https://nodemailer.com/) | Transactional delivery with CRLF sanitization |
-| **Validation** | [Zod 4](https://zod.dev/) | Runtime schema validation on API contracts |
-| **Testing** | [Vitest 5](https://vitest.dev/) + [Testing Library](https://testing-library.com/) | 100+ co-located unit and integration tests |
-
-
+| Layer                  | Technology                                                                        | Purpose                                                       |
+| ---------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| **Core Framework**     | [Next.js 16 (App Router)](https://nextjs.org/)                                    | Hybrid SSR/SSG/ISR with Turbopack bundler                     |
+| **UI & Runtime**       | [React 19](https://react.dev/)                                                    | React Server Components, Actions, and Hooks                   |
+| **Language**           | [TypeScript 5](https://www.typescriptlang.org/)                                   | Strict type checking with zero compiler bypass                |
+| **Styling & Design**   | [Tailwind CSS](https://tailwindcss.com/) + [Radix UI](https://www.radix-ui.com/)  | Accessible design tokens, dark luxury theme, fluid typography |
+| **Animations**         | [Motion](https://motion.dev/)                                                     | Hardware-accelerated transitions & scroll interactions        |
+| **Database & ORM**     | [Neon PostgreSQL](https://neon.tech/) + [Drizzle ORM](https://orm.drizzle.team/)  | Serverless database with typed schema migrations              |
+| **Asset Storage**      | [Cloudflare R2](https://developers.cloudflare.com/r2/) (`@aws-sdk/client-s3`)     | S3-compatible global object storage                           |
+| **Caching & Limiting** | [Upstash Redis](https://upstash.com/) (`@upstash/redis`)                          | Atomic Lua-script sliding-window rate limiting                |
+| **Email Service**      | [Nodemailer](https://nodemailer.com/)                                             | Transactional delivery with CRLF sanitization                 |
+| **Validation**         | [Zod 4](https://zod.dev/)                                                         | Runtime schema validation on API contracts                    |
+| **Testing**            | [Vitest 5](https://vitest.dev/) + [Testing Library](https://testing-library.com/) | 100+ co-located unit and integration tests                    |
 
 ## 📂 Project Directory Structure
 
@@ -135,8 +127,6 @@ dossier/
 └── tsconfig.json               # TypeScript strict configuration
 ```
 
-
-
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -148,28 +138,34 @@ dossier/
 ### Installation & Setup
 
 1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/Tushardevx01/dossier.git
    cd dossier
    ```
 
 2. **Install dependencies:**
+
    ```bash
    npm ci
    ```
 
 3. **Configure environment variables:**
+
    ```bash
    cp .env.example .env
    ```
-   *Edit `.env` with your database URL, email credentials, and API secrets.*
+
+   _Edit `.env` with your database URL, email credentials, and API secrets._
 
 4. **Run database migrations:**
+
    ```bash
    npm run db:migrate
    ```
 
 5. **Seed initial data:**
+
    ```bash
    npm run db:seed
    npm run db:seed:case-studies
@@ -181,33 +177,29 @@ dossier/
    ```
    Open [http://localhost:3000](http://localhost:3000) to view the application with Turbopack hot reloading.
 
-
-
 ## 🔐 Environment Configuration
 
 All required and optional environment variables are documented in [`.env.example`](.env.example):
 
-| Variable | Required | Description |
-|---|:---:|---|
-| `DATABASE_URL` | **Yes** | Neon PostgreSQL connection string (`postgresql://...`) |
-| `NODE_ENV` | Optional | Set to `development`, `test`, or `production` |
-| `LOG_LEVEL` | Optional | Structured logger threshold (`debug`, `info`, `warn`, `error`) |
-| `EMAIL_FROM` | **Yes** | Sender email address for contact form notifications |
-| `EMAIL_PASSWORD` | **Yes** | App password / SMTP token for email transport |
-| `R2_ACCOUNT_ID` | Optional | Cloudflare R2 Account Identifier for document uploads |
-| `R2_ACCESS_KEY_ID` | Optional | Cloudflare R2 S3 Access Key ID |
-| `R2_SECRET_ACCESS_KEY`| Optional | Cloudflare R2 S3 Secret Access Key |
-| `R2_BUCKET_NAME` | Optional | Target Cloudflare R2 bucket name |
-| `R2_PUBLIC_URL` | Optional | Public CDN origin for verified credential assets |
-| `UPSTASH_REDIS_REST_URL` | Optional | Upstash Redis REST URL for distributed rate limiting |
-| `UPSTASH_REDIS_REST_TOKEN` | Optional | Upstash Redis REST Token |
-| `ADMIN_API_KEY` | Optional | Cryptographic hex key for administrative mutation APIs |
-| `TRUST_PROXY_HEADERS` | Optional | Enable `true` only behind trusted reverse proxies (e.g. Vercel) |
+| Variable                   | Required | Description                                                     |
+| -------------------------- | :------: | --------------------------------------------------------------- |
+| `DATABASE_URL`             | **Yes**  | Neon PostgreSQL connection string (`postgresql://...`)          |
+| `NODE_ENV`                 | Optional | Set to `development`, `test`, or `production`                   |
+| `LOG_LEVEL`                | Optional | Structured logger threshold (`debug`, `info`, `warn`, `error`)  |
+| `EMAIL_FROM`               | **Yes**  | Sender email address for contact form notifications             |
+| `EMAIL_PASSWORD`           | **Yes**  | App password / SMTP token for email transport                   |
+| `R2_ACCOUNT_ID`            | Optional | Cloudflare R2 Account Identifier for document uploads           |
+| `R2_ACCESS_KEY_ID`         | Optional | Cloudflare R2 S3 Access Key ID                                  |
+| `R2_SECRET_ACCESS_KEY`     | Optional | Cloudflare R2 S3 Secret Access Key                              |
+| `R2_BUCKET_NAME`           | Optional | Target Cloudflare R2 bucket name                                |
+| `R2_PUBLIC_URL`            | Optional | Public CDN origin for verified credential assets                |
+| `UPSTASH_REDIS_REST_URL`   | Optional | Upstash Redis REST URL for distributed rate limiting            |
+| `UPSTASH_REDIS_REST_TOKEN` | Optional | Upstash Redis REST Token                                        |
+| `ADMIN_API_KEY`            | Optional | Cryptographic hex key for administrative mutation APIs          |
+| `TRUST_PROXY_HEADERS`      | Optional | Enable `true` only behind trusted reverse proxies (e.g. Vercel) |
 
 > [!TIP]
 > In local development, if Upstash Redis credentials are not provided, rate limiting automatically falls back to an in-memory sliding window cache.
-
-
 
 ## 🗄️ Database Management
 
@@ -230,43 +222,39 @@ npm run db:seed:case-studies
 npm run db:studio
 ```
 
-
-
 ## ⚡ Development & Quality Scripts
 
-| Command | Action |
-|---|---|
-| `npm run dev` | Starts Next.js development server with Turbopack |
-| `npm run build` | Compiles optimized static & dynamic production bundles |
-| `npm run start` | Boots the compiled Next.js standalone server |
-| `npm run lint` | Runs ESLint across all TypeScript and JavaScript files |
-| `npm run typecheck` | Executes TypeScript strict type verification (`tsc --noEmit`) |
-| `npm test` | Runs the full Vitest suite in single-run mode |
-| `npm run test:watch` | Runs Vitest in interactive watch mode for TDD |
-| `npm run check` | Executes **linting + typechecking + unit test suite** in sequence |
-
-
+| Command                | Action                                                        |
+| ---------------------- | ------------------------------------------------------------- |
+| `npm run dev`          | Starts Next.js development server with Turbopack              |
+| `npm run build`        | Compiles optimized static & dynamic production bundles        |
+| `npm run start`        | Boots the compiled Next.js standalone server                  |
+| `npm run lint`         | Runs ESLint across all TypeScript and JavaScript files        |
+| `npm run typecheck`    | Executes TypeScript strict type verification (`tsc --noEmit`) |
+| `npm run format`       | Formats entire codebase with Prettier (`prettier --write .`)  |
+| `npm run format:check` | Verifies code formatting rules with Prettier                  |
+| `npm test`             | Runs the full Vitest suite in single-run mode                 |
+| `npm run test:watch`   | Runs Vitest in interactive watch mode for TDD                 |
+| `npm run check`        | Executes **lint + typecheck + format check + test suite**     |
 
 ## 📡 API Reference
 
 All API routes are served under `/api` with strict HTTP method guards and rate limiting:
 
-| Method | Endpoint | Description | Security / Guard |
-|---|---|---|---|
-| `POST` | `/api/send` | Submits contact messages with SMTP delivery | CSRF Token, Rate Limit, Input Sanitization |
-| `POST` | `/api/analyze` | Evaluates URL SEO health & heading taxonomy | SSRF DNS-Pinning, Byte-capped |
-| `GET` | `/api/credentials` | Retrieves paginated verified credential registry | Edge Cached, Public |
-| `POST` | `/api/credentials` | Creates a verified credential record & uploads to R2 | `ADMIN_API_KEY` Required (Timing-Safe) |
-| `GET` | `/api/credentials/:id` | Fetches single credential details by identifier | Public |
-| `PATCH` | `/api/credentials/:id` | Updates credential metadata or asset object | `ADMIN_API_KEY` Required |
-| `DELETE` | `/api/credentials/:id` | Removes credential record and Purges R2 object | `ADMIN_API_KEY` Required |
-| `GET` | `/api/credentials/:id/download` | Streams credential PDF/image directly with MIME type | Rate Limited |
-| `GET` | `/api/credentials/count` | Lightweight count endpoint for badge counts | Cached |
-| `GET` | `/api/github` | Real-time GitHub commit history and activity metrics | Stale-While-Revalidate |
-| `GET` | `/api/health` | Liveness & database connection health probe | Public |
-| `GET` | `/api/version` | Returns Git SHA and deployment environment info | Public |
-
-
+| Method   | Endpoint                        | Description                                          | Security / Guard                           |
+| -------- | ------------------------------- | ---------------------------------------------------- | ------------------------------------------ |
+| `POST`   | `/api/send`                     | Submits contact messages with SMTP delivery          | CSRF Token, Rate Limit, Input Sanitization |
+| `POST`   | `/api/analyze`                  | Evaluates URL SEO health & heading taxonomy          | SSRF DNS-Pinning, Byte-capped              |
+| `GET`    | `/api/credentials`              | Retrieves paginated verified credential registry     | Edge Cached, Public                        |
+| `POST`   | `/api/credentials`              | Creates a verified credential record & uploads to R2 | `ADMIN_API_KEY` Required (Timing-Safe)     |
+| `GET`    | `/api/credentials/:id`          | Fetches single credential details by identifier      | Public                                     |
+| `PATCH`  | `/api/credentials/:id`          | Updates credential metadata or asset object          | `ADMIN_API_KEY` Required                   |
+| `DELETE` | `/api/credentials/:id`          | Removes credential record and Purges R2 object       | `ADMIN_API_KEY` Required                   |
+| `GET`    | `/api/credentials/:id/download` | Streams credential PDF/image directly with MIME type | Rate Limited                               |
+| `GET`    | `/api/credentials/count`        | Lightweight count endpoint for badge counts          | Cached                                     |
+| `GET`    | `/api/github`                   | Real-time GitHub commit history and activity metrics | Stale-While-Revalidate                     |
+| `GET`    | `/api/health`                   | Liveness & database connection health probe          | Public                                     |
+| `GET`    | `/api/version`                  | Returns Git SHA and deployment environment info      | Public                                     |
 
 ## 🛡️ Security & Production Hardening
 
@@ -276,8 +264,6 @@ All API routes are served under `/api` with strict HTTP method guards and rate l
 - **Atomic Sliding Window Rate Limiting**: Powered by Upstash Redis Lua scripts executing atomic `INCR` + `EXPIRE` transactions, preventing race conditions.
 - **PII-Masked Structured Logging**: Logger automatically masks email addresses, auth tokens, passwords, and API keys before writing to console/stdout.
 - **Timing Attack Mitigation**: Secret comparisons use Node's `crypto.timingSafeEqual` with SHA-256 pre-hashing to protect variable-length token leaks.
-
-
 
 ## 🧪 Testing Suite
 
@@ -292,25 +278,22 @@ npm run test:watch
 ```
 
 Test coverage encompasses:
+
 - ✅ **SSRF Protection**: Verifies loopback, link-local, private range, and redirect bypass rejections.
 - ✅ **Rate Limiting**: Tests fail-closed behavior, distributed Redis evaluation, and in-memory fallback.
 - ✅ **Security Utilities**: Timing-safe equality, CORS header builders, CSRF token generation, and PII masking.
 - ✅ **Storage Validation**: R2 key sanitization, path traversal blocking, and upload payload validation.
 - ✅ **Input Sanitization**: HTML tag stripping, script injection defenses, and attribute allowlists.
 
-
-
 ## 👨‍💻 Author & Connect
 
 **Tushar Kanti Dey**  
-*Full-Stack Developer & DevOps Engineer* — Kolkata, India
+_Full-Stack Developer & DevOps Engineer_ — Kolkata, India
 
 - 🌐 **Portfolio**: [tushardevx01.tech](https://www.tushardevx01.tech)
 - 🐙 **GitHub**: [@tushardevx01](https://github.com/tushardevx01)
 - 💼 **LinkedIn**: [/in/tushardevx01](https://www.linkedin.com/in/tushardevx01)
 - 📧 **Email**: [thetushardev0@gmail.com](mailto:thetushardev0@gmail.com)
-
-
 
 ## 📄 License
 

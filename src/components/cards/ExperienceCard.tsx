@@ -1,6 +1,5 @@
 import { FC } from "react";
 
-
 import { Card } from "../ui/card";
 import { Badge } from "../ui/badge";
 
@@ -25,16 +24,10 @@ export const ExperienceCard: FC<ExperienceCardProps> = ({
   url,
   index = 0,
 }) => {
-
   return (
-    <div
-      key={index}
-      className="relative flex items-start gap-4 sm:gap-8 group"
-    >
+    <div key={index} className="relative flex items-start gap-4 sm:gap-8 group">
       {/* Timeline dot */}
-      <div
-        className="mt-6 flex-shrink-0 hidden sm:block"
-      >
+      <div className="mt-6 flex-shrink-0 hidden sm:block">
         <div className="w-4 h-4 bg-gradient-to-r from-primary to-secondary rounded-full border-2 border-background shadow-lg" />
         <div className="w-px h-20 bg-gradient-to-b from-primary/50 to-transparent mx-auto mt-2" />
       </div>
@@ -55,9 +48,7 @@ export const ExperienceCard: FC<ExperienceCardProps> = ({
           />
 
           <div className="relative z-10 p-4 sm:p-6">
-            <div
-              className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4"
-            >
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
               <div>
                 <h3
                   className="text-xl font-semibold font-nasalization mb-1"
@@ -65,10 +56,7 @@ export const ExperienceCard: FC<ExperienceCardProps> = ({
                 >
                   {role}
                 </h3>
-                <p
-                  className="font-medium"
-                  style={{ color: "hsl(var(--secondary))" }}
-                >
+                <p className="font-medium" style={{ color: "hsl(var(--secondary))" }}>
                   {url ? (
                     <a
                       href={url}
@@ -91,11 +79,11 @@ export const ExperienceCard: FC<ExperienceCardProps> = ({
               </span>
             </div>
 
-            <ul
-              className="space-y-2"
-            >
+            <ul className="space-y-2">
               {impactSummary ? (
-                <li className="text-xs font-semibold text-primary/90 leading-relaxed">{impactSummary}</li>
+                <li className="text-xs font-semibold text-primary/90 leading-relaxed">
+                  {impactSummary}
+                </li>
               ) : null}
               {description.map((point, pointIndex) => (
                 <li
@@ -112,13 +100,9 @@ export const ExperienceCard: FC<ExperienceCardProps> = ({
               ))}
             </ul>
 
-            <div
-              className="flex flex-wrap gap-2 mt-6"
-            >
+            <div className="flex flex-wrap gap-2 mt-6">
               {technologies.map((tech, techIndex) => (
-                <div
-                  key={techIndex}
-                >
+                <div key={techIndex}>
                   <Badge
                     variant="outline"
                     className="text-xs transition-all duration-300 hover:shadow-md font-mono px-3 py-1"

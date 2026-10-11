@@ -19,7 +19,9 @@ describe("security helpers", () => {
   it("preserves CSRF base64 padding when reading cookies", () => {
     const token = generateServerCsrfToken();
 
-    expect(readCsrfTokenFromCookieString(`theme=dark; ${getCsrfCookieName()}=${token}; session=abc`)).toBe(token);
+    expect(
+      readCsrfTokenFromCookieString(`theme=dark; ${getCsrfCookieName()}=${token}; session=abc`)
+    ).toBe(token);
   });
 
   it("rejects mismatched CSRF tokens", () => {

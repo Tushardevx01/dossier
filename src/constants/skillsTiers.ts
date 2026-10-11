@@ -84,15 +84,11 @@ export const supportingStack: SkillsCategory[] = [
       { techKey: "SASS" },
       { techKey: "React Native" },
       { techKey: "Radix UI" },
-      
     ],
   },
   {
     title: "Backend & Services",
-    skills: [
-      { techKey: "NPM" },
-      { techKey: "Nodemon" },
-    ],
+    skills: [{ techKey: "NPM" }, { techKey: "Nodemon" }],
   },
   {
     title: "Data & Persistence",
@@ -137,7 +133,6 @@ export const additionalStack: SkillsCategory[] = [
       { techKey: "Java" },
       { techKey: "Shell (Bash)" },
       { techKey: "Python" },
-
     ],
   },
   {

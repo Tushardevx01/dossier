@@ -1,15 +1,27 @@
-import { z } from 'zod';
+import { z } from "zod";
 
-const webUrl = z.string().trim().max(2048).url().refine((value) => {
-  try {
-    const url = new URL(value);
-    return ["https:", "http:"].includes(url.protocol) && !url.username && !url.password;
-  } catch {
-    return false;
-  }
-}, "Expected an HTTP(S) URL without credentials");
-const storageKey = z.string().regex(/^credentials\/[A-Za-z0-9_-]+\/[A-Za-z0-9_.-]+$/, "Invalid storage key");
-const slug = z.string().trim().min(2).max(255).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Invalid slug");
+const webUrl = z
+  .string()
+  .trim()
+  .max(2048)
+  .url()
+  .refine((value) => {
+    try {
+      const url = new URL(value);
+      return ["https:", "http:"].includes(url.protocol) && !url.username && !url.password;
+    } catch {
+      return false;
+    }
+  }, "Expected an HTTP(S) URL without credentials");
+const storageKey = z
+  .string()
+  .regex(/^credentials\/[A-Za-z0-9_-]+\/[A-Za-z0-9_.-]+$/, "Invalid storage key");
+const slug = z
+  .string()
+  .trim()
+  .min(2)
+  .max(255)
+  .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Invalid slug");
 
 /* =========================================================================
    2. RUNTIME VALIDATION SCHEMAS (ZOD)
@@ -26,10 +38,7 @@ export const CredentialJsonSchema = z.object({
     message: "Valid issue date is required",
   }),
   objectLink: z.union([webUrl, storageKey]),
-  credentialLink: webUrl
-    .optional()
-    .nullable()
-    .or(z.literal("")),
+  credentialLink: webUrl.optional().nullable().or(z.literal("")),
   description: z.string().optional().nullable(),
 });
 
@@ -84,10 +93,7 @@ export const ContactFormSchema = z.object({
     .transform((val) => val.trim()),
 
   // Honeypot field - should be empty, silently captured in service layer if filled
-  website: z
-    .string()
-    .optional()
-    .default(""),
+  website: z.string().optional().default(""),
 });
 
 export type ContactFormInput = z.infer<typeof ContactFormSchema>;
@@ -96,12 +102,13 @@ export type ContactFormInput = z.infer<typeof ContactFormSchema>;
  * Validate contact form input
  * Returns either validated data or structured error
  */
-export function validateContactForm(input: unknown): 
+export function validateContactForm(
+  input: unknown
+):
   | { success: true; data: ContactFormInput }
   | { success: false; error: { code: string; message: string; field?: string } } {
-  
   const result = ContactFormSchema.safeParse(input);
-  
+
   if (result.success) {
     return { success: true, data: result.data };
   }

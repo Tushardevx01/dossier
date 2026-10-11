@@ -18,9 +18,7 @@ export function CredentialRecordCard({ credential }: CredentialRecordCardProps) 
 
   // Clean description for card display: remove Markdown formatting and leading headers
   const rawDescription = credential.description ? stripMarkdown(credential.description) : "";
-  const cleanDescription = rawDescription
-    .replace(/^(Overview|About|Summary)\s+/i, "")
-    .trim();
+  const cleanDescription = rawDescription.replace(/^(Overview|About|Summary)\s+/i, "").trim();
 
   return (
     <Link

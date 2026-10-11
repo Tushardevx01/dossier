@@ -7,7 +7,10 @@ import NotesBackHandler from "@/components/NotesBackHandler";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { getAllArticles, getArticleCategories } from "@/server/repositories/articleLoader";
 import { buildPageMetadata, absoluteUrl } from "@/lib/seo";
-import { generateBreadcrumbListStructuredData, generateEngineeringNotesItemListStructuredData } from "@/lib/structured-data";
+import {
+  generateBreadcrumbListStructuredData,
+  generateEngineeringNotesItemListStructuredData,
+} from "@/lib/structured-data";
 
 export const revalidate = 60;
 
@@ -16,7 +19,11 @@ export const metadata: Metadata = buildPageMetadata({
   description:
     "Technical articles by Tushar Kanti Dey covering systems architecture, full stack development, deployment strategy, and production engineering decisions.",
   path: "/engineering-notes",
-  keywords: ["Full Stack Developer and DevOps Engineer", "Next.js Developer India", "Portfolio of Full Stack Developer"],
+  keywords: [
+    "Full Stack Developer and DevOps Engineer",
+    "Next.js Developer India",
+    "Portfolio of Full Stack Developer",
+  ],
 });
 
 export default async function EngineeringNotesPage() {
@@ -42,7 +49,8 @@ export default async function EngineeringNotesPage() {
           Engineering Notes
         </h1>
         <p className="text-base sm:text-lg text-neutral-400 max-w-2xl leading-relaxed">
-          Articles on architecture choices, production trade-offs, and the systems behind web products that stay reliable after launch.
+          Articles on architecture choices, production trade-offs, and the systems behind web
+          products that stay reliable after launch.
         </p>
       </section>
 

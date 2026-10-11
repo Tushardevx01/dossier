@@ -69,7 +69,8 @@ export function SocialCardContent(): ReactElement {
             width: "84px",
             height: "84px",
             borderRadius: "22px",
-            background: "linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)",
+            background:
+              "linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)",
             border: "1px solid rgba(255, 255, 255, 0.14)",
             boxShadow: "0 10px 30px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.15)",
             display: "flex",
@@ -163,7 +164,8 @@ export function SocialCardContent(): ReactElement {
             lineHeight: 1.45,
           }}
         >
-          Building scalable full-stack products, connecting polished interfaces with reliable systems &amp; cloud architecture.
+          Building scalable full-stack products, connecting polished interfaces with reliable
+          systems &amp; cloud architecture.
         </p>
 
         {/* Tech Stack Badges */}

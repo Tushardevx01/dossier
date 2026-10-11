@@ -16,9 +16,7 @@ export default async function CredentialNotFound() {
           <div className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-3">
             404 / NOT FOUND
           </div>
-          <h1 className="text-2xl sm:text-3xl font-serif text-white mb-3">
-            Credential not found
-          </h1>
+          <h1 className="text-2xl sm:text-3xl font-serif text-white mb-3">Credential not found</h1>
           <p className="text-xs font-mono text-neutral-400 mb-8 leading-relaxed">
             The requested certification record does not exist.
           </p>

@@ -1,8 +1,8 @@
 // Test setup file
-import { expect, afterEach, vi } from 'vitest';
-vi.mock('server-only', () => ({}));
-import { cleanup } from '@testing-library/react';
-import * as matchers from '@testing-library/jest-dom/matchers';
+import { expect, afterEach, vi } from "vitest";
+vi.mock("server-only", () => ({}));
+import { cleanup } from "@testing-library/react";
+import * as matchers from "@testing-library/jest-dom/matchers";
 
 // Extend expect with jest-dom matchers
 expect.extend(matchers);

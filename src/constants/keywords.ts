@@ -63,13 +63,7 @@ const projects = [
   "Subscription Tracker",
 ];
 
-const locations = [
-  "India",
-  "Kolkata",
-  "Bangalore",
-  "Remote",
-  "Worldwide"
-];
+const locations = ["India", "Kolkata", "Bangalore", "Remote", "Worldwide"];
 
 const longTail = [
   "Hire Full Stack Engineer India",

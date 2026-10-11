@@ -10,9 +10,15 @@ describe("bounded request bodies", () => {
 
   it("cancels an oversized stream without trusting Content-Length", async () => {
     const cancel = vi.fn();
-    const request = { headers: new Headers(), body: new ReadableStream({
-      start(controller) { controller.enqueue(new Uint8Array(11)); }, cancel,
-    }) } as Request;
+    const request = {
+      headers: new Headers(),
+      body: new ReadableStream({
+        start(controller) {
+          controller.enqueue(new Uint8Array(11));
+        },
+        cancel,
+      }),
+    } as Request;
     await expect(readBodyText(request, 10)).rejects.toBeInstanceOf(PayloadTooLargeError);
     expect(cancel).toHaveBeenCalledOnce();
   });

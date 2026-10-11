@@ -16,9 +16,13 @@ import { Hero } from "@/components/sections";
 
 // Lazy-load below-the-fold sections for faster initial paint
 const About = dynamic(() => import("@/components/sections/About").then((mod) => mod.About));
-const Experience = dynamic(() => import("@/components/sections/Experience").then((mod) => mod.Experience));
+const Experience = dynamic(() =>
+  import("@/components/sections/Experience").then((mod) => mod.Experience)
+);
 const Skills = dynamic(() => import("@/components/sections/Skills").then((mod) => mod.Skills));
-const Projects = dynamic(() => import("@/components/sections/Projects").then((mod) => mod.Projects));
+const Projects = dynamic(() =>
+  import("@/components/sections/Projects").then((mod) => mod.Projects)
+);
 const DevOps = dynamic(() => import("@/components/sections/DevOps").then((mod) => mod.DevOps));
 const Contact = dynamic(() => import("@/components/sections/Contact").then((mod) => mod.Contact));
 

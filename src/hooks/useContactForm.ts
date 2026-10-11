@@ -105,7 +105,9 @@ export function useContactForm() {
           if (error.message.includes("not valid")) {
             return `The email address you entered is not valid (${formValues.senderEmail}). Please use a real email.`;
           }
-          return error.message || "An error occurred while sending your message. Please try again later.";
+          return (
+            error.message || "An error occurred while sending your message. Please try again later."
+          );
         },
       });
     },

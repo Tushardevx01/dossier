@@ -52,9 +52,7 @@ export const getCredentialsCount = cache(async (): Promise<number> => {
     await ensureDatabaseReady();
     const db = getDb();
 
-    const result = await db
-      .select({ count: sql<number>`count(*)::int` })
-      .from(credentials);
+    const result = await db.select({ count: sql<number>`count(*)::int` }).from(credentials);
 
     return Number(result[0]?.count ?? 0);
   } catch (error) {
@@ -75,11 +73,7 @@ export const getCredentialById = cache(async (id: number): Promise<Credential | 
     await ensureDatabaseReady();
     const db = getDb();
 
-    const rows = await db
-      .select()
-      .from(credentials)
-      .where(eq(credentials.id, id))
-      .limit(1);
+    const rows = await db.select().from(credentials).where(eq(credentials.id, id)).limit(1);
 
     return rows[0] ?? null;
   } catch (error) {
@@ -118,7 +112,7 @@ export const getCredentialBySlug = cache(async (slug: string): Promise<Credentia
       .from(credentials)
       .where(sql`lower(${credentials.title}) = ${normalized}`)
       .limit(1);
-      
+
     return fallbackRows[0] ?? null;
   } catch (error) {
     logger.warn("Failed to query credential by slug from DB", {
@@ -132,22 +126,24 @@ export const getCredentialBySlug = cache(async (slug: string): Promise<Credentia
 /**
  * Retrieve a credential by either slug or numeric ID (handles backward compatibility).
  */
-export const getCredentialBySlugOrId = cache(async (slugOrId: string | number): Promise<Credential | null> => {
-  if (SKIP_DB_BUILD || slugOrId === undefined || slugOrId === null) return null;
+export const getCredentialBySlugOrId = cache(
+  async (slugOrId: string | number): Promise<Credential | null> => {
+    if (SKIP_DB_BUILD || slugOrId === undefined || slugOrId === null) return null;
 
-  const stringVal = String(slugOrId).trim();
-  if (!stringVal) return null;
+    const stringVal = String(slugOrId).trim();
+    if (!stringVal) return null;
 
-  // If it's a numeric ID, try lookup by ID first
-  const numId = parseInt(stringVal, 10);
-  if (!isNaN(numId) && String(numId) === stringVal && numId > 0) {
-    const byId = await getCredentialById(numId);
-    if (byId) return byId;
+    // If it's a numeric ID, try lookup by ID first
+    const numId = parseInt(stringVal, 10);
+    if (!isNaN(numId) && String(numId) === stringVal && numId > 0) {
+      const byId = await getCredentialById(numId);
+      if (byId) return byId;
+    }
+
+    // Otherwise, lookup by slug
+    return await getCredentialBySlug(stringVal);
   }
-
-  // Otherwise, lookup by slug
-  return await getCredentialBySlug(stringVal);
-});
+);
 
 /**
  * Retrieve all valid credential slugs for static params generation.
@@ -159,7 +155,9 @@ export async function getAllCredentialSlugs(): Promise<string[]> {
     await ensureDatabaseReady();
     const db = getDb();
 
-    const rows = await db.select({ slug: credentials.slug, title: credentials.title }).from(credentials);
+    const rows = await db
+      .select({ slug: credentials.slug, title: credentials.title })
+      .from(credentials);
     return rows.map((r) => r.slug || slugifyTitle(r.title)).filter(Boolean);
   } catch (error) {
     logger.warn("Failed to query credential slugs from DB", {
@@ -194,11 +192,14 @@ export async function createCredential(data: NewCredential): Promise<Credential>
 
     return inserted;
   } catch (error) {
-    if (error instanceof Error && error.message.includes('unique constraint')) {
-      throw new Error(`Credential with slug "${data.slug || slugifyTitle(data.title)}" already exists`, { cause: error });
+    if (error instanceof Error && error.message.includes("unique constraint")) {
+      throw new Error(
+        `Credential with slug "${data.slug || slugifyTitle(data.title)}" already exists`,
+        { cause: error }
+      );
     }
-    logger.error('Failed to create credential', { error });
-    throw new Error('Failed to create credential', { cause: error });
+    logger.error("Failed to create credential", { error });
+    throw new Error("Failed to create credential", { cause: error });
   }
 }
 
@@ -230,11 +231,11 @@ export async function updateCredential(
 
     return updated ?? null;
   } catch (error) {
-    if (error instanceof Error && error.message.includes('unique constraint')) {
-      throw new Error('Credential slug already exists', { cause: error });
+    if (error instanceof Error && error.message.includes("unique constraint")) {
+      throw new Error("Credential slug already exists", { cause: error });
     }
-    logger.error('Failed to update credential', { id, error });
-    throw new Error('Failed to update credential', { cause: error });
+    logger.error("Failed to update credential", { id, error });
+    throw new Error("Failed to update credential", { cause: error });
   }
 }
 
@@ -246,14 +247,11 @@ export async function deleteCredential(id: number): Promise<Credential | null> {
     await ensureDatabaseReady();
     const db = getDb();
 
-    const [deleted] = await db
-      .delete(credentials)
-      .where(eq(credentials.id, id))
-      .returning();
+    const [deleted] = await db.delete(credentials).where(eq(credentials.id, id)).returning();
 
     return deleted ?? null;
   } catch (error) {
-    logger.error('Failed to delete credential', { id, error });
-    throw new Error('Failed to delete credential', { cause: error });
+    logger.error("Failed to delete credential", { id, error });
+    throw new Error("Failed to delete credential", { cause: error });
   }
 }

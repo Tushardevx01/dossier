@@ -49,7 +49,9 @@ function jsonResponse(
 function errorResponse(error: AppError, requestId: string) {
   const retryAfterSeconds = Number(error.meta?.retryAfter);
   const retryAfterHeader =
-    error.code === "RATE_LIMIT_EXCEEDED" && Number.isFinite(retryAfterSeconds) && retryAfterSeconds > 0
+    error.code === "RATE_LIMIT_EXCEEDED" &&
+    Number.isFinite(retryAfterSeconds) &&
+    retryAfterSeconds > 0
       ? { "Retry-After": String(Math.ceil(retryAfterSeconds)) }
       : undefined;
 
@@ -72,7 +74,9 @@ export async function POST(request: NextRequest) {
   try {
     const contentLength = request.headers.get("content-length");
     if (contentLength && Number(contentLength) > CONTACT_MAX_BODY_BYTES) {
-      return jsonResponse({ error: "Invalid request payload", requestId }, 413, { "X-Robots-Tag": "noindex, nofollow" });
+      return jsonResponse({ error: "Invalid request payload", requestId }, 413, {
+        "X-Robots-Tag": "noindex, nofollow",
+      });
     }
 
     // Origin check (CSRF protection)
@@ -87,13 +91,17 @@ export async function POST(request: NextRequest) {
     // Content-Type check
     const contentType = request.headers.get("content-type") ?? "";
     if (!contentType.includes("application/json")) {
-      return jsonResponse({ error: "Unsupported content type", requestId }, 415, { "X-Robots-Tag": "noindex, nofollow" });
+      return jsonResponse({ error: "Unsupported content type", requestId }, 415, {
+        "X-Robots-Tag": "noindex, nofollow",
+      });
     }
 
     // Read and validate body size
     const rawBody = await readBodyText(request, CONTACT_MAX_BODY_BYTES);
     if (!isValidBodySize(rawBody)) {
-      return jsonResponse({ error: "Invalid request payload", requestId }, 400, { "X-Robots-Tag": "noindex, nofollow" });
+      return jsonResponse({ error: "Invalid request payload", requestId }, 400, {
+        "X-Robots-Tag": "noindex, nofollow",
+      });
     }
 
     // Parse JSON
@@ -101,11 +109,15 @@ export async function POST(request: NextRequest) {
     try {
       body = JSON.parse(rawBody);
     } catch {
-      return jsonResponse({ error: "Malformed JSON payload", requestId }, 400, { "X-Robots-Tag": "noindex, nofollow" });
+      return jsonResponse({ error: "Malformed JSON payload", requestId }, 400, {
+        "X-Robots-Tag": "noindex, nofollow",
+      });
     }
 
     if (!body || typeof body !== "object") {
-      return jsonResponse({ error: "Invalid input data", requestId }, 400, { "X-Robots-Tag": "noindex, nofollow" });
+      return jsonResponse({ error: "Invalid input data", requestId }, 400, {
+        "X-Robots-Tag": "noindex, nofollow",
+      });
     }
 
     // Validate CSRF token from request body against cookie
@@ -128,7 +140,9 @@ export async function POST(request: NextRequest) {
       };
     } catch {
       logger.error("Server configuration error", { requestId });
-      return jsonResponse({ error: "Server configuration error", requestId }, 500, { "X-Robots-Tag": "noindex, nofollow" });
+      return jsonResponse({ error: "Server configuration error", requestId }, 500, {
+        "X-Robots-Tag": "noindex, nofollow",
+      });
     }
 
     // Process submission through service layer
@@ -154,6 +168,8 @@ export async function POST(request: NextRequest) {
       requestId,
     });
 
-    return jsonResponse({ error: "Internal server error", requestId }, 500, { "X-Robots-Tag": "noindex, nofollow" });
+    return jsonResponse({ error: "Internal server error", requestId }, 500, {
+      "X-Robots-Tag": "noindex, nofollow",
+    });
   }
 }

@@ -30,14 +30,25 @@ export default function ProjectsPage() {
       <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-24">
         <div className="space-y-6">
           {projectsData.map((project) => (
-            <article key={project.slug} className="border border-neutral-800 rounded-xl p-6 sm:p-8 bg-neutral-950/30">
+            <article
+              key={project.slug}
+              className="border border-neutral-800 rounded-xl p-6 sm:p-8 bg-neutral-950/30"
+            >
               <h2 className="text-2xl sm:text-3xl font-semibold text-white">{project.name}</h2>
               <p className="mt-3 text-neutral-400 leading-relaxed">{project.description}</p>
               <div className="mt-6 flex flex-wrap gap-4 text-sm text-neutral-300">
-                <Link href={`/work/${project.slug}`} className="underline underline-offset-4 hover:text-white">
+                <Link
+                  href={`/work/${project.slug}`}
+                  className="underline underline-offset-4 hover:text-white"
+                >
                   View project details
                 </Link>
-                <a href={project.github_link} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 hover:text-white">
+                <a
+                  href={project.github_link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline underline-offset-4 hover:text-white"
+                >
                   GitHub
                 </a>
               </div>

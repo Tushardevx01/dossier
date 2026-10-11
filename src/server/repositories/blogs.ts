@@ -7,18 +7,18 @@ import "server-only";
  * Replaces the hardcoded articlesData approach.
  */
 
-import { and, desc, eq, sql } from 'drizzle-orm';
+import { and, desc, eq, sql } from "drizzle-orm";
 
-import { ensureDatabaseReady, getDb } from '@/server/db';
-import { sanitizeHtml } from '@/lib/sanitize';
-import { engineeringNotes } from '@/server/db/schema';
-import { normalizeArray } from '@/lib/data-normalization';
+import { ensureDatabaseReady, getDb } from "@/server/db";
+import { sanitizeHtml } from "@/lib/sanitize";
+import { engineeringNotes } from "@/server/db/schema";
+import { normalizeArray } from "@/lib/data-normalization";
 import type {
   ArticleCategory,
   ArticleDifficulty,
   ArticleMetadata,
   ArticlePost,
-} from '@/types/article';
+} from "@/types/article";
 
 type NoteRow = {
   slug: string;
@@ -44,7 +44,7 @@ type NotePostRow = NoteRow & {
 // When building inside Docker or CI without a reachable DB, set SKIP_DB_BUILD=true
 // to allow the Next.js build to complete without attempting to connect to the database.
 // This prevents build-time DB access while keeping runtime DB behavior unchanged.
-const SKIP_DB_BUILD = process.env.SKIP_DB_BUILD === 'true' || process.env.SKIP_DB === 'true';
+const SKIP_DB_BUILD = process.env.SKIP_DB_BUILD === "true" || process.env.SKIP_DB === "true";
 
 function mapMetadata(note: NoteRow): ArticleMetadata {
   return {
@@ -104,11 +104,15 @@ export async function getAllNotes(): Promise<ArticleMetadata[]> {
       })
       .from(engineeringNotes)
       .where(eq(engineeringNotes.published, true))
-      .orderBy(desc(engineeringNotes.featured), desc(engineeringNotes.createdAt), desc(engineeringNotes.id));
+      .orderBy(
+        desc(engineeringNotes.featured),
+        desc(engineeringNotes.createdAt),
+        desc(engineeringNotes.id)
+      );
 
     return notes.map(mapMetadata);
   } catch (error) {
-    console.warn('Failed to query engineering_notes from DB, returning empty list:', error);
+    console.warn("Failed to query engineering_notes from DB, returning empty list:", error);
     return [];
   }
 }
@@ -188,7 +192,7 @@ export async function getFeaturedNotes(limit = 6): Promise<ArticleMetadata[]> {
 
     return notes.map(mapMetadata);
   } catch (error) {
-    console.warn('Failed to query featured notes from DB:', error);
+    console.warn("Failed to query featured notes from DB:", error);
     return [];
   }
 }
@@ -232,7 +236,7 @@ export async function getRelatedNotes(
 
     return notes.map(mapMetadata);
   } catch (error) {
-    console.warn('Failed to query related notes from DB:', error);
+    console.warn("Failed to query related notes from DB:", error);
     return [];
   }
 }
@@ -255,7 +259,7 @@ export async function getCategories(): Promise<ArticleCategory[]> {
 
     return categories.map((row: { category: string }) => row.category as ArticleCategory);
   } catch (error) {
-    console.warn('Failed to query categories from DB:', error);
+    console.warn("Failed to query categories from DB:", error);
     return [];
   }
 }
@@ -288,7 +292,7 @@ export async function getNotesByCategory(category: ArticleCategory): Promise<Art
 
     return notes.map(mapMetadata);
   } catch (error) {
-    console.warn('Failed to query notes by category from DB:', error);
+    console.warn("Failed to query notes by category from DB:", error);
     return [];
   }
 }
@@ -311,7 +315,7 @@ export async function getNoteCount(): Promise<number> {
 
     return result?.count ?? 0;
   } catch (error) {
-    console.warn('Failed to query note count from DB:', error);
+    console.warn("Failed to query note count from DB:", error);
     return 0;
   }
 }
@@ -334,7 +338,7 @@ export async function getAllNoteSlugs(): Promise<{ slug: string }[]> {
 
     return notes.map((row: { slug: string }) => ({ slug: String(row.slug).trim().toLowerCase() }));
   } catch (error) {
-    console.warn('Failed to query note slugs from DB:', error);
+    console.warn("Failed to query note slugs from DB:", error);
     return [];
   }
 }

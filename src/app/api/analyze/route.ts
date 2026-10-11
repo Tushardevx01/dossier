@@ -1,15 +1,15 @@
 /**
  * SEO Analyzer API Route
- * 
+ *
  * POST /api/analyze
- * 
+ *
  * Analyzes a URL for SEO best practices and returns structured results.
- * 
+ *
  * @example Request
  * ```json
  * { "url": "https://example.com" }
  * ```
- * 
+ *
  * @example Success Response (200)
  * ```json
  * {
@@ -25,7 +25,7 @@
  *   }
  * }
  * ```
- * 
+ *
  * @example Error Response (400/500)
  * ```json
  * {
@@ -55,7 +55,11 @@ const MAX_BODY_BYTES = 4096;
 const RATE_LIMIT_MAX = 10; // requests per window
 const RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
 
-function secureJson(payload: Record<string, unknown>, status: number, extraHeaders?: Record<string, string>) {
+function secureJson(
+  payload: Record<string, unknown>,
+  status: number,
+  extraHeaders?: Record<string, string>
+) {
   return NextResponse.json(payload, {
     status,
     headers: {
@@ -143,8 +147,10 @@ export async function POST(request: NextRequest) {
 
     // Check rate limit using API key's limit
     const configuredLimit = keyValidation.permissions?.rateLimit;
-    const rateLimitMax = Number.isSafeInteger(configuredLimit) && configuredLimit! > 0
-      ? Math.min(configuredLimit!, 1000) : RATE_LIMIT_MAX;
+    const rateLimitMax =
+      Number.isSafeInteger(configuredLimit) && configuredLimit! > 0
+        ? Math.min(configuredLimit!, 1000)
+        : RATE_LIMIT_MAX;
     const rateLimit = await checkRateLimit(key, rateLimitMax, RATE_LIMIT_WINDOW_MS);
     if (!rateLimit.allowed) {
       const retryAfter = Math.max(rateLimit.retryAfterSeconds, 1);
@@ -256,8 +262,8 @@ export async function POST(request: NextRequest) {
 
     // Check for analysis errors
     if (isAnalysisError(result)) {
-      const statusCode = result.code === "TIMEOUT" ? 504 : 
-                         result.code === "FETCH_FAILED" ? 502 : 400;
+      const statusCode =
+        result.code === "TIMEOUT" ? 504 : result.code === "FETCH_FAILED" ? 502 : 400;
       return secureJson(
         {
           success: false,
@@ -285,7 +291,10 @@ export async function POST(request: NextRequest) {
     );
   } catch (error) {
     if (error instanceof PayloadTooLargeError) {
-      return secureJson({ success: false, error: { code: "PAYLOAD_TOO_LARGE", message: error.message } }, 413);
+      return secureJson(
+        { success: false, error: { code: "PAYLOAD_TOO_LARGE", message: error.message } },
+        413
+      );
     }
     // Unexpected error handling
     logger.error("[SEO Analyzer] Unexpected error", {

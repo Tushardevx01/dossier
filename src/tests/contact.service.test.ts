@@ -67,11 +67,7 @@ describe("contact service", () => {
     );
 
     expect(result.success).toBe(true);
-    expect(mockedVerifyEmailAddress).toHaveBeenCalledWith(
-      "sender@example.com",
-      "api-key",
-      "req-1"
-    );
+    expect(mockedVerifyEmailAddress).toHaveBeenCalledWith("sender@example.com", "api-key", "req-1");
     expect(mockedSendEmail).toHaveBeenCalledTimes(2);
   });
 

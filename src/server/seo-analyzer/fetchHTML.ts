@@ -11,11 +11,22 @@ const MAX_RESPONSE_BYTES = 2_000_000;
 
 const blockedV4 = new BlockList();
 for (const [address, prefix] of [
-  ["0.0.0.0", 8], ["10.0.0.0", 8], ["100.64.0.0", 10], ["127.0.0.0", 8],
-  ["169.254.0.0", 16], ["172.16.0.0", 12], ["192.0.0.0", 24],
-  ["192.0.2.0", 24], ["192.88.99.0", 24], ["192.168.0.0", 16],
-  ["198.18.0.0", 15], ["198.51.100.0", 24], ["203.0.113.0", 24], ["224.0.0.0", 3],
-] as const) blockedV4.addSubnet(address, prefix, "ipv4");
+  ["0.0.0.0", 8],
+  ["10.0.0.0", 8],
+  ["100.64.0.0", 10],
+  ["127.0.0.0", 8],
+  ["169.254.0.0", 16],
+  ["172.16.0.0", 12],
+  ["192.0.0.0", 24],
+  ["192.0.2.0", 24],
+  ["192.88.99.0", 24],
+  ["192.168.0.0", 16],
+  ["198.18.0.0", 15],
+  ["198.51.100.0", 24],
+  ["203.0.113.0", 24],
+  ["224.0.0.0", 3],
+] as const)
+  blockedV4.addSubnet(address, prefix, "ipv4");
 
 const globalV6 = new BlockList();
 globalV6.addSubnet("2000::", 3, "ipv6");
@@ -57,11 +68,17 @@ export async function validateUrl(urlString: string, signal?: AbortSignal): Prom
     return { valid: false, error: { code: "INVALID_URL", message: "Invalid URL format" } };
   }
   if (url.protocol !== "https:" || url.username || url.password) {
-    return { valid: false, error: { code: "INVALID_URL", message: "Only HTTPS URLs without credentials are supported" } };
+    return {
+      valid: false,
+      error: { code: "INVALID_URL", message: "Only HTTPS URLs without credentials are supported" },
+    };
   }
   const hostname = url.hostname.replace(/^\[|\]$/g, "").toLowerCase();
   if (url.port || /(^|\.)(localhost|local|internal)\.?$/.test(hostname)) {
-    return { valid: false, error: { code: "BLOCKED_URL", message: "This URL is not allowed for analysis" } };
+    return {
+      valid: false,
+      error: { code: "BLOCKED_URL", message: "This URL is not allowed for analysis" },
+    };
   }
   try {
     const resolution = isIP(hostname)
@@ -69,7 +86,13 @@ export async function validateUrl(urlString: string, signal?: AbortSignal): Prom
       : lookup(hostname, { all: true });
     const addresses = await withAbort(resolution, signal ?? AbortSignal.timeout(FETCH_TIMEOUT_MS));
     if (!addresses.length || addresses.some(({ address }) => !isPublicAddress(address))) {
-      return { valid: false, error: { code: "BLOCKED_URL", message: "Private or reserved network addresses are not allowed" } };
+      return {
+        valid: false,
+        error: {
+          code: "BLOCKED_URL",
+          message: "Private or reserved network addresses are not allowed",
+        },
+      };
     }
     return { valid: true, url, address: addresses[0] };
   } catch {
@@ -114,14 +137,18 @@ export async function fetchHTML(urlString: string): Promise<FetchResult | Analyz
         if ([301, 302, 303, 307, 308].includes(response.status)) {
           await response.body?.cancel();
           const location = response.headers.get("location");
-          if (!location) return { code: "FETCH_FAILED", message: "Redirect response missing location header" };
+          if (!location)
+            return { code: "FETCH_FAILED", message: "Redirect response missing location header" };
           target = new URL(location, url).href;
           continue;
         }
         const contentType = (response.headers.get("content-type") ?? "").toLowerCase();
         if (!response.ok || !/^(text\/html|application\/xhtml\+xml)(;|$)/.test(contentType)) {
           await response.body?.cancel();
-          return { code: "FETCH_FAILED", message: response.ok ? "Response is not HTML" : `Server returned ${response.status}` };
+          return {
+            code: "FETCH_FAILED",
+            message: response.ok ? "Response is not HTML" : `Server returned ${response.status}`,
+          };
         }
         if (Number(response.headers.get("content-length")) > MAX_RESPONSE_BYTES) {
           await response.body?.cancel();
@@ -133,7 +160,8 @@ export async function fetchHTML(urlString: string): Promise<FetchResult | Analyz
         if (response.body) {
           for await (const chunk of response.body) {
             bytes += chunk.byteLength;
-            if (bytes > MAX_RESPONSE_BYTES) return { code: "FETCH_FAILED", message: "Response is too large" };
+            if (bytes > MAX_RESPONSE_BYTES)
+              return { code: "FETCH_FAILED", message: "Response is too large" };
             chunks.push(chunk);
           }
         }

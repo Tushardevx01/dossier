@@ -32,7 +32,7 @@ interface PrismHighlighterProps {
 /**
  * Client-side wrapper component that ensures Prism syntax highlighting
  * is applied when the slug changes (dynamic content).
- * 
+ *
  * This handles:
  * - Initial highlighting on mount
  * - Re-highlighting when navigating between articles

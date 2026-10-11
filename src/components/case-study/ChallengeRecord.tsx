@@ -60,9 +60,7 @@ export const ChallengeRecord: React.FC<ChallengeRecordProps> = ({
             >
               PROBLEM
             </span>
-            <p className="text-neutral-300 font-sans leading-relaxed">
-              {problem}
-            </p>
+            <p className="text-neutral-300 font-sans leading-relaxed">{problem}</p>
           </div>
         )}
 
@@ -73,9 +71,7 @@ export const ChallengeRecord: React.FC<ChallengeRecordProps> = ({
             >
               IMPACT
             </span>
-            <p className="text-neutral-300 font-sans leading-relaxed">
-              {impact}
-            </p>
+            <p className="text-neutral-300 font-sans leading-relaxed">{impact}</p>
           </div>
         )}
 
@@ -86,9 +82,7 @@ export const ChallengeRecord: React.FC<ChallengeRecordProps> = ({
             >
               CONSTRAINT
             </span>
-            <p className="text-neutral-300 font-sans leading-relaxed">
-              {constraint}
-            </p>
+            <p className="text-neutral-300 font-sans leading-relaxed">{constraint}</p>
           </div>
         )}
 
@@ -99,9 +93,7 @@ export const ChallengeRecord: React.FC<ChallengeRecordProps> = ({
             >
               SOLUTION
             </span>
-            <p className="text-neutral-300 font-sans leading-relaxed">
-              {solution}
-            </p>
+            <p className="text-neutral-300 font-sans leading-relaxed">{solution}</p>
           </div>
         )}
 
@@ -112,9 +104,7 @@ export const ChallengeRecord: React.FC<ChallengeRecordProps> = ({
             >
               RESULT
             </span>
-            <p className="text-neutral-200 font-sans leading-relaxed font-medium">
-              {result}
-            </p>
+            <p className="text-neutral-200 font-sans leading-relaxed font-medium">{result}</p>
           </div>
         )}
       </div>

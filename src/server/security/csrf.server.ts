@@ -17,8 +17,12 @@ export function generateCsrfToken(): string {
 }
 
 export function validateCsrfToken(cookieToken: unknown, bodyToken: unknown): boolean {
-  if (typeof cookieToken !== "string" || typeof bodyToken !== "string" ||
-      !/^[A-Za-z0-9_-]{43}$/.test(cookieToken) || !/^[A-Za-z0-9_-]{43}$/.test(bodyToken)) {
+  if (
+    typeof cookieToken !== "string" ||
+    typeof bodyToken !== "string" ||
+    !/^[A-Za-z0-9_-]{43}$/.test(cookieToken) ||
+    !/^[A-Za-z0-9_-]{43}$/.test(bodyToken)
+  ) {
     return false;
   }
 

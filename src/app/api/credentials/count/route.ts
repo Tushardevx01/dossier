@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
         { status: 429, headers: { "Retry-After": String(rl.retryAfterSeconds) } }
       );
     }
-    
+
     const count = await getCredentialsCount();
     return NextResponse.json({
       success: true,

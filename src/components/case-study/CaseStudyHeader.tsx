@@ -22,11 +22,7 @@ export interface CaseStudyHeaderProps {
   children?: React.ReactNode;
 }
 
-export const CaseStudyHeader: React.FC<CaseStudyHeaderProps> = ({
-  meta,
-  project,
-  children,
-}) => {
+export const CaseStudyHeader: React.FC<CaseStudyHeaderProps> = ({ meta, project, children }) => {
   const role = project?.role || "Systems Architect & Developer";
   const year = project?.year || meta.date || "2026";
   const status = project?.status || "Active";

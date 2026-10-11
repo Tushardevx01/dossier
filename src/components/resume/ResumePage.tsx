@@ -9,7 +9,6 @@ import { nasalization } from "@/app/fonts";
 
 const PDFViewer = dynamic(() => import("./PDFViewer"), { ssr: false });
 
-
 export function ResumePage({ credentialCount }: { credentialCount?: number } = {}) {
   const previewRef = useRef<HTMLDivElement | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);

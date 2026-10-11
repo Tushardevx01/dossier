@@ -17,11 +17,7 @@ import {
 } from "@/server/repositories/credentials";
 import { CredentialJsonSchema } from "@/schemas";
 import { validateAdminRequest } from "@/server/security/auth";
-import {
-  uploadToR2,
-  deleteFromR2,
-  isR2Configured,
-} from "@/server/storage/r2";
+import { uploadToR2, deleteFromR2, isR2Configured } from "@/server/storage/r2";
 import {
   validateCredentialFile,
   generateSafeStorageKey,
@@ -116,9 +112,13 @@ export async function POST(request: NextRequest) {
       const title = formData.get("title")?.toString().trim() || "";
       const issuer = formData.get("issuer")?.toString().trim() || "";
       const description = formData.get("description")?.toString().trim() || null;
-      const issueDateStr = (formData.get("issueDate") || formData.get("issuedAt"))?.toString().trim() || "";
-      const credentialLink = (formData.get("credentialLink") || formData.get("verificationUrl"))?.toString().trim() || null;
-      let objectLink = (formData.get("objectLink") || formData.get("certificateUrl"))?.toString().trim() || null;
+      const issueDateStr =
+        (formData.get("issueDate") || formData.get("issuedAt"))?.toString().trim() || "";
+      const credentialLink =
+        (formData.get("credentialLink") || formData.get("verificationUrl"))?.toString().trim() ||
+        null;
+      let objectLink =
+        (formData.get("objectLink") || formData.get("certificateUrl"))?.toString().trim() || null;
 
       // Validate required inputs
       if (!title || !issuer || !issueDateStr) {
@@ -148,7 +148,8 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      const certFile = formData.get("certificateFile") || formData.get("certificate") || formData.get("file");
+      const certFile =
+        formData.get("certificateFile") || formData.get("certificate") || formData.get("file");
 
       // Upload Certificate file to R2 if provided
       if (certFile && certFile instanceof File && certFile.size > 0) {
@@ -198,7 +199,12 @@ export async function POST(request: NextRequest) {
       }
 
       const parsed = CredentialJsonSchema.parse({
-        title, issuer, issueDate: issueDateStr, objectLink, credentialLink, description,
+        title,
+        issuer,
+        issueDate: issueDateStr,
+        objectLink,
+        credentialLink,
+        description,
         slug: formData.get("slug")?.toString().trim() || slugifyTitle(title),
       });
 
@@ -295,8 +301,13 @@ export async function POST(request: NextRequest) {
       );
     } catch (validationErr) {
       if (validationErr instanceof PayloadTooLargeError || validationErr instanceof SyntaxError) {
-        return NextResponse.json({ success: false, error: { code: "INVALID_PAYLOAD", message: "Invalid request payload" } },
-          { status: validationErr instanceof PayloadTooLargeError ? 413 : 400 });
+        return NextResponse.json(
+          {
+            success: false,
+            error: { code: "INVALID_PAYLOAD", message: "Invalid request payload" },
+          },
+          { status: validationErr instanceof PayloadTooLargeError ? 413 : 400 }
+        );
       }
       if (validationErr instanceof z.ZodError) {
         return NextResponse.json(

@@ -6,15 +6,14 @@ export interface WorkflowDiagramProps extends AsciiDiagramProps {
   states?: string[];
 }
 
-export const WorkflowDiagram: React.FC<WorkflowDiagramProps> = ({
-  states,
-  ...diagramProps
-}) => {
+export const WorkflowDiagram: React.FC<WorkflowDiagramProps> = ({ states, ...diagramProps }) => {
   return (
     <div className="space-y-4 w-full">
       {states && states.length > 0 && (
         <div className="flex flex-wrap items-center gap-1.5 p-2.5 rounded-lg border border-neutral-800/60 bg-neutral-950/40 text-xs font-mono">
-          <span className={`${mono.className} text-[10px] text-neutral-500 uppercase tracking-wider font-semibold mr-1`}>
+          <span
+            className={`${mono.className} text-[10px] text-neutral-500 uppercase tracking-wider font-semibold mr-1`}
+          >
             STATE MACHINE:
           </span>
           {states.map((st, idx) => (

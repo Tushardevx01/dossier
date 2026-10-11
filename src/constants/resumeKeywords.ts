@@ -1,5 +1,4 @@
 export const resumeKeywords = [
-
   "Tushar Kanti Dey",
   "Tushar Kanti Dey resume",
   "Tushar Kanti Dey CV",
@@ -14,7 +13,6 @@ export const resumeKeywords = [
   "B.Tech Computer Science",
   "Adamas University",
 
-
   "JavaScript",
   "TypeScript",
   "Python",
@@ -25,7 +23,6 @@ export const resumeKeywords = [
   "CSS3",
   "SQL",
   "NoSQL",
-
 
   "React.js",
   "Next.js",
@@ -47,7 +44,6 @@ export const resumeKeywords = [
   "Single Page Applications",
   "SPA",
 
-
   "Node.js",
   "Express.js",
   "Next.js API Routes",
@@ -63,7 +59,6 @@ export const resumeKeywords = [
   "JWT",
   "OAuth",
 
-
   "MongoDB",
   "PostgreSQL",
   "MySQL",
@@ -78,7 +73,6 @@ export const resumeKeywords = [
   "Database Optimization",
   "ACID Properties",
   "Database Indexing",
-
 
   "AWS",
   "Google Cloud Platform",
@@ -98,7 +92,6 @@ export const resumeKeywords = [
   "Deployment",
   "Cloud Computing",
   "Serverless Architecture",
-
 
   "Machine Learning",
   "Deep Learning",
@@ -125,7 +118,6 @@ export const resumeKeywords = [
   "Data Science",
   "Data Analysis",
 
-
   "Unit Testing",
   "Integration Testing",
   "End-to-End Testing",
@@ -141,7 +133,6 @@ export const resumeKeywords = [
   "Quality Assurance",
   "Code Review",
   "Debugging",
-
 
   "Agile Development",
   "Scrum",
@@ -160,7 +151,6 @@ export const resumeKeywords = [
   "Refactoring",
   "Technical Documentation",
 
-
   "Data Structures",
   "Algorithms",
   "Big O Notation",
@@ -177,7 +167,6 @@ export const resumeKeywords = [
   "Recursion",
   "Problem Solving",
 
-
   "Visual Studio Code",
   "VS Code",
   "IntelliJ IDEA",
@@ -192,7 +181,6 @@ export const resumeKeywords = [
   "npm",
   "yarn",
   "pnpm",
-
 
   "Problem Solving",
   "Critical Thinking",
@@ -210,7 +198,6 @@ export const resumeKeywords = [
   "Mentoring",
   "Code Review",
 
-
   "Internship",
   "Entry Level",
   "Junior Developer",
@@ -224,7 +211,6 @@ export const resumeKeywords = [
   "Personal Projects",
   "Portfolio Projects",
 
-
   "HackerRank Certificate",
   "FreeCodeCamp Certificate",
   "AMCAT Certificate",
@@ -233,7 +219,6 @@ export const resumeKeywords = [
   "Coding Challenges",
   "GitHub Contributions",
   "Open Source Contributions",
-
 
   "Web Applications",
   "Mobile Applications",
@@ -253,7 +238,6 @@ export const resumeKeywords = [
   "Machine Learning Projects",
   "AI Projects",
 
-
   "Kolkata",
   "West Bengal",
   "India",
@@ -266,7 +250,6 @@ export const resumeKeywords = [
   "Available Immediately",
   "Flexible Schedule",
 
-
   "Computer Science",
   "Software Engineering",
   "Information Technology",
@@ -278,7 +261,6 @@ export const resumeKeywords = [
   "Technical Skills",
   "Coursework",
   "Capstone Project",
-
 
   "Digital Transformation",
   "Innovation",

@@ -26,19 +26,28 @@ function validateEnvironment(): EnvValidationResult {
   // Required environment variables
   const isSkipDb = process.env.SKIP_DB_BUILD === "true" || process.env.SKIP_DB === "true";
   const requiredEnv = [
-    ...(isSkipDb ? [] : [{ key: "DATABASE_URL", description: "Neon PostgreSQL connection string" }]),
+    ...(isSkipDb
+      ? []
+      : [{ key: "DATABASE_URL", description: "Neon PostgreSQL connection string" }]),
     { key: "EMAIL_FROM", description: "Email sender address" },
-    ...(process.env.RESEND_API_KEY ? [] : [{ key: "EMAIL_PASSWORD", description: "Email password/app password" }]),
-    ...(process.env.NODE_ENV === "production" ? [
-      { key: "UPSTASH_REDIS_REST_URL", description: "Required for production rate limiting" },
-      { key: "UPSTASH_REDIS_REST_TOKEN", description: "Required for production rate limiting" },
-    ] : []),
+    ...(process.env.RESEND_API_KEY
+      ? []
+      : [{ key: "EMAIL_PASSWORD", description: "Email password/app password" }]),
+    ...(process.env.NODE_ENV === "production"
+      ? [
+          { key: "UPSTASH_REDIS_REST_URL", description: "Required for production rate limiting" },
+          { key: "UPSTASH_REDIS_REST_TOKEN", description: "Required for production rate limiting" },
+        ]
+      : []),
   ];
 
   // Optional but recommended environment variables
   const optionalEnv = [
     { key: "QEV_API_KEY", description: "QuickEmailVerification API Key" },
-    { key: "UPSTASH_REDIS_REST_URL", description: "Upstash Redis URL (for distributed rate limiting)" },
+    {
+      key: "UPSTASH_REDIS_REST_URL",
+      description: "Upstash Redis URL (for distributed rate limiting)",
+    },
     { key: "UPSTASH_REDIS_REST_TOKEN", description: "Upstash Redis Token" },
     { key: "LOG_LEVEL", description: "Logging level (debug|info|warn|error)" },
   ];
@@ -64,7 +73,7 @@ export async function register() {
   if (typeof window !== "undefined") return;
 
   const startTime = Date.now();
-  
+
   logger.info("Application starting", {
     nodeEnv: process.env.NODE_ENV,
   });

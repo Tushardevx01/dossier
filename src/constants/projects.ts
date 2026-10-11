@@ -21,7 +21,8 @@ export const projectsData: Project[] = [
     approach:
       "Designed a decoupled, control-plane-driven cluster topology. A trusted Control Plane owns authoritative state, deterministic round-robin scheduling, and reconciliation. Thin Go agents discover host nodes, claim tasks, isolate executions within Docker or Podman, and enforce ExecutionID fencing to reject stale results.",
     architecture: {
-      flowSummary: "CLI / HTTP → Control Plane (Registries & Schedulers) → Agent (Heartbeat & Poll) → Docker / Podman",
+      flowSummary:
+        "CLI / HTTP → Control Plane (Registries & Schedulers) → Agent (Heartbeat & Poll) → Docker / Podman",
       layers: [
         {
           name: "Client / Operator Layer",
@@ -133,8 +134,7 @@ export const projectsData: Project[] = [
           "Ensures predictable, reproducible work distribution across all healthy ONLINE nodes via sorted IDs and persistent cursor.",
         tradeoff:
           "V1 does not factor in dynamic CPU/RAM utilization when choosing the target worker node.",
-        outcome:
-          "Deterministic testability and zero starvation across heterogeneous worker nodes.",
+        outcome: "Deterministic testability and zero starvation across heterogeneous worker nodes.",
       },
       {
         technology: "PostgreSQL V2 Foundation",
@@ -157,22 +157,26 @@ export const projectsData: Project[] = [
       {
         value: "01",
         label: "CONTROL PLANE",
-        description: "Authoritative central state engine with explicit state transition validation and rejection of invalid states.",
+        description:
+          "Authoritative central state engine with explicit state transition validation and rejection of invalid states.",
       },
       {
         value: "02",
         label: "EXECUTION FENCING",
-        description: "Unique ExecutionID per attempt guarantees stale results from severed workers are rejected upon node recovery.",
+        description:
+          "Unique ExecutionID per attempt guarantees stale results from severed workers are rejected upon node recovery.",
       },
       {
         value: "03",
         label: "BOUNDED RETRIES",
-        description: "Strict Attempts <= MaxRetries budget prevents infinite failure retry loops across partitioned workers.",
+        description:
+          "Strict Attempts <= MaxRetries budget prevents infinite failure retry loops across partitioned workers.",
       },
       {
         value: "04",
         label: "DETERMINISTIC",
-        description: "Sorted online node ring with persistent cursor prevents starvation and provides predictable assignment.",
+        description:
+          "Sorted online node ring with persistent cursor prevents starvation and provides predictable assignment.",
       },
     ],
     learnings: [
@@ -220,7 +224,8 @@ export const projectsData: Project[] = [
     approach:
       "Engineered an air-gapped, closed-loop pipeline. Docker Watchman captures death events and extracts recent logs into Kafka KRaft. A NestJS orchestrator invokes local Python embedding (all-MiniLM-L6-v2), FAISS similarity search, and an MLP classifier. Remediation passes a deterministic safety gate before bounded Dockerode execution and complete MongoDB audit logging.",
     architecture: {
-      flowSummary: "Docker Event → Watchman → Kafka KRaft → NestJS Orchestrator → AI Engine (FAISS/MLP) → Safety Gate → Dockerode → MongoDB Audit",
+      flowSummary:
+        "Docker Event → Watchman → Kafka KRaft → NestJS Orchestrator → AI Engine (FAISS/MLP) → Safety Gate → Dockerode → MongoDB Audit",
       layers: [
         {
           name: "Docker Watchman",
@@ -298,8 +303,7 @@ export const projectsData: Project[] = [
         technology: "MongoDB",
         reason:
           "Flexible document persistence well-suited for varying incident schemas, embedding arrays, audit logs, and replay buffers.",
-        tradeoff:
-          "Lacks cross-document multi-table relational joins.",
+        tradeoff: "Lacks cross-document multi-table relational joins.",
         outcome:
           "High-speed write throughput for raw crash logs and structured JSON remediation plans.",
       },
@@ -307,8 +311,7 @@ export const projectsData: Project[] = [
         technology: "Dockerode",
         reason:
           "Direct Unix socket communication with the Docker daemon without invoking shell subprocesses.",
-        tradeoff:
-          "Restricted to local host Docker socket permissions.",
+        tradeoff: "Restricted to local host Docker socket permissions.",
         outcome:
           "Deterministic, injection-free container lifecycle actuation with zero shell execution.",
       },
@@ -316,8 +319,7 @@ export const projectsData: Project[] = [
         technology: "SentenceTransformers + FAISS",
         reason:
           "Generates compact 384-dimensional vector embeddings locally and executes sub-millisecond similarity search over historical incidents.",
-        tradeoff:
-          "Requires local model weight storage and Python runtime sidecar.",
+        tradeoff: "Requires local model weight storage and Python runtime sidecar.",
         outcome:
           "Completely air-gapped, zero-cloud semantic matching against known infrastructure incident patterns.",
       },
@@ -336,8 +338,7 @@ export const projectsData: Project[] = [
           "Provides enterprise-grade TypeScript modularity, dependency injection, and clean separation between watchers, orchestrators, and actuators.",
         tradeoff:
           "Framework boilerplate and lifecycle structure compared to minimalist Express scripts.",
-        outcome:
-          "Highly testable, maintainable SRE control plane with clear domain boundaries.",
+        outcome: "Highly testable, maintainable SRE control plane with clear domain boundaries.",
       },
     ],
     results: [
@@ -351,7 +352,8 @@ export const projectsData: Project[] = [
       {
         value: "01",
         label: "LOCAL-FIRST",
-        description: "Zero runtime dependency on cloud AI or external APIs; all models run locally.",
+        description:
+          "Zero runtime dependency on cloud AI or external APIs; all models run locally.",
       },
       {
         value: "02",
@@ -366,7 +368,8 @@ export const projectsData: Project[] = [
       {
         value: "04",
         label: "AUDITABLE",
-        description: "Immutable incident records, raw log tails, embeddings, and execution plans in MongoDB.",
+        description:
+          "Immutable incident records, raw log tails, embeddings, and execution plans in MongoDB.",
       },
     ],
     learnings: [
@@ -491,8 +494,7 @@ export const projectsData: Project[] = [
           "Provides modern React component architecture with explicit server and client boundaries, native layout nesting, and file-based routing.",
         tradeoff:
           "Requires disciplined demarcation between server-side data loaders and interactive client components.",
-        outcome:
-          "Streamlined full-stack architecture with zero REST API boilerplate.",
+        outcome: "Streamlined full-stack architecture with zero REST API boilerplate.",
       },
       {
         technology: "Server Actions",
@@ -507,8 +509,7 @@ export const projectsData: Project[] = [
         technology: "Appwrite BaaS",
         reason:
           "Delivers managed user authentication, document collections, encrypted document file storage, and SMS messaging without custom database operations.",
-        tradeoff:
-          "Coupled to Appwrite's document modeling conventions and SDK interfaces.",
+        tradeoff: "Coupled to Appwrite's document modeling conventions and SDK interfaces.",
         outcome:
           "Rapid, reliable full-stack execution covering authentication, database, storage, and notifications.",
       },
@@ -516,8 +517,7 @@ export const projectsData: Project[] = [
         technology: "Zod",
         reason:
           "Single source of truth for runtime input validation and automatic TypeScript type inference across client forms and server actions.",
-        tradeoff:
-          "Schemas must be maintained alongside changing product requirements.",
+        tradeoff: "Schemas must be maintained alongside changing product requirements.",
         outcome:
           "Zero runtime type coercion vulnerabilities and instantaneous inline form validation feedback.",
       },
@@ -616,8 +616,7 @@ export const projectsData: Project[] = [
       },
       {
         title: "Real-Time Call State Synchronization",
-        description:
-          "The client cannot assume a meeting room is immediately ready or accessible.",
+        description: "The client cannot assume a meeting room is immediately ready or accessible.",
         solution:
           "Inspected call state hooks to handle loading states, future scheduled meetings, already-ended calls, and unauthorized access gracefully.",
       },
@@ -643,8 +642,7 @@ export const projectsData: Project[] = [
         technology: "Stream Video SDK",
         reason:
           "Provides production-grade real-time video infrastructure without building custom WebRTC signaling and SFU servers.",
-        tradeoff:
-          "Meeting models and call parameters conform to Stream Video SDK contracts.",
+        tradeoff: "Meeting models and call parameters conform to Stream Video SDK contracts.",
         outcome:
           "Rapid delivery of high-reliability video calls, speaking indicators, and call diagnostics.",
       },
@@ -654,8 +652,7 @@ export const projectsData: Project[] = [
           "Consolidates application routes, dynamic meeting parameters, and server actions for token generation into a single framework.",
         tradeoff:
           "Requires strict separation between server-side token generation and client-side real-time media hooks.",
-        outcome:
-          "Modular codebase with isolated secret keys and zero REST boilerplate.",
+        outcome: "Modular codebase with isolated secret keys and zero REST boilerplate.",
       },
       {
         technology: "Componentized Call UI",
@@ -691,7 +688,16 @@ export const projectsData: Project[] = [
     year: "2026",
     timeline: "2026",
     status: "Production",
-    technologies: ["React Native", "Expo SDK 54", "TypeScript", "Supabase", "PostgreSQL", "Better Auth", "Razorpay", "NativeWind"],
+    technologies: [
+      "React Native",
+      "Expo SDK 54",
+      "TypeScript",
+      "Supabase",
+      "PostgreSQL",
+      "Better Auth",
+      "Razorpay",
+      "NativeWind",
+    ],
     tech: ["React Native", "Expo", "Supabase", "Razorpay"],
     problem:
       "Multi-day campus tech festivals face database registration bottlenecks, Android 60Hz display throttling, client query security leaks, and gate verification queues under peak attendee traffic.",
@@ -774,7 +780,16 @@ export const projectsData: Project[] = [
     year: "2024",
     timeline: "2024",
     status: "Production",
-    technologies: ["Next.js 14 App Router", "TypeScript", "Axios", "Cheerio", "Prisma", "PostgreSQL", "NextAuth", "Tailwind CSS"],
+    technologies: [
+      "Next.js 14 App Router",
+      "TypeScript",
+      "Axios",
+      "Cheerio",
+      "Prisma",
+      "PostgreSQL",
+      "NextAuth",
+      "Tailwind CSS",
+    ],
     tech: ["Next.js", "Cheerio", "Prisma", "PostgreSQL"],
     problem:
       "Websites expose data through diverse layers: metadata, headings, content structure, media, scripts, and crawl rules. The challenge was turning an unparsed URL into structured, persistent, and actionable website intelligence without unbounded execution or server crashes.",

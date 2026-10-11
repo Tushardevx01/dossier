@@ -60,7 +60,12 @@ export async function GET(_request: NextRequest, context: RouteContext) {
       const ct = (r2Obj.contentType || "").toLowerCase();
       if (ct.includes("png") || key.endsWith(".png")) {
         extension = "png";
-      } else if (ct.includes("jpeg") || ct.includes("jpg") || key.endsWith(".jpg") || key.endsWith(".jpeg")) {
+      } else if (
+        ct.includes("jpeg") ||
+        ct.includes("jpg") ||
+        key.endsWith(".jpg") ||
+        key.endsWith(".jpeg")
+      ) {
         extension = "jpg";
       } else if (ct.includes("webp") || key.endsWith(".webp")) {
         extension = "webp";
@@ -83,8 +88,13 @@ export async function GET(_request: NextRequest, context: RouteContext) {
       }
 
       // Check if transformToWebStream is available on the AWS SDK stream
-      if (typeof (r2Obj.body as { transformToWebStream?: () => ReadableStream }).transformToWebStream === "function") {
-        const stream = (r2Obj.body as { transformToWebStream: () => ReadableStream }).transformToWebStream();
+      if (
+        typeof (r2Obj.body as { transformToWebStream?: () => ReadableStream })
+          .transformToWebStream === "function"
+      ) {
+        const stream = (
+          r2Obj.body as { transformToWebStream: () => ReadableStream }
+        ).transformToWebStream();
         return new NextResponse(stream, { headers, status: 200 });
       }
 
@@ -93,7 +103,10 @@ export async function GET(_request: NextRequest, context: RouteContext) {
 
     if (!safeRedirectUrl) {
       return NextResponse.json(
-        { success: false, error: { code: "INVALID_ASSET_URL", message: "Certificate asset URL is invalid" } },
+        {
+          success: false,
+          error: { code: "INVALID_ASSET_URL", message: "Certificate asset URL is invalid" },
+        },
         { status: 502 }
       );
     }
@@ -108,7 +121,10 @@ export async function GET(_request: NextRequest, context: RouteContext) {
 
     if (!safeRedirectUrl) {
       return NextResponse.json(
-        { success: false, error: { code: "FETCH_FAILED", message: "Failed to retrieve certificate asset" } },
+        {
+          success: false,
+          error: { code: "FETCH_FAILED", message: "Failed to retrieve certificate asset" },
+        },
         { status: 502 }
       );
     }

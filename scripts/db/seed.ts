@@ -15,17 +15,17 @@
  * 4. Marks them as published
  */
 
-import { createHash } from 'crypto';
+import { createHash } from "crypto";
 
-import { ensureDatabaseReady, getDb } from '@/server/db';
-import { engineeringNotes, apiKeys } from '@/server/db/schema';
-import { logger } from '@/lib/logger';
+import { ensureDatabaseReady, getDb } from "@/server/db";
+import { engineeringNotes, apiKeys } from "@/server/db/schema";
+import { logger } from "@/lib/logger";
 
 /**
  * Report current database state.
  */
 export async function seedDatabase() {
-  logger.info('Checking database state');
+  logger.info("Checking database state");
 
   try {
     await ensureDatabaseReady();
@@ -35,26 +35,25 @@ export async function seedDatabase() {
       .select({ count: engineeringNotes.id })
       .from(engineeringNotes);
 
-    logger.info('engineering_notes table is available', { rows: notesResult.length });
+    logger.info("engineering_notes table is available", { rows: notesResult.length });
 
     // Seed API keys if none exist
-    const keysResult = await database
-      .select({ count: apiKeys.id })
-      .from(apiKeys);
+    const keysResult = await database.select({ count: apiKeys.id }).from(apiKeys);
 
     if (keysResult.length === 0) {
-      if (process.env.NODE_ENV === 'production' || !process.env.SEED_API_KEY) {
-        logger.warn('Skipping API key seed: requires explicit SEED_API_KEY outside production');
+      if (process.env.NODE_ENV === "production" || !process.env.SEED_API_KEY) {
+        logger.warn("Skipping API key seed: requires explicit SEED_API_KEY outside production");
       } else {
-        logger.info('Seeding API keys');
+        logger.info("Seeding API keys");
 
         const testKey = process.env.SEED_API_KEY!.trim();
-        if (testKey.length < 32) throw new Error('SEED_API_KEY must contain at least 32 characters');
-        const hashedKey = createHash('sha256').update(testKey).digest('hex');
+        if (testKey.length < 32)
+          throw new Error("SEED_API_KEY must contain at least 32 characters");
+        const hashedKey = createHash("sha256").update(testKey).digest("hex");
 
         await database.insert(apiKeys).values({
           keyHash: hashedKey,
-          name: 'Test API Key',
+          name: "Test API Key",
           permissions: {
             analyze: true,
             rateLimit: 10,
@@ -62,58 +61,61 @@ export async function seedDatabase() {
           active: true,
         });
 
-        logger.info('API keys seeded');
+        logger.info("API keys seeded");
       }
     } else {
-      logger.info('api_keys table is available', { rows: keysResult.length });
+      logger.info("api_keys table is available", { rows: keysResult.length });
     }
 
     // Check & Seed case studies
-    const { caseStudies } = await import('@/server/db/schema');
-    const caseStudiesResult = await database
-      .select({ count: caseStudies.id })
-      .from(caseStudies);
+    const { caseStudies } = await import("@/server/db/schema");
+    const caseStudiesResult = await database.select({ count: caseStudies.id }).from(caseStudies);
 
-    logger.info('case_studies table is available', { rows: caseStudiesResult.length });
+    logger.info("case_studies table is available", { rows: caseStudiesResult.length });
 
     if (caseStudiesResult.length === 0) {
-      logger.info('Seeding case studies from static repository data');
-      const fs = await import('fs');
-      const path = await import('path');
-      const fullDataPath = path.join(process.cwd(), 'src/lib/case-studies-full.json');
+      logger.info("Seeding case studies from static repository data");
+      const fs = await import("fs");
+      const path = await import("path");
+      const fullDataPath = path.join(process.cwd(), "src/lib/case-studies-full.json");
       let caseStudiesData = [];
       if (fs.existsSync(fullDataPath)) {
-        caseStudiesData = JSON.parse(fs.readFileSync(fullDataPath, 'utf8'));
+        caseStudiesData = JSON.parse(fs.readFileSync(fullDataPath, "utf8"));
       } else {
-        const { caseStudiesMeta } = await import('@/lib/case-studies-meta');
+        const { caseStudiesMeta } = await import("@/lib/case-studies-meta");
         caseStudiesData = caseStudiesMeta;
       }
       // Neon HTTP does not support interactive transactions. One bulk insert is atomic.
       if (caseStudiesData.length > 0) {
-        await database.insert(caseStudies).values(caseStudiesData.map((record: typeof caseStudies.$inferInsert) => ({
-            slug: record.slug,
-            title: record.title,
-            subtitle: record.subtitle,
-            excerpt: record.excerpt,
-            content: record.content,
-            category: record.category,
-            level: record.level,
-            readTime: record.readTime,
-            date: record.date,
-            tags: record.tags,
-            published: record.published,
-            featured: record.featured,
-            whatILearned: record.whatILearned,
-            improvements: record.improvements,
-            relatedNoteSlugs: record.relatedNoteSlugs,
-            relatedProjectSlug: record.relatedProjectSlug,
-            relatedSystemDesignSlug: record.relatedSystemDesignSlug,
-          }))).onConflictDoNothing();
+        await database
+          .insert(caseStudies)
+          .values(
+            caseStudiesData.map((record: typeof caseStudies.$inferInsert) => ({
+              slug: record.slug,
+              title: record.title,
+              subtitle: record.subtitle,
+              excerpt: record.excerpt,
+              content: record.content,
+              category: record.category,
+              level: record.level,
+              readTime: record.readTime,
+              date: record.date,
+              tags: record.tags,
+              published: record.published,
+              featured: record.featured,
+              whatILearned: record.whatILearned,
+              improvements: record.improvements,
+              relatedNoteSlugs: record.relatedNoteSlugs,
+              relatedProjectSlug: record.relatedProjectSlug,
+              relatedSystemDesignSlug: record.relatedSystemDesignSlug,
+            }))
+          )
+          .onConflictDoNothing();
       }
-      logger.info('Case studies seeded successfully');
+      logger.info("Case studies seeded successfully");
     }
   } catch (error) {
-    logger.error('Database check failed', { error });
+    logger.error("Database check failed", { error });
     process.exit(1);
   }
 }
@@ -122,17 +124,17 @@ export async function seedDatabase() {
  * Drop and recreate tables (development only)
  */
 export async function resetDatabase() {
-  logger.warn('Resetting database (development only)');
-  
+  logger.warn("Resetting database (development only)");
+
   try {
     void getDb();
-    
+
     // Note: In production, use proper migrations instead
     // This is just for quick local development resets
-    logger.info('This would drop and recreate tables');
-    logger.info('Use proper Drizzle migrations in production');
+    logger.info("This would drop and recreate tables");
+    logger.info("Use proper Drizzle migrations in production");
   } catch (error) {
-    logger.error('Reset failed', { error });
+    logger.error("Reset failed", { error });
     process.exit(1);
   }
 }
@@ -141,5 +143,5 @@ export async function resetDatabase() {
  * Run seed if called directly
  */
 if (import.meta.url === `file://${process.argv[1]}`) {
-  seedDatabase().catch((error) => logger.error('Seed script failed', { error }));
+  seedDatabase().catch((error) => logger.error("Seed script failed", { error }));
 }

@@ -165,10 +165,7 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
       {/* Top Section */}
       <div className="relative z-10">
         {/* Status badge */}
-        <motion.div
-          variants={childVariants}
-          className="flex items-center justify-end mb-4"
-        >
+        <motion.div variants={childVariants} className="flex items-center justify-end mb-4">
           {/* Status badge */}
           <div
             className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border ${statusConfig.containerClass} shrink-0 transition-colors`}
@@ -243,10 +240,7 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
       </div>
 
       {/* Bottom Section (Role and Footer Action Bar) */}
-      <motion.div
-        variants={childVariants}
-        className="relative z-10 space-y-4 mt-auto"
-      >
+      <motion.div variants={childVariants} className="relative z-10 space-y-4 mt-auto">
         <p
           className={`${mono.className} text-[10px] sm:text-[11px] uppercase tracking-wider text-neutral-500 font-medium`}
         >

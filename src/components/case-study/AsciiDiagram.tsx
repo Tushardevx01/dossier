@@ -47,8 +47,8 @@ export const AsciiDiagram: React.FC<AsciiDiagramProps> = ({
     variant === "breakout"
       ? "w-full max-w-[1200px]"
       : variant === "compact"
-      ? "w-full max-w-[800px]"
-      : "w-full";
+        ? "w-full max-w-[800px]"
+        : "w-full";
 
   return (
     <div

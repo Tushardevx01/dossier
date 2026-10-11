@@ -13,7 +13,11 @@ export const DevOps = () => {
   const { telemetry, logs } = useSystemStatus();
 
   return (
-    <section id="devops" ref={ref} className="py-24 relative overflow-hidden control-grid scroll-mt-24">
+    <section
+      id="devops"
+      ref={ref}
+      className="py-24 relative overflow-hidden control-grid scroll-mt-24"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           className="mb-12 space-y-2"
@@ -21,11 +25,18 @@ export const DevOps = () => {
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className={`${nasalization.className} text-3xl sm:text-4xl md:text-5xl font-bold`} style={{ color: "hsl(var(--foreground))" }}>
+          <h2
+            className={`${nasalization.className} text-3xl sm:text-4xl md:text-5xl font-bold`}
+            style={{ color: "hsl(var(--foreground))" }}
+          >
             Production Control <span style={{ color: "hsl(var(--primary) / 0.85)" }}>Center.</span>
           </h2>
-          <p className={`${mono.className} text-sm`} style={{ color: "hsl(var(--foreground) / 0.45)" }}>
-            Live System Dashboard • deployment telemetry, incident traces, and service-state visibility.
+          <p
+            className={`${mono.className} text-sm`}
+            style={{ color: "hsl(var(--foreground) / 0.45)" }}
+          >
+            Live System Dashboard • deployment telemetry, incident traces, and service-state
+            visibility.
           </p>
         </motion.div>
 

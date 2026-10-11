@@ -20,7 +20,13 @@ export const metadata: Metadata = {
   creator: siteConfig.fullName,
   publisher: siteConfig.fullName,
   icons: {
-    icon: ["/favicon.ico", "/favicon-32x32.png", "/favicon-16x16.png", "/android-chrome-192x192.png", "/android-chrome-512x512.png"],
+    icon: [
+      "/favicon.ico",
+      "/favicon-32x32.png",
+      "/favicon-16x16.png",
+      "/android-chrome-192x192.png",
+      "/android-chrome-512x512.png",
+    ],
     apple: "/apple-touch-icon.png",
   },
   openGraph: {

@@ -39,11 +39,9 @@ const SupportingItemsGrid: React.FC<{ items: ParsedSupportingItem[] }> = ({ item
 
           // If title was actually a key list (when num was an identifier), promote it to tag
           const showTag =
-            item.tag ||
-            (isNumCodeOrName && item.title !== item.num ? item.title : undefined);
+            item.tag || (isNumCodeOrName && item.title !== item.num ? item.title : undefined);
 
-          const showBadge =
-            item.badge && item.badge !== showTitle ? item.badge : undefined;
+          const showBadge = item.badge && item.badge !== showTitle ? item.badge : undefined;
 
           return (
             <div
@@ -144,8 +142,7 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
       sections.map((sec) => ({
         id: sec.id,
         number: sec.number,
-        label:
-          sec.title.length > 25 ? sec.title.slice(0, 23) + "..." : sec.title,
+        label: sec.title.length > 25 ? sec.title.slice(0, 23) + "..." : sec.title,
       })),
     [sections]
   );
@@ -200,12 +197,8 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
                         key={i}
                         className="flex items-start gap-2.5 py-1.5 border-b border-neutral-900/60 last:border-0"
                       >
-                        <span className="text-emerald-400 font-bold shrink-0 select-none">
-                          ▸
-                        </span>
-                        <span className="leading-snug text-neutral-300 font-sans text-xs">
-                          {c}
-                        </span>
+                        <span className="text-emerald-400 font-bold shrink-0 select-none">▸</span>
+                        <span className="leading-snug text-neutral-300 font-sans text-xs">{c}</span>
                       </li>
                     ))}
                   </ul>
@@ -313,12 +306,7 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
 
             {/* Tables if any (e.g. API endpoints, routing specifications) */}
             {sec.tables.map((tbl, i) => (
-              <TechnicalMatrix
-                key={i}
-                title={tbl.title}
-                headers={tbl.headers}
-                rows={tbl.rows}
-              />
+              <TechnicalMatrix key={i} title={tbl.title} headers={tbl.headers} rows={tbl.rows} />
             ))}
           </div>
         );
@@ -486,12 +474,7 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
 
             {/* Tables if any */}
             {sec.tables.map((tbl, i) => (
-              <TechnicalMatrix
-                key={i}
-                title={tbl.title}
-                headers={tbl.headers}
-                rows={tbl.rows}
-              />
+              <TechnicalMatrix key={i} title={tbl.title} headers={tbl.headers} rows={tbl.rows} />
             ))}
 
             {/* Supporting Items / Specifications */}
@@ -516,12 +499,7 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
 
             {/* Tables if any */}
             {sec.tables.map((tbl, i) => (
-              <TechnicalMatrix
-                key={i}
-                title={tbl.title}
-                headers={tbl.headers}
-                rows={tbl.rows}
-              />
+              <TechnicalMatrix key={i} title={tbl.title} headers={tbl.headers} rows={tbl.rows} />
             ))}
 
             {/* Diagrams if any */}
@@ -570,12 +548,7 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
 
             {/* Tables if any */}
             {sec.tables.map((tbl, i) => (
-              <TechnicalMatrix
-                key={i}
-                title={tbl.title}
-                headers={tbl.headers}
-                rows={tbl.rows}
-              />
+              <TechnicalMatrix key={i} title={tbl.title} headers={tbl.headers} rows={tbl.rows} />
             ))}
 
             {/* Supporting Items / Specifications */}
@@ -616,12 +589,7 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
 
             {/* Tables if any */}
             {sec.tables.map((tbl, i) => (
-              <TechnicalMatrix
-                key={i}
-                title={tbl.title}
-                headers={tbl.headers}
-                rows={tbl.rows}
-              />
+              <TechnicalMatrix key={i} title={tbl.title} headers={tbl.headers} rows={tbl.rows} />
             ))}
 
             {/* Diagrams if any */}

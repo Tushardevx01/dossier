@@ -163,211 +163,248 @@ export const CommandPalette = () => {
 
   const commands: CommandItem[] = useMemo(
     () => [
-    // Navigation
-    {
-      id: "nav-home",
-      label: "Home",
-      category: "Navigation",
-      description: "Jump to overview & editorial hero",
-      icon: LuCompass,
-      action: () => navigateTo("/"),
-      keywords: ["home", "main", "start", "landing"],
-    },
-    {
-      id: "nav-about",
-      label: "About Me",
-      category: "Navigation",
-      description: "Engineering background, mindset & bio",
-      icon: LuCompass,
-      action: () => navigateTo("/#about"),
-      keywords: ["about", "bio", "background", "story", "me", "mindset"],
-    },
-    {
-      id: "nav-work",
-      label: "Selected Work",
-      category: "Navigation",
-      description: "Production case studies & outcomes",
-      icon: LuFolderGit2,
-      action: () => navigateTo("/#selected-work"),
-      keywords: ["work", "projects", "case studies", "selected"],
-    },
-    {
-      id: "nav-devops",
-      label: "DevOps & Cloud Architecture",
-      category: "Navigation",
-      description: "CI/CD pipelines, Docker, Kubernetes & cloud automation",
-      icon: LuTerminal,
-      action: () => navigateTo("/#devops"),
-      keywords: ["devops", "cloud", "docker", "ci/cd", "kubernetes", "infrastructure", "deploy"],
-    },
-    {
-      id: "nav-stack",
-      label: "Technology Matrix",
-      category: "Navigation",
-      description: "Purpose-organized languages, backend, infra & tooling",
-      icon: LuCpu,
-      action: () => navigateTo("/#tech"),
-      keywords: ["stack", "technology", "tech", "matrix", "skills", "languages", "tools"],
-    },
-    {
-      id: "nav-experience",
-      label: "Engineering Track Record",
-      category: "Navigation",
-      description: "Full-time roles, platform leadership & impact",
-      icon: LuFileText,
-      action: () => navigateTo("/#experience"),
-      keywords: ["experience", "roles", "jobs", "azmth", "cycoders", "namespace"],
-    },
-    {
-      id: "nav-contact",
-      label: "Open Channel / Contact",
-      category: "Navigation",
-      description: "Direct email and professional channels",
-      icon: LuCompass,
-      action: () => navigateTo("/#contact"),
-      keywords: ["contact", "email", "collaborate", "hire", "message"],
-    },
-    {
-      id: "nav-credentials",
-      label: "Credentials",
-      category: "Navigation",
-      description: "Verified academic qualifications & technical certifications",
-      icon: LuAward,
-      action: () => navigateTo("/credentials"),
-      keywords: ["credentials", "certifications", "degree", "education", "certificates", "qualification"],
-    },
-    {
-      id: "nav-notes",
-      label: "Engineering Notes",
-      category: "Navigation",
-      description: "Technical writing and architecture deep-dives",
-      icon: LuFileText,
-      action: () => navigateTo("/engineering-notes"),
-      keywords: ["notes", "blog", "articles", "writings"],
-    },
-    {
-      id: "nav-resume",
-      label: "Resume / CV",
-      category: "Navigation",
-      description: "Verified engineering CV and experience sheet",
-      icon: LuFileText,
-      action: () => navigateTo("/resume"),
-      keywords: ["resume", "cv", "pdf", "qualifications"],
-    },
-
-    // Case Studies
-    {
-      id: "cs-runstack",
-      label: "Case Study: RunStack",
-      category: "Case Studies",
-      description: "Distributed deployment and job orchestration in Go",
-      icon: LuCpu,
-      action: () => navigateTo("/work/runstack"),
-      keywords: ["runstack", "orchestrator", "kafka", "redis", "docker", "go"],
-    },
-    {
-      id: "cs-aegis",
-      label: "Case Study: Aegis",
-      category: "Case Studies",
-      description: "Air-gapped AIOps & self-healing infrastructure",
-      icon: LuLayers,
-      action: () => navigateTo("/work/aegis"),
-      keywords: ["aegis", "aiops", "sre", "incident", "remediation", "docker", "kafka", "nestjs", "python"],
-    },
-    {
-      id: "cs-carepulse",
-      label: "Case Study: CarePulse",
-      category: "Case Studies",
-      description: "Full-stack healthcare appointment & patient onboarding engine",
-      icon: LuFileText,
-      action: () => navigateTo("/work/carepulse"),
-      keywords: ["carepulse", "healthcare", "appointments", "appwrite", "sms", "twilio", "nextjs", "zod", "server-actions"],
-    },
-    {
-      id: "cs-fenix",
-      label: "Case Study: Fenix",
-      category: "Case Studies",
-      description: "Real-time meeting platform with Stream Video SDK & Clerk",
-      icon: LuLayers,
-      action: () => navigateTo("/work/fenix"),
-      keywords: ["fenix", "stream", "video", "clerk", "meetings", "realtime", "nextjs"],
-    },
-    {
-      id: "cs-signifiya",
-      label: "Case Study: Signifiya",
-      category: "Case Studies",
-      description: "Mobile event infrastructure, native payments & 120Hz engine",
-      icon: LuSmartphone,
-      action: () => navigateTo("/work/signifiya"),
-      keywords: ["signifiya", "expo", "react-native", "supabase", "razorpay", "better-auth", "mobile"],
-    },
-    {
-      id: "cs-webscope",
-      label: "Case Study: WebScope Pro",
-      category: "Case Studies",
-      description: "Website intelligence platform with Axios, Cheerio & Prisma",
-      icon: LuGlobe,
-      action: () => navigateTo("/work/webscope"),
-      keywords: ["webscope", "seo", "cheerio", "axios", "prisma", "scraper", "monitoring"],
-    },
-    {
-      id: "cs-subscription-tracker",
-      label: "Case Study: Subscription Tracker",
-      category: "Case Studies",
-      description: "API architecture, Upstash Workflow scheduling & Arcjet security",
-      icon: LuWorkflow,
-      action: () => navigateTo("/work/subscription-tracker"),
-      keywords: [
-        "subscription",
-        "tracker",
-        "express",
-        "mongodb",
-        "mongoose",
-        "arcjet",
-        "upstash",
-        "workflow",
-        "nodemailer",
-      ],
-    },
-
-    // Actions
-    {
-      id: "action-copy-email",
-      label: "Copy Email Address",
-      category: "Actions",
-      description: selfData.email,
-      shortcut: "↵",
-      icon: LuCopy,
-      action: copyEmail,
-      keywords: ["copy", "email", "clipboard", "contact", "address"],
-    },
-    {
-      id: "action-open-github",
-      label: "Open GitHub Profile",
-      category: "Actions",
-      description: "github.com/tushardevx01",
-      shortcut: "↗",
-      icon: LuFolderGit2,
-      action: () => {
-        window.open(siteConfig.social.github, "_blank", "noopener,noreferrer");
-        closePalette();
+      // Navigation
+      {
+        id: "nav-home",
+        label: "Home",
+        category: "Navigation",
+        description: "Jump to overview & editorial hero",
+        icon: LuCompass,
+        action: () => navigateTo("/"),
+        keywords: ["home", "main", "start", "landing"],
       },
-      keywords: ["github", "profile", "open", "source"],
-    },
-    {
-      id: "action-open-linkedin",
-      label: "Open LinkedIn Profile",
-      category: "Actions",
-      description: "linkedin.com/in/tushardevx01",
-      shortcut: "↗",
-      icon: LuArrowUpRight,
-      action: () => {
-        window.open(siteConfig.social.linkedin, "_blank", "noopener,noreferrer");
-        closePalette();
+      {
+        id: "nav-about",
+        label: "About Me",
+        category: "Navigation",
+        description: "Engineering background, mindset & bio",
+        icon: LuCompass,
+        action: () => navigateTo("/#about"),
+        keywords: ["about", "bio", "background", "story", "me", "mindset"],
       },
-      keywords: ["linkedin", "profile", "connect", "network"],
-    },
-  ], [navigateTo, copyEmail]);
+      {
+        id: "nav-work",
+        label: "Selected Work",
+        category: "Navigation",
+        description: "Production case studies & outcomes",
+        icon: LuFolderGit2,
+        action: () => navigateTo("/#selected-work"),
+        keywords: ["work", "projects", "case studies", "selected"],
+      },
+      {
+        id: "nav-devops",
+        label: "DevOps & Cloud Architecture",
+        category: "Navigation",
+        description: "CI/CD pipelines, Docker, Kubernetes & cloud automation",
+        icon: LuTerminal,
+        action: () => navigateTo("/#devops"),
+        keywords: ["devops", "cloud", "docker", "ci/cd", "kubernetes", "infrastructure", "deploy"],
+      },
+      {
+        id: "nav-stack",
+        label: "Technology Matrix",
+        category: "Navigation",
+        description: "Purpose-organized languages, backend, infra & tooling",
+        icon: LuCpu,
+        action: () => navigateTo("/#tech"),
+        keywords: ["stack", "technology", "tech", "matrix", "skills", "languages", "tools"],
+      },
+      {
+        id: "nav-experience",
+        label: "Engineering Track Record",
+        category: "Navigation",
+        description: "Full-time roles, platform leadership & impact",
+        icon: LuFileText,
+        action: () => navigateTo("/#experience"),
+        keywords: ["experience", "roles", "jobs", "azmth", "cycoders", "namespace"],
+      },
+      {
+        id: "nav-contact",
+        label: "Open Channel / Contact",
+        category: "Navigation",
+        description: "Direct email and professional channels",
+        icon: LuCompass,
+        action: () => navigateTo("/#contact"),
+        keywords: ["contact", "email", "collaborate", "hire", "message"],
+      },
+      {
+        id: "nav-credentials",
+        label: "Credentials",
+        category: "Navigation",
+        description: "Verified academic qualifications & technical certifications",
+        icon: LuAward,
+        action: () => navigateTo("/credentials"),
+        keywords: [
+          "credentials",
+          "certifications",
+          "degree",
+          "education",
+          "certificates",
+          "qualification",
+        ],
+      },
+      {
+        id: "nav-notes",
+        label: "Engineering Notes",
+        category: "Navigation",
+        description: "Technical writing and architecture deep-dives",
+        icon: LuFileText,
+        action: () => navigateTo("/engineering-notes"),
+        keywords: ["notes", "blog", "articles", "writings"],
+      },
+      {
+        id: "nav-resume",
+        label: "Resume / CV",
+        category: "Navigation",
+        description: "Verified engineering CV and experience sheet",
+        icon: LuFileText,
+        action: () => navigateTo("/resume"),
+        keywords: ["resume", "cv", "pdf", "qualifications"],
+      },
+
+      // Case Studies
+      {
+        id: "cs-runstack",
+        label: "Case Study: RunStack",
+        category: "Case Studies",
+        description: "Distributed deployment and job orchestration in Go",
+        icon: LuCpu,
+        action: () => navigateTo("/work/runstack"),
+        keywords: ["runstack", "orchestrator", "kafka", "redis", "docker", "go"],
+      },
+      {
+        id: "cs-aegis",
+        label: "Case Study: Aegis",
+        category: "Case Studies",
+        description: "Air-gapped AIOps & self-healing infrastructure",
+        icon: LuLayers,
+        action: () => navigateTo("/work/aegis"),
+        keywords: [
+          "aegis",
+          "aiops",
+          "sre",
+          "incident",
+          "remediation",
+          "docker",
+          "kafka",
+          "nestjs",
+          "python",
+        ],
+      },
+      {
+        id: "cs-carepulse",
+        label: "Case Study: CarePulse",
+        category: "Case Studies",
+        description: "Full-stack healthcare appointment & patient onboarding engine",
+        icon: LuFileText,
+        action: () => navigateTo("/work/carepulse"),
+        keywords: [
+          "carepulse",
+          "healthcare",
+          "appointments",
+          "appwrite",
+          "sms",
+          "twilio",
+          "nextjs",
+          "zod",
+          "server-actions",
+        ],
+      },
+      {
+        id: "cs-fenix",
+        label: "Case Study: Fenix",
+        category: "Case Studies",
+        description: "Real-time meeting platform with Stream Video SDK & Clerk",
+        icon: LuLayers,
+        action: () => navigateTo("/work/fenix"),
+        keywords: ["fenix", "stream", "video", "clerk", "meetings", "realtime", "nextjs"],
+      },
+      {
+        id: "cs-signifiya",
+        label: "Case Study: Signifiya",
+        category: "Case Studies",
+        description: "Mobile event infrastructure, native payments & 120Hz engine",
+        icon: LuSmartphone,
+        action: () => navigateTo("/work/signifiya"),
+        keywords: [
+          "signifiya",
+          "expo",
+          "react-native",
+          "supabase",
+          "razorpay",
+          "better-auth",
+          "mobile",
+        ],
+      },
+      {
+        id: "cs-webscope",
+        label: "Case Study: WebScope Pro",
+        category: "Case Studies",
+        description: "Website intelligence platform with Axios, Cheerio & Prisma",
+        icon: LuGlobe,
+        action: () => navigateTo("/work/webscope"),
+        keywords: ["webscope", "seo", "cheerio", "axios", "prisma", "scraper", "monitoring"],
+      },
+      {
+        id: "cs-subscription-tracker",
+        label: "Case Study: Subscription Tracker",
+        category: "Case Studies",
+        description: "API architecture, Upstash Workflow scheduling & Arcjet security",
+        icon: LuWorkflow,
+        action: () => navigateTo("/work/subscription-tracker"),
+        keywords: [
+          "subscription",
+          "tracker",
+          "express",
+          "mongodb",
+          "mongoose",
+          "arcjet",
+          "upstash",
+          "workflow",
+          "nodemailer",
+        ],
+      },
+
+      // Actions
+      {
+        id: "action-copy-email",
+        label: "Copy Email Address",
+        category: "Actions",
+        description: selfData.email,
+        shortcut: "↵",
+        icon: LuCopy,
+        action: copyEmail,
+        keywords: ["copy", "email", "clipboard", "contact", "address"],
+      },
+      {
+        id: "action-open-github",
+        label: "Open GitHub Profile",
+        category: "Actions",
+        description: "github.com/tushardevx01",
+        shortcut: "↗",
+        icon: LuFolderGit2,
+        action: () => {
+          window.open(siteConfig.social.github, "_blank", "noopener,noreferrer");
+          closePalette();
+        },
+        keywords: ["github", "profile", "open", "source"],
+      },
+      {
+        id: "action-open-linkedin",
+        label: "Open LinkedIn Profile",
+        category: "Actions",
+        description: "linkedin.com/in/tushardevx01",
+        shortcut: "↗",
+        icon: LuArrowUpRight,
+        action: () => {
+          window.open(siteConfig.social.linkedin, "_blank", "noopener,noreferrer");
+          closePalette();
+        },
+        keywords: ["linkedin", "profile", "connect", "network"],
+      },
+    ],
+    [navigateTo, copyEmail]
+  );
 
   const filteredCommands = useMemo(() => {
     if (!search.trim()) return commands;
@@ -588,7 +625,9 @@ export const CommandPalette = () => {
                         <div className="relative z-10 flex items-center gap-3 min-w-0">
                           <Icon
                             className={`w-4 h-4 flex-shrink-0 transition-colors duration-150 ${
-                              isSelected ? "text-emerald-400" : "text-neutral-500 group-hover:text-neutral-400"
+                              isSelected
+                                ? "text-emerald-400"
+                                : "text-neutral-500 group-hover:text-neutral-400"
                             }`}
                           />
                           <div className="truncate">
@@ -667,4 +706,3 @@ export const CommandPalette = () => {
     </>
   );
 };
-

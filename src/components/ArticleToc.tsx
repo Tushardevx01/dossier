@@ -36,9 +36,7 @@ export function ArticleToc({
 
     const levels = levelsKey ? levelsKey.split(",").map(Number) : DEFAULT_HEADING_LEVELS;
     const headingElements = Array.from(
-      container.querySelectorAll(
-        levels.map((level) => `h${level}`).join(",")
-      )
+      container.querySelectorAll(levels.map((level) => `h${level}`).join(","))
     ).filter((el): el is HTMLHeadingElement => el instanceof HTMLHeadingElement);
 
     const extracted: Heading[] = headingElements.map((el) => {
@@ -57,9 +55,7 @@ export function ArticleToc({
   if (headings.length === 0) return null;
 
   return (
-    <aside
-      className="hidden xl:block fixed right-8 2xl:right-16 top-32 w-56"
-    >
+    <aside className="hidden xl:block fixed right-8 2xl:right-16 top-32 w-56">
       <nav aria-label="Article navigation">
         <div className="space-y-0.5">
           <p className="text-xs uppercase tracking-widest font-semibold text-zinc-500 mb-4 px-3">
@@ -75,9 +71,7 @@ export function ArticleToc({
                     marginLeft: heading.level === 3 ? "1rem" : "0",
                   }}
                 >
-                  {heading.text.length > 30
-                    ? heading.text.substring(0, 30) + "…"
-                    : heading.text}
+                  {heading.text.length > 30 ? heading.text.substring(0, 30) + "…" : heading.text}
                 </div>
               </li>
             ))}

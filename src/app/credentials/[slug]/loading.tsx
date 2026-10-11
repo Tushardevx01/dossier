@@ -7,7 +7,6 @@ export default function CredentialLoading() {
       <Navbar />
 
       <main className="max-w-[720px] mx-auto px-4 sm:px-6 md:px-8 pt-28 sm:pt-32 pb-24 sm:pb-32 w-full">
-
         {/* Header Skeleton */}
         <div className="flex flex-wrap items-center justify-between gap-3 mb-8 sm:mb-10 animate-pulse">
           <div className="h-4 w-32 bg-neutral-800 rounded" />

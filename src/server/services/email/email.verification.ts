@@ -35,12 +35,12 @@ export async function verifyEmailAddress(
     const url = new URL("https://api.quickemailverification.com/v1/verify");
     url.searchParams.append("email", email);
     url.searchParams.append("apikey", apiKey);
-    
+
     const response = await fetch(url.toString(), {
       method: "GET",
       headers: {
-        "Accept": "application/json",
-        "Authorization": `Bearer ${apiKey}`,
+        Accept: "application/json",
+        Authorization: `Bearer ${apiKey}`,
       },
       signal: controller.signal,
       cache: "no-store",
@@ -69,7 +69,7 @@ export async function verifyEmailAddress(
     return { valid: true };
   } catch (error) {
     const isAbort = error instanceof Error && error.name === "AbortError";
-    const errorMessage = isAbort ? "timeout" : (error instanceof Error ? error.message : "unknown");
+    const errorMessage = isAbort ? "timeout" : error instanceof Error ? error.message : "unknown";
 
     logger.warn("Email verification failed", {
       error: errorMessage,

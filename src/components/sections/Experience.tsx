@@ -16,19 +16,12 @@ export function Experience() {
     >
       {/* Background decoration */}
 
-
-
       <div className="container mx-auto max-w-4xl px-4">
         <div className="text-center mb-16">
-          <h2
-            className={`${nasalization.className} text-4xl md:text-5xl font-bold text-primary`}
-          >
-            Engineering{" "}
-            <span className="text-primary/85">Track Record.</span>
+          <h2 className={`${nasalization.className} text-4xl md:text-5xl font-bold text-primary`}>
+            Engineering <span className="text-primary/85">Track Record.</span>
           </h2>
-          <p
-            className="text-xs text-muted-foreground max-w-2xl mx-auto mt-4"
-          >
+          <p className="text-xs text-muted-foreground max-w-2xl mx-auto mt-4">
             Roles where I owned delivery from architecture to deployment.
           </p>
         </div>

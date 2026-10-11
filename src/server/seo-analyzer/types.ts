@@ -1,6 +1,6 @@
 /**
  * SEO Analyzer Types
- * 
+ *
  * Type definitions for the production-grade SEO analysis engine.
  */
 

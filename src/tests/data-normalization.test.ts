@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { normalizeArray, normalizeObject, isArrayLike, isStringArray } from "@/lib/data-normalization";
+import {
+  normalizeArray,
+  normalizeObject,
+  isArrayLike,
+  isStringArray,
+} from "@/lib/data-normalization";
 
 describe("data-normalization", () => {
   describe("normalizeArray", () => {
@@ -20,7 +25,10 @@ describe("data-normalization", () => {
 
     it("parses double JSON-stringified arrays", () => {
       expect(normalizeArray(JSON.stringify('["item1", "item2"]'))).toEqual(["item1", "item2"]);
-      expect(normalizeArray(JSON.stringify(JSON.stringify(["alpha", "beta"])))).toEqual(["alpha", "beta"]);
+      expect(normalizeArray(JSON.stringify(JSON.stringify(["alpha", "beta"])))).toEqual([
+        "alpha",
+        "beta",
+      ]);
       expect(normalizeArray('\'["item1", "item2"]\'')).toEqual(["item1", "item2"]);
     });
 

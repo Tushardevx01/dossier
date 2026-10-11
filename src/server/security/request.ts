@@ -50,15 +50,22 @@ function isLocalhostHost(host: string): boolean {
 
 function resolveRequestOrigin(headers: Headers): string | null {
   const host = shouldTrustForwardedHeaders()
-    ? firstHeaderValue(headers.get("x-forwarded-host")) ?? firstHeaderValue(headers.get("host"))
+    ? (firstHeaderValue(headers.get("x-forwarded-host")) ?? firstHeaderValue(headers.get("host")))
     : firstHeaderValue(headers.get("host"));
 
   if (!host) {
     return null;
   }
 
-  const forwardedProto = shouldTrustForwardedHeaders() ? firstHeaderValue(headers.get("x-forwarded-proto")) : null;
-  const protocol = forwardedProto === "http" || forwardedProto === "https" ? forwardedProto : isLocalhostHost(host) ? "http" : "https";
+  const forwardedProto = shouldTrustForwardedHeaders()
+    ? firstHeaderValue(headers.get("x-forwarded-proto"))
+    : null;
+  const protocol =
+    forwardedProto === "http" || forwardedProto === "https"
+      ? forwardedProto
+      : isLocalhostHost(host)
+        ? "http"
+        : "https";
 
   try {
     return new URL(`${protocol}://${host}`).origin;
@@ -71,15 +78,15 @@ function extractForwardedClientIp(headers: Headers): string | null {
   // Only trust headers that the configured ingress overwrites. Storage account
   // credentials do not imply that requests passed through Cloudflare.
   if (process.env.VERCEL === "1") {
-    return normalizeClientIp(headers.get("x-vercel-forwarded-for")) ??
-      normalizeClientIp(headers.get("x-forwarded-for"));
+    return (
+      normalizeClientIp(headers.get("x-vercel-forwarded-for")) ??
+      normalizeClientIp(headers.get("x-forwarded-for"))
+    );
   }
   if (process.env.CF_PAGES) {
     return normalizeClientIp(headers.get("cf-connecting-ip"));
   }
-  const headerCandidates = [
-    headers.get("x-forwarded-for"),
-  ];
+  const headerCandidates = [headers.get("x-forwarded-for")];
 
   for (const value of headerCandidates) {
     const ip = normalizeClientIp(value);
@@ -107,14 +114,22 @@ export function isTrustedOrigin(headers: Headers): boolean {
   }
 
   const requestOrigin = resolveRequestOrigin(headers);
-  if (process.env.NODE_ENV !== "production" && requestOrigin &&
-      isLocalhostHost(new URL(requestOrigin).host) && originToTest === requestOrigin) {
+  if (
+    process.env.NODE_ENV !== "production" &&
+    requestOrigin &&
+    isLocalhostHost(new URL(requestOrigin).host) &&
+    originToTest === requestOrigin
+  ) {
     return true;
   }
 
   // Vercel preview hostnames are deployment configuration, never client headers.
-  if (process.env.VERCEL === "1" && process.env.VERCEL_URL &&
-      originToTest === `https://${process.env.VERCEL_URL}`) return true;
+  if (
+    process.env.VERCEL === "1" &&
+    process.env.VERCEL_URL &&
+    originToTest === `https://${process.env.VERCEL_URL}`
+  )
+    return true;
 
   return false;
 }

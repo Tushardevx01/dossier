@@ -1,5 +1,9 @@
 import { ImageResponse } from "next/og";
-import { SocialCardContent, SOCIAL_IMAGE_ALT, SOCIAL_IMAGE_SIZE } from "@/components/shared/SocialCardContent";
+import {
+  SocialCardContent,
+  SOCIAL_IMAGE_ALT,
+  SOCIAL_IMAGE_SIZE,
+} from "@/components/shared/SocialCardContent";
 
 export const runtime = "nodejs";
 export const alt = SOCIAL_IMAGE_ALT;

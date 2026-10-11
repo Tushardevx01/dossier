@@ -16,7 +16,7 @@ export interface ValidatedFile {
 
 export interface FileValidationOptions {
   maxSizeBytes?: number;
-  allowedTypes?: ('pdf' | 'png' | 'jpg' | 'jpeg' | 'webp')[];
+  allowedTypes?: ("pdf" | "png" | "jpg" | "jpeg" | "webp")[];
 }
 
 const DEFAULT_MAX_CERT_SIZE = 15 * 1024 * 1024; // 15 MB
@@ -25,19 +25,16 @@ const DEFAULT_MAX_THUMB_SIZE = 5 * 1024 * 1024; // 5 MB
 /**
  * Detect file MIME type and normalized extension from buffer header bytes.
  */
-export function detectMimeFromMagicBytes(buffer: Buffer): { mimeType: string; extension: string } | null {
+export function detectMimeFromMagicBytes(
+  buffer: Buffer
+): { mimeType: string; extension: string } | null {
   if (buffer.length < 12) {
     return null;
   }
 
   // PDF: starts with %PDF- (0x25, 0x50, 0x44, 0x46)
-  if (
-    buffer[0] === 0x25 &&
-    buffer[1] === 0x50 &&
-    buffer[2] === 0x44 &&
-    buffer[3] === 0x46
-  ) {
-    return { mimeType: 'application/pdf', extension: 'pdf' };
+  if (buffer[0] === 0x25 && buffer[1] === 0x50 && buffer[2] === 0x44 && buffer[3] === 0x46) {
+    return { mimeType: "application/pdf", extension: "pdf" };
   }
 
   // PNG: 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A
@@ -51,12 +48,12 @@ export function detectMimeFromMagicBytes(buffer: Buffer): { mimeType: string; ex
     buffer[6] === 0x1a &&
     buffer[7] === 0x0a
   ) {
-    return { mimeType: 'image/png', extension: 'png' };
+    return { mimeType: "image/png", extension: "png" };
   }
 
   // JPEG / JPG: 0xFF, 0xD8, 0xFF
   if (buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff) {
-    return { mimeType: 'image/jpeg', extension: 'jpg' };
+    return { mimeType: "image/jpeg", extension: "jpg" };
   }
 
   // WEBP: RIFF....WEBP (0x52, 0x49, 0x46, 0x46 ... 0x57, 0x45, 0x42, 0x50)
@@ -70,7 +67,7 @@ export function detectMimeFromMagicBytes(buffer: Buffer): { mimeType: string; ex
     buffer[10] === 0x42 &&
     buffer[11] === 0x50
   ) {
-    return { mimeType: 'image/webp', extension: 'webp' };
+    return { mimeType: "image/webp", extension: "webp" };
   }
 
   return null;
@@ -84,10 +81,10 @@ export async function validateCredentialFile(
   options: FileValidationOptions = {}
 ): Promise<ValidatedFile> {
   const maxBytes = options.maxSizeBytes ?? DEFAULT_MAX_CERT_SIZE;
-  const allowed = options.allowedTypes ?? ['pdf', 'png', 'jpg', 'jpeg', 'webp'];
+  const allowed = options.allowedTypes ?? ["pdf", "png", "jpg", "jpeg", "webp"];
 
   let buffer: Buffer;
-  let clientFilename = '';
+  let clientFilename = "";
 
   if (fileInput instanceof Buffer) {
     buffer = fileInput;
@@ -95,15 +92,15 @@ export async function validateCredentialFile(
     if (fileInput.size > maxBytes) throw new Error("File size exceeds the upload limit");
     const arrayBuffer = await fileInput.arrayBuffer();
     buffer = Buffer.from(arrayBuffer);
-    if ('name' in fileInput && typeof fileInput.name === 'string') {
+    if ("name" in fileInput && typeof fileInput.name === "string") {
       clientFilename = fileInput.name;
     }
   } else {
-    throw new Error('Invalid file input');
+    throw new Error("Invalid file input");
   }
 
   if (buffer.length === 0) {
-    throw new Error('Uploaded file is empty');
+    throw new Error("Uploaded file is empty");
   }
 
   if (buffer.length > maxBytes) {
@@ -113,21 +110,23 @@ export async function validateCredentialFile(
 
   // Check client extension if available
   if (clientFilename) {
-    const ext = clientFilename.split('.').pop()?.toLowerCase() ?? '';
-    const normalizedExt = ext === 'jpeg' ? 'jpg' : ext;
-    if (!allowed.includes(normalizedExt as 'pdf' | 'png' | 'jpg' | 'jpeg' | 'webp')) {
-      throw new Error(`Unsupported file extension: .${ext}. Allowed extensions: ${allowed.join(', ')}`);
+    const ext = clientFilename.split(".").pop()?.toLowerCase() ?? "";
+    const normalizedExt = ext === "jpeg" ? "jpg" : ext;
+    if (!allowed.includes(normalizedExt as "pdf" | "png" | "jpg" | "jpeg" | "webp")) {
+      throw new Error(
+        `Unsupported file extension: .${ext}. Allowed extensions: ${allowed.join(", ")}`
+      );
     }
   }
 
   // Deep inspect magic bytes
   const magic = detectMimeFromMagicBytes(buffer);
   if (!magic) {
-    throw new Error('File content does not match any accepted format (PDF, PNG, JPG, WEBP)');
+    throw new Error("File content does not match any accepted format (PDF, PNG, JPG, WEBP)");
   }
 
-  const normalizedDetected = magic.extension === 'jpeg' ? 'jpg' : magic.extension;
-  if (!allowed.includes(normalizedDetected as 'pdf' | 'png' | 'jpg' | 'jpeg' | 'webp')) {
+  const normalizedDetected = magic.extension === "jpeg" ? "jpg" : magic.extension;
+  if (!allowed.includes(normalizedDetected as "pdf" | "png" | "jpg" | "jpeg" | "webp")) {
     throw new Error(`Detected file type (${magic.mimeType}) is not allowed for this field`);
   }
 
@@ -147,13 +146,14 @@ export async function validateCredentialFile(
  */
 export function generateSafeStorageKey(
   credentialId: string | number,
-  type: 'certificate' | 'thumbnail',
+  type: "certificate" | "thumbnail",
   extension: string
 ): string {
-  const sanitizedId = String(credentialId).replace(/[^a-zA-Z0-9_-]/g, '');
-  const cleanExt = extension.replace(/^\./, '').toLowerCase();
-  if (!["pdf", "png", "jpg", "jpeg", "webp"].includes(cleanExt)) throw new Error("Invalid file extension");
-  return `credentials/${sanitizedId || 'draft'}/${type}-${crypto.randomUUID()}.${cleanExt}`;
+  const sanitizedId = String(credentialId).replace(/[^a-zA-Z0-9_-]/g, "");
+  const cleanExt = extension.replace(/^\./, "").toLowerCase();
+  if (!["pdf", "png", "jpg", "jpeg", "webp"].includes(cleanExt))
+    throw new Error("Invalid file extension");
+  return `credentials/${sanitizedId || "draft"}/${type}-${crypto.randomUUID()}.${cleanExt}`;
 }
 
 export { DEFAULT_MAX_CERT_SIZE, DEFAULT_MAX_THUMB_SIZE };

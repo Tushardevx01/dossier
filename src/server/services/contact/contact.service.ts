@@ -23,7 +23,10 @@ import {
 import { validateContactForm } from "@/schemas";
 import { checkRateLimit, createRateLimitKey } from "./contact.rateLimit";
 import { sendEmail } from "@/server/services/email/email.transport";
-import { renderContactEmail, renderContactNotificationEmail } from "@/server/services/email/email.templates";
+import {
+  renderContactEmail,
+  renderContactNotificationEmail,
+} from "@/server/services/email/email.templates";
 import { verifyEmailAddress } from "@/server/services/email/email.verification";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -41,8 +44,7 @@ export interface ContactRequest {
 }
 
 export type ContactResult =
-  | { success: true; message: string }
-  | { success: false; error: AppError };
+  { success: true; message: string } | { success: false; error: AppError };
 
 async function runEmailVerificationBestEffort(
   email: string,
@@ -88,7 +90,11 @@ export async function processContactSubmission(
     );
 
     if (!rateLimit.allowed) {
-      logger.warn("Rate limit exceeded", { requestId, clientIdentifier, retryAfterSeconds: rateLimit.retryAfterSeconds });
+      logger.warn("Rate limit exceeded", {
+        requestId,
+        clientIdentifier,
+        retryAfterSeconds: rateLimit.retryAfterSeconds,
+      });
       return {
         success: false,
         error: Errors.rateLimitExceeded(rateLimit.retryAfterSeconds, { requestId }),
@@ -156,18 +162,23 @@ export async function processContactSubmission(
         { from: config.emailFrom, password: config.emailPassword }
       ),
       sendEmail(
-      {
-        to: { name: "Tushar Kanti Dey", address: config.emailFrom },
-        subject: `New Collaboration Request from ${formData.senderName.replace(/[\r\n\t]+/g, " ").trim()} - ${formData.reasonToContact}`,
-        html: ownerHtmlContent,
-        replyTo: formData.senderEmail,
-      },
-      { from: config.emailFrom, password: config.emailPassword }
+        {
+          to: { name: "Tushar Kanti Dey", address: config.emailFrom },
+          subject: `New Collaboration Request from ${formData.senderName.replace(/[\r\n\t]+/g, " ").trim()} - ${formData.reasonToContact}`,
+          html: ownerHtmlContent,
+          replyTo: formData.senderEmail,
+        },
+        { from: config.emailFrom, password: config.emailPassword }
       ),
     ]);
 
     if (!userEmailResult.success || !ownerEmailResult.success) {
-      logger.error("Email send failed", { requestId, userError: userEmailResult.error, ownerError: ownerEmailResult.error, clientIdentifier });
+      logger.error("Email send failed", {
+        requestId,
+        userError: userEmailResult.error,
+        ownerError: ownerEmailResult.error,
+        clientIdentifier,
+      });
       return {
         success: false,
         error: Errors.internal("Failed to send email", { requestId }),
@@ -177,10 +188,13 @@ export async function processContactSubmission(
     logger.info("Contact submission processed successfully", { requestId, clientIdentifier });
     return { success: true, message: "Message has been sent successfully" };
   } catch (error) {
-    logger.exception(error instanceof Error ? error : new Error("Unexpected contact submission failure"), {
-      requestId,
-      clientIdentifier,
-    });
+    logger.exception(
+      error instanceof Error ? error : new Error("Unexpected contact submission failure"),
+      {
+        requestId,
+        clientIdentifier,
+      }
+    );
 
     return {
       success: false,

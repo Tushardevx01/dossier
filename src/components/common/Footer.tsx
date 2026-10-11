@@ -17,13 +17,10 @@ export const Footer = () => {
   const toggleHeart = () => setIsHeartFilled((prev) => !prev);
   const currentYear = new Date().getFullYear();
 
-
   return (
     <footer className="relative border-t border-border/50 overflow-hidden">
       <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-6 py-8 overflow-x-hidden">
         {/* Navigation Links */}
-          
-        
 
         {/* Divider */}
 
@@ -34,10 +31,7 @@ export const Footer = () => {
             <button onClick={toggleHeart} className="text-primary" aria-label="Toggle heart">
               {isHeartFilled ? <TbHeartFilled /> : <TbHeart />}
             </button>
-            <a
-              href="/"
-              className="text-primary/80 hover:text-primary"
-            >
+            <a href="/" className="text-primary/80 hover:text-primary">
               Tushar Kanti Dey
             </a>
           </p>

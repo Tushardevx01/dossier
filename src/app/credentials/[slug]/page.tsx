@@ -1,12 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import {
-  LuArrowLeft,
-  LuAward,
-  LuCalendar,
-  LuExternalLink,
-} from "react-icons/lu";
+import { LuArrowLeft, LuAward, LuCalendar, LuExternalLink } from "react-icons/lu";
 
 import { Navbar, Footer, Background } from "@/components/common";
 import { JsonLd } from "@/components/shared/JsonLd";
@@ -17,10 +12,7 @@ import {
   getCredentialsCount,
   getAllCredentialSlugs,
 } from "@/server/repositories/credentials";
-import {
-  formatFullDate,
-  slugifyTitle,
-} from "@/lib/credential-utils";
+import { formatFullDate, slugifyTitle } from "@/lib/credential-utils";
 import { CertificatePreviewWrapper } from "@/components/credentials/CertificatePreviewWrapper";
 import { renderMarkdownToHtml } from "@/lib/markdown";
 
@@ -46,18 +38,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return buildPageMetadata({
     title: `${cred.title} | Certification | Tushar Kanti Dey`,
-    description:
-      cred.description
-        ? cred.description.replace(/[#*`_>|~[\]()-]/g, " ").replace(/\s+/g, " ").trim().slice(0, 160)
-        : `Certification credential record for ${cred.title} issued by ${cred.issuer}.`,
+    description: cred.description
+      ? cred.description
+          .replace(/[#*`_>|~[\]()-]/g, " ")
+          .replace(/\s+/g, " ")
+          .trim()
+          .slice(0, 160)
+      : `Certification credential record for ${cred.title} issued by ${cred.issuer}.`,
     path: `/credentials/${canonicalSlug}`,
-    keywords: [
-      cred.title,
-      cred.issuer,
-      "Certification",
-      "Credential",
-      "Tushar Kanti Dey",
-    ].filter(Boolean) as string[],
+    keywords: [cred.title, cred.issuer, "Certification", "Credential", "Tushar Kanti Dey"].filter(
+      Boolean
+    ) as string[],
   });
 }
 
@@ -92,7 +83,6 @@ export default async function CredentialDetailPage({ params }: PageProps) {
       <JsonLd data={breadcrumbsSchema} />
 
       <main className="max-w-[720px] mx-auto px-4 sm:px-6 md:px-8 pt-28 sm:pt-32 pb-24 sm:pb-32 w-full">
-
         {/* Page Header */}
         <div className="flex flex-wrap items-center justify-between gap-3 mb-8 sm:mb-10">
           <Link
@@ -107,7 +97,11 @@ export default async function CredentialDetailPage({ params }: PageProps) {
           <div className="flex items-center gap-2.5 sm:gap-3">
             {cred.credentialLink && (
               <a
-                href={cred.credentialLink.startsWith("http") ? cred.credentialLink : `https://${cred.credentialLink}`}
+                href={
+                  cred.credentialLink.startsWith("http")
+                    ? cred.credentialLink
+                    : `https://${cred.credentialLink}`
+                }
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 px-3 py-1 rounded text-xs font-mono tracking-wider uppercase text-neutral-300 hover:text-white bg-neutral-900/80 hover:bg-neutral-800 border border-neutral-800 hover:border-neutral-700 transition-colors"

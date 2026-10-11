@@ -49,7 +49,11 @@ async function checkMemoryRateLimit(
 
   if (!current || current.resetAt <= now) {
     memoryStore.set(key, { count: 1, resetAt: now + windowMs });
-    return { allowed: true, remaining: Math.max(maxRequests - 1, 0), retryAfterSeconds: windowSeconds };
+    return {
+      allowed: true,
+      remaining: Math.max(maxRequests - 1, 0),
+      retryAfterSeconds: windowSeconds,
+    };
   }
 
   if (current.count >= maxRequests) {
@@ -76,7 +80,10 @@ async function checkRedisRateLimit(
   const redis = getRedisClient();
   if (!redis) {
     if (process.env.NODE_ENV === "production") {
-      logger.error("Redis rate limiting unavailable in production. Failing closed to prevent bypass.", { key });
+      logger.error(
+        "Redis rate limiting unavailable in production. Failing closed to prevent bypass.",
+        { key }
+      );
       return { allowed: false, remaining: 0, retryAfterSeconds: windowMs / 1000 };
     }
     return checkMemoryRateLimit(key, maxRequests, windowMs);
@@ -97,7 +104,7 @@ async function checkRedisRateLimit(
        end
        return {count, ttl}`,
       [redisKey],
-      [windowSeconds],
+      [windowSeconds]
     )) as [number, number];
 
     const [count, ttl] = result;
@@ -135,6 +142,9 @@ export async function checkRateLimit(
 }
 
 export function createRateLimitKey(prefix: string, identifier: string): string {
-  const normalized = identifier.trim().slice(0, 128).replace(/[^a-zA-Z0-9:._-]/g, "_");
+  const normalized = identifier
+    .trim()
+    .slice(0, 128)
+    .replace(/[^a-zA-Z0-9:._-]/g, "_");
   return `${prefix}:${normalized || "unknown"}`;
 }

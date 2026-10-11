@@ -16,9 +16,7 @@ export function normalizeCsrfTokenValue(token: string): string {
 }
 
 export function normalizeBase64Token(token: string): string {
-  const canonical = normalizeCsrfTokenValue(token)
-    .replace(/-/g, "+")
-    .replace(/_/g, "/");
+  const canonical = normalizeCsrfTokenValue(token).replace(/-/g, "+").replace(/_/g, "/");
 
   const paddingLength = canonical.length % 4;
   if (paddingLength === 0) {

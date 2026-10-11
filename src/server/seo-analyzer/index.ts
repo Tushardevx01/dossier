@@ -2,10 +2,10 @@ import "server-only";
 
 /**
  * SEO Analyzer - Main Entry Point
- * 
+ *
  * Production-grade SEO analysis engine for modern Next.js websites.
  * Handles SSR, streaming, and dynamic content correctly.
- * 
+ *
  * @module seo-analyzer
  */
 
@@ -15,23 +15,17 @@ import { runChecks, calculateScore, extractMetrics } from "./calculateScore";
 import type { SEOAnalysisResult, AnalyzerError } from "./types";
 
 // Re-export types for consumers
-export type {
-  SEOAnalysisResult,
-  SEOCheck,
-  SEOMetrics,
-  MetaTags,
-  AnalyzerError,
-} from "./types";
+export type { SEOAnalysisResult, SEOCheck, SEOMetrics, MetaTags, AnalyzerError } from "./types";
 
 // Re-export utilities
 export { validateUrl } from "./fetchHTML";
 
 /**
  * Analyzes a URL for SEO best practices
- * 
+ *
  * @param url - The HTTPS URL to analyze
  * @returns Analysis result or error
- * 
+ *
  * @example
  * ```typescript
  * const result = await analyzeSEO("https://example.com");

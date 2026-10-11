@@ -32,7 +32,8 @@ export const CaseStudyIndex: React.FC<CaseStudyIndexProps> = ({
     const activeBtn = mobileNavRef.current.querySelector<HTMLElement>("[data-active='true']");
     if (activeBtn) {
       const container = mobileNavRef.current;
-      const scrollLeft = activeBtn.offsetLeft - container.offsetWidth / 2 + activeBtn.offsetWidth / 2;
+      const scrollLeft =
+        activeBtn.offsetLeft - container.offsetWidth / 2 + activeBtn.offsetWidth / 2;
       container.scrollTo({ left: Math.max(0, scrollLeft), behavior: "smooth" });
     }
   }, [activeSection]);

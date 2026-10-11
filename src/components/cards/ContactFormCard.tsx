@@ -1,4 +1,3 @@
-
 import { BsSend, BsSendCheck } from "react-icons/bs";
 
 import { Card } from "../ui/card";
@@ -8,9 +7,7 @@ export const ContactFormCard = () => {
   const { formValues, isSending, isSent, handleChange, handleSubmit } = useContactForm();
 
   return (
-    <div
-      className="h-full"
-    >
+    <div className="h-full">
       <Card
         className="relative overflow-hidden border transition-all duration-300 h-full flex flex-col"
         style={{
@@ -98,9 +95,7 @@ export const ContactFormCard = () => {
               </select>
             </div>
 
-            <div
-              className="flex-grow flex flex-col"
-            >
+            <div className="flex-grow flex flex-col">
               <label className="block text-xs uppercase tracking-wider text-white/50 mb-2">
                 Message
               </label>
@@ -118,9 +113,7 @@ export const ContactFormCard = () => {
               />
             </div>
 
-            <div
-              className="pt-4"
-            >
+            <div className="pt-4">
               <button
                 type="submit"
                 disabled={isSending}
@@ -128,9 +121,7 @@ export const ContactFormCard = () => {
               >
                 {isSending ? (
                   <>
-                    <div
-                      className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"
-                    />
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                     <span>Sending...</span>
                   </>
                 ) : isSent ? (

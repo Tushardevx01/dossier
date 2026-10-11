@@ -2,7 +2,7 @@ import "server-only";
 
 /**
  * Content Parser Module
- * 
+ *
  * Extracts and normalizes visible content from HTML using Cheerio.
  * Handles modern Next.js SSR/streaming sites correctly.
  */
@@ -101,7 +101,7 @@ function analyzeImages($: CheerioDocument): { total: number; withAlt: number; wi
 function normalizeText(text: string): string {
   return text
     .replace(/[\r\n\t]+/g, " ") // Replace newlines/tabs with space
-    .replace(/\s+/g, " ")       // Collapse multiple spaces
+    .replace(/\s+/g, " ") // Collapse multiple spaces
     .trim();
 }
 

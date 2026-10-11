@@ -9,16 +9,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { readCredentialJson, readCredentialForm, parseCredentialId } from "@/server/services/credentials/payload";
+import {
+  readCredentialJson,
+  readCredentialForm,
+  parseCredentialId,
+} from "@/server/services/credentials/payload";
 import { PayloadTooLargeError } from "@/server/http/body";
-import { getCredentialById, updateCredential, deleteCredential } from "@/server/repositories/credentials";
+import {
+  getCredentialById,
+  updateCredential,
+  deleteCredential,
+} from "@/server/repositories/credentials";
 import { UpdateJsonSchema } from "@/schemas";
 import { validateAdminRequest } from "@/server/security/auth";
-import {
-  uploadToR2,
-  deleteFromR2,
-  isR2Configured,
-} from "@/server/storage/r2";
+import { uploadToR2, deleteFromR2, isR2Configured } from "@/server/storage/r2";
 import {
   validateCredentialFile,
   generateSafeStorageKey,
@@ -93,7 +97,10 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
   const auth = await validateAdminRequest(request);
   if (!auth.authorized) {
     return NextResponse.json(
-      { success: false, error: { code: "UNAUTHORIZED", message: auth.error || "Admin access required" } },
+      {
+        success: false,
+        error: { code: "UNAUTHORIZED", message: auth.error || "Admin access required" },
+      },
       { status: 401 }
     );
   }
@@ -130,22 +137,31 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
       if (formData.has("title")) updateData.title = formData.get("title")?.toString().trim();
       if (formData.has("slug")) updateData.slug = formData.get("slug")?.toString().trim();
       if (formData.has("issuer")) updateData.issuer = formData.get("issuer")?.toString().trim();
-      if (formData.has("objectLink")) updateData.objectLink = formData.get("objectLink")?.toString().trim();
-      if (formData.has("description")) updateData.description = formData.get("description")?.toString().trim() || null;
-      if (formData.has("credentialLink")) updateData.credentialLink = formData.get("credentialLink")?.toString().trim() || null;
-      if (formData.has("verificationUrl")) updateData.credentialLink = formData.get("verificationUrl")?.toString().trim() || null;
+      if (formData.has("objectLink"))
+        updateData.objectLink = formData.get("objectLink")?.toString().trim();
+      if (formData.has("description"))
+        updateData.description = formData.get("description")?.toString().trim() || null;
+      if (formData.has("credentialLink"))
+        updateData.credentialLink = formData.get("credentialLink")?.toString().trim() || null;
+      if (formData.has("verificationUrl"))
+        updateData.credentialLink = formData.get("verificationUrl")?.toString().trim() || null;
 
       if (formData.has("issueDate") || formData.has("issuedAt")) {
-        const dateStr = (formData.get("issueDate") || formData.get("issuedAt"))?.toString().trim() || "";
+        const dateStr =
+          (formData.get("issueDate") || formData.get("issuedAt"))?.toString().trim() || "";
         updateData.issueDate = dateStr;
       }
 
       // Check for replacement certificate file
-      const certFile = formData.get("certificateFile") || formData.get("certificate") || formData.get("file");
+      const certFile =
+        formData.get("certificateFile") || formData.get("certificate") || formData.get("file");
       if (certFile && certFile instanceof File && certFile.size > 0) {
         if (!isR2Configured()) {
           return NextResponse.json(
-            { success: false, error: { code: "R2_NOT_CONFIGURED", message: "R2 is not configured" } },
+            {
+              success: false,
+              error: { code: "R2_NOT_CONFIGURED", message: "R2 is not configured" },
+            },
             { status: 503 }
           );
         }
@@ -212,7 +228,10 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
       }
     } catch (uploadErr) {
       await Promise.allSettled(newlyUploadedKeys.map((k) => deleteFromR2(k)));
-      logger.error("Error processing multipart credential payload", { id: numId, error: uploadErr });
+      logger.error("Error processing multipart credential payload", {
+        id: numId,
+        error: uploadErr,
+      });
       return NextResponse.json(
         {
           success: false,
@@ -239,10 +258,15 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
       if (parsed.description !== undefined) updateData.description = parsed.description;
       if (parsed.issueDate !== undefined) updateData.issueDate = new Date(parsed.issueDate);
       if (parsed.objectLink !== undefined) updateData.objectLink = parsed.objectLink;
-      if (parsed.credentialLink !== undefined) updateData.credentialLink = parsed.credentialLink || null;
+      if (parsed.credentialLink !== undefined)
+        updateData.credentialLink = parsed.credentialLink || null;
 
       const updated = await updateCredential(numId, updateData);
-      if (!updated) return NextResponse.json({ success: false, error: { code: "NOT_FOUND", message: "Credential not found" } }, { status: 404 });
+      if (!updated)
+        return NextResponse.json(
+          { success: false, error: { code: "NOT_FOUND", message: "Credential not found" } },
+          { status: 404 }
+        );
 
       revalidatePath("/credentials");
       revalidatePath(`/credentials/${numId}`);
@@ -257,8 +281,13 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
       });
     } catch (err) {
       if (err instanceof PayloadTooLargeError || err instanceof SyntaxError) {
-        return NextResponse.json({ success: false, error: { code: "INVALID_PAYLOAD", message: "Invalid request payload" } },
-          { status: err instanceof PayloadTooLargeError ? 413 : 400 });
+        return NextResponse.json(
+          {
+            success: false,
+            error: { code: "INVALID_PAYLOAD", message: "Invalid request payload" },
+          },
+          { status: err instanceof PayloadTooLargeError ? 413 : 400 }
+        );
       }
       if (err instanceof z.ZodError) {
         return NextResponse.json(
@@ -288,7 +317,10 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
   }
 
   return NextResponse.json(
-    { success: false, error: { code: "UNSUPPORTED_MEDIA_TYPE", message: "Unsupported content type" } },
+    {
+      success: false,
+      error: { code: "UNSUPPORTED_MEDIA_TYPE", message: "Unsupported content type" },
+    },
     { status: 415 }
   );
 }
@@ -311,7 +343,10 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
   const auth = await validateAdminRequest(request);
   if (!auth.authorized) {
     return NextResponse.json(
-      { success: false, error: { code: "UNAUTHORIZED", message: auth.error || "Admin access required" } },
+      {
+        success: false,
+        error: { code: "UNAUTHORIZED", message: auth.error || "Admin access required" },
+      },
       { status: 401 }
     );
   }

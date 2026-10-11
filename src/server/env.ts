@@ -8,15 +8,20 @@ const cleanString = (val: unknown) =>
 const cleanPassword = (val: unknown) =>
   typeof val === "string" ? val.replace(/^["']|["']$/g, "").replace(/\s+/g, "") : val;
 
-const serverEnvSchema = z.object({
-  QEV_API_KEY: z.preprocess(cleanString, z.string().optional().default("")),
-  EMAIL_FROM: z.preprocess(cleanString, z.string().email("EMAIL_FROM must be a valid email address")),
-  EMAIL_PASSWORD: z.preprocess(cleanPassword, z.string().optional().default("")),
-  RESEND_API_KEY: z.preprocess(cleanString, z.string().optional().default("")),
-}).refine((env) => Boolean(env.EMAIL_PASSWORD || env.RESEND_API_KEY), {
-  message: "Configure EMAIL_PASSWORD or RESEND_API_KEY",
-  path: ["EMAIL_PASSWORD"],
-});
+const serverEnvSchema = z
+  .object({
+    QEV_API_KEY: z.preprocess(cleanString, z.string().optional().default("")),
+    EMAIL_FROM: z.preprocess(
+      cleanString,
+      z.string().email("EMAIL_FROM must be a valid email address")
+    ),
+    EMAIL_PASSWORD: z.preprocess(cleanPassword, z.string().optional().default("")),
+    RESEND_API_KEY: z.preprocess(cleanString, z.string().optional().default("")),
+  })
+  .refine((env) => Boolean(env.EMAIL_PASSWORD || env.RESEND_API_KEY), {
+    message: "Configure EMAIL_PASSWORD or RESEND_API_KEY",
+    path: ["EMAIL_PASSWORD"],
+  });
 
 export type ServerEnv = z.infer<typeof serverEnvSchema>;
 

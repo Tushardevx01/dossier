@@ -109,7 +109,14 @@ function isNetworkError(error: unknown): boolean {
   const msg = String(err.message || "").toLowerCase();
 
   return (
-    ["ETIMEDOUT", "ESOCKETTIMEDOUT", "ECONNREFUSED", "ECONNRESET", "EHOSTUNREACH", "ENOTFOUND"].includes(code) ||
+    [
+      "ETIMEDOUT",
+      "ESOCKETTIMEDOUT",
+      "ECONNREFUSED",
+      "ECONNRESET",
+      "EHOSTUNREACH",
+      "ENOTFOUND",
+    ].includes(code) ||
     msg.includes("timeout") ||
     msg.includes("greeting never received") ||
     msg.includes("connection closed")

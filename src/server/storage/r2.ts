@@ -107,8 +107,13 @@ export function extractR2Key(keyOrUrl: string): string {
       if (!publicBase) return "";
       const base = new URL(publicBase);
       const basePath = base.pathname.replace(/\/$/, "") + "/";
-      if (url.origin !== base.origin || url.username || url.password ||
-          !url.pathname.startsWith(basePath)) return "";
+      if (
+        url.origin !== base.origin ||
+        url.username ||
+        url.password ||
+        !url.pathname.startsWith(basePath)
+      )
+        return "";
       trimmed = decodeURIComponent(url.pathname.slice(basePath.length));
     } catch {
       return "";
@@ -118,7 +123,8 @@ export function extractR2Key(keyOrUrl: string): string {
   // Normalize and block traversal
   trimmed = trimmed.replace(/^\/+/, "");
   const segments = trimmed.split("/");
-  if (segments.some(s => !s || s === "." || s === ".." || !/^[a-zA-Z0-9_.-]+$/.test(s))) return "";
+  if (segments.some((s) => !s || s === "." || s === ".." || !/^[a-zA-Z0-9_.-]+$/.test(s)))
+    return "";
   const clean = segments.join("/");
 
   // Enforce prefix (assuming all usage is within 'credentials/')
@@ -195,9 +201,7 @@ export async function uploadToR2(options: {
  * Delete an object from Cloudflare R2.
  * Idempotent: does not throw if object doesn't exist.
  */
-export async function deleteFromR2(
-  keyOrUrl: string
-): Promise<{ success: boolean; key: string }> {
+export async function deleteFromR2(keyOrUrl: string): Promise<{ success: boolean; key: string }> {
   const cleanKey = extractR2Key(keyOrUrl);
   if (!cleanKey) {
     return { success: false, key: "" };

@@ -2,10 +2,17 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const { evalMock } = vi.hoisted(() => ({ evalMock: vi.fn() }));
-vi.mock("@upstash/redis", () => ({ Redis: class { eval = evalMock; } }));
+vi.mock("@upstash/redis", () => ({
+  Redis: class {
+    eval = evalMock;
+  },
+}));
 
 describe("rate limits", () => {
-  beforeEach(() => { vi.resetModules(); vi.clearAllMocks(); });
+  beforeEach(() => {
+    vi.resetModules();
+    vi.clearAllMocks();
+  });
   afterEach(() => vi.unstubAllEnvs());
 
   it("fails closed in production when Redis is absent", async () => {
@@ -31,7 +38,11 @@ describe("rate limits", () => {
     vi.stubEnv("UPSTASH_REDIS_REST_TOKEN", "test");
     evalMock.mockResolvedValue([6, 17]);
     const { checkRateLimit } = await import("./rateLimit");
-    expect(await checkRateLimit("test", 5, 60000)).toEqual({ allowed: false, remaining: 0, retryAfterSeconds: 17 });
+    expect(await checkRateLimit("test", 5, 60000)).toEqual({
+      allowed: false,
+      remaining: 0,
+      retryAfterSeconds: 17,
+    });
   });
 
   it("enforces and expires the local development window", async () => {
@@ -45,6 +56,8 @@ describe("rate limits", () => {
       expect((await checkRateLimit("test", 1, 1000)).allowed).toBe(false);
       vi.advanceTimersByTime(1001);
       expect((await checkRateLimit("test", 1, 1000)).allowed).toBe(true);
-    } finally { vi.useRealTimers(); }
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });

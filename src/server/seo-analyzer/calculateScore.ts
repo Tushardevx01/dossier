@@ -2,7 +2,7 @@ import "server-only";
 
 /**
  * Score Calculator Module
- * 
+ *
  * Calculates SEO scores based on parsed content analysis.
  * Uses weighted scoring system with clear pass/fail criteria.
  */

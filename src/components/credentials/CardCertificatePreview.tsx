@@ -44,9 +44,7 @@ export function CardCertificatePreview({ credential }: { credential: Credential 
   }, []);
 
   const displayImage =
-    credential.objectLink && isImageUrl(credential.objectLink)
-      ? credential.objectLink
-      : null;
+    credential.objectLink && isImageUrl(credential.objectLink) ? credential.objectLink : null;
 
   const pdfUrl = credential.objectLink
     ? `/api/credentials/${credential.id}/download?inline=true`
@@ -109,9 +107,7 @@ export function CardCertificatePreview({ credential }: { credential: Credential 
         <div className="text-sm sm:text-base font-serif font-bold text-neutral-900 tracking-tight line-clamp-2">
           {credential.title}
         </div>
-        <div className="text-xs font-sans text-neutral-600 mt-1">
-          {credential.issuer}
-        </div>
+        <div className="text-xs font-sans text-neutral-600 mt-1">{credential.issuer}</div>
       </div>
       <div className="text-[9px] font-mono text-neutral-400 text-right uppercase">
         Verified Record
