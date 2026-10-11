@@ -1,0 +1,86 @@
+import "server-only";
+
+/**
+ * Email Verification Service
+ *
+ * Validates email addresses via external API.
+ * Handles timeouts and errors gracefully.
+ *
+ * SECURITY: API key is passed in request body/headers, not in URL query parameters,
+ * to prevent exposure in logs, referrer headers, or browser history.
+ */
+
+import { logger } from "@/lib/logger";
+import { Errors, AppError } from "@/lib/errors";
+
+const VERIFICATION_TIMEOUT_MS = 3000;
+
+export interface VerificationResult {
+  valid: boolean;
+  error?: AppError;
+}
+
+/**
+ * Verify email address via QuickEmailVerification API
+ */
+export async function verifyEmailAddress(
+  email: string,
+  apiKey: string,
+  requestId?: string
+): Promise<VerificationResult> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), VERIFICATION_TIMEOUT_MS);
+
+  try {
+    const url = new URL("https://api.quickemailverification.com/v1/verify");
+    url.searchParams.append("email", email);
+    url.searchParams.append("apikey", apiKey);
+    
+    const response = await fetch(url.toString(), {
+      method: "GET",
+      headers: {
+        "Accept": "application/json",
+        "Authorization": `Bearer ${apiKey}`,
+      },
+      signal: controller.signal,
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      logger.warn("Email verification API returned non-OK status", {
+        status: response.status,
+        requestId,
+      });
+      return {
+        valid: false,
+        error: Errors.externalService("Email validation service", { requestId }),
+      };
+    }
+
+    const data = await response.json();
+
+    if (data.result !== "valid") {
+      return {
+        valid: false,
+        error: Errors.validation("Email address is not valid", { requestId, field: "senderEmail" }),
+      };
+    }
+
+    return { valid: true };
+  } catch (error) {
+    const isAbort = error instanceof Error && error.name === "AbortError";
+    const errorMessage = isAbort ? "timeout" : (error instanceof Error ? error.message : "unknown");
+
+    logger.warn("Email verification failed", {
+      error: errorMessage,
+      requestId,
+    });
+
+    return {
+      valid: false,
+      error: Errors.externalService("Email validation service", { requestId }),
+    };
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}

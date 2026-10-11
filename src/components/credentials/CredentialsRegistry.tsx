@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import type { Credential } from "@/db/schema";
+import type { Credential } from "@/server/db/schema";
 import { CredentialRecordCard } from "./CredentialRecordCard";
 import { LuSearch } from "react-icons/lu";
 

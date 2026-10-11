@@ -8,9 +8,10 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { getCredentialById } from "@/lib/credentials";
-import { getR2Object, extractR2Key } from "@/lib/storage/r2";
+import { getCredentialById } from "@/server/repositories/credentials";
+import { getR2Object, extractR2Key } from "@/server/storage/r2";
 import { logger } from "@/lib/logger";
+import { parseCredentialId } from "@/server/services/credentials/payload";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -21,9 +22,9 @@ interface RouteContext {
 
 export async function GET(_request: NextRequest, context: RouteContext) {
   const { id } = await context.params;
-  const numId = parseInt(id, 10);
+  const numId = parseCredentialId(id);
 
-  if (isNaN(numId) || numId <= 0) {
+  if (numId === null) {
     return NextResponse.json(
       { success: false, error: { code: "INVALID_ID", message: "Invalid credential ID" } },
       { status: 400 }
@@ -68,7 +69,10 @@ export async function GET(_request: NextRequest, context: RouteContext) {
       const isInline = _request.nextUrl.searchParams.get("inline") === "true";
       const disposition = isInline ? "inline" : "attachment";
       const headers = new Headers();
-      headers.set("Content-Type", r2Obj.contentType || "application/pdf");
+      const allowedTypes = ["application/pdf", "image/png", "image/jpeg", "image/webp"];
+      headers.set("Content-Type", allowedTypes.includes(ct) ? ct : "application/octet-stream");
+      headers.set("X-Content-Type-Options", "nosniff");
+      headers.set("Content-Security-Policy", "sandbox; default-src 'none'");
       headers.set(
         "Content-Disposition",
         `${disposition}; filename="${safeFilename}"; filename*=UTF-8''${encodeURIComponent(safeFilename)}`

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { LuAward, LuCalendar, LuArrowUpRight } from "react-icons/lu";
-import type { Credential } from "@/db/schema";
+import type { Credential } from "@/server/db/schema";
 import { slugifyTitle, formatCardDate } from "@/lib/credential-utils";
 import { stripMarkdown } from "@/lib/markdown";
 import { CardCertificatePreviewWrapper } from "./CardCertificatePreviewWrapper";

@@ -1,15 +1,15 @@
 import { describe, it, expect, vi } from 'vitest';
-import { analyzeSEO } from '@/lib/seo-analyzer';
-import { validateUrl } from '@/lib/seo-analyzer/fetchHTML';
+import { analyzeSEO } from '@/server/seo-analyzer';
+import { validateUrl } from '@/server/seo-analyzer/fetchHTML';
 
 // Mock fetchHTML
-vi.mock('@/lib/seo-analyzer/fetchHTML', () => ({
+vi.mock('@/server/seo-analyzer/fetchHTML', () => ({
   fetchHTML: vi.fn(),
   isFetchError: vi.fn(),
   validateUrl: vi.fn(),
 }));
 
-import { fetchHTML, isFetchError } from '@/lib/seo-analyzer/fetchHTML';
+import { fetchHTML, isFetchError } from '@/server/seo-analyzer/fetchHTML';
 
 describe('SEO Analyzer', () => {
   describe('validateUrl', () => {

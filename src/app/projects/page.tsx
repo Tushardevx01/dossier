@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { JsonLd } from "@/components/shared/JsonLd";
-import { projectsData } from "@/constant/projects";
+import { projectsData } from "@/constants/projects";
 import { buildPageMetadata, absoluteUrl } from "@/lib/seo";
 import { generateBreadcrumbListStructuredData } from "@/lib/structured-data";
 

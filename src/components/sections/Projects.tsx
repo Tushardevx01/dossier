@@ -4,7 +4,7 @@ import { motion, useInView } from "motion/react";
 import { useRef } from "react";
 
 import { mono, nasalization } from "@/app/fonts";
-import { projectsData } from "@/constant/projects";
+import { projectsData } from "@/constants/projects";
 import { ProjectCard } from "@/components/case-study/ProjectCard";
 
 export const Projects = () => {

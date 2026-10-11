@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-import { getCaseStudyBySlug } from "@/lib/case-studies";
+import { getCaseStudyBySlug } from "@/server/repositories/case-studies";
 
 export const runtime = "nodejs";
 export const contentType = "image/png";

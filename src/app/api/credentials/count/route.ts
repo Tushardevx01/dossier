@@ -6,9 +6,9 @@
  */
 
 import { NextResponse, NextRequest } from "next/server";
-import { getCredentialsCount } from "@/lib/credentials";
-import { checkRateLimit, createRateLimitKey } from "@/lib/security/rateLimit";
-import { extractClientIdentifier } from "@/lib/security/request";
+import { getCredentialsCount } from "@/server/repositories/credentials";
+import { checkRateLimit, createRateLimitKey } from "@/server/security/rateLimit";
+import { extractClientIdentifier } from "@/server/security/request";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";

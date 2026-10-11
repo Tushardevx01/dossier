@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-import { getArticle } from "@/lib/articleLoader";
+import { getArticle } from "@/server/repositories/articleLoader";
 
 export const runtime = "nodejs";
 export const contentType = "image/png";

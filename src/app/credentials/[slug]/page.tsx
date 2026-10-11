@@ -16,7 +16,7 @@ import {
   getCredentialBySlugOrId,
   getCredentialsCount,
   getAllCredentialSlugs,
-} from "@/lib/credentials";
+} from "@/server/repositories/credentials";
 import {
   formatFullDate,
   slugifyTitle,

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll } from "vitest";
 import type { CaseStudyRecord } from "@/lib/case-studies-meta";
-import { getCaseStudyBySlug } from "@/lib/case-studies";
+import { getCaseStudyBySlug } from "@/server/repositories/case-studies";
 import { parseCaseStudyContent } from "@/lib/case-study-parser";
 
 const SKIP_DB = !process.env.DATABASE_URL;

@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
-import { selfData } from "@/constant";
+import { selfData } from "@/constants";
 import { siteConfig } from "@/lib/site";
 import {
   LuSearch,

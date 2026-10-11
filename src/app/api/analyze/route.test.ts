@@ -34,7 +34,7 @@ vi.mock('next/server', () => ({
 }));
 
 // Mock dependencies
-vi.mock('@/lib/seo-analyzer', () => ({
+vi.mock('@/server/seo-analyzer', () => ({
   analyzeSEO: vi.fn(),
   isAnalysisError: vi.fn(),
   validateUrl: vi.fn(),
@@ -44,24 +44,24 @@ vi.mock('@/lib/logger', () => ({
   logger: { error: vi.fn() },
 }));
 
-vi.mock('@/lib/security/rateLimit', () => ({
+vi.mock('@/server/security/rateLimit', () => ({
   checkRateLimit: vi.fn(),
   createRateLimitKey: vi.fn(),
 }));
 
-vi.mock('@/lib/security/auth', () => ({
+vi.mock('@/server/security/auth', () => ({
   validateApiKey: vi.fn(),
   extractApiKey: vi.fn(),
 }));
 
-vi.mock('@/lib/security/request', () => ({
+vi.mock('@/server/security/request', () => ({
   extractClientIdentifier: vi.fn(),
 }));
 
-import { analyzeSEO, isAnalysisError, validateUrl } from '@/lib/seo-analyzer';
-import { checkRateLimit, createRateLimitKey } from '@/lib/security/rateLimit';
-import { extractClientIdentifier } from '@/lib/security/request';
-import { validateApiKey, extractApiKey } from '@/lib/security/auth';
+import { analyzeSEO, isAnalysisError, validateUrl } from '@/server/seo-analyzer';
+import { checkRateLimit, createRateLimitKey } from '@/server/security/rateLimit';
+import { extractClientIdentifier } from '@/server/security/request';
+import { validateApiKey, extractApiKey } from '@/server/security/auth';
 
 type AnalyzePostRequest = Parameters<typeof POST>[0];
 
@@ -75,10 +75,9 @@ const mockedAnalyzeSEO = vi.mocked(analyzeSEO);
 const mockedIsAnalysisError = vi.mocked(isAnalysisError);
 
 function createRequest(body: string): AnalyzePostRequest {
-  return {
-    headers: new Headers({ 'content-type': 'application/json' }),
-    text: () => Promise.resolve(body),
-  } as AnalyzePostRequest;
+  return new Request('https://example.com/api/analyze', {
+    method: 'POST', headers: { 'content-type': 'application/json' }, body,
+  }) as AnalyzePostRequest;
 }
 
 describe('/api/analyze POST', () => {

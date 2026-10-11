@@ -39,12 +39,12 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { AnalyzeRequestSchema } from "@/db/schema";
-import { analyzeSEO, isAnalysisError, validateUrl } from "@/lib/seo-analyzer";
+import { AnalyzeRequestSchema } from "@/schemas";
+import { analyzeSEO, isAnalysisError, validateUrl } from "@/server/seo-analyzer";
 import { logger } from "@/lib/logger";
-import { checkRateLimit, createRateLimitKey } from "@/lib/security/rateLimit";
-import { extractClientIdentifier } from "@/lib/security/request";
-import { validateApiKey, extractApiKey } from "@/lib/security/auth";
+import { checkRateLimit, createRateLimitKey } from "@/server/security/rateLimit";
+import { readBodyText, PayloadTooLargeError } from "@/server/http/body";
+import { validateApiKey, extractApiKey } from "@/server/security/auth";
 
 // Use Node.js runtime for Cheerio compatibility
 export const runtime = "nodejs";
@@ -111,7 +111,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!keyValidation.permissions?.analyze) {
+    if (keyValidation.permissions?.analyze !== true) {
       return secureJson(
         {
           success: false,
@@ -139,11 +139,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Get client IP for rate limiting
-    const clientIdentifier = extractClientIdentifier(request);
-    const key = createRateLimitKey("analyze", clientIdentifier);
+    const key = createRateLimitKey("analyze", String(keyValidation.keyId));
 
     // Check rate limit using API key's limit
-    const rateLimitMax = keyValidation.permissions?.rateLimit || RATE_LIMIT_MAX;
+    const configuredLimit = keyValidation.permissions?.rateLimit;
+    const rateLimitMax = Number.isSafeInteger(configuredLimit) && configuredLimit! > 0
+      ? Math.min(configuredLimit!, 1000) : RATE_LIMIT_MAX;
     const rateLimit = await checkRateLimit(key, rateLimitMax, RATE_LIMIT_WINDOW_MS);
     if (!rateLimit.allowed) {
       const retryAfter = Math.max(rateLimit.retryAfterSeconds, 1);
@@ -165,8 +166,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Parse and validate request body
-    const rawBody = await request.text();
-    if (rawBody.length > MAX_BODY_BYTES) {
+    const rawBody = await readBodyText(request, MAX_BODY_BYTES);
+    if (Buffer.byteLength(rawBody, "utf8") > MAX_BODY_BYTES) {
       return secureJson(
         {
           success: false,
@@ -283,6 +284,9 @@ export async function POST(request: NextRequest) {
       }
     );
   } catch (error) {
+    if (error instanceof PayloadTooLargeError) {
+      return secureJson({ success: false, error: { code: "PAYLOAD_TOO_LARGE", message: error.message } }, 413);
+    }
     // Unexpected error handling
     logger.error("[SEO Analyzer] Unexpected error", {
       error: error instanceof Error ? error.message : String(error),

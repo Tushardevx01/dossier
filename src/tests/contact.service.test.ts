@@ -1,20 +1,20 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
 
-vi.mock("@/services/contact/contact.rateLimit", () => ({
+vi.mock("@/server/services/contact/contact.rateLimit", () => ({
   checkRateLimit: vi.fn(),
   createRateLimitKey: vi.fn(() => "contact:127.0.0.1"),
 }));
 
-vi.mock("@/services/email/email.transport", () => ({
+vi.mock("@/server/services/email/email.transport", () => ({
   sendEmail: vi.fn(),
 }));
 
-vi.mock("@/services/email/email.templates", () => ({
+vi.mock("@/server/services/email/email.templates", () => ({
   renderContactEmail: vi.fn(() => "<p>Contact email</p>"),
   renderContactNotificationEmail: vi.fn(() => "<p>Notification email</p>"),
 }));
 
-vi.mock("@/services/email/email.verification", () => ({
+vi.mock("@/server/services/email/email.verification", () => ({
   verifyEmailAddress: vi.fn(),
 }));
 
@@ -28,10 +28,10 @@ vi.mock("@/lib/logger", () => ({
   },
 }));
 
-import { processContactSubmission } from "@/services/contact/contact.service";
-import { checkRateLimit } from "@/services/contact/contact.rateLimit";
-import { sendEmail } from "@/services/email/email.transport";
-import { verifyEmailAddress } from "@/services/email/email.verification";
+import { processContactSubmission } from "@/server/services/contact/contact.service";
+import { checkRateLimit } from "@/server/services/contact/contact.rateLimit";
+import { sendEmail } from "@/server/services/email/email.transport";
+import { verifyEmailAddress } from "@/server/services/email/email.verification";
 
 const mockedCheckRateLimit = vi.mocked(checkRateLimit);
 const mockedSendEmail = vi.mocked(sendEmail);

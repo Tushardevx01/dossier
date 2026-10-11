@@ -11,8 +11,8 @@ import {
   getCaseStudyBySlug,
   getAllCaseStudySlugs,
   getAllCaseStudies,
-} from "@/lib/case-studies";
-import { projectsData } from "@/constant/projects";
+} from "@/server/repositories/case-studies";
+import { projectsData } from "@/constants/projects";
 import { parseCaseStudyContent } from "@/lib/case-study-parser";
 
 interface WorkDetailPageProps {

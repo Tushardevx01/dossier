@@ -3,9 +3,9 @@
 import { motion } from "motion/react";
 
 import { mono } from "@/app/fonts";
-import { resolveTechStackItem } from "@/constant/tech";
+import { resolveTechStackItem } from "@/constants/tech";
 import { TechBadge } from "@/components/shared/TechBadge";
-import type { Skill } from "@/constant/skillsTiers";
+import type { Skill } from "@/constants/skillsTiers";
 import type { TechBadgeSize } from "@/types/tech";
 
 interface SkillCategoryCardProps {

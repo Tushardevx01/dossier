@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 
 import { TagBadge } from "@/components/notes/TagBadge";
-import type { CategoryFilter, ArticleMetadata } from "@/lib/articleLoader";
+import type { CategoryFilter, ArticleMetadata } from "@/server/repositories/articleLoader";
 
 interface NotesListClientProps {
   posts: ArticleMetadata[];

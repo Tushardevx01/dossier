@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 
 import { nasalization } from "@/app/fonts";
 import { SkillCategoryCard } from "@/components/sections/skills/SkillCategoryCard";
-import type { SkillsCategory } from "@/constant/skillsTiers";
+import type { SkillsCategory } from "@/constants/skillsTiers";
 import type { TechBadgeSize } from "@/types/tech";
 
 interface SkillTierBlockProps {

@@ -34,8 +34,8 @@ replaceInFile('src/lib/case-studies.ts', [
   }
 ]);
 
-// 2. Update src/db/seed.ts
-replaceInFile('src/db/seed.ts', [
+// 2. Update scripts/db/seed.ts
+replaceInFile('scripts/db/seed.ts', [
   {
     from: "const { caseStudiesData } = await import('@/lib/case-studies-data');",
     to: "const fs = await import('fs');\n      const path = await import('path');\n      const fullDataPath = path.join(process.cwd(), 'src/lib/case-studies-full.json');\n      const caseStudiesData = JSON.parse(fs.readFileSync(fullDataPath, 'utf8'));"

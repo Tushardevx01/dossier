@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import { LuFileText, LuExternalLink } from "react-icons/lu";
-import type { Credential } from "@/db/schema";
+import type { Credential } from "@/server/db/schema";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 

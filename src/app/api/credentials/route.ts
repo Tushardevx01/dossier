@@ -8,30 +8,32 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { readCredentialJson, readCredentialForm } from "@/server/services/credentials/payload";
+import { PayloadTooLargeError } from "@/server/http/body";
 import {
   getAllCredentials,
   createCredential,
   slugifyTitle,
-} from "@/lib/credentials";
-import { CredentialJsonSchema } from "@/db/schema";
-import { validateAdminRequest } from "@/lib/security/auth";
+} from "@/server/repositories/credentials";
+import { CredentialJsonSchema } from "@/schemas";
+import { validateAdminRequest } from "@/server/security/auth";
 import {
   uploadToR2,
   deleteFromR2,
   isR2Configured,
-} from "@/lib/storage/r2";
+} from "@/server/storage/r2";
 import {
   validateCredentialFile,
   generateSafeStorageKey,
   DEFAULT_MAX_CERT_SIZE,
-} from "@/lib/storage/validation";
+} from "@/server/storage/validation";
 import { logger } from "@/lib/logger";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-import { checkRateLimit, createRateLimitKey } from "@/lib/security/rateLimit";
-import { extractClientIdentifier } from "@/lib/security/request";
+import { checkRateLimit, createRateLimitKey } from "@/server/security/rateLimit";
+import { extractClientIdentifier } from "@/server/security/request";
 
 /**
  * GET /api/credentials
@@ -109,7 +111,7 @@ export async function POST(request: NextRequest) {
     const uploadedR2Keys: string[] = [];
 
     try {
-      const formData = await request.formData();
+      const formData = await readCredentialForm(request);
 
       const title = formData.get("title")?.toString().trim() || "";
       const issuer = formData.get("issuer")?.toString().trim() || "";
@@ -195,13 +197,16 @@ export async function POST(request: NextRequest) {
         );
       }
 
+      const parsed = CredentialJsonSchema.parse({
+        title, issuer, issueDate: issueDateStr, objectLink, credentialLink, description,
+        slug: formData.get("slug")?.toString().trim() || slugifyTitle(title),
+      });
+
       // 3. Save to database
       try {
-        const slug = slugifyTitle(title);
         const created = await createCredential({
-          title,
-          slug,
-          issuer,
+          ...parsed,
+          slug: parsed.slug || slugifyTitle(parsed.title),
           issueDate,
           objectLink,
           credentialLink: credentialLink && credentialLink.length > 0 ? credentialLink : null,
@@ -242,7 +247,7 @@ export async function POST(request: NextRequest) {
           { status: 500 }
         );
       }
-    } catch {
+    } catch (error) {
       // Clean up any uploaded files on general error
       await Promise.allSettled(uploadedR2Keys.map((key) => deleteFromR2(key)));
 
@@ -254,7 +259,7 @@ export async function POST(request: NextRequest) {
             message: "Invalid file or payload",
           },
         },
-        { status: 400 }
+        { status: error instanceof PayloadTooLargeError ? 413 : 400 }
       );
     }
   }
@@ -262,7 +267,7 @@ export async function POST(request: NextRequest) {
   // 3. Handle JSON Body (Direct metadata insert)
   if (contentType.includes("application/json")) {
     try {
-      const body = await request.json();
+      const body = await readCredentialJson(request);
       const parsed = CredentialJsonSchema.parse(body);
 
       const created = await createCredential({
@@ -289,6 +294,10 @@ export async function POST(request: NextRequest) {
         { status: 201 }
       );
     } catch (validationErr) {
+      if (validationErr instanceof PayloadTooLargeError || validationErr instanceof SyntaxError) {
+        return NextResponse.json({ success: false, error: { code: "INVALID_PAYLOAD", message: "Invalid request payload" } },
+          { status: validationErr instanceof PayloadTooLargeError ? 413 : 400 });
+      }
       if (validationErr instanceof z.ZodError) {
         return NextResponse.json(
           {

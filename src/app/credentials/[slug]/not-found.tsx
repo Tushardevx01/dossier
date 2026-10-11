@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { LuArrowLeft } from "react-icons/lu";
 import { Navbar, Footer, Background } from "@/components/common";
-import { getCredentialsCount } from "@/lib/credentials";
+import { getCredentialsCount } from "@/server/repositories/credentials";
 
 export default async function CredentialNotFound() {
   const count = await getCredentialsCount();

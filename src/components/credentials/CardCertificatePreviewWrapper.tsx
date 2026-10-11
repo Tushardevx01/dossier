@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import type { Credential } from "@/db/schema";
+import type { Credential } from "@/server/db/schema";
 
 const DynamicCardCertificatePreview = dynamic(
   () =>

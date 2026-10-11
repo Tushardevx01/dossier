@@ -5,7 +5,7 @@ import { Footer } from "@/components/common";
 import { NotesListClient } from "@/components/NotesListClient";
 import NotesBackHandler from "@/components/NotesBackHandler";
 import { JsonLd } from "@/components/shared/JsonLd";
-import { getAllArticles, getArticleCategories } from "@/lib/articleLoader";
+import { getAllArticles, getArticleCategories } from "@/server/repositories/articleLoader";
 import { buildPageMetadata, absoluteUrl } from "@/lib/seo";
 import { generateBreadcrumbListStructuredData, generateEngineeringNotesItemListStructuredData } from "@/lib/structured-data";
 

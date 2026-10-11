@@ -5,10 +5,10 @@ import {
   generateCsrfToken as generateServerCsrfToken,
   readCsrfTokenFromCookieString,
   validateCsrfToken,
-} from "@/lib/security/csrf.server";
+} from "@/server/security/csrf.server";
 import { generateCsrfToken as generateEdgeCsrfToken } from "@/lib/security/csrf.edge";
 import { getCsrfCookieName } from "@/lib/security/csrf.client";
-import { extractClientIdentifier, isTrustedOrigin } from "@/lib/security/request";
+import { extractClientIdentifier, isTrustedOrigin } from "@/server/security/request";
 import { logger } from "@/lib/logger";
 
 describe("security helpers", () => {

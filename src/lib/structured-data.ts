@@ -1,4 +1,4 @@
-import { selfData } from "@/constant";
+import { selfData } from "@/constants";
 import { SITE_URL, siteConfig } from "@/lib/site";
 import type { Project } from "@/types/project";
 

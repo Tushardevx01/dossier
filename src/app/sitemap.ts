@@ -1,8 +1,8 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site";
-import { getAllCaseStudies } from "@/lib/case-studies";
-import { getAllArticles } from "@/lib/articleLoader";
-import { getAllCredentials, slugifyTitle } from "@/lib/credentials";
+import { getAllCaseStudies } from "@/server/repositories/case-studies";
+import { getAllArticles } from "@/server/repositories/articleLoader";
+import { getAllCredentials, slugifyTitle } from "@/server/repositories/credentials";
 
 function safeDate(value: string | Date | null | undefined, fallback = new Date()): Date {
   if (!value) return fallback;

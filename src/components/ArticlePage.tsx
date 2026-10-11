@@ -8,7 +8,7 @@
 
 import Link from "next/link";
 
-import { ArticlePost } from "@/lib/articleLoader";
+import { ArticlePost } from "@/server/repositories/articleLoader";
 import { ArticleHero } from "@/components/ArticleHero";
 import { ArticleToc } from "@/components/ArticleToc";
 import { PrismHighlighter } from "@/components/PrismHighlighter";

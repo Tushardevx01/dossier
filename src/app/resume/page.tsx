@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { ResumePage } from "@/components/resume/ResumePage";
-import { resumeKeywords } from "@/constant";
+import { resumeKeywords } from "@/constants";
 import { buildPageMetadata } from "@/lib/seo";
 
-import { getCredentialsCount } from "@/lib/credentials";
+import { getCredentialsCount } from "@/server/repositories/credentials";
 
 export const revalidate = 60;
 

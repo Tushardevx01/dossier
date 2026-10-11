@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 
 import { ArticlePage } from "@/components/ArticlePage";
 import { JsonLd } from "@/components/shared/JsonLd";
-import { generateArticleStaticParams, getArticle } from "@/lib/articleLoader";
+import { generateArticleStaticParams, getArticle } from "@/server/repositories/articleLoader";
 import { buildPageMetadata, absoluteUrl } from "@/lib/seo";
 import { generateArticleStructuredData, generateBreadcrumbListStructuredData } from "@/lib/structured-data";
 import "prismjs/themes/prism-tomorrow.css";

@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 
 import { nasalization } from "@/app/fonts";
-import { additionalStack, primaryStack, supportingStack } from "@/constant";
+import { additionalStack, primaryStack, supportingStack } from "@/constants";
 import { SkillTierBlock } from "@/components/sections/skills/SkillTierBlock";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 

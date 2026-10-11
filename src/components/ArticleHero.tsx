@@ -1,4 +1,4 @@
-import { ArticlePost } from "@/lib/articleLoader";
+import { ArticlePost } from "@/server/repositories/articleLoader";
 import { TagBadge } from "@/components/notes/TagBadge";
 
 interface ArticleHeroProps {

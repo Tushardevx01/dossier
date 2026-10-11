@@ -1,15 +1,16 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+afterEach(() => vi.unstubAllEnvs());
 import {
   detectMimeFromMagicBytes,
   validateCredentialFile,
   generateSafeStorageKey,
-} from "@/lib/storage/validation";
+} from "@/server/storage/validation";
 import {
   extractR2Key,
   getPublicUrl,
   isR2Configured,
-} from "@/lib/storage/r2";
-import { validateAdminRequest } from "@/lib/security/auth";
+} from "@/server/storage/r2";
+import { validateAdminRequest } from "@/server/security/auth";
 
 describe("Credential Storage Validation", () => {
   it("detects PDF magic bytes accurately", () => {
@@ -56,17 +57,18 @@ describe("Credential Storage Validation", () => {
 
   it("generates safe, normalized R2 storage keys", () => {
     const key = generateSafeStorageKey("cert-123", "certificate", "pdf");
-    expect(key).toMatch(/^credentials\/cert-123\/certificate-\d+\.pdf$/);
+    expect(key).toMatch(/^credentials\/cert-123\/certificate-[a-f0-9-]{36}\.pdf$/);
 
     // Sanitizes traversal and weird characters
     const dirtyKey = generateSafeStorageKey("../../../etc/passwd", "thumbnail", ".png");
     expect(dirtyKey).not.toContain("..");
-    expect(dirtyKey).toMatch(/^credentials\/etcpasswd\/thumbnail-\d+\.png$/);
+    expect(dirtyKey).toMatch(/^credentials\/etcpasswd\/thumbnail-[a-f0-9-]{36}\.png$/);
   });
 });
 
 describe("Cloudflare R2 Abstraction", () => {
   it("extracts R2 key from full public URL", () => {
+    vi.stubEnv("R2_PUBLIC_URL", "https://pub-12345.r2.dev");
     const url = "https://pub-12345.r2.dev/credentials/42/certificate-1718000.pdf";
     expect(extractR2Key(url)).toBe("credentials/42/certificate-1718000.pdf");
   });
@@ -160,7 +162,7 @@ describe("Admin Authorization for Credentials", () => {
 
   it("handles alphanumeric credential IDs safely", () => {
     const key = generateSafeStorageKey("330877722AAI26OFA", "certificate", "pdf");
-    expect(key).toMatch(/^credentials\/330877722AAI26OFA\/certificate-\d+\.pdf$/);
+    expect(key).toMatch(/^credentials\/330877722AAI26OFA\/certificate-[a-f0-9-]{36}\.pdf$/);
   });
 });
 
@@ -198,7 +200,7 @@ describe("Credential Slug Utilities", () => {
 
 describe("Credential Schema Validation", () => {
   it("validates a complete and correct credential input payload", async () => {
-    const { CredentialJsonSchema } = await import("@/db/schema");
+    const { CredentialJsonSchema } = await import("@/schemas");
 
     const payload = {
       title: "Agentic AI Certified Foundations Associate",
@@ -215,7 +217,7 @@ describe("Credential Schema Validation", () => {
   });
 
   it("fails validation when required fields are missing", async () => {
-    const { CredentialJsonSchema } = await import("@/db/schema");
+    const { CredentialJsonSchema } = await import("@/schemas");
 
     const payload = {
       title: "Agentic AI Certified",
@@ -233,7 +235,7 @@ describe("Credential Schema Validation", () => {
   });
 
   it("fails validation when issueDate is invalid", async () => {
-    const { CredentialJsonSchema } = await import("@/db/schema");
+    const { CredentialJsonSchema } = await import("@/schemas");
 
     const payload = {
       title: "Agentic AI Certified",
@@ -250,7 +252,7 @@ describe("Credential Schema Validation", () => {
   });
 
   it("allows optional and nullable fields in update schema", async () => {
-    const { UpdateCredentialJsonSchema } = await import("@/db/schema");
+    const { UpdateCredentialJsonSchema } = await import("@/schemas");
 
     const updatePayload = {
       issuer: "Updated Organization",
@@ -262,7 +264,7 @@ describe("Credential Schema Validation", () => {
   });
 
   it("supports large long-form markdown documents without artificial character limits", async () => {
-    const { CredentialJsonSchema } = await import("@/db/schema");
+    const { CredentialJsonSchema } = await import("@/schemas");
 
     const largeMarkdown = "# Large Document\n\n" + "This is a detailed technical write-up. ".repeat(500);
     const payload = {

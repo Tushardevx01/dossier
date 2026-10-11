@@ -5,22 +5,31 @@
 ALTER TABLE "credentials" ADD COLUMN IF NOT EXISTS "issue_date" timestamp with time zone;
 ALTER TABLE "credentials" ADD COLUMN IF NOT EXISTS "object_link" text;
 ALTER TABLE "credentials" ADD COLUMN IF NOT EXISTS "credential_link" text;
+ALTER TABLE "credentials" ADD COLUMN IF NOT EXISTS "slug" varchar(255);
 
 -- Safely copy data from legacy columns
-UPDATE "credentials" SET "issue_date" = "issued_at" WHERE "issue_date" IS NULL AND "issued_at" IS NOT NULL;
-UPDATE "credentials" SET "object_link" = "certificate_url" WHERE "object_link" IS NULL AND "certificate_url" IS NOT NULL;
-UPDATE "credentials" SET "credential_link" = "verification_url" WHERE "credential_link" IS NULL AND "verification_url" IS NOT NULL;
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema = 'public' AND table_name = 'credentials' AND column_name = 'issued_at') THEN
+    EXECUTE 'UPDATE credentials SET issue_date = issued_at WHERE issue_date IS NULL';
+  END IF;
+  IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema = 'public' AND table_name = 'credentials' AND column_name = 'certificate_url') THEN
+    EXECUTE 'UPDATE credentials SET object_link = certificate_url WHERE object_link IS NULL';
+  END IF;
+  IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema = 'public' AND table_name = 'credentials' AND column_name = 'verification_url') THEN
+    EXECUTE 'UPDATE credentials SET credential_link = verification_url WHERE credential_link IS NULL';
+  END IF;
+END $$;
 
 -- Ensure required fields on existing real records
-UPDATE "credentials" SET "issuer" = 'Oracle University' WHERE "id" = 1 AND ("issuer" IS NULL OR "issuer" = '');
-UPDATE "credentials" SET "slug" = 'agentic-ai-certified-foundations-associate' WHERE "id" = 1 AND ("slug" IS NULL OR "slug" = '');
+UPDATE "credentials" SET "slug" = 'credential-' || "id"::text WHERE "slug" IS NULL OR btrim("slug") = '';
 
 -- Enforce constraints
 ALTER TABLE "credentials" ALTER COLUMN "slug" SET NOT NULL;
 DO $$
 BEGIN
   IF NOT EXISTS (
-    SELECT 1 FROM pg_constraint WHERE conname = 'credentials_slug_unique'
+    SELECT 1 FROM pg_constraint WHERE conname = 'credentials_slug_unique' AND conrelid = 'public.credentials'::regclass
   ) THEN
     ALTER TABLE "credentials" ADD CONSTRAINT "credentials_slug_unique" UNIQUE ("slug");
   END IF;

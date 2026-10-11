@@ -579,7 +579,7 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
         num = numMatch ? numMatch[1].padStart(2, "0") : cleanDecorativeSlashes(num);
         if (!num || num.length > 10) num = String(sIdx + 1).padStart(2, "0");
 
-        recTitle = cleanDecorativeSlashes(recTitle.replace(/^\d+\s*[\/•:-]*\s*/, "")).trim();
+        recTitle = cleanDecorativeSlashes(recTitle.replace(/^\d+\s*[/•:-]*\s*/, "")).trim();
 
         let problemText = "";
         let constraintText = "";
@@ -834,7 +834,7 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
         const $emerald = $el.find("span.text-emerald-400, span.font-mono").first();
         const rawEmerald = $emerald.text().trim();
 
-        let rawNum = "";
+        let rawNum: string;
         let emeraldTitle = "";
         const emeraldMatch = rawEmerald.match(/^(\d+)\s*(?:\/\/|—|–|-|\.)\s*(.*)$/);
         if (emeraldMatch) {
@@ -876,7 +876,7 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
           return false;
         };
 
-        let title = "";
+        let title: string;
         let num: string | undefined = undefined;
 
         if (emeraldTitle) {
@@ -930,9 +930,9 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
       if ($(el).is("pre, code, script, style") || $(el).closest("pre, code").length > 0) return;
       $(el).contents().each((_, node) => {
         if (node.type === "text") {
-          const original = (node as any).data;
+          const original = node.data;
           if (original && original.includes("//") && !original.includes("http://") && !original.includes("https://")) {
-            (node as any).data = cleanDecorativeSlashes(original);
+            node.data = cleanDecorativeSlashes(original);
           }
         }
       });

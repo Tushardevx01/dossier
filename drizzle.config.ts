@@ -7,7 +7,7 @@
 import type { Config } from 'drizzle-kit';
 
 const config = {
-  schema: './src/db/schema.ts',
+  schema: './src/server/db/schema.ts',
   out: './migrations',
   dialect: 'postgresql',
   dbCredentials: {

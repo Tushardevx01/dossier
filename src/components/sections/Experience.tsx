@@ -1,8 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import { experienceData } from "@/constant/experience";
-import { ExperienceCard } from "../Cards";
+import { experienceData } from "@/constants/experience";
+import { ExperienceCard } from "../cards";
 import { nasalization } from "@/app/fonts";
 
 export function Experience() {

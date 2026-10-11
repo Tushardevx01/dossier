@@ -9,22 +9,24 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { getCredentialById, updateCredential, deleteCredential } from "@/lib/credentials";
-import { UpdateJsonSchema } from "@/db/schema";
-import { validateAdminRequest } from "@/lib/security/auth";
+import { readCredentialJson, readCredentialForm, parseCredentialId } from "@/server/services/credentials/payload";
+import { PayloadTooLargeError } from "@/server/http/body";
+import { getCredentialById, updateCredential, deleteCredential } from "@/server/repositories/credentials";
+import { UpdateJsonSchema } from "@/schemas";
+import { validateAdminRequest } from "@/server/security/auth";
 import {
   uploadToR2,
   deleteFromR2,
   isR2Configured,
-} from "@/lib/storage/r2";
+} from "@/server/storage/r2";
 import {
   validateCredentialFile,
   generateSafeStorageKey,
   DEFAULT_MAX_CERT_SIZE,
-} from "@/lib/storage/validation";
+} from "@/server/storage/validation";
 import { logger } from "@/lib/logger";
-import { checkRateLimit, createRateLimitKey } from "@/lib/security/rateLimit";
-import { extractClientIdentifier } from "@/lib/security/request";
+import { checkRateLimit, createRateLimitKey } from "@/server/security/rateLimit";
+import { extractClientIdentifier } from "@/server/security/request";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -38,9 +40,9 @@ interface RouteContext {
  */
 export async function GET(_request: NextRequest, context: RouteContext) {
   const { id } = await context.params;
-  const numId = parseInt(id, 10);
+  const numId = parseCredentialId(id);
 
-  if (isNaN(numId) || numId <= 0) {
+  if (numId === null) {
     return NextResponse.json(
       { success: false, error: { code: "INVALID_ID", message: "Invalid credential ID" } },
       { status: 400 }
@@ -97,8 +99,8 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
   }
 
   const { id } = await context.params;
-  const numId = parseInt(id, 10);
-  if (isNaN(numId) || numId <= 0) {
+  const numId = parseCredentialId(id);
+  if (numId === null) {
     return NextResponse.json(
       { success: false, error: { code: "INVALID_ID", message: "Invalid credential ID" } },
       { status: 400 }
@@ -121,23 +123,21 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
     const oldKeysToDelete: string[] = [];
 
     try {
-      const formData = await request.formData();
+      const formData = await readCredentialForm(request);
 
       const updateData: Record<string, unknown> = {};
 
       if (formData.has("title")) updateData.title = formData.get("title")?.toString().trim();
       if (formData.has("slug")) updateData.slug = formData.get("slug")?.toString().trim();
       if (formData.has("issuer")) updateData.issuer = formData.get("issuer")?.toString().trim();
+      if (formData.has("objectLink")) updateData.objectLink = formData.get("objectLink")?.toString().trim();
       if (formData.has("description")) updateData.description = formData.get("description")?.toString().trim() || null;
       if (formData.has("credentialLink")) updateData.credentialLink = formData.get("credentialLink")?.toString().trim() || null;
       if (formData.has("verificationUrl")) updateData.credentialLink = formData.get("verificationUrl")?.toString().trim() || null;
 
       if (formData.has("issueDate") || formData.has("issuedAt")) {
         const dateStr = (formData.get("issueDate") || formData.get("issuedAt"))?.toString().trim() || "";
-        const date = new Date(dateStr);
-        if (!isNaN(date.getTime())) {
-          updateData.issueDate = date;
-        }
+        updateData.issueDate = dateStr;
       }
 
       // Check for replacement certificate file
@@ -169,15 +169,24 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
         }
       }
 
+      const parsed = UpdateJsonSchema.parse(updateData);
+      const validatedUpdate = {
+        ...parsed,
+        slug: parsed.slug || undefined,
+        issueDate: parsed.issueDate ? new Date(parsed.issueDate) : undefined,
+      };
+
       // Update in DB
       try {
-        const updated = await updateCredential(numId, updateData);
+        const updated = await updateCredential(numId, validatedUpdate);
+        if (!updated) throw new Error("Credential no longer exists");
 
         // Delete old replaced assets from R2
         await Promise.allSettled(oldKeysToDelete.map((k) => deleteFromR2(k)));
 
         revalidatePath("/credentials");
         revalidatePath(`/credentials/${numId}`);
+        revalidatePath(`/credentials/${existing.slug}`);
         if (updated?.slug) revalidatePath(`/credentials/${updated.slug}`);
         revalidatePath("/");
         revalidatePath("/api/credentials");
@@ -195,7 +204,7 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
             success: false,
             error: {
               code: "DATABASE_ERROR",
-              message: dbErr instanceof Error ? dbErr.message : "Failed to persist credential updates",
+              message: "Failed to persist credential updates",
             },
           },
           { status: 500 }
@@ -209,10 +218,10 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
           success: false,
           error: {
             code: "UPDATE_FAILED",
-            message: uploadErr instanceof Error ? uploadErr.message : "Failed to update credential",
+            message: "Invalid file or payload",
           },
         },
-        { status: 400 }
+        { status: uploadErr instanceof PayloadTooLargeError ? 413 : 400 }
       );
     }
   }
@@ -220,11 +229,11 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
   // 2. JSON Update
   if (contentType.includes("application/json")) {
     try {
-      const body = await request.json();
+      const body = await readCredentialJson(request);
       const parsed = UpdateJsonSchema.parse(body);
 
       const updateData: Record<string, unknown> = {};
-      if (parsed.slug !== undefined) updateData.slug = parsed.slug;
+      if (parsed.slug) updateData.slug = parsed.slug;
       if (parsed.title !== undefined) updateData.title = parsed.title;
       if (parsed.issuer !== undefined) updateData.issuer = parsed.issuer;
       if (parsed.description !== undefined) updateData.description = parsed.description;
@@ -233,9 +242,11 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
       if (parsed.credentialLink !== undefined) updateData.credentialLink = parsed.credentialLink || null;
 
       const updated = await updateCredential(numId, updateData);
+      if (!updated) return NextResponse.json({ success: false, error: { code: "NOT_FOUND", message: "Credential not found" } }, { status: 404 });
 
       revalidatePath("/credentials");
       revalidatePath(`/credentials/${numId}`);
+      revalidatePath(`/credentials/${existing.slug}`);
       if (updated?.slug) revalidatePath(`/credentials/${updated.slug}`);
       revalidatePath("/");
       revalidatePath("/api/credentials");
@@ -245,6 +256,10 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
         data: updated,
       });
     } catch (err) {
+      if (err instanceof PayloadTooLargeError || err instanceof SyntaxError) {
+        return NextResponse.json({ success: false, error: { code: "INVALID_PAYLOAD", message: "Invalid request payload" } },
+          { status: err instanceof PayloadTooLargeError ? 413 : 400 });
+      }
       if (err instanceof z.ZodError) {
         return NextResponse.json(
           {
@@ -264,7 +279,7 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
           success: false,
           error: {
             code: "DATABASE_ERROR",
-            message: err instanceof Error ? err.message : "Failed to update credential",
+            message: "Failed to update credential",
           },
         },
         { status: 500 }
@@ -302,8 +317,8 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
   }
 
   const { id } = await context.params;
-  const numId = parseInt(id, 10);
-  if (isNaN(numId) || numId <= 0) {
+  const numId = parseCredentialId(id);
+  if (numId === null) {
     return NextResponse.json(
       { success: false, error: { code: "INVALID_ID", message: "Invalid credential ID" } },
       { status: 400 }

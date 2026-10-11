@@ -14,8 +14,8 @@ const caseStudiesData = fs.existsSync(fullDataPath)
   ? JSON.parse(fs.readFileSync(fullDataPath, "utf8"))
   : caseStudiesMeta;
 
-import { ensureDatabaseReady, getDb } from "../src/db";
-import { caseStudies } from "../src/db/schema";
+import { ensureDatabaseReady, getDb } from "../src/server/db";
+import { caseStudies } from "../src/server/db/schema";
 import { sql } from "drizzle-orm";
 
 export async function main() {

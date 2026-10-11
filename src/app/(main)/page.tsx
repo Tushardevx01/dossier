@@ -9,8 +9,8 @@ import type { Metadata } from "next";
 
 import { HomePageShell } from "@/components/HomePageShell";
 import { JsonLd } from "@/components/shared/JsonLd";
-import { projectsData } from "@/constant/projects";
-import { getAllArticles } from "@/lib/articleLoader";
+import { projectsData } from "@/constants/projects";
+import { getAllArticles } from "@/server/repositories/articleLoader";
 import {
   generateEngineeringNotesItemListStructuredData,
   generateOrganizationStructuredData,
@@ -19,7 +19,7 @@ import {
   generateWebsiteStructuredData,
 } from "@/lib/structured-data";
 
-import { getCredentialsCount } from "@/lib/credentials";
+import { getCredentialsCount } from "@/server/repositories/credentials";
 
 export const revalidate = 60;
 

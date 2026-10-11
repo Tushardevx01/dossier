@@ -7,7 +7,7 @@
  * @see https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation
  */
 
-import { getServerEnv } from "./lib/env.server";
+import { getServerEnv } from "./server/env";
 import { logger } from "./lib/logger";
 
 interface EnvValidationResult {
@@ -28,7 +28,11 @@ function validateEnvironment(): EnvValidationResult {
   const requiredEnv = [
     ...(isSkipDb ? [] : [{ key: "DATABASE_URL", description: "Neon PostgreSQL connection string" }]),
     { key: "EMAIL_FROM", description: "Email sender address" },
-    { key: "EMAIL_PASSWORD", description: "Email password/app password" },
+    ...(process.env.RESEND_API_KEY ? [] : [{ key: "EMAIL_PASSWORD", description: "Email password/app password" }]),
+    ...(process.env.NODE_ENV === "production" ? [
+      { key: "UPSTASH_REDIS_REST_URL", description: "Required for production rate limiting" },
+      { key: "UPSTASH_REDIS_REST_TOKEN", description: "Required for production rate limiting" },
+    ] : []),
   ];
 
   // Optional but recommended environment variables

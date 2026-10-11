@@ -5,7 +5,7 @@ import { motion } from "motion/react";
 import { useRef } from "react";
 
 import { Button } from "@/components/ui/button";
-import { selfData } from "@/constant";
+import { selfData } from "@/constants";
 
 import { quentine, mono } from "@/app/fonts";
 

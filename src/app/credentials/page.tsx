@@ -5,7 +5,7 @@ import { Navbar, Footer, Background } from "@/components/common";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { buildPageMetadata, absoluteUrl } from "@/lib/seo";
 import { generateBreadcrumbListStructuredData } from "@/lib/structured-data";
-import { getAllCredentials } from "@/lib/credentials";
+import { getAllCredentials } from "@/server/repositories/credentials";
 import { CredentialsRegistry } from "@/components/credentials/CredentialsRegistry";
 
 export const revalidate = 60;

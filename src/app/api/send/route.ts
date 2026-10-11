@@ -6,10 +6,11 @@
  */
 
 import { NextResponse } from "next/server";
+import { readBodyText, PayloadTooLargeError } from "@/server/http/body";
 import type { NextRequest } from "next/server";
 
 import { generateRequestId, logger } from "@/lib/logger";
-import { getServerEnv } from "@/lib/env.server";
+import { getServerEnv } from "@/server/env";
 import { AppError } from "@/lib/errors";
 import { CONTACT_MAX_BODY_BYTES } from "@/config";
 import {
@@ -17,8 +18,8 @@ import {
   isValidBodySize,
   extractClientIdentifier,
   isOriginAllowed,
-} from "@/services/contact";
-import { validateCsrfToken, getCsrfCookieName } from "@/lib/security/csrf.server";
+} from "@/server/services/contact";
+import { validateCsrfToken, getCsrfCookieName } from "@/server/security/csrf.server";
 import { getCorsHeaders, getSecurityHeaders, mergeHeaders } from "@/lib/security/corsHeaders";
 
 export const runtime = "nodejs";
@@ -56,7 +57,6 @@ function errorResponse(error: AppError, requestId: string) {
     {
       error: error.message,
       code: error.code,
-      details: error.meta?.details,
       requestId,
     },
     error.statusCode,
@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Read and validate body size
-    const rawBody = await request.text();
+    const rawBody = await readBodyText(request, CONTACT_MAX_BODY_BYTES);
     if (!isValidBodySize(rawBody)) {
       return jsonResponse({ error: "Invalid request payload", requestId }, 400, { "X-Robots-Tag": "noindex, nofollow" });
     }
@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
 
     // Validate CSRF token from request body against cookie
     const bodyObj = body as Record<string, unknown>;
-    const csrfBodyToken = bodyObj.csrfToken as string | undefined;
+    const csrfBodyToken = bodyObj.csrfToken;
 
     if (!validateCsrfToken(csrfCookieToken, csrfBodyToken)) {
       logger.warn("CSRF validation failed", { requestId });
@@ -147,6 +147,9 @@ export async function POST(request: NextRequest) {
 
     return errorResponse(result.error, requestId);
   } catch (error) {
+    if (error instanceof PayloadTooLargeError) {
+      return jsonResponse({ error: error.message, requestId }, 413);
+    }
     logger.exception(error instanceof Error ? error : new Error("Unhandled /api/send failure"), {
       requestId,
     });

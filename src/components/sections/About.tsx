@@ -4,7 +4,7 @@ import Image from "next/image";
 import { motion, useInView } from "motion/react";
 import { useRef } from "react";
 import { nasalization } from "@/app/fonts";
-import { selfData } from "@/constant";
+import { selfData } from "@/constants";
 import Link from "next/link";
 import { LuMapPinned } from "react-icons/lu";
 

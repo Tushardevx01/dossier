@@ -7,9 +7,9 @@ import { useRef } from "react";
 
 import { IoLocationOutline, IoMailOutline } from "react-icons/io5";
 
-import { selfData } from "@/constant";
+import { selfData } from "@/constants";
 import { nasalization } from "@/app/fonts";
-import { ContactFormCard, ContactSocials } from "@/components/Cards";
+import { ContactFormCard, ContactSocials } from "@/components/cards";
 
 export const Contact = () => {
   const ref = useRef(null);
