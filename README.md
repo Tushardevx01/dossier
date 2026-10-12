@@ -44,7 +44,7 @@ Engineered with strict type safety, zero-leak server boundaries, automated defen
 Dossier is designed as an architectural showcase of production full-stack engineering standards:
 
 - **Strict Server/Client Boundary**: Server logic (database pools, repositories, storage clients, email transport) lives strictly under `src/server/*` guarded by `import "server-only";` to eliminate bundle contamination.
-- **Isomorphic Security Layer**: Edge and client CSRF validation (`src/lib/security/`), timing-safe API authorization (`src/server/security/auth.ts`), and distributed Redis sliding-window rate limiting.
+- **Isomorphic Security Layer**: Edge and client CSRF validation (`src/lib/security/`), timing-safe API authorization (`src/server/security/auth.ts`), and distributed Redis fixed-window rate limiting.
 - **Serverless PostgreSQL & Drizzle ORM**: Direct connection pooling via `@neondatabase/serverless` over HTTP, schema version control with Drizzle Kit, and automated idempotent migrations.
 - **Resilient Request Deduplication**: All repository accessors use `React.cache()` to share state between dynamic metadata generation (`generateMetadata()`) and page component trees without duplicate database hits.
 - **SSRF Hardened SEO Analyzer**: Ingests external target pages with custom Undici agents pinning DNS resolutions to prevent loopback/LAN rebinding attacks and enforce strict content-length caps.
@@ -62,7 +62,7 @@ Dossier is designed as an architectural showcase of production full-stack engine
 | **Animations**         | [Motion](https://motion.dev/)                                                     | Hardware-accelerated transitions & scroll interactions        |
 | **Database & ORM**     | [Neon PostgreSQL](https://neon.tech/) + [Drizzle ORM](https://orm.drizzle.team/)  | Serverless database with typed schema migrations              |
 | **Asset Storage**      | [Cloudflare R2](https://developers.cloudflare.com/r2/) (`@aws-sdk/client-s3`)     | S3-compatible global object storage                           |
-| **Caching & Limiting** | [Upstash Redis](https://upstash.com/) (`@upstash/redis`)                          | Atomic Lua-script sliding-window rate limiting                |
+| **Caching & Limiting** | [Upstash Redis](https://upstash.com/) (`@upstash/redis`)                          | Atomic Lua-script fixed-window rate limiting                  |
 | **Email Service**      | [Nodemailer](https://nodemailer.com/)                                             | Transactional delivery with CRLF sanitization                 |
 | **Validation**         | [Zod 4](https://zod.dev/)                                                         | Runtime schema validation on API contracts                    |
 | **Testing**            | [Vitest 5](https://vitest.dev/) + [Testing Library](https://testing-library.com/) | 100+ co-located unit and integration tests                    |
@@ -131,9 +131,9 @@ dossier/
 
 ### Prerequisites
 
-- **Node.js**: `v20.x` or later (LTS recommended)
+- **Node.js**: `v24.x` LTS (Node.js 22.12+ is supported)
 - **Package Manager**: `npm` (v10+), `pnpm`, or `yarn`
-- **Database**: Active [Neon PostgreSQL](https://neon.tech/) instance or local PostgreSQL 15+
+- **Database**: Active [Neon PostgreSQL](https://neon.tech/) instance (the HTTP driver requires a Neon-compatible endpoint)
 
 ### Installation & Setup
 
@@ -152,9 +152,7 @@ dossier/
 
 3. **Configure environment variables:**
 
-   ```bash
-   cp .env.example .env
-   ```
+   Create a local `.env` file using the variable names below. Keep it out of version control.
 
    _Edit `.env` with your database URL, email credentials, and API secrets._
 
@@ -179,31 +177,35 @@ dossier/
 
 ## 🔐 Environment Configuration
 
-All required and optional environment variables are documented in [`.env.example`](.env.example):
+Configure the following variables in `.env` for local development and in your hosting environment for deployment:
 
-| Variable                   | Required | Description                                                     |
-| -------------------------- | :------: | --------------------------------------------------------------- |
-| `DATABASE_URL`             | **Yes**  | Neon PostgreSQL connection string (`postgresql://...`)          |
-| `NODE_ENV`                 | Optional | Set to `development`, `test`, or `production`                   |
-| `LOG_LEVEL`                | Optional | Structured logger threshold (`debug`, `info`, `warn`, `error`)  |
-| `EMAIL_FROM`               | **Yes**  | Sender email address for contact form notifications             |
-| `EMAIL_PASSWORD`           | **Yes**  | App password / SMTP token for email transport                   |
-| `R2_ACCOUNT_ID`            | Optional | Cloudflare R2 Account Identifier for document uploads           |
-| `R2_ACCESS_KEY_ID`         | Optional | Cloudflare R2 S3 Access Key ID                                  |
-| `R2_SECRET_ACCESS_KEY`     | Optional | Cloudflare R2 S3 Secret Access Key                              |
-| `R2_BUCKET_NAME`           | Optional | Target Cloudflare R2 bucket name                                |
-| `R2_PUBLIC_URL`            | Optional | Public CDN origin for verified credential assets                |
-| `UPSTASH_REDIS_REST_URL`   | Optional | Upstash Redis REST URL for distributed rate limiting            |
-| `UPSTASH_REDIS_REST_TOKEN` | Optional | Upstash Redis REST Token                                        |
-| `ADMIN_API_KEY`            | Optional | Cryptographic hex key for administrative mutation APIs          |
-| `TRUST_PROXY_HEADERS`      | Optional | Enable `true` only behind trusted reverse proxies (e.g. Vercel) |
+| Variable                   |  Required  | Description                                                                              |
+| -------------------------- | :--------: | ---------------------------------------------------------------------------------------- |
+| `DATABASE_URL`             |  **Yes**   | Neon PostgreSQL connection string (`postgresql://...`)                                   |
+| `NODE_ENV`                 |  Optional  | Set to `development`, `test`, or `production`                                            |
+| `LOG_LEVEL`                |  Optional  | Structured logger threshold (`debug`, `info`, `warn`, `error`)                           |
+| `EMAIL_FROM`               |  **Yes**   | Sender email address for contact form notifications                                      |
+| `EMAIL_PASSWORD`           | SMTP only  | App password / SMTP token for email transport                                            |
+| `R2_ACCOUNT_ID`            |  Optional  | Cloudflare R2 Account Identifier for document uploads                                    |
+| `R2_ACCESS_KEY_ID`         |  Optional  | Cloudflare R2 S3 Access Key ID                                                           |
+| `R2_SECRET_ACCESS_KEY`     |  Optional  | Cloudflare R2 S3 Secret Access Key                                                       |
+| `R2_BUCKET_NAME`           |  Optional  | Target Cloudflare R2 bucket name                                                         |
+| `R2_PUBLIC_URL`            |  Optional  | Public CDN origin for verified credential assets                                         |
+| `UPSTASH_REDIS_REST_URL`   | Production | Upstash Redis REST URL for distributed rate limiting                                     |
+| `UPSTASH_REDIS_REST_TOKEN` | Production | Upstash Redis REST Token                                                                 |
+| `ADMIN_API_KEY`            |  Optional  | Cryptographic hex key for administrative mutation APIs                                   |
+| `TRUST_PROXY_HEADERS`      |  Optional  | Enable only if your ingress overwrites X-Forwarded-For; Vercel is detected automatically |
 
 > [!TIP]
-> In local development, if Upstash Redis credentials are not provided, rate limiting automatically falls back to an in-memory sliding window cache.
+> In local development, if Upstash Redis credentials are not provided, rate limiting automatically falls back to an in-memory fixed window cache.
 
 ## 🗄️ Database Management
 
 Database schemas and migrations are handled via **Drizzle ORM**:
+
+Apply migrations explicitly before deploying application changes. Request handlers never create or alter tables. The latest migration aligns legacy `engineering_notes.level` columns with `difficulty`; the credentials migration also supports the legacy column layout. Back up existing data before applying migrations. No live migrations are run by the automated unit tests.
+
+`db:seed` creates an API key only when `SEED_API_KEY` is explicitly set (at least 32 characters) outside production. Metadata-only case studies are seeded as drafts. `db:seed:case-studies` requires full content in `src/lib/case-studies-full.json` and rejects empty bodies so existing published articles cannot be erased by a metadata-only upsert.
 
 ```bash
 # Generate SQL migration files from schema changes
@@ -224,11 +226,15 @@ npm run db:studio
 
 ## ⚡ Development & Quality Scripts
 
+Run `npm run check` before submitting changes. CI also builds with `SKIP_DB_BUILD=true`; this validates compilation without a live database, but does not verify database content or external email/storage delivery. Use a normal database-connected build for deployment, since an offline build can prerender empty database-backed pages.
+
+The contact service supports SMTP or `RESEND_API_KEY` with optional `RESEND_FROM`. Production rate-limited endpoints reject requests when Redis is missing or unavailable. Configure `R2_PUBLIC_URL` to your actual owned asset origin when using public URLs; external URLs are never mapped into your bucket for deletion.
+
 | Command                | Action                                                        |
 | ---------------------- | ------------------------------------------------------------- |
 | `npm run dev`          | Starts Next.js development server with Turbopack              |
 | `npm run build`        | Compiles optimized static & dynamic production bundles        |
-| `npm run start`        | Boots the compiled Next.js standalone server                  |
+| `npm run start`        | Boots the compiled Next.js production server                  |
 | `npm run lint`         | Runs ESLint across all TypeScript and JavaScript files        |
 | `npm run typecheck`    | Executes TypeScript strict type verification (`tsc --noEmit`) |
 | `npm run format`       | Formats entire codebase with Prettier (`prettier --write .`)  |
@@ -261,7 +267,7 @@ All API routes are served under `/api` with strict HTTP method guards and rate l
 - **Content Security Policy (CSP)**: Fine-grained CSP configured in `next.config.ts` enforcing `base-uri 'self'`, `frame-ancestors 'none'`, and explicit script/connect origins.
 - **Double-Submit Cookie CSRF Defense**: Cryptographically random 32-byte tokens verified via timing-safe byte equality.
 - **SSRF Attack Prevention**: External fetches in `src/server/seo-analyzer/fetchHTML.ts` validate requested hostnames against private IP blocks (RFC 1918, loopbacks, link-local, AWS/cloud metadata services `169.254.169.254`) before making connections.
-- **Atomic Sliding Window Rate Limiting**: Powered by Upstash Redis Lua scripts executing atomic `INCR` + `EXPIRE` transactions, preventing race conditions.
+- **Atomic Fixed Window Rate Limiting**: Powered by Upstash Redis Lua scripts executing atomic `INCR` + `EXPIRE` transactions, preventing race conditions.
 - **PII-Masked Structured Logging**: Logger automatically masks email addresses, auth tokens, passwords, and API keys before writing to console/stdout.
 - **Timing Attack Mitigation**: Secret comparisons use Node's `crypto.timingSafeEqual` with SHA-256 pre-hashing to protect variable-length token leaks.
 

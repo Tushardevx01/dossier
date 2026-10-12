@@ -101,7 +101,7 @@ export async function seedDatabase() {
               readTime: record.readTime,
               date: record.date,
               tags: record.tags,
-              published: record.published,
+              published: Boolean(record.content?.trim()) && record.published,
               featured: record.featured,
               whatILearned: record.whatILearned,
               improvements: record.improvements,

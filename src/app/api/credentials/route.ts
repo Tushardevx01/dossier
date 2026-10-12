@@ -219,6 +219,9 @@ export async function POST(request: NextRequest) {
           description,
         });
 
+        // The insert committed. Later cache failures must not delete its asset.
+        uploadedR2Keys.length = 0;
+
         // Invalidate Next.js caches
         revalidatePath("/credentials");
         revalidatePath(`/credentials/${created.slug}`);

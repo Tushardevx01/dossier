@@ -196,6 +196,8 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
       try {
         const updated = await updateCredential(numId, validatedUpdate);
         if (!updated) throw new Error("Credential no longer exists");
+        // The update committed; compensation is no longer safe for the new asset.
+        newlyUploadedKeys.length = 0;
 
         // Delete old replaced assets from R2
         await Promise.allSettled(oldKeysToDelete.map((k) => deleteFromR2(k)));

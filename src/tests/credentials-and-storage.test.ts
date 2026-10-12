@@ -76,6 +76,18 @@ describe("Credential Storage Validation", () => {
 });
 
 describe("Cloudflare R2 Abstraction", () => {
+  it("does not treat external URLs as objects owned by this bucket", () => {
+    vi.stubEnv("R2_PUBLIC_URL", "https://assets.example.com");
+    expect(extractR2Key("https://evil.example/credentials/42/certificate.pdf")).toBe("");
+    expect(extractR2Key("credentials/42/../certificate.pdf")).toBe("");
+    expect(extractR2Key("credentials/42/%2e%2e/certificate.pdf")).toBe("");
+  });
+
+  it("generates distinct keys for uploads in the same millisecond", () => {
+    expect(generateSafeStorageKey(42, "certificate", "pdf")).not.toBe(
+      generateSafeStorageKey(42, "certificate", "pdf")
+    );
+  });
   it("extracts R2 key from full public URL", () => {
     vi.stubEnv("R2_PUBLIC_URL", "https://pub-12345.r2.dev");
     const url = "https://pub-12345.r2.dev/credentials/42/certificate-1718000.pdf";
@@ -176,6 +188,17 @@ describe("Admin Authorization for Credentials", () => {
 });
 
 describe("Credential Download Endpoint", () => {
+  it.each(["1abc", "1e3", "1.5", "-1", "0", "2147483648"])(
+    "rejects malformed ID %s",
+    async (id) => {
+      const { GET } = await import("@/app/api/credentials/[id]/download/route");
+      const req = new Request("http://localhost:3000/api/credentials/invalid/download");
+      const res = await GET(req as import("next/server").NextRequest, {
+        params: Promise.resolve({ id }),
+      });
+      expect(res.status).toBe(400);
+    }
+  );
   it("rejects invalid non-numeric ID parameter", async () => {
     const { GET } = await import("@/app/api/credentials/[id]/download/route");
     const req = new Request("http://localhost:3000/api/credentials/invalid/download");

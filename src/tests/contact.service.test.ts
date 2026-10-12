@@ -38,6 +38,25 @@ const mockedSendEmail = vi.mocked(sendEmail);
 const mockedVerifyEmailAddress = vi.mocked(verifyEmailAddress);
 
 describe("contact service", () => {
+  it("does not return transport diagnostics to API callers", async () => {
+    mockedSendEmail.mockResolvedValue({ success: false, error: "private SMTP diagnostic" });
+    const result = await processContactSubmission(
+      {
+        requestId: "failure",
+        clientIdentifier: "127.0.0.1",
+        body: {
+          senderName: "Test",
+          senderEmail: "sender@example.com",
+          reasonToContact: "Collaboration",
+          senderMsg: "Hello",
+          website: "",
+        },
+      },
+      { emailApiKey: "", emailFrom: "owner@example.com", emailPassword: "secret" }
+    );
+    expect(result.success).toBe(false);
+    expect(JSON.stringify(result)).not.toContain("private SMTP diagnostic");
+  });
   beforeEach(() => {
     vi.clearAllMocks();
     mockedCheckRateLimit.mockResolvedValue({ allowed: true, remaining: 4, retryAfterSeconds: 0 });

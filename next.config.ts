@@ -64,7 +64,7 @@ const nextConfig: NextConfig = {
       "font-src 'self' data:",
       "connect-src 'self' https://vitals.vercel-insights.com https://*.r2.dev https://*.cloudflarestorage.com",
       "worker-src 'self' blob:",
-      "upgrade-insecure-requests",
+      ...(isDev ? [] : ["upgrade-insecure-requests"]),
     ].join("; ");
 
     const commonSecurityHeaders = [

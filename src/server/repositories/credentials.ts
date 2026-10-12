@@ -176,6 +176,7 @@ export async function createCredential(data: NewCredential): Promise<Credential>
     const db = getDb();
 
     const slug = data.slug || slugifyTitle(data.title);
+    if (!slug) throw new Error("A URL-safe slug is required for this title");
 
     const [inserted] = await db
       .insert(credentials)
@@ -221,6 +222,7 @@ export async function updateCredential(
 
     if (data.title && !data.slug) {
       updatePayload.slug = slugifyTitle(data.title);
+      if (!updatePayload.slug) throw new Error("A URL-safe slug is required for this title");
     }
 
     const [updated] = await db

@@ -19,6 +19,12 @@ import { caseStudies } from "../src/server/db/schema";
 import { sql } from "drizzle-orm";
 
 export async function main() {
+  // Metadata-only records contain empty bodies. Never overwrite published content with them.
+  if (caseStudiesData.some((record: { content?: string }) => !record.content?.trim())) {
+    throw new Error(
+      "Full case-study content is required before seeding; metadata-only input was rejected"
+    );
+  }
   console.log("Connecting to database and verifying case studies schema...");
   await ensureDatabaseReady();
   const db = getDb();

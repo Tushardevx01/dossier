@@ -12,6 +12,44 @@ import { extractClientIdentifier, isTrustedOrigin } from "@/server/security/requ
 import { logger } from "@/lib/logger";
 
 describe("security helpers", () => {
+  it.each([null, 42, {}, [], "short"])("rejects malformed CSRF tokens: %j", (token) => {
+    expect(validateCsrfToken(token, token)).toBe(false);
+  });
+
+  it("does not allow a forged Host header to authorize a production origin", () => {
+    vi.stubEnv("NODE_ENV", "production");
+    expect(
+      isTrustedOrigin(new Headers({ origin: "https://evil.example", host: "evil.example" }))
+    ).toBe(false);
+  });
+
+  it("ignores attacker-controlled Cloudflare headers on Vercel", () => {
+    vi.stubEnv("VERCEL", "1");
+    const headers = new Headers({
+      "cf-connecting-ip": "1.1.1.1",
+      "x-vercel-forwarded-for": "8.8.8.8",
+    });
+    expect(extractClientIdentifier({ headers })).toBe("8.8.8.8");
+  });
+
+  it("cannot rotate the fallback identity using User-Agent", () => {
+    vi.stubEnv("VERCEL", "");
+    vi.stubEnv("CF_PAGES", "");
+    vi.stubEnv("TRUST_PROXY_HEADERS", "");
+    const first = extractClientIdentifier({ headers: new Headers({ "user-agent": "first" }) });
+    const second = extractClientIdentifier({ headers: new Headers({ "user-agent": "second" }) });
+    expect(first).toBe(second);
+  });
+
+  it("does not infer proxy trust from storage credentials", () => {
+    vi.stubEnv("VERCEL", "");
+    vi.stubEnv("CF_PAGES", "");
+    vi.stubEnv("TRUST_PROXY_HEADERS", "");
+    vi.stubEnv("CLOUDFLARE_ACCOUNT_ID", "storage-account");
+    expect(
+      extractClientIdentifier({ headers: new Headers({ "cf-connecting-ip": "1.1.1.1" }) })
+    ).toBe("unknown");
+  });
   afterEach(() => {
     vi.unstubAllEnvs();
   });
