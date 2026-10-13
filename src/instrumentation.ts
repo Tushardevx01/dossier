@@ -24,21 +24,23 @@ function validateEnvironment(): EnvValidationResult {
   };
 
   // Required environment variables
-  const isSkipDb = process.env.SKIP_DB_BUILD === "true" || process.env.SKIP_DB === "true";
+  const isSkipDb =
+    process.env.SKIP_DB_BUILD === "true" || process.env.SKIP_DB === "true";
   const requiredEnv = [
     ...(isSkipDb
       ? []
-      : [{ key: "DATABASE_URL", description: "Neon PostgreSQL connection string" }]),
+      : [
+          {
+            key: "DATABASE_URL",
+            description: "Neon PostgreSQL connection string",
+          },
+        ]),
     { key: "EMAIL_FROM", description: "Email sender address" },
     ...(process.env.RESEND_API_KEY
       ? []
-      : [{ key: "EMAIL_PASSWORD", description: "Email password/app password" }]),
-    ...(process.env.NODE_ENV === "production"
-      ? [
-          { key: "UPSTASH_REDIS_REST_URL", description: "Required for production rate limiting" },
-          { key: "UPSTASH_REDIS_REST_TOKEN", description: "Required for production rate limiting" },
-        ]
-      : []),
+      : [
+          { key: "EMAIL_PASSWORD", description: "Email password/app password" },
+        ]),
   ];
 
   // Optional but recommended environment variables

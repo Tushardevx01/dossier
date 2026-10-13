@@ -26,11 +26,14 @@ function cleanupMemoryStore(now: number) {
 }
 
 function getRedisClient(): Redis | null {
-  if (redisClient) return redisClient;
-
   const url = process.env.UPSTASH_REDIS_REST_URL;
   const token = process.env.UPSTASH_REDIS_REST_TOKEN;
-  if (!url || !token) return null;
+  if (!url || !token) {
+    redisClient = null;
+    return null;
+  }
+
+  if (redisClient) return redisClient;
 
   redisClient = new Redis({ url, token });
   return redisClient;
@@ -39,7 +42,7 @@ function getRedisClient(): Redis | null {
 async function checkMemoryRateLimit(
   key: string,
   maxRequests: number,
-  windowMs: number
+  windowMs: number,
 ): Promise<RateLimitResult> {
   const now = Date.now();
   cleanupMemoryStore(now);
@@ -75,17 +78,27 @@ async function checkMemoryRateLimit(
 async function checkRedisRateLimit(
   key: string,
   maxRequests: number,
-  windowMs: number
+  windowMs: number,
 ): Promise<RateLimitResult> {
   const redis = getRedisClient();
+  const failClosed = process.env.RATE_LIMIT_FAIL_CLOSED === "true";
+
   if (!redis) {
-    if (process.env.NODE_ENV === "production") {
+    if (failClosed) {
       logger.error(
-        "Redis rate limiting unavailable in production. Failing closed to prevent bypass.",
-        { key }
+        "Redis rate limiting unavailable and RATE_LIMIT_FAIL_CLOSED is enabled. Failing closed.",
+        { key },
       );
-      return { allowed: false, remaining: 0, retryAfterSeconds: windowMs / 1000 };
+      return {
+        allowed: false,
+        remaining: 0,
+        retryAfterSeconds: windowMs / 1000,
+      };
     }
+    logger.warn(
+      "Redis rate limiting unavailable; falling back to in-memory rate limiting.",
+      { key },
+    );
     return checkMemoryRateLimit(key, maxRequests, windowMs);
   }
 
@@ -104,7 +117,7 @@ async function checkRedisRateLimit(
        end
        return {count, ttl}`,
       [redisKey],
-      [windowSeconds]
+      [windowSeconds],
     )) as [number, number];
 
     const [count, ttl] = result;
@@ -122,8 +135,8 @@ async function checkRedisRateLimit(
       error: error instanceof Error ? error.message : String(error),
     });
 
-    if (process.env.NODE_ENV === "production") {
-      logger.error("Failing closed on Redis error in production");
+    if (failClosed) {
+      logger.error("Failing closed on Redis error as configured");
       return { allowed: false, remaining: 0, retryAfterSeconds: windowSeconds };
     }
     return checkMemoryRateLimit(key, maxRequests, windowMs);
@@ -133,9 +146,10 @@ async function checkRedisRateLimit(
 export async function checkRateLimit(
   key: string,
   maxRequests: number,
-  windowMs: number
+  windowMs: number,
 ): Promise<RateLimitResult> {
-  if (process.env.NODE_ENV === "production" || getRedisClient()) {
+  const redis = getRedisClient();
+  if (redis || process.env.RATE_LIMIT_FAIL_CLOSED === "true") {
     return checkRedisRateLimit(key, maxRequests, windowMs);
   }
   return checkMemoryRateLimit(key, maxRequests, windowMs);

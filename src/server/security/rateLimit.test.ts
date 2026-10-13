@@ -15,18 +15,37 @@ describe("rate limits", () => {
   });
   afterEach(() => vi.unstubAllEnvs());
 
-  it("fails closed in production when Redis is absent", async () => {
+  it("falls back to memory rate limiting in production when Redis is absent by default", async () => {
     vi.stubEnv("NODE_ENV", "production");
     vi.stubEnv("UPSTASH_REDIS_REST_URL", "");
     vi.stubEnv("UPSTASH_REDIS_REST_TOKEN", "");
     const { checkRateLimit } = await import("./rateLimit");
+    expect((await checkRateLimit("test", 5, 60000)).allowed).toBe(true);
+  });
+
+  it("fails closed in production when Redis is absent if RATE_LIMIT_FAIL_CLOSED is set", async () => {
+    vi.stubEnv("NODE_ENV", "production");
+    vi.stubEnv("UPSTASH_REDIS_REST_URL", "");
+    vi.stubEnv("UPSTASH_REDIS_REST_TOKEN", "");
+    vi.stubEnv("RATE_LIMIT_FAIL_CLOSED", "true");
+    const { checkRateLimit } = await import("./rateLimit");
     expect((await checkRateLimit("test", 5, 60000)).allowed).toBe(false);
   });
 
-  it("fails closed on a Redis outage", async () => {
+  it("falls back to memory rate limiting on a Redis outage by default", async () => {
     vi.stubEnv("NODE_ENV", "production");
     vi.stubEnv("UPSTASH_REDIS_REST_URL", "https://redis.example.com");
     vi.stubEnv("UPSTASH_REDIS_REST_TOKEN", "test");
+    evalMock.mockRejectedValue(new Error("Unavailable"));
+    const { checkRateLimit } = await import("./rateLimit");
+    expect((await checkRateLimit("test", 5, 60000)).allowed).toBe(true);
+  });
+
+  it("fails closed on a Redis outage if RATE_LIMIT_FAIL_CLOSED is set", async () => {
+    vi.stubEnv("NODE_ENV", "production");
+    vi.stubEnv("UPSTASH_REDIS_REST_URL", "https://redis.example.com");
+    vi.stubEnv("UPSTASH_REDIS_REST_TOKEN", "test");
+    vi.stubEnv("RATE_LIMIT_FAIL_CLOSED", "true");
     evalMock.mockRejectedValue(new Error("Unavailable"));
     const { checkRateLimit } = await import("./rateLimit");
     expect((await checkRateLimit("test", 5, 60000)).allowed).toBe(false);

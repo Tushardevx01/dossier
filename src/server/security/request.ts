@@ -17,8 +17,19 @@ type RequestLike = {
 
 function normalizeClientIp(value: string | null | undefined): string | null {
   if (!value) return null;
-  const candidate = value.split(",")[0]?.trim();
+  let candidate = value.split(",")[0]?.trim();
   if (!candidate) return null;
+
+  // Strip port if IPv4:port
+  if (/^(\d{1,3}\.){3}\d{1,3}:\d+$/.test(candidate)) {
+    candidate = candidate.split(":")[0];
+  }
+  // Strip brackets and port if [IPv6]:port
+  if (/^\[([a-fA-F0-9:]+)\](?::\d+)?$/.test(candidate)) {
+    const match = candidate.match(/^\[([a-fA-F0-9:]+)\]/);
+    if (match) candidate = match[1];
+  }
+
   if (!isIP(candidate)) return null;
   return candidate;
 }
@@ -27,7 +38,11 @@ function shouldTrustForwardedHeaders(): boolean {
   return (
     process.env.VERCEL === "1" ||
     process.env.TRUST_PROXY_HEADERS === "true" ||
-    Boolean(process.env.CF_PAGES)
+    Boolean(process.env.CF_PAGES) ||
+    Boolean(process.env.RENDER) ||
+    Boolean(process.env.RAILWAY_ENVIRONMENT) ||
+    Boolean(process.env.NETLIFY) ||
+    Boolean(process.env.FLY_APP_NAME)
   );
 }
 
@@ -50,7 +65,8 @@ function isLocalhostHost(host: string): boolean {
 
 function resolveRequestOrigin(headers: Headers): string | null {
   const host = shouldTrustForwardedHeaders()
-    ? (firstHeaderValue(headers.get("x-forwarded-host")) ?? firstHeaderValue(headers.get("host")))
+    ? (firstHeaderValue(headers.get("x-forwarded-host")) ??
+      firstHeaderValue(headers.get("host")))
     : firstHeaderValue(headers.get("host"));
 
   if (!host) {
@@ -86,7 +102,11 @@ function extractForwardedClientIp(headers: Headers): string | null {
   if (process.env.CF_PAGES) {
     return normalizeClientIp(headers.get("cf-connecting-ip"));
   }
-  const headerCandidates = [headers.get("x-forwarded-for")];
+  const headerCandidates = [
+    headers.get("cf-connecting-ip"),
+    headers.get("x-real-ip"),
+    headers.get("x-forwarded-for"),
+  ];
 
   for (const value of headerCandidates) {
     const ip = normalizeClientIp(value);
@@ -123,13 +143,27 @@ export function isTrustedOrigin(headers: Headers): boolean {
     return true;
   }
 
-  // Vercel preview hostnames are deployment configuration, never client headers.
-  if (
-    process.env.VERCEL === "1" &&
-    process.env.VERCEL_URL &&
-    originToTest === `https://${process.env.VERCEL_URL}`
-  )
-    return true;
+  // Vercel deployment and preview hostnames
+  if (process.env.VERCEL === "1") {
+    if (
+      process.env.VERCEL_URL &&
+      originToTest === `https://${process.env.VERCEL_URL}`
+    ) {
+      return true;
+    }
+    if (
+      process.env.VERCEL_PROJECT_PRODUCTION_URL &&
+      originToTest === `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    ) {
+      return true;
+    }
+    if (
+      process.env.VERCEL_BRANCH_URL &&
+      originToTest === `https://${process.env.VERCEL_BRANCH_URL}`
+    ) {
+      return true;
+    }
+  }
 
   return false;
 }
