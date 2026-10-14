@@ -40,7 +40,7 @@ export const TechBadge = ({ tech, size = "md", delay = 0 }: TechBadgeProps) => {
         aria-label={`${tech.name}: ${tech.description}`}
         className={cn(
           "inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 text-white/75 transition-all duration-150 ease-out hover:bg-white/10 hover:border-primary/40 focus-visible:bg-white/10 focus-visible:border-primary/40 focus-visible:outline-none",
-          sizeClasses[size]
+          sizeClasses[size],
         )}
       >
         <Icon

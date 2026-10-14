@@ -58,7 +58,10 @@ export const AsciiDiagram: React.FC<AsciiDiagramProps> = ({
       <div className="px-4 py-2.5 bg-neutral-950/90 border-b border-neutral-800/80 flex items-center justify-between gap-3 text-xs select-none">
         <div className="flex items-center gap-3 min-w-0">
           {/* Subtle status dots */}
-          <div className="flex items-center gap-1.5 shrink-0" aria-hidden="true">
+          <div
+            className="flex items-center gap-1.5 shrink-0"
+            aria-hidden="true"
+          >
             <span className="w-2 h-2 rounded-full bg-neutral-800" />
             <span className="w-2 h-2 rounded-full bg-neutral-800" />
             <span className="w-2 h-2 rounded-full bg-emerald-500/70 animate-pulse" />
@@ -129,7 +132,8 @@ export const AsciiDiagram: React.FC<AsciiDiagramProps> = ({
       {/* Chrome Bottom Caption Bar */}
       <div className="px-4 py-2.5 border-t border-neutral-900 bg-neutral-950/70 text-[11px] text-neutral-400 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
         <p className="font-sans text-[11px] sm:text-xs text-neutral-400 max-w-2xl leading-normal">
-          {caption || "Authoritative system flow and architecture topology spec."}
+          {caption ||
+            "Authoritative system flow and architecture topology spec."}
         </p>
         <span className="text-neutral-600 font-mono text-[10px] uppercase tracking-wider shrink-0 select-none">
           HORIZONTAL SCROLL ON MOBILE ↔

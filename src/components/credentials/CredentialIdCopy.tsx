@@ -8,7 +8,10 @@ interface CredentialIdCopyProps {
   inline?: boolean;
 }
 
-export function CredentialIdCopy({ credentialId, inline = false }: CredentialIdCopyProps) {
+export function CredentialIdCopy({
+  credentialId,
+  inline = false,
+}: CredentialIdCopyProps) {
   const [copied, setCopied] = useState(false);
 
   async function handleCopy() {
@@ -38,8 +41,12 @@ export function CredentialIdCopy({ credentialId, inline = false }: CredentialIdC
   if (inline) {
     return (
       <div className="inline-flex items-center gap-2 font-mono text-xs text-neutral-400 bg-neutral-900/60 border border-neutral-800/80 px-2.5 py-1 rounded-md">
-        <span className="text-neutral-500 uppercase tracking-wider text-[11px]">Credential ID</span>
-        <span className="text-neutral-200 select-all font-medium">{credentialId}</span>
+        <span className="text-neutral-500 uppercase tracking-wider text-[11px]">
+          Credential ID
+        </span>
+        <span className="text-neutral-200 select-all font-medium">
+          {credentialId}
+        </span>
         <button
           type="button"
           onClick={handleCopy}

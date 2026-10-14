@@ -8,7 +8,8 @@
 
 import type { ReactElement } from "react";
 
-export const SOCIAL_IMAGE_ALT = "Tushar Kanti Dey - Full Stack Developer and DevOps Engineer";
+export const SOCIAL_IMAGE_ALT =
+  "Tushar Kanti Dey - Full Stack Developer and DevOps Engineer";
 export const SOCIAL_IMAGE_SIZE = { width: 1200, height: 630 } as const;
 
 export function SocialCardContent(): ReactElement {
@@ -24,7 +25,8 @@ export function SocialCardContent(): ReactElement {
         backgroundColor: "#000000",
         backgroundImage:
           "radial-gradient(circle at 50% 18%, rgba(59, 130, 246, 0.16) 0%, transparent 60%), radial-gradient(circle at 85% 85%, rgba(99, 102, 241, 0.08) 0%, transparent 45%)",
-        fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+        fontFamily:
+          "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
         position: "relative",
         padding: "48px 32px",
       }}
@@ -72,7 +74,8 @@ export function SocialCardContent(): ReactElement {
             background:
               "linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)",
             border: "1px solid rgba(255, 255, 255, 0.14)",
-            boxShadow: "0 10px 30px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.15)",
+            boxShadow:
+              "0 10px 30px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.15)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -164,8 +167,8 @@ export function SocialCardContent(): ReactElement {
             lineHeight: 1.45,
           }}
         >
-          Building scalable full-stack products, connecting polished interfaces with reliable
-          systems &amp; cloud architecture.
+          Building scalable full-stack products, connecting polished interfaces
+          with reliable systems &amp; cloud architecture.
         </p>
 
         {/* Tech Stack Badges */}
@@ -177,7 +180,14 @@ export function SocialCardContent(): ReactElement {
             marginBottom: 28,
           }}
         >
-          {["Next.js", "TypeScript", "React", "Node.js", "Docker", "PostgreSQL"].map((tech) => (
+          {[
+            "Next.js",
+            "TypeScript",
+            "React",
+            "Node.js",
+            "Docker",
+            "PostgreSQL",
+          ].map((tech) => (
             <div
               key={tech}
               style={{

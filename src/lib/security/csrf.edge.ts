@@ -16,7 +16,10 @@ function bytesToBase64Url(bytes: Uint8Array): string {
     binary += String.fromCharCode(bytes[index]);
   }
 
-  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+  return btoa(binary)
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/g, "");
 }
 
 function decodeToken(token: string): Uint8Array | null {
@@ -53,7 +56,10 @@ export function generateCsrfToken(): string {
   return bytesToBase64Url(bytes);
 }
 
-export function validateCsrfToken(cookieToken?: string, bodyToken?: string): boolean {
+export function validateCsrfToken(
+  cookieToken?: string,
+  bodyToken?: string,
+): boolean {
   if (!cookieToken || !bodyToken) {
     return false;
   }
@@ -65,7 +71,10 @@ export function validateCsrfToken(cookieToken?: string, bodyToken?: string): boo
     return false;
   }
 
-  if (decodedCookie.length !== CSRF_TOKEN_LENGTH || decodedBody.length !== CSRF_TOKEN_LENGTH) {
+  if (
+    decodedCookie.length !== CSRF_TOKEN_LENGTH ||
+    decodedBody.length !== CSRF_TOKEN_LENGTH
+  ) {
     return false;
   }
 

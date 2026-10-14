@@ -35,14 +35,20 @@ export async function seedDatabase() {
       .select({ count: engineeringNotes.id })
       .from(engineeringNotes);
 
-    logger.info("engineering_notes table is available", { rows: notesResult.length });
+    logger.info("engineering_notes table is available", {
+      rows: notesResult.length,
+    });
 
     // Seed API keys if none exist
-    const keysResult = await database.select({ count: apiKeys.id }).from(apiKeys);
+    const keysResult = await database
+      .select({ count: apiKeys.id })
+      .from(apiKeys);
 
     if (keysResult.length === 0) {
       if (process.env.NODE_ENV === "production" || !process.env.SEED_API_KEY) {
-        logger.warn("Skipping API key seed: requires explicit SEED_API_KEY outside production");
+        logger.warn(
+          "Skipping API key seed: requires explicit SEED_API_KEY outside production",
+        );
       } else {
         logger.info("Seeding API keys");
 
@@ -69,15 +75,22 @@ export async function seedDatabase() {
 
     // Check & Seed case studies
     const { caseStudies } = await import("@/server/db/schema");
-    const caseStudiesResult = await database.select({ count: caseStudies.id }).from(caseStudies);
+    const caseStudiesResult = await database
+      .select({ count: caseStudies.id })
+      .from(caseStudies);
 
-    logger.info("case_studies table is available", { rows: caseStudiesResult.length });
+    logger.info("case_studies table is available", {
+      rows: caseStudiesResult.length,
+    });
 
     if (caseStudiesResult.length === 0) {
       logger.info("Seeding case studies from static repository data");
       const fs = await import("fs");
       const path = await import("path");
-      const fullDataPath = path.join(process.cwd(), "src/lib/case-studies-full.json");
+      const fullDataPath = path.join(
+        process.cwd(),
+        "src/lib/case-studies-full.json",
+      );
       let caseStudiesData = [];
       if (fs.existsSync(fullDataPath)) {
         caseStudiesData = JSON.parse(fs.readFileSync(fullDataPath, "utf8"));
@@ -108,7 +121,7 @@ export async function seedDatabase() {
               relatedNoteSlugs: record.relatedNoteSlugs,
               relatedProjectSlug: record.relatedProjectSlug,
               relatedSystemDesignSlug: record.relatedSystemDesignSlug,
-            }))
+            })),
           )
           .onConflictDoNothing();
       }
@@ -143,5 +156,7 @@ export async function resetDatabase() {
  * Run seed if called directly
  */
 if (import.meta.url === `file://${process.argv[1]}`) {
-  seedDatabase().catch((error) => logger.error("Seed script failed", { error }));
+  seedDatabase().catch((error) =>
+    logger.error("Seed script failed", { error }),
+  );
 }

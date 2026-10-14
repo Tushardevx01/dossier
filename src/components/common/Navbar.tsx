@@ -22,7 +22,11 @@ export const Navbar = (props: NavbarProps = {}) => {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 sm:py-4 flex items-center justify-between">
-        <Link href="/" className="flex items-center space-x-2 group" aria-label="Go to homepage">
+        <Link
+          href="/"
+          className="flex items-center space-x-2 group"
+          aria-label="Go to homepage"
+        >
           <div className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
             <Image
               src="/images/logo.svg"

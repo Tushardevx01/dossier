@@ -51,7 +51,7 @@ function getR2Config(): R2Config {
 
   if (!isR2Configured()) {
     throw new Error(
-      "Cloudflare R2 storage is not configured. Missing R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, or R2_BUCKET_NAME."
+      "Cloudflare R2 storage is not configured. Missing R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, or R2_BUCKET_NAME.",
     );
   }
 
@@ -123,7 +123,11 @@ export function extractR2Key(keyOrUrl: string): string {
   // Normalize and block traversal
   trimmed = trimmed.replace(/^\/+/, "");
   const segments = trimmed.split("/");
-  if (segments.some((s) => !s || s === "." || s === ".." || !/^[a-zA-Z0-9_.-]+$/.test(s)))
+  if (
+    segments.some(
+      (s) => !s || s === "." || s === ".." || !/^[a-zA-Z0-9_.-]+$/.test(s),
+    )
+  )
     return "";
   const clean = segments.join("/");
 
@@ -192,7 +196,7 @@ export async function uploadToR2(options: {
     });
     throw new Error(
       `R2 upload failed for key '${cleanKey}': ${error instanceof Error ? error.message : "Unknown error"}`,
-      { cause: error }
+      { cause: error },
     );
   }
 }
@@ -201,14 +205,18 @@ export async function uploadToR2(options: {
  * Delete an object from Cloudflare R2.
  * Idempotent: does not throw if object doesn't exist.
  */
-export async function deleteFromR2(keyOrUrl: string): Promise<{ success: boolean; key: string }> {
+export async function deleteFromR2(
+  keyOrUrl: string,
+): Promise<{ success: boolean; key: string }> {
   const cleanKey = extractR2Key(keyOrUrl);
   if (!cleanKey) {
     return { success: false, key: "" };
   }
 
   if (!isR2Configured()) {
-    logger.warn("Skipping R2 deletion because R2 is not configured", { key: cleanKey });
+    logger.warn("Skipping R2 deletion because R2 is not configured", {
+      key: cleanKey,
+    });
     return { success: false, key: cleanKey };
   }
 
@@ -223,7 +231,9 @@ export async function deleteFromR2(keyOrUrl: string): Promise<{ success: boolean
 
     await client.send(command);
 
-    logger.info("Successfully deleted object from Cloudflare R2", { key: cleanKey });
+    logger.info("Successfully deleted object from Cloudflare R2", {
+      key: cleanKey,
+    });
     return { success: true, key: cleanKey };
   } catch (error) {
     logger.error("Failed to delete object from Cloudflare R2", {

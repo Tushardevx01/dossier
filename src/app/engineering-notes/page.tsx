@@ -5,7 +5,10 @@ import { Footer } from "@/components/common";
 import { NotesListClient } from "@/components/NotesListClient";
 import NotesBackHandler from "@/components/NotesBackHandler";
 import { JsonLd } from "@/components/shared/JsonLd";
-import { getAllArticles, getArticleCategories } from "@/server/repositories/articleLoader";
+import {
+  getAllArticles,
+  getArticleCategories,
+} from "@/server/repositories/articleLoader";
 import { buildPageMetadata, absoluteUrl } from "@/lib/seo";
 import {
   generateBreadcrumbListStructuredData,
@@ -49,8 +52,8 @@ export default async function EngineeringNotesPage() {
           Engineering Notes
         </h1>
         <p className="text-base sm:text-lg text-neutral-400 max-w-2xl leading-relaxed">
-          Articles on architecture choices, production trade-offs, and the systems behind web
-          products that stay reliable after launch.
+          Articles on architecture choices, production trade-offs, and the
+          systems behind web products that stay reliable after launch.
         </p>
       </section>
 

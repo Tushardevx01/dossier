@@ -4,7 +4,8 @@ import { Card } from "../ui/card";
 import { useContactForm } from "@/hooks/useContactForm";
 
 export const ContactFormCard = () => {
-  const { formValues, isSending, isSent, handleChange, handleSubmit } = useContactForm();
+  const { formValues, isSending, isSent, handleChange, handleSubmit } =
+    useContactForm();
 
   return (
     <div className="h-full">
@@ -16,7 +17,10 @@ export const ContactFormCard = () => {
         }}
       >
         <div className="relative z-10 p-5 sm:p-8 md:p-10 flex flex-col flex-grow">
-          <form onSubmit={handleSubmit} className="space-y-6 flex flex-col flex-grow">
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-6 flex flex-col flex-grow"
+          >
             <input
               type="text"
               name="website"

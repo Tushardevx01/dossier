@@ -19,8 +19,15 @@ import {
   extractClientIdentifier,
   isOriginAllowed,
 } from "@/server/services/contact";
-import { validateCsrfToken, getCsrfCookieName } from "@/server/security/csrf.server";
-import { getCorsHeaders, getSecurityHeaders, mergeHeaders } from "@/lib/security/corsHeaders";
+import {
+  validateCsrfToken,
+  getCsrfCookieName,
+} from "@/server/security/csrf.server";
+import {
+  getCorsHeaders,
+  getSecurityHeaders,
+  mergeHeaders,
+} from "@/lib/security/corsHeaders";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -30,7 +37,7 @@ export const dynamic = "force-dynamic";
 function jsonResponse(
   payload: Record<string, unknown>,
   status: number,
-  headers?: Record<string, string>
+  headers?: Record<string, string>,
 ) {
   return NextResponse.json(payload, {
     status,
@@ -41,7 +48,7 @@ function jsonResponse(
       },
       getCorsHeaders(),
       getSecurityHeaders(),
-      headers ?? {}
+      headers ?? {},
     ),
   });
 }
@@ -62,7 +69,7 @@ function errorResponse(error: AppError, requestId: string) {
       requestId,
     },
     error.statusCode,
-    retryAfterHeader
+    retryAfterHeader,
   );
 }
 
@@ -74,9 +81,13 @@ export async function POST(request: NextRequest) {
   try {
     const contentLength = request.headers.get("content-length");
     if (contentLength && Number(contentLength) > CONTACT_MAX_BODY_BYTES) {
-      return jsonResponse({ error: "Invalid request payload", requestId }, 413, {
-        "X-Robots-Tag": "noindex, nofollow",
-      });
+      return jsonResponse(
+        { error: "Invalid request payload", requestId },
+        413,
+        {
+          "X-Robots-Tag": "noindex, nofollow",
+        },
+      );
     }
 
     // Origin check (CSRF protection)
@@ -91,17 +102,25 @@ export async function POST(request: NextRequest) {
     // Content-Type check
     const contentType = request.headers.get("content-type") ?? "";
     if (!contentType.includes("application/json")) {
-      return jsonResponse({ error: "Unsupported content type", requestId }, 415, {
-        "X-Robots-Tag": "noindex, nofollow",
-      });
+      return jsonResponse(
+        { error: "Unsupported content type", requestId },
+        415,
+        {
+          "X-Robots-Tag": "noindex, nofollow",
+        },
+      );
     }
 
     // Read and validate body size
     const rawBody = await readBodyText(request, CONTACT_MAX_BODY_BYTES);
     if (!isValidBodySize(rawBody)) {
-      return jsonResponse({ error: "Invalid request payload", requestId }, 400, {
-        "X-Robots-Tag": "noindex, nofollow",
-      });
+      return jsonResponse(
+        { error: "Invalid request payload", requestId },
+        400,
+        {
+          "X-Robots-Tag": "noindex, nofollow",
+        },
+      );
     }
 
     // Parse JSON
@@ -140,9 +159,13 @@ export async function POST(request: NextRequest) {
       };
     } catch {
       logger.error("Server configuration error", { requestId });
-      return jsonResponse({ error: "Server configuration error", requestId }, 500, {
-        "X-Robots-Tag": "noindex, nofollow",
-      });
+      return jsonResponse(
+        { error: "Server configuration error", requestId },
+        500,
+        {
+          "X-Robots-Tag": "noindex, nofollow",
+        },
+      );
     }
 
     // Process submission through service layer
@@ -152,7 +175,7 @@ export async function POST(request: NextRequest) {
         clientIdentifier: extractClientIdentifier(request),
         requestId,
       },
-      config
+      config,
     );
 
     if (result.success) {
@@ -164,9 +187,12 @@ export async function POST(request: NextRequest) {
     if (error instanceof PayloadTooLargeError) {
       return jsonResponse({ error: error.message, requestId }, 413);
     }
-    logger.exception(error instanceof Error ? error : new Error("Unhandled /api/send failure"), {
-      requestId,
-    });
+    logger.exception(
+      error instanceof Error ? error : new Error("Unhandled /api/send failure"),
+      {
+        requestId,
+      },
+    );
 
     return jsonResponse({ error: "Internal server error", requestId }, 500, {
       "X-Robots-Tag": "noindex, nofollow",

@@ -7,7 +7,10 @@
 
 import { NextResponse, NextRequest } from "next/server";
 import { getCredentialsCount } from "@/server/repositories/credentials";
-import { checkRateLimit, createRateLimitKey } from "@/server/security/rateLimit";
+import {
+  checkRateLimit,
+  createRateLimitKey,
+} from "@/server/security/rateLimit";
 import { extractClientIdentifier } from "@/server/security/request";
 
 export const runtime = "nodejs";
@@ -21,7 +24,10 @@ export async function GET(request: NextRequest) {
     if (!rl.allowed) {
       return NextResponse.json(
         { success: false, error: "Too many requests" },
-        { status: 429, headers: { "Retry-After": String(rl.retryAfterSeconds) } }
+        {
+          status: 429,
+          headers: { "Retry-After": String(rl.retryAfterSeconds) },
+        },
       );
     }
 
@@ -32,8 +38,11 @@ export async function GET(request: NextRequest) {
     });
   } catch {
     return NextResponse.json(
-      { success: false, error: { code: "DATABASE_ERROR", message: "Failed to retrieve count" } },
-      { status: 500 }
+      {
+        success: false,
+        error: { code: "DATABASE_ERROR", message: "Failed to retrieve count" },
+      },
+      { status: 500 },
     );
   }
 }

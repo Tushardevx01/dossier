@@ -40,9 +40,16 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { AnalyzeRequestSchema } from "@/schemas";
-import { analyzeSEO, isAnalysisError, validateUrl } from "@/server/seo-analyzer";
+import {
+  analyzeSEO,
+  isAnalysisError,
+  validateUrl,
+} from "@/server/seo-analyzer";
 import { logger } from "@/lib/logger";
-import { checkRateLimit, createRateLimitKey } from "@/server/security/rateLimit";
+import {
+  checkRateLimit,
+  createRateLimitKey,
+} from "@/server/security/rateLimit";
 import { readBodyText, PayloadTooLargeError } from "@/server/http/body";
 import { validateApiKey, extractApiKey } from "@/server/security/auth";
 
@@ -58,7 +65,7 @@ const RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
 function secureJson(
   payload: Record<string, unknown>,
   status: number,
-  extraHeaders?: Record<string, string>
+  extraHeaders?: Record<string, string>,
 ) {
   return NextResponse.json(payload, {
     status,
@@ -82,7 +89,7 @@ export async function POST(request: NextRequest) {
             message: "Unsupported content type",
           },
         },
-        415
+        415,
       );
     }
 
@@ -94,10 +101,11 @@ export async function POST(request: NextRequest) {
           success: false,
           error: {
             code: "AUTHENTICATION_REQUIRED",
-            message: "API key required. Use Authorization: Bearer <key> or X-API-Key header",
+            message:
+              "API key required. Use Authorization: Bearer <key> or X-API-Key header",
           },
         },
-        401
+        401,
       );
     }
 
@@ -111,7 +119,7 @@ export async function POST(request: NextRequest) {
             message: keyValidation.error || "Authentication failed",
           },
         },
-        401
+        401,
       );
     }
 
@@ -124,7 +132,7 @@ export async function POST(request: NextRequest) {
             message: "API key does not have analyze permission",
           },
         },
-        403
+        403,
       );
     }
 
@@ -138,7 +146,7 @@ export async function POST(request: NextRequest) {
             message: "Request body is too large",
           },
         },
-        413
+        413,
       );
     }
 
@@ -151,7 +159,11 @@ export async function POST(request: NextRequest) {
       Number.isSafeInteger(configuredLimit) && configuredLimit! > 0
         ? Math.min(configuredLimit!, 1000)
         : RATE_LIMIT_MAX;
-    const rateLimit = await checkRateLimit(key, rateLimitMax, RATE_LIMIT_WINDOW_MS);
+    const rateLimit = await checkRateLimit(
+      key,
+      rateLimitMax,
+      RATE_LIMIT_WINDOW_MS,
+    );
     if (!rateLimit.allowed) {
       const retryAfter = Math.max(rateLimit.retryAfterSeconds, 1);
       return secureJson(
@@ -167,7 +179,7 @@ export async function POST(request: NextRequest) {
           "X-RateLimit-Limit": String(rateLimitMax),
           "X-RateLimit-Remaining": "0",
           "Retry-After": String(retryAfter),
-        }
+        },
       );
     }
 
@@ -182,7 +194,7 @@ export async function POST(request: NextRequest) {
             message: "Request body is too large",
           },
         },
-        413
+        413,
       );
     }
 
@@ -198,7 +210,7 @@ export async function POST(request: NextRequest) {
             message: "Invalid JSON body",
           },
         },
-        400
+        400,
       );
     }
 
@@ -211,7 +223,7 @@ export async function POST(request: NextRequest) {
             message: "Invalid JSON body",
           },
         },
-        400
+        400,
       );
     }
 
@@ -224,7 +236,7 @@ export async function POST(request: NextRequest) {
             message: "Invalid input data",
           },
         },
-        400
+        400,
       );
     }
 
@@ -239,7 +251,7 @@ export async function POST(request: NextRequest) {
             message: firstIssue?.message || "Invalid request",
           },
         },
-        400
+        400,
       );
     }
 
@@ -253,7 +265,7 @@ export async function POST(request: NextRequest) {
           success: false,
           error: urlValidation.error,
         },
-        400
+        400,
       );
     }
 
@@ -263,7 +275,11 @@ export async function POST(request: NextRequest) {
     // Check for analysis errors
     if (isAnalysisError(result)) {
       const statusCode =
-        result.code === "TIMEOUT" ? 504 : result.code === "FETCH_FAILED" ? 502 : 400;
+        result.code === "TIMEOUT"
+          ? 504
+          : result.code === "FETCH_FAILED"
+            ? 502
+            : 400;
       return secureJson(
         {
           success: false,
@@ -273,7 +289,7 @@ export async function POST(request: NextRequest) {
         {
           "X-RateLimit-Limit": String(rateLimitMax),
           "X-RateLimit-Remaining": String(rateLimit.remaining),
-        }
+        },
       );
     }
 
@@ -287,13 +303,16 @@ export async function POST(request: NextRequest) {
       {
         "X-RateLimit-Limit": String(rateLimitMax),
         "X-RateLimit-Remaining": String(rateLimit.remaining),
-      }
+      },
     );
   } catch (error) {
     if (error instanceof PayloadTooLargeError) {
       return secureJson(
-        { success: false, error: { code: "PAYLOAD_TOO_LARGE", message: error.message } },
-        413
+        {
+          success: false,
+          error: { code: "PAYLOAD_TOO_LARGE", message: error.message },
+        },
+        413,
       );
     }
     // Unexpected error handling
@@ -308,7 +327,7 @@ export async function POST(request: NextRequest) {
           message: "An unexpected error occurred",
         },
       },
-      500
+      500,
     );
   }
 }

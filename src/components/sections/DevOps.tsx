@@ -9,7 +9,11 @@ import { DevopsRuntimePanel } from "@/components/sections/devops/DevopsRuntimePa
 import { useSystemStatus } from "@/hooks/useSystemStatus";
 
 export const DevOps = () => {
-  const { ref, isInView } = useScrollAnimation({ once: true, margin: "-80px", amount: 0.15 });
+  const { ref, isInView } = useScrollAnimation({
+    once: true,
+    margin: "-80px",
+    amount: 0.15,
+  });
   const { telemetry, logs } = useSystemStatus();
 
   return (
@@ -29,14 +33,15 @@ export const DevOps = () => {
             className={`${nasalization.className} text-3xl sm:text-4xl md:text-5xl font-bold`}
             style={{ color: "hsl(var(--foreground))" }}
           >
-            Production Control <span style={{ color: "hsl(var(--primary) / 0.85)" }}>Center.</span>
+            Production Control{" "}
+            <span style={{ color: "hsl(var(--primary) / 0.85)" }}>Center.</span>
           </h2>
           <p
             className={`${mono.className} text-sm`}
             style={{ color: "hsl(var(--foreground) / 0.45)" }}
           >
-            Live System Dashboard • deployment telemetry, incident traces, and service-state
-            visibility.
+            Live System Dashboard • deployment telemetry, incident traces, and
+            service-state visibility.
           </p>
         </motion.div>
 

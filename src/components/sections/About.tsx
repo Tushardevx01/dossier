@@ -38,7 +38,10 @@ export const About = () => {
             className={`${nasalization.className} text-3xl sm:text-4xl md:text-5xl font-bold relative`}
             style={{ color: "hsl(var(--primary))" }}
           >
-            Systems That <span style={{ color: "hsl(var(--foreground) / 0.5)" }}>Endure.</span>
+            Systems That{" "}
+            <span style={{ color: "hsl(var(--foreground) / 0.5)" }}>
+              Endure.
+            </span>
           </h2>
           <p
             className="mt-3 text-sm sm:text-base"
@@ -119,7 +122,9 @@ export const About = () => {
                   key={index}
                   className="text-sm sm:text-base leading-relaxed"
                   initial={{ opacity: 0, y: 15 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
+                  animate={
+                    isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }
+                  }
                   transition={{
                     duration: 0.5,
                     delay: 0.6 + index * 0.1,
@@ -161,7 +166,9 @@ export const About = () => {
                   className="flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-2.5 sm:py-3 rounded-full border border-primary/20 hover:border-primary/50 group transition-all duration-300"
                 >
                   <motion.div
-                    animate={isInView ? { rotate: [0, -8, 8, 0] } : { rotate: 0 }}
+                    animate={
+                      isInView ? { rotate: [0, -8, 8, 0] } : { rotate: 0 }
+                    }
                     transition={{
                       duration: 2,
                       repeat: Infinity,
@@ -174,8 +181,12 @@ export const About = () => {
                       style={{ color: "hsl(var(--primary))" }}
                     />
                   </motion.div>
-                  <span className="transition-colors" style={{ color: "hsl(var(--foreground))" }}>
-                    {selfData.current_location.city}, {selfData.current_location.state}
+                  <span
+                    className="transition-colors"
+                    style={{ color: "hsl(var(--foreground))" }}
+                  >
+                    {selfData.current_location.city},{" "}
+                    {selfData.current_location.state}
                   </span>
                 </Link>
               </motion.div>

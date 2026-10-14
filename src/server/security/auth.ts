@@ -29,7 +29,9 @@ export interface ApiKeyValidation {
 /**
  * Validate an API key
  */
-export async function validateApiKey(apiKey: string): Promise<ApiKeyValidation> {
+export async function validateApiKey(
+  apiKey: string,
+): Promise<ApiKeyValidation> {
   if (!apiKey || typeof apiKey !== "string") {
     return { valid: false, error: "Invalid credentials" };
   }
@@ -47,7 +49,9 @@ export async function validateApiKey(apiKey: string): Promise<ApiKeyValidation> 
   try {
     await ensureDatabaseReady();
     const db = getDb();
-    const hashedKey = createHash("sha256").update(normalizedApiKey).digest("hex");
+    const hashedKey = createHash("sha256")
+      .update(normalizedApiKey)
+      .digest("hex");
     const result = await db
       .select({
         id: apiKeys.id,
@@ -117,13 +121,14 @@ export function extractApiKey(request: Request): string | null {
  * Checks against ADMIN_API_KEY environment secret or validated database API keys.
  */
 export async function validateAdminRequest(
-  request: Request
+  request: Request,
 ): Promise<{ authorized: boolean; error?: string }> {
   const apiKey = extractApiKey(request);
   if (!apiKey) {
     return {
       authorized: false,
-      error: "Authentication required. Provide Authorization: Bearer <key> or X-API-Key header",
+      error:
+        "Authentication required. Provide Authorization: Bearer <key> or X-API-Key header",
     };
   }
 

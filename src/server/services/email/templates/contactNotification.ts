@@ -36,7 +36,9 @@ function formatDate(date: Date): string {
   );
 }
 
-export function generateContactNotificationEmail(data: ContactNotificationData): string {
+export function generateContactNotificationEmail(
+  data: ContactNotificationData,
+): string {
   const safeName = escapeHtml(data.name || "Unknown");
   const safeEmail = escapeHtml(data.email || "");
   const safeInquiryType = escapeHtml(data.inquiryType || "General");
@@ -176,7 +178,7 @@ export function contactNotificationTemplate(
   email: string,
   subject: string,
   message: string,
-  timestamp: string
+  timestamp: string,
 ): string {
   return generateContactNotificationEmail({
     name,

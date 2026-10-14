@@ -17,7 +17,9 @@ export const DevopsMetrics = ({ telemetry }: DevopsMetricsProps) => {
         <div className="flex items-center justify-between gap-3">
           <div>
             <p className="system-label">Cluster State</p>
-            <p className={`${nasalization.className} text-2xl sm:text-3xl text-white mt-2`}>
+            <p
+              className={`${nasalization.className} text-2xl sm:text-3xl text-white mt-2`}
+            >
               Operational
             </p>
             <p className={`${mono.className} text-xs text-white/45 mt-2`}>
@@ -26,7 +28,9 @@ export const DevopsMetrics = ({ telemetry }: DevopsMetricsProps) => {
           </div>
           <div className="flex items-center gap-2">
             <span className="status-dot bg-emerald-400 animate-pulse" />
-            <span className={`${mono.className} text-xs text-emerald-300`}>ONLINE</span>
+            <span className={`${mono.className} text-xs text-emerald-300`}>
+              ONLINE
+            </span>
           </div>
         </div>
       </div>
@@ -37,7 +41,11 @@ export const DevopsMetrics = ({ telemetry }: DevopsMetricsProps) => {
           value={`${telemetry.uptime.toFixed(2)}%`}
           valueClassName="text-emerald-300"
         />
-        <MetricCard label="Requests/sec" value={`${telemetry.rps}`} valueClassName="text-sky-300" />
+        <MetricCard
+          label="Requests/sec"
+          value={`${telemetry.rps}`}
+          valueClassName="text-sky-300"
+        />
         <MetricCard
           label="Error Rate"
           value={`${telemetry.errorRate.toFixed(1)}%`}
@@ -53,7 +61,9 @@ export const DevopsMetrics = ({ telemetry }: DevopsMetricsProps) => {
       <div className="rounded-xl border border-white/10 bg-black/30 p-4">
         <div className="flex items-center justify-between mb-2">
           <p className="system-label">Latency Graph</p>
-          <span className={`${mono.className} text-[11px] text-white/45`}>last 5m</span>
+          <span className={`${mono.className} text-[11px] text-white/45`}>
+            last 5m
+          </span>
         </div>
         <svg viewBox="0 0 324 84" className="w-full h-[90px]">
           <polyline
@@ -74,12 +84,25 @@ export const DevopsMetrics = ({ telemetry }: DevopsMetricsProps) => {
             strokeLinejoin="round"
             initial={{ pathLength: 0.05, opacity: 0.35 }}
             animate={{ pathLength: 1, opacity: 1 }}
-            transition={{ duration: 2, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              repeatType: "reverse",
+              ease: "easeInOut",
+            }}
           />
-          <text x="136" y="18" className={`${mono.className} fill-amber-200 text-[8px]`}>
+          <text
+            x="136"
+            y="18"
+            className={`${mono.className} fill-amber-200 text-[8px]`}
+          >
             activity spike
           </text>
-          <text x="246" y="20" className={`${mono.className} fill-sky-200 text-[8px]`}>
+          <text
+            x="246"
+            y="20"
+            className={`${mono.className} fill-sky-200 text-[8px]`}
+          >
             deployment phase
           </text>
         </svg>

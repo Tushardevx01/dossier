@@ -26,14 +26,19 @@ const DEFAULT_MAX_THUMB_SIZE = 5 * 1024 * 1024; // 5 MB
  * Detect file MIME type and normalized extension from buffer header bytes.
  */
 export function detectMimeFromMagicBytes(
-  buffer: Buffer
+  buffer: Buffer,
 ): { mimeType: string; extension: string } | null {
   if (buffer.length < 12) {
     return null;
   }
 
   // PDF: starts with %PDF- (0x25, 0x50, 0x44, 0x46)
-  if (buffer[0] === 0x25 && buffer[1] === 0x50 && buffer[2] === 0x44 && buffer[3] === 0x46) {
+  if (
+    buffer[0] === 0x25 &&
+    buffer[1] === 0x50 &&
+    buffer[2] === 0x44 &&
+    buffer[3] === 0x46
+  ) {
     return { mimeType: "application/pdf", extension: "pdf" };
   }
 
@@ -78,7 +83,7 @@ export function detectMimeFromMagicBytes(
  */
 export async function validateCredentialFile(
   fileInput: File | Blob | Buffer,
-  options: FileValidationOptions = {}
+  options: FileValidationOptions = {},
 ): Promise<ValidatedFile> {
   const maxBytes = options.maxSizeBytes ?? DEFAULT_MAX_CERT_SIZE;
   const allowed = options.allowedTypes ?? ["pdf", "png", "jpg", "jpeg", "webp"];
@@ -89,7 +94,8 @@ export async function validateCredentialFile(
   if (fileInput instanceof Buffer) {
     buffer = fileInput;
   } else if (fileInput instanceof Blob || fileInput instanceof File) {
-    if (fileInput.size > maxBytes) throw new Error("File size exceeds the upload limit");
+    if (fileInput.size > maxBytes)
+      throw new Error("File size exceeds the upload limit");
     const arrayBuffer = await fileInput.arrayBuffer();
     buffer = Buffer.from(arrayBuffer);
     if ("name" in fileInput && typeof fileInput.name === "string") {
@@ -112,9 +118,13 @@ export async function validateCredentialFile(
   if (clientFilename) {
     const ext = clientFilename.split(".").pop()?.toLowerCase() ?? "";
     const normalizedExt = ext === "jpeg" ? "jpg" : ext;
-    if (!allowed.includes(normalizedExt as "pdf" | "png" | "jpg" | "jpeg" | "webp")) {
+    if (
+      !allowed.includes(
+        normalizedExt as "pdf" | "png" | "jpg" | "jpeg" | "webp",
+      )
+    ) {
       throw new Error(
-        `Unsupported file extension: .${ext}. Allowed extensions: ${allowed.join(", ")}`
+        `Unsupported file extension: .${ext}. Allowed extensions: ${allowed.join(", ")}`,
       );
     }
   }
@@ -122,12 +132,21 @@ export async function validateCredentialFile(
   // Deep inspect magic bytes
   const magic = detectMimeFromMagicBytes(buffer);
   if (!magic) {
-    throw new Error("File content does not match any accepted format (PDF, PNG, JPG, WEBP)");
+    throw new Error(
+      "File content does not match any accepted format (PDF, PNG, JPG, WEBP)",
+    );
   }
 
-  const normalizedDetected = magic.extension === "jpeg" ? "jpg" : magic.extension;
-  if (!allowed.includes(normalizedDetected as "pdf" | "png" | "jpg" | "jpeg" | "webp")) {
-    throw new Error(`Detected file type (${magic.mimeType}) is not allowed for this field`);
+  const normalizedDetected =
+    magic.extension === "jpeg" ? "jpg" : magic.extension;
+  if (
+    !allowed.includes(
+      normalizedDetected as "pdf" | "png" | "jpg" | "jpeg" | "webp",
+    )
+  ) {
+    throw new Error(
+      `Detected file type (${magic.mimeType}) is not allowed for this field`,
+    );
   }
 
   return {
@@ -147,7 +166,7 @@ export async function validateCredentialFile(
 export function generateSafeStorageKey(
   credentialId: string | number,
   type: "certificate" | "thumbnail",
-  extension: string
+  extension: string,
 ): string {
   const sanitizedId = String(credentialId).replace(/[^a-zA-Z0-9_-]/g, "");
   const cleanExt = extension.replace(/^\./, "").toLowerCase();

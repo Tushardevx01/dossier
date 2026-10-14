@@ -6,17 +6,25 @@ const cleanString = (val: unknown) =>
   typeof val === "string" ? val.replace(/^["']|["']$/g, "").trim() : val;
 
 const cleanPassword = (val: unknown) =>
-  typeof val === "string" ? val.replace(/^["']|["']$/g, "").replace(/\s+/g, "") : val;
+  typeof val === "string"
+    ? val.replace(/^["']|["']$/g, "").replace(/\s+/g, "")
+    : val;
 
 const serverEnvSchema = z
   .object({
     QEV_API_KEY: z.preprocess(cleanString, z.string().optional().default("")),
     EMAIL_FROM: z.preprocess(
       cleanString,
-      z.string().email("EMAIL_FROM must be a valid email address")
+      z.string().email("EMAIL_FROM must be a valid email address"),
     ),
-    EMAIL_PASSWORD: z.preprocess(cleanPassword, z.string().optional().default("")),
-    RESEND_API_KEY: z.preprocess(cleanString, z.string().optional().default("")),
+    EMAIL_PASSWORD: z.preprocess(
+      cleanPassword,
+      z.string().optional().default(""),
+    ),
+    RESEND_API_KEY: z.preprocess(
+      cleanString,
+      z.string().optional().default(""),
+    ),
   })
   .refine((env) => Boolean(env.EMAIL_PASSWORD || env.RESEND_API_KEY), {
     message: "Configure EMAIL_PASSWORD or RESEND_API_KEY",
@@ -29,7 +37,9 @@ let cachedServerEnv: ServerEnv | null = null;
 
 export function getServerEnv(): ServerEnv {
   if (typeof window !== "undefined") {
-    throw new Error("Server environment variables cannot be accessed in the browser.");
+    throw new Error(
+      "Server environment variables cannot be accessed in the browser.",
+    );
   }
 
   if (cachedServerEnv) {
@@ -38,8 +48,12 @@ export function getServerEnv(): ServerEnv {
 
   const result = serverEnvSchema.safeParse(process.env);
   if (!result.success) {
-    const invalidKeys = result.error.issues.map((issue) => issue.path.join(".")).join(", ");
-    throw new Error(`Missing or invalid required server environment variables: ${invalidKeys}`);
+    const invalidKeys = result.error.issues
+      .map((issue) => issue.path.join("."))
+      .join(", ");
+    throw new Error(
+      `Missing or invalid required server environment variables: ${invalidKeys}`,
+    );
   }
 
   cachedServerEnv = result.data;

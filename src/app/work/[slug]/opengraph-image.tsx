@@ -35,7 +35,8 @@ export default async function Image({ params }: ImageRouteProps) {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        background: "linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)",
+        background:
+          "linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)",
         color: "#ffffff",
         padding: "48px",
         fontFamily: "system-ui, sans-serif",
@@ -74,6 +75,6 @@ export default async function Image({ params }: ImageRouteProps) {
     </div>,
     {
       ...size,
-    }
+    },
   );
 }

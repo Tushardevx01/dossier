@@ -8,7 +8,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { readCredentialJson, readCredentialForm } from "@/server/services/credentials/payload";
+import {
+  readCredentialJson,
+  readCredentialForm,
+} from "@/server/services/credentials/payload";
 import { PayloadTooLargeError } from "@/server/http/body";
 import {
   getAllCredentials,
@@ -28,7 +31,10 @@ import { logger } from "@/lib/logger";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-import { checkRateLimit, createRateLimitKey } from "@/server/security/rateLimit";
+import {
+  checkRateLimit,
+  createRateLimitKey,
+} from "@/server/security/rateLimit";
 import { extractClientIdentifier } from "@/server/security/request";
 
 /**
@@ -43,7 +49,10 @@ export async function GET(request: NextRequest) {
     if (!rl.allowed) {
       return NextResponse.json(
         { success: false, error: "Too many requests" },
-        { status: 429, headers: { "Retry-After": String(rl.retryAfterSeconds) } }
+        {
+          status: 429,
+          headers: { "Retry-After": String(rl.retryAfterSeconds) },
+        },
       );
     }
     const list = await getAllCredentials();
@@ -64,7 +73,7 @@ export async function GET(request: NextRequest) {
           message: "Unable to retrieve credentials from database",
         },
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -81,7 +90,7 @@ export async function POST(request: NextRequest) {
   if (!rl.allowed) {
     return NextResponse.json(
       { success: false, error: "Too many requests" },
-      { status: 429, headers: { "Retry-After": String(rl.retryAfterSeconds) } }
+      { status: 429, headers: { "Retry-After": String(rl.retryAfterSeconds) } },
     );
   }
 
@@ -96,7 +105,7 @@ export async function POST(request: NextRequest) {
           message: auth.error || "Administrative privileges required",
         },
       },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
@@ -111,14 +120,20 @@ export async function POST(request: NextRequest) {
 
       const title = formData.get("title")?.toString().trim() || "";
       const issuer = formData.get("issuer")?.toString().trim() || "";
-      const description = formData.get("description")?.toString().trim() || null;
+      const description =
+        formData.get("description")?.toString().trim() || null;
       const issueDateStr =
-        (formData.get("issueDate") || formData.get("issuedAt"))?.toString().trim() || "";
+        (formData.get("issueDate") || formData.get("issuedAt"))
+          ?.toString()
+          .trim() || "";
       const credentialLink =
-        (formData.get("credentialLink") || formData.get("verificationUrl"))?.toString().trim() ||
-        null;
+        (formData.get("credentialLink") || formData.get("verificationUrl"))
+          ?.toString()
+          .trim() || null;
       let objectLink =
-        (formData.get("objectLink") || formData.get("certificateUrl"))?.toString().trim() || null;
+        (formData.get("objectLink") || formData.get("certificateUrl"))
+          ?.toString()
+          .trim() || null;
 
       // Validate required inputs
       if (!title || !issuer || !issueDateStr) {
@@ -130,7 +145,7 @@ export async function POST(request: NextRequest) {
               message: "Title, issuer, and issueDate are required fields",
             },
           },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -144,12 +159,14 @@ export async function POST(request: NextRequest) {
               message: "Invalid issueDate format",
             },
           },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
       const certFile =
-        formData.get("certificateFile") || formData.get("certificate") || formData.get("file");
+        formData.get("certificateFile") ||
+        formData.get("certificate") ||
+        formData.get("file");
 
       // Upload Certificate file to R2 if provided
       if (certFile && certFile instanceof File && certFile.size > 0) {
@@ -162,7 +179,7 @@ export async function POST(request: NextRequest) {
                 message: "Cloudflare R2 storage credentials are not configured",
               },
             },
-            { status: 503 }
+            { status: 503 },
           );
         }
 
@@ -173,7 +190,11 @@ export async function POST(request: NextRequest) {
 
         const slugCandidate = slugifyTitle(title);
         const tempId = slugCandidate || `cert-${Date.now()}`;
-        const key = generateSafeStorageKey(tempId, "certificate", validatedCert.extension);
+        const key = generateSafeStorageKey(
+          tempId,
+          "certificate",
+          validatedCert.extension,
+        );
 
         const uploadResult = await uploadToR2({
           file: validatedCert.buffer,
@@ -194,7 +215,7 @@ export async function POST(request: NextRequest) {
               message: "Certificate file or objectLink is required",
             },
           },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -215,7 +236,8 @@ export async function POST(request: NextRequest) {
           slug: parsed.slug || slugifyTitle(parsed.title),
           issueDate,
           objectLink,
-          credentialLink: credentialLink && credentialLink.length > 0 ? credentialLink : null,
+          credentialLink:
+            credentialLink && credentialLink.length > 0 ? credentialLink : null,
           description,
         });
 
@@ -234,16 +256,21 @@ export async function POST(request: NextRequest) {
             success: true,
             data: created,
           },
-          { status: 201 }
+          { status: 201 },
         );
       } catch (dbError) {
         // Rollback: Clean up uploaded R2 files if DB insert failed
-        logger.error("DB insert failed after R2 upload; rolling back uploaded assets", {
-          keys: uploadedR2Keys,
-          error: dbError instanceof Error ? dbError.message : String(dbError),
-        });
+        logger.error(
+          "DB insert failed after R2 upload; rolling back uploaded assets",
+          {
+            keys: uploadedR2Keys,
+            error: dbError instanceof Error ? dbError.message : String(dbError),
+          },
+        );
 
-        await Promise.allSettled(uploadedR2Keys.map((key) => deleteFromR2(key)));
+        await Promise.allSettled(
+          uploadedR2Keys.map((key) => deleteFromR2(key)),
+        );
 
         return NextResponse.json(
           {
@@ -253,7 +280,7 @@ export async function POST(request: NextRequest) {
               message: "Failed to persist credential metadata to database",
             },
           },
-          { status: 500 }
+          { status: 500 },
         );
       }
     } catch (error) {
@@ -268,7 +295,7 @@ export async function POST(request: NextRequest) {
             message: "Invalid file or payload",
           },
         },
-        { status: error instanceof PayloadTooLargeError ? 413 : 400 }
+        { status: error instanceof PayloadTooLargeError ? 413 : 400 },
       );
     }
   }
@@ -300,16 +327,22 @@ export async function POST(request: NextRequest) {
           success: true,
           data: created,
         },
-        { status: 201 }
+        { status: 201 },
       );
     } catch (validationErr) {
-      if (validationErr instanceof PayloadTooLargeError || validationErr instanceof SyntaxError) {
+      if (
+        validationErr instanceof PayloadTooLargeError ||
+        validationErr instanceof SyntaxError
+      ) {
         return NextResponse.json(
           {
             success: false,
-            error: { code: "INVALID_PAYLOAD", message: "Invalid request payload" },
+            error: {
+              code: "INVALID_PAYLOAD",
+              message: "Invalid request payload",
+            },
           },
-          { status: validationErr instanceof PayloadTooLargeError ? 413 : 400 }
+          { status: validationErr instanceof PayloadTooLargeError ? 413 : 400 },
         );
       }
       if (validationErr instanceof z.ZodError) {
@@ -321,7 +354,7 @@ export async function POST(request: NextRequest) {
               issues: validationErr.issues,
             },
           },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -333,7 +366,7 @@ export async function POST(request: NextRequest) {
             message: "Failed to create credential record",
           },
         },
-        { status: 500 }
+        { status: 500 },
       );
     }
   }
@@ -346,6 +379,6 @@ export async function POST(request: NextRequest) {
         message: "Expected multipart/form-data or application/json",
       },
     },
-    { status: 415 }
+    { status: 415 },
   );
 }

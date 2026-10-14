@@ -8,18 +8,26 @@ import {
 } from "@/server/security/csrf.server";
 import { generateCsrfToken as generateEdgeCsrfToken } from "@/lib/security/csrf.edge";
 import { getCsrfCookieName } from "@/lib/security/csrf.client";
-import { extractClientIdentifier, isTrustedOrigin } from "@/server/security/request";
+import {
+  extractClientIdentifier,
+  isTrustedOrigin,
+} from "@/server/security/request";
 import { logger } from "@/lib/logger";
 
 describe("security helpers", () => {
-  it.each([null, 42, {}, [], "short"])("rejects malformed CSRF tokens: %j", (token) => {
-    expect(validateCsrfToken(token, token)).toBe(false);
-  });
+  it.each([null, 42, {}, [], "short"])(
+    "rejects malformed CSRF tokens: %j",
+    (token) => {
+      expect(validateCsrfToken(token, token)).toBe(false);
+    },
+  );
 
   it("does not allow a forged Host header to authorize a production origin", () => {
     vi.stubEnv("NODE_ENV", "production");
     expect(
-      isTrustedOrigin(new Headers({ origin: "https://evil.example", host: "evil.example" }))
+      isTrustedOrigin(
+        new Headers({ origin: "https://evil.example", host: "evil.example" }),
+      ),
     ).toBe(false);
   });
 
@@ -36,8 +44,12 @@ describe("security helpers", () => {
     vi.stubEnv("VERCEL", "");
     vi.stubEnv("CF_PAGES", "");
     vi.stubEnv("TRUST_PROXY_HEADERS", "");
-    const first = extractClientIdentifier({ headers: new Headers({ "user-agent": "first" }) });
-    const second = extractClientIdentifier({ headers: new Headers({ "user-agent": "second" }) });
+    const first = extractClientIdentifier({
+      headers: new Headers({ "user-agent": "first" }),
+    });
+    const second = extractClientIdentifier({
+      headers: new Headers({ "user-agent": "second" }),
+    });
     expect(first).toBe(second);
   });
 
@@ -47,7 +59,9 @@ describe("security helpers", () => {
     vi.stubEnv("TRUST_PROXY_HEADERS", "");
     vi.stubEnv("CLOUDFLARE_ACCOUNT_ID", "storage-account");
     expect(
-      extractClientIdentifier({ headers: new Headers({ "cf-connecting-ip": "1.1.1.1" }) })
+      extractClientIdentifier({
+        headers: new Headers({ "cf-connecting-ip": "1.1.1.1" }),
+      }),
     ).toBe("unknown");
   });
   afterEach(() => {
@@ -58,13 +72,17 @@ describe("security helpers", () => {
     const token = generateServerCsrfToken();
 
     expect(
-      readCsrfTokenFromCookieString(`theme=dark; ${getCsrfCookieName()}=${token}; session=abc`)
+      readCsrfTokenFromCookieString(
+        `theme=dark; ${getCsrfCookieName()}=${token}; session=abc`,
+      ),
     ).toBe(token);
   });
 
   it("rejects mismatched CSRF tokens", () => {
     const token = generateServerCsrfToken();
-    const mismatched = token.endsWith("A") ? `${token.slice(0, -1)}B` : `${token.slice(0, -1)}A`;
+    const mismatched = token.endsWith("A")
+      ? `${token.slice(0, -1)}B`
+      : `${token.slice(0, -1)}A`;
 
     expect(validateCsrfToken(token, mismatched)).toBe(false);
   });
@@ -121,12 +139,17 @@ describe("security helpers", () => {
   it("handles invalid CORS origins safely", () => {
     const headers = getCorsHeaders("not-a-valid-origin");
 
-    expect(headers["Access-Control-Allow-Origin"]).toBe("https://www.tushardevx01.tech");
+    expect(headers["Access-Control-Allow-Origin"]).toBe(
+      "https://www.tushardevx01.tech",
+    );
     expect(headers.Vary).toBe("Origin");
   });
 
   it("safely handles circular references in logging metadata without infinite recursion", () => {
-    const circular: Record<string, unknown> = { name: "test", email: "secret@example.com" };
+    const circular: Record<string, unknown> = {
+      name: "test",
+      email: "secret@example.com",
+    };
     circular.self = circular;
 
     expect(() => {

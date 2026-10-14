@@ -4,7 +4,10 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 
 import { TagBadge } from "@/components/notes/TagBadge";
-import type { CategoryFilter, ArticleMetadata } from "@/server/repositories/articleLoader";
+import type {
+  CategoryFilter,
+  ArticleMetadata,
+} from "@/server/repositories/articleLoader";
 
 interface NotesListClientProps {
   posts: ArticleMetadata[];
@@ -12,7 +15,8 @@ interface NotesListClientProps {
 }
 
 export function NotesListClient({ posts, categories }: NotesListClientProps) {
-  const [selectedCategory, setSelectedCategory] = useState<CategoryFilter>("All");
+  const [selectedCategory, setSelectedCategory] =
+    useState<CategoryFilter>("All");
 
   const filteredPosts = useMemo(() => {
     if (selectedCategory === "All") {
@@ -83,7 +87,9 @@ export function NotesListClient({ posts, categories }: NotesListClientProps) {
           </div>
         ) : (
           <div className="py-20 text-center">
-            <p className="text-neutral-400 text-lg">No articles found in this category.</p>
+            <p className="text-neutral-400 text-lg">
+              No articles found in this category.
+            </p>
           </div>
         )}
       </section>

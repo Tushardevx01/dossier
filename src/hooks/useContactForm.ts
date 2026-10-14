@@ -32,7 +32,8 @@ const INITIAL_VALUES: ContactFormValues = {
 const SENT_FEEDBACK_DURATION = 3000;
 
 export function useContactForm() {
-  const [formValues, setFormValues] = useState<ContactFormValues>(INITIAL_VALUES);
+  const [formValues, setFormValues] =
+    useState<ContactFormValues>(INITIAL_VALUES);
   const [isSending, setIsSending] = useState(false);
   const [isSent, setIsSent] = useState(false);
   const sentTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -40,18 +41,25 @@ export function useContactForm() {
   // Auto-reset "sent" state
   useEffect(() => {
     if (!isSent) return;
-    sentTimerRef.current = setTimeout(() => setIsSent(false), SENT_FEEDBACK_DURATION);
+    sentTimerRef.current = setTimeout(
+      () => setIsSent(false),
+      SENT_FEEDBACK_DURATION,
+    );
     return () => {
       if (sentTimerRef.current) clearTimeout(sentTimerRef.current);
     };
   }, [isSent]);
 
   const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    (
+      e: React.ChangeEvent<
+        HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+      >,
+    ) => {
       const { name, value } = e.target;
       setFormValues((prev) => ({ ...prev, [name]: value }));
     },
-    []
+    [],
   );
 
   const handleSubmit = useCallback(
@@ -106,12 +114,13 @@ export function useContactForm() {
             return `The email address you entered is not valid (${formValues.senderEmail}). Please use a real email.`;
           }
           return (
-            error.message || "An error occurred while sending your message. Please try again later."
+            error.message ||
+            "An error occurred while sending your message. Please try again later."
           );
         },
       });
     },
-    [formValues, isSending]
+    [formValues, isSending],
   );
 
   return {

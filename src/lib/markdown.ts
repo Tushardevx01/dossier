@@ -39,8 +39,8 @@ function parseInlineMarkdown(text: string): string {
     const idx = codePlaceholders.length;
     codePlaceholders.push(
       `<code class="rounded bg-neutral-900 border border-neutral-800 px-1.5 py-0.5 font-mono text-xs text-neutral-200">${escapeHtml(
-        codeContent
-      )}</code>`
+        codeContent,
+      )}</code>`,
     );
     return `@@CODE_PLACEHOLDER_${idx}@@`;
   });
@@ -56,26 +56,35 @@ function parseInlineMarkdown(text: string): string {
         ? escapeHtml(trimmedUrl)
         : "#";
 
-    const isExternal = safeUrl.startsWith("http://") || safeUrl.startsWith("https://");
-    const targetRel = isExternal ? ' target="_blank" rel="noopener noreferrer"' : "";
+    const isExternal =
+      safeUrl.startsWith("http://") || safeUrl.startsWith("https://");
+    const targetRel = isExternal
+      ? ' target="_blank" rel="noopener noreferrer"'
+      : "";
 
     return `<a href="${safeUrl}"${targetRel} class="text-white underline underline-offset-4 decoration-neutral-600 hover:decoration-white transition-colors">${parseInlineMarkdown(
-      label
+      label,
     )}</a>`;
   });
 
   // 3. Bold: **text** or __text__
-  result = result.replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-white">$1</strong>');
-  result = result.replace(/__(.*?)__/g, '<strong class="font-semibold text-white">$1</strong>');
+  result = result.replace(
+    /\*\*(.*?)\*\*/g,
+    '<strong class="font-semibold text-white">$1</strong>',
+  );
+  result = result.replace(
+    /__(.*?)__/g,
+    '<strong class="font-semibold text-white">$1</strong>',
+  );
 
   // 4. Italic: *text* or _text_ (excluding inside words)
   result = result.replace(
     /(^|[^\w*])\*([^*\n]+)\*([^\w*]|$)/g,
-    '$1<em class="italic text-neutral-200">$2</em>$3'
+    '$1<em class="italic text-neutral-200">$2</em>$3',
   );
   result = result.replace(
     /(^|[^\w_])_([^_\n]+)_([^\w_]|$)/g,
-    '$1<em class="italic text-neutral-200">$2</em>$3'
+    '$1<em class="italic text-neutral-200">$2</em>$3',
   );
 
   // 5. Restore code placeholders safely (using function replacer to prevent $1, $& pattern expansions)
@@ -116,7 +125,9 @@ function parseTableRow(line: string): string[] {
  * @param markdown - Long-form markdown content
  * @returns Sanitized HTML string safe for innerHTML
  */
-export function renderMarkdownToHtml(markdown: string | null | undefined): string {
+export function renderMarkdownToHtml(
+  markdown: string | null | undefined,
+): string {
   if (!markdown || typeof markdown !== "string") {
     return "";
   }
@@ -150,8 +161,8 @@ export function renderMarkdownToHtml(markdown: string | null | undefined): strin
       const rawCode = codeLines.join("\n");
       htmlBlocks.push(
         `<pre class="my-6 overflow-x-auto rounded-lg border border-neutral-800 bg-[#0d1117] p-4 font-mono text-xs text-neutral-300 leading-relaxed"><code>${escapeHtml(
-          rawCode
-        )}</code></pre>`
+          rawCode,
+        )}</code></pre>`,
       );
       continue;
     }
@@ -173,19 +184,19 @@ export function renderMarkdownToHtml(markdown: string | null | undefined): strin
 
         if (level === 1) {
           htmlBlocks.push(
-            `<h1 class="text-2xl sm:text-3xl font-serif text-white tracking-tight mt-10 mb-4">${innerHtml}</h1>`
+            `<h1 class="text-2xl sm:text-3xl font-serif text-white tracking-tight mt-10 mb-4">${innerHtml}</h1>`,
           );
         } else if (level === 2) {
           htmlBlocks.push(
-            `<h2 class="text-lg sm:text-xl font-mono text-white tracking-wide uppercase mt-10 mb-4 pb-2 border-b border-neutral-800/80">${innerHtml}</h2>`
+            `<h2 class="text-lg sm:text-xl font-mono text-white tracking-wide uppercase mt-10 mb-4 pb-2 border-b border-neutral-800/80">${innerHtml}</h2>`,
           );
         } else if (level === 3) {
           htmlBlocks.push(
-            `<h3 class="text-base sm:text-lg font-mono text-neutral-200 font-semibold mt-6 mb-3">${innerHtml}</h3>`
+            `<h3 class="text-base sm:text-lg font-mono text-neutral-200 font-semibold mt-6 mb-3">${innerHtml}</h3>`,
           );
         } else {
           htmlBlocks.push(
-            `<h4 class="text-sm sm:text-base font-mono text-neutral-300 font-medium mt-4 mb-2">${innerHtml}</h4>`
+            `<h4 class="text-sm sm:text-base font-mono text-neutral-300 font-medium mt-4 mb-2">${innerHtml}</h4>`,
           );
         }
         i++;
@@ -203,14 +214,18 @@ export function renderMarkdownToHtml(markdown: string | null | undefined): strin
       const quoteText = quoteLines.join("<br />");
       htmlBlocks.push(
         `<blockquote class="my-6 border-l-2 border-neutral-700 pl-4 py-1 italic text-neutral-400 text-sm sm:text-base leading-relaxed">${parseInlineMarkdown(
-          quoteText
-        )}</blockquote>`
+          quoteText,
+        )}</blockquote>`,
       );
       continue;
     }
 
     // 5. GFM Tables (starts with | and followed by separator row)
-    if (trimmed.includes("|") && i + 1 < lines.length && isTableSeparator(lines[i + 1])) {
+    if (
+      trimmed.includes("|") &&
+      i + 1 < lines.length &&
+      isTableSeparator(lines[i + 1])
+    ) {
       const headerCells = parseTableRow(line);
       i += 2; // skip header and separator
 
@@ -224,8 +239,8 @@ export function renderMarkdownToHtml(markdown: string | null | undefined): strin
         .map(
           (cell) =>
             `<th class="px-5 py-3 text-left font-semibold text-white">${parseInlineMarkdown(
-              cell
-            )}</th>`
+              cell,
+            )}</th>`,
         )
         .join("")}</tr>`;
 
@@ -237,14 +252,14 @@ export function renderMarkdownToHtml(markdown: string | null | undefined): strin
                 (cell, cellIdx) =>
                   `<td class="px-5 py-3 ${
                     cellIdx === 0 ? "text-neutral-400" : "text-neutral-200"
-                  }">${parseInlineMarkdown(cell)}</td>`
+                  }">${parseInlineMarkdown(cell)}</td>`,
               )
-              .join("")}</tr>`
+              .join("")}</tr>`,
         )
         .join("");
 
       htmlBlocks.push(
-        `<div class="my-6 overflow-x-auto rounded-lg border border-neutral-800"><table class="w-full text-left border-collapse"><thead class="bg-neutral-900 border-b border-neutral-800 text-xs font-mono uppercase tracking-wider text-neutral-400">${theadHtml}</thead><tbody class="divide-y divide-neutral-800/80 bg-neutral-950/40 text-neutral-300 font-mono text-xs">${tbodyHtml}</tbody></table></div>`
+        `<div class="my-6 overflow-x-auto rounded-lg border border-neutral-800"><table class="w-full text-left border-collapse"><thead class="bg-neutral-900 border-b border-neutral-800 text-xs font-mono uppercase tracking-wider text-neutral-400">${theadHtml}</thead><tbody class="divide-y divide-neutral-800/80 bg-neutral-950/40 text-neutral-300 font-mono text-xs">${tbodyHtml}</tbody></table></div>`,
       );
       continue;
     }
@@ -257,9 +272,11 @@ export function renderMarkdownToHtml(markdown: string | null | undefined): strin
         listItems.push(itemText);
         i++;
       }
-      const itemsHtml = listItems.map((item) => `<li>${parseInlineMarkdown(item)}</li>`).join("");
+      const itemsHtml = listItems
+        .map((item) => `<li>${parseInlineMarkdown(item)}</li>`)
+        .join("");
       htmlBlocks.push(
-        `<ul class="my-4 space-y-2 text-sm sm:text-base text-neutral-300 list-disc list-inside">${itemsHtml}</ul>`
+        `<ul class="my-4 space-y-2 text-sm sm:text-base text-neutral-300 list-disc list-inside">${itemsHtml}</ul>`,
       );
       continue;
     }
@@ -272,9 +289,11 @@ export function renderMarkdownToHtml(markdown: string | null | undefined): strin
         listItems.push(itemText);
         i++;
       }
-      const itemsHtml = listItems.map((item) => `<li>${parseInlineMarkdown(item)}</li>`).join("");
+      const itemsHtml = listItems
+        .map((item) => `<li>${parseInlineMarkdown(item)}</li>`)
+        .join("");
       htmlBlocks.push(
-        `<ol class="my-4 space-y-2 text-sm sm:text-base text-neutral-300 list-decimal list-inside">${itemsHtml}</ol>`
+        `<ol class="my-4 space-y-2 text-sm sm:text-base text-neutral-300 list-decimal list-inside">${itemsHtml}</ol>`,
       );
       continue;
     }
@@ -290,7 +309,11 @@ export function renderMarkdownToHtml(markdown: string | null | undefined): strin
       !lines[i].trim().startsWith(">") &&
       !/^[-*]\s+/.test(lines[i].trim()) &&
       !/^\d+\.\s+/.test(lines[i].trim()) &&
-      !(lines[i].trim().includes("|") && i + 1 < lines.length && isTableSeparator(lines[i + 1]))
+      !(
+        lines[i].trim().includes("|") &&
+        i + 1 < lines.length &&
+        isTableSeparator(lines[i + 1])
+      )
     ) {
       paragraphLines.push(lines[i].trim());
       i++;
@@ -300,8 +323,8 @@ export function renderMarkdownToHtml(markdown: string | null | undefined): strin
       const pText = paragraphLines.join(" ");
       htmlBlocks.push(
         `<p class="text-sm sm:text-base text-neutral-300 leading-relaxed my-4">${parseInlineMarkdown(
-          pText
-        )}</p>`
+          pText,
+        )}</p>`,
       );
     }
 
@@ -309,8 +332,8 @@ export function renderMarkdownToHtml(markdown: string | null | undefined): strin
     if (i === prevI) {
       htmlBlocks.push(
         `<p class="text-sm sm:text-base text-neutral-300 leading-relaxed my-4">${parseInlineMarkdown(
-          trimmed
-        )}</p>`
+          trimmed,
+        )}</p>`,
       );
       i++;
     }

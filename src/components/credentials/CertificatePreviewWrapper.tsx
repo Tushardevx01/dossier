@@ -17,9 +17,13 @@ const DynamicCertificatePreview = dynamic(
         </div>
       </div>
     ),
-  }
+  },
 );
 
-export function CertificatePreviewWrapper({ credential }: { credential: Credential }) {
+export function CertificatePreviewWrapper({
+  credential,
+}: {
+  credential: Credential;
+}) {
   return <DynamicCertificatePreview credential={credential} />;
 }

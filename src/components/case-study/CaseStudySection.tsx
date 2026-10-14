@@ -28,7 +28,14 @@ export const CaseStudySection: React.FC<CaseStudySectionProps> = ({
       className={`scroll-mt-28 mb-20 sm:mb-28 lg:mb-32 space-y-7 ${className}`}
     >
       {/* Section Header */}
-      {title && <SectionHeading id={id} title={title} subtitle={subtitle} badge={badge} />}
+      {title && (
+        <SectionHeading
+          id={id}
+          title={title}
+          subtitle={subtitle}
+          badge={badge}
+        />
+      )}
 
       {/* Intro Narrative (Reading Column: max 760px) */}
       {intro && (

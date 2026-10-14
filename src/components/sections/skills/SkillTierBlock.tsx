@@ -37,12 +37,18 @@ export const SkillTierBlock = ({
         >
           {label}
         </h3>
-        <p className="text-sm md:text-base" style={{ color: "hsl(var(--foreground) / 0.65)" }}>
+        <p
+          className="text-sm md:text-base"
+          style={{ color: "hsl(var(--foreground) / 0.65)" }}
+        >
           {description}
         </p>
       </div>
 
-      <motion.div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-5" layout>
+      <motion.div
+        className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-5"
+        layout
+      >
         {categories.map((category, idx) => (
           <SkillCategoryCard
             key={category.title}

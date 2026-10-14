@@ -4,7 +4,8 @@ import dynamic from "next/dynamic";
 import type { Credential } from "@/server/db/schema";
 
 const DynamicCardCertificatePreview = dynamic(
-  () => import("./CardCertificatePreview").then((m) => m.CardCertificatePreview),
+  () =>
+    import("./CardCertificatePreview").then((m) => m.CardCertificatePreview),
   {
     ssr: false,
     loading: () => (
@@ -15,9 +16,13 @@ const DynamicCardCertificatePreview = dynamic(
         </span>
       </div>
     ),
-  }
+  },
 );
 
-export function CardCertificatePreviewWrapper({ credential }: { credential: Credential }) {
+export function CardCertificatePreviewWrapper({
+  credential,
+}: {
+  credential: Credential;
+}) {
   return <DynamicCardCertificatePreview credential={credential} />;
 }

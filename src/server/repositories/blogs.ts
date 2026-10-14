@@ -44,7 +44,8 @@ type NotePostRow = NoteRow & {
 // When building inside Docker or CI without a reachable DB, set SKIP_DB_BUILD=true
 // to allow the Next.js build to complete without attempting to connect to the database.
 // This prevents build-time DB access while keeping runtime DB behavior unchanged.
-const SKIP_DB_BUILD = process.env.SKIP_DB_BUILD === "true" || process.env.SKIP_DB === "true";
+const SKIP_DB_BUILD =
+  process.env.SKIP_DB_BUILD === "true" || process.env.SKIP_DB === "true";
 
 function mapMetadata(note: NoteRow): ArticleMetadata {
   return {
@@ -74,7 +75,9 @@ function mapPost(note: NotePostRow): ArticlePost {
     content: sanitizeHtml(note.content),
     whatILearned: normalizeArray(note.whatILearned),
     improvements: normalizeArray(note.improvements),
-    relatedNoteSlugs: note.relatedNoteSlugs ? normalizeArray(note.relatedNoteSlugs) : undefined,
+    relatedNoteSlugs: note.relatedNoteSlugs
+      ? normalizeArray(note.relatedNoteSlugs)
+      : undefined,
     relatedProjectSlug: note.relatedProjectSlug ?? undefined,
     relatedSystemDesignSlug: note.relatedSystemDesignSlug ?? undefined,
   };
@@ -107,12 +110,15 @@ export async function getAllNotes(): Promise<ArticleMetadata[]> {
       .orderBy(
         desc(engineeringNotes.featured),
         desc(engineeringNotes.createdAt),
-        desc(engineeringNotes.id)
+        desc(engineeringNotes.id),
       );
 
     return notes.map(mapMetadata);
   } catch (error) {
-    console.warn("Failed to query engineering_notes from DB, returning empty list:", error);
+    console.warn(
+      "Failed to query engineering_notes from DB, returning empty list:",
+      error,
+    );
     return [];
   }
 }
@@ -147,7 +153,12 @@ export async function getNoteBySlug(slug: string): Promise<ArticlePost | null> {
         relatedSystemDesignSlug: engineeringNotes.relatedSystemDesignSlug,
       })
       .from(engineeringNotes)
-      .where(and(eq(engineeringNotes.slug, normalizedSlug), eq(engineeringNotes.published, true)))
+      .where(
+        and(
+          eq(engineeringNotes.slug, normalizedSlug),
+          eq(engineeringNotes.published, true),
+        ),
+      )
       .limit(1);
 
     const note = rows[0];
@@ -186,7 +197,12 @@ export async function getFeaturedNotes(limit = 6): Promise<ArticleMetadata[]> {
         level: engineeringNotes.level,
       })
       .from(engineeringNotes)
-      .where(and(eq(engineeringNotes.published, true), eq(engineeringNotes.featured, true)))
+      .where(
+        and(
+          eq(engineeringNotes.published, true),
+          eq(engineeringNotes.featured, true),
+        ),
+      )
       .orderBy(desc(engineeringNotes.createdAt), desc(engineeringNotes.id))
       .limit(limit);
 
@@ -203,7 +219,7 @@ export async function getFeaturedNotes(limit = 6): Promise<ArticleMetadata[]> {
 export async function getRelatedNotes(
   category: ArticleCategory,
   excludeSlug: string,
-  limit = 2
+  limit = 2,
 ): Promise<ArticleMetadata[]> {
   if (SKIP_DB_BUILD) return [];
 
@@ -228,8 +244,8 @@ export async function getRelatedNotes(
         and(
           eq(engineeringNotes.published, true),
           eq(engineeringNotes.category, category),
-          sql`${engineeringNotes.slug} != ${excludeSlug}`
-        )
+          sql`${engineeringNotes.slug} != ${excludeSlug}`,
+        ),
       )
       .orderBy(desc(engineeringNotes.createdAt), desc(engineeringNotes.id))
       .limit(limit);
@@ -257,7 +273,9 @@ export async function getCategories(): Promise<ArticleCategory[]> {
       .where(eq(engineeringNotes.published, true))
       .orderBy(engineeringNotes.category)) as Array<{ category: string }>;
 
-    return categories.map((row: { category: string }) => row.category as ArticleCategory);
+    return categories.map(
+      (row: { category: string }) => row.category as ArticleCategory,
+    );
   } catch (error) {
     console.warn("Failed to query categories from DB:", error);
     return [];
@@ -267,7 +285,9 @@ export async function getCategories(): Promise<ArticleCategory[]> {
 /**
  * Filter notes by category.
  */
-export async function getNotesByCategory(category: ArticleCategory): Promise<ArticleMetadata[]> {
+export async function getNotesByCategory(
+  category: ArticleCategory,
+): Promise<ArticleMetadata[]> {
   if (SKIP_DB_BUILD) return [];
 
   try {
@@ -287,7 +307,12 @@ export async function getNotesByCategory(category: ArticleCategory): Promise<Art
         level: engineeringNotes.level,
       })
       .from(engineeringNotes)
-      .where(and(eq(engineeringNotes.published, true), eq(engineeringNotes.category, category)))
+      .where(
+        and(
+          eq(engineeringNotes.published, true),
+          eq(engineeringNotes.category, category),
+        ),
+      )
       .orderBy(desc(engineeringNotes.createdAt), desc(engineeringNotes.id));
 
     return notes.map(mapMetadata);
@@ -336,7 +361,9 @@ export async function getAllNoteSlugs(): Promise<{ slug: string }[]> {
       .where(eq(engineeringNotes.published, true))
       .orderBy(engineeringNotes.id)) as Array<{ slug: string }>;
 
-    return notes.map((row: { slug: string }) => ({ slug: String(row.slug).trim().toLowerCase() }));
+    return notes.map((row: { slug: string }) => ({
+      slug: String(row.slug).trim().toLowerCase(),
+    }));
   } catch (error) {
     console.warn("Failed to query note slugs from DB:", error);
     return [];

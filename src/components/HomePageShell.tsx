@@ -15,20 +15,30 @@ import { Navbar, Footer, Background, PreLoader } from "@/components/common";
 import { Hero } from "@/components/sections";
 
 // Lazy-load below-the-fold sections for faster initial paint
-const About = dynamic(() => import("@/components/sections/About").then((mod) => mod.About));
+const About = dynamic(() =>
+  import("@/components/sections/About").then((mod) => mod.About),
+);
 const Experience = dynamic(() =>
-  import("@/components/sections/Experience").then((mod) => mod.Experience)
+  import("@/components/sections/Experience").then((mod) => mod.Experience),
 );
-const Skills = dynamic(() => import("@/components/sections/Skills").then((mod) => mod.Skills));
+const Skills = dynamic(() =>
+  import("@/components/sections/Skills").then((mod) => mod.Skills),
+);
 const Projects = dynamic(() =>
-  import("@/components/sections/Projects").then((mod) => mod.Projects)
+  import("@/components/sections/Projects").then((mod) => mod.Projects),
 );
-const DevOps = dynamic(() => import("@/components/sections/DevOps").then((mod) => mod.DevOps));
-const Contact = dynamic(() => import("@/components/sections/Contact").then((mod) => mod.Contact));
+const DevOps = dynamic(() =>
+  import("@/components/sections/DevOps").then((mod) => mod.DevOps),
+);
+const Contact = dynamic(() =>
+  import("@/components/sections/Contact").then((mod) => mod.Contact),
+);
 
 const PRELOADER_DURATION_MS = 1500;
 
-export function HomePageShell({ credentialCount }: { credentialCount?: number } = {}) {
+export function HomePageShell({
+  credentialCount,
+}: { credentialCount?: number } = {}) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -44,7 +54,8 @@ export function HomePageShell({ credentialCount }: { credentialCount?: number } 
         if (el) {
           const navOffset = 80;
           const elementPosition = el.getBoundingClientRect().top;
-          const offsetPosition = elementPosition + window.pageYOffset - navOffset;
+          const offsetPosition =
+            elementPosition + window.pageYOffset - navOffset;
           window.scrollTo({
             top: Math.max(0, offsetPosition),
             behavior: "smooth",

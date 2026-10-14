@@ -75,7 +75,10 @@ export default function PDFViewer({ pdfUrl }: PDFViewerProps) {
               loading={<PDFLoading />}
             >
               {Array.from(new Array(numPages), (_, index) => (
-                <div key={`page_${index + 1}`} className="mb-4 flex justify-center">
+                <div
+                  key={`page_${index + 1}`}
+                  className="mb-4 flex justify-center"
+                >
                   <Page
                     pageNumber={index + 1}
                     width={Math.min(scaledWidth || containerWidth - 32, 800)}

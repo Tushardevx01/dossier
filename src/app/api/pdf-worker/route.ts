@@ -5,7 +5,10 @@ export const runtime = "nodejs";
 
 export async function GET() {
   try {
-    const workerPath = path.join(process.cwd(), "node_modules/pdfjs-dist/build/pdf.worker.min.mjs");
+    const workerPath = path.join(
+      process.cwd(),
+      "node_modules/pdfjs-dist/build/pdf.worker.min.mjs",
+    );
     const workerSource = await readFile(workerPath, "utf8");
 
     return new Response(workerSource, {

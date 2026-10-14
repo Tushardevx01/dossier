@@ -32,7 +32,7 @@ export class AppError extends Error {
     message: string,
     statusCode: number = 500,
     meta: ErrorMeta = {},
-    isOperational: boolean = true
+    isOperational: boolean = true,
   ) {
     super(message);
     this.name = "AppError";
@@ -60,10 +60,15 @@ export const Errors = {
     new AppError("VALIDATION_ERROR", message, 400, meta),
 
   rateLimitExceeded: (retryAfter: number, meta?: ErrorMeta) =>
-    new AppError("RATE_LIMIT_EXCEEDED", "Too many requests. Please try again later.", 429, {
-      ...meta,
-      retryAfter,
-    }),
+    new AppError(
+      "RATE_LIMIT_EXCEEDED",
+      "Too many requests. Please try again later.",
+      429,
+      {
+        ...meta,
+        retryAfter,
+      },
+    ),
 
   unauthorized: (message = "Authentication required", meta?: ErrorMeta) =>
     new AppError("UNAUTHORIZED", message, 401, meta),
@@ -75,7 +80,12 @@ export const Errors = {
     new AppError("NOT_FOUND", `${resource} not found`, 404, meta),
 
   externalService: (service: string, meta?: ErrorMeta) =>
-    new AppError("EXTERNAL_SERVICE_ERROR", `${service} is unavailable`, 503, meta),
+    new AppError(
+      "EXTERNAL_SERVICE_ERROR",
+      `${service} is unavailable`,
+      503,
+      meta,
+    ),
 
   config: (message: string, meta?: ErrorMeta) =>
     new AppError("CONFIG_ERROR", message, 500, meta, false),

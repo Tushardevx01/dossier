@@ -45,7 +45,7 @@ function createCheck(
   score: number,
   maxScore: number,
   message: string,
-  severity: "critical" | "warning" | "info" = "warning"
+  severity: "critical" | "warning" | "info" = "warning",
 ): SEOCheck {
   return {
     id,
@@ -77,8 +77,8 @@ export function runChecks(content: ParsedContent): SEOCheck[] {
       titleExists
         ? `Title found: "${meta.title?.substring(0, 50)}${(meta.title?.length ?? 0) > 50 ? "..." : ""}"`
         : "Missing title tag - critical for SEO",
-      "critical"
-    )
+      "critical",
+    ),
   );
 
   // 2. Title length optimal
@@ -96,8 +96,8 @@ export function runChecks(content: ParsedContent): SEOCheck[] {
           ? `Title length (${titleLen} chars) is optimal (${TITLE_MIN}-${TITLE_MAX})`
           : `Title length (${titleLen} chars) should be ${TITLE_MIN}-${TITLE_MAX} characters`
         : "Cannot check - no title found",
-      "warning"
-    )
+      "warning",
+    ),
   );
 
   // 3. Meta description exists
@@ -112,8 +112,8 @@ export function runChecks(content: ParsedContent): SEOCheck[] {
       metaExists
         ? `Meta description found (${meta.description?.length} chars)`
         : "Missing meta description - important for click-through rates",
-      "critical"
-    )
+      "critical",
+    ),
   );
 
   // 4. Meta description length optimal
@@ -131,8 +131,8 @@ export function runChecks(content: ParsedContent): SEOCheck[] {
           ? `Meta description length (${metaLen} chars) is optimal (${META_MIN}-${META_MAX})`
           : `Meta description (${metaLen} chars) should be ${META_MIN}-${META_MAX} characters`
         : "Cannot check - no meta description found",
-      "warning"
-    )
+      "warning",
+    ),
   );
 
   // 5. Exactly one H1
@@ -150,8 +150,8 @@ export function runChecks(content: ParsedContent): SEOCheck[] {
         : h1Count === 0
           ? "No H1 tag found - every page needs exactly one H1"
           : `Found ${h1Count} H1 tags - page should have exactly one`,
-      "critical"
-    )
+      "critical",
+    ),
   );
 
   // 6. At least one H2
@@ -167,8 +167,8 @@ export function runChecks(content: ParsedContent): SEOCheck[] {
       hasH2
         ? `Found ${h2Count} H2 subheading(s) providing content structure`
         : "No H2 tags found - add subheadings for better content structure",
-      "warning"
-    )
+      "warning",
+    ),
   );
 
   // 7. Word count > 300
@@ -183,8 +183,8 @@ export function runChecks(content: ParsedContent): SEOCheck[] {
       hasMinWords
         ? `Found ${wordCount} words of visible content (minimum ${WORDS_MIN})`
         : `Only ${wordCount} words found - aim for at least ${WORDS_MIN} words`,
-      "warning"
-    )
+      "warning",
+    ),
   );
 
   // 8. Word count > 600 bonus
@@ -199,8 +199,8 @@ export function runChecks(content: ParsedContent): SEOCheck[] {
       hasBonusWords
         ? `Excellent! ${wordCount} words exceeds recommended ${WORDS_BONUS}`
         : `Content has ${wordCount} words - ${WORDS_BONUS}+ words can improve rankings`,
-      "info"
-    )
+      "info",
+    ),
   );
 
   // 9. All images have alt
@@ -217,8 +217,8 @@ export function runChecks(content: ParsedContent): SEOCheck[] {
         : allImagesHaveAlt
           ? `All ${images.total} images have alt attributes`
           : `${images.withoutAlt} of ${images.total} images missing alt text`,
-      images.withoutAlt > 0 ? "warning" : "info"
-    )
+      images.withoutAlt > 0 ? "warning" : "info",
+    ),
   );
 
   // 10. Canonical tag exists
@@ -233,8 +233,8 @@ export function runChecks(content: ParsedContent): SEOCheck[] {
       hasCanonical
         ? `Canonical URL set: ${meta.canonical}`
         : "No canonical URL - helps prevent duplicate content issues",
-      "info"
-    )
+      "info",
+    ),
   );
 
   return checks;

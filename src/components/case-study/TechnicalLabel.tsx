@@ -9,7 +9,10 @@ export interface TechnicalLabelProps {
   className?: string;
 }
 
-const variantStyles: Record<NonNullable<TechnicalLabelProps["variant"]>, string> = {
+const variantStyles: Record<
+  NonNullable<TechnicalLabelProps["variant"]>,
+  string
+> = {
   default: "bg-neutral-900/90 text-neutral-300 border-neutral-800",
   emerald:
     "bg-emerald-950/40 text-emerald-400 border-emerald-800/50 shadow-[0_0_12px_rgba(16,185,129,0.1)]",

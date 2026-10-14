@@ -5,7 +5,8 @@ export const siteConfig = {
   fullName: "Tushar Kanti Dey",
   location: "Kolkata, India",
   email: "thetushardev0@gmail.com",
-  title: "Tushar Kanti Dey — Full-Stack Developer & DevOps Engineer (Kolkata, India)",
+  title:
+    "Tushar Kanti Dey — Full-Stack Developer & DevOps Engineer (Kolkata, India)",
   description:
     "Tushar Kanti Dey is a full-stack developer and DevOps engineer based near Kolkata, India. Building scalable Next.js apps, real-time systems, and product-ready web experiences.",
   social: {

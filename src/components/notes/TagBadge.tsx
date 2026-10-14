@@ -27,8 +27,10 @@ const levelClasses: Record<ArticleDifficulty, string> = {
 export function TagBadge({ type, label }: TagBadgeProps) {
   const toneClass =
     type === "category"
-      ? (categoryClasses[label as ArticleCategory] ?? "bg-zinc-800 text-zinc-200 border-zinc-700")
-      : (levelClasses[label as ArticleDifficulty] ?? "bg-zinc-800 text-zinc-200 border-zinc-700");
+      ? (categoryClasses[label as ArticleCategory] ??
+        "bg-zinc-800 text-zinc-200 border-zinc-700")
+      : (levelClasses[label as ArticleDifficulty] ??
+        "bg-zinc-800 text-zinc-200 border-zinc-700");
 
   return (
     <span

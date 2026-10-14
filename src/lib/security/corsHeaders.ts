@@ -48,7 +48,7 @@ export function getCorsHeaders(origin?: string | null): Record<string, string> {
 export function getRateLimitHeaders(
   limit: number,
   remaining: number,
-  resetAt: number
+  resetAt: number,
 ): Record<string, string> {
   return {
     "X-RateLimit-Limit": String(limit),
@@ -74,6 +74,8 @@ export function getSecurityHeaders(): Record<string, string> {
 /**
  * Merge multiple header objects
  */
-export function mergeHeaders(...headerSets: Record<string, string>[]): Record<string, string> {
+export function mergeHeaders(
+  ...headerSets: Record<string, string>[]
+): Record<string, string> {
   return Object.assign({}, ...headerSets);
 }

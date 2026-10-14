@@ -53,14 +53,18 @@ export default function Error({ error, reset }: ErrorProps) {
         </div>
 
         {/* Error Message */}
-        <h1 className="text-2xl font-semibold text-foreground mb-2">Something went wrong</h1>
+        <h1 className="text-2xl font-semibold text-foreground mb-2">
+          Something went wrong
+        </h1>
         <p className="text-muted-foreground mb-6">
           An unexpected error occurred. Please try again.
         </p>
 
         {/* Error correlation ID (safe to display; no internals) */}
         {error.digest && (
-          <p className="mb-6 text-xs text-muted-foreground font-mono">Error ID: {error.digest}</p>
+          <p className="mb-6 text-xs text-muted-foreground font-mono">
+            Error ID: {error.digest}
+          </p>
         )}
 
         {/* Actions */}

@@ -10,13 +10,18 @@ import "server-only";
 import { cache } from "react";
 import { eq, desc, sql } from "drizzle-orm";
 import { ensureDatabaseReady, getDb } from "@/server/db";
-import { credentials, type Credential, type NewCredential } from "@/server/db/schema";
+import {
+  credentials,
+  type Credential,
+  type NewCredential,
+} from "@/server/db/schema";
 import { logger } from "@/lib/logger";
 import { slugifyTitle, formatEditorialDate } from "@/lib/credential-utils";
 
 export { slugifyTitle, formatEditorialDate };
 
-const SKIP_DB_BUILD = process.env.SKIP_DB_BUILD === "true" || process.env.SKIP_DB === "true";
+const SKIP_DB_BUILD =
+  process.env.SKIP_DB_BUILD === "true" || process.env.SKIP_DB === "true";
 
 /**
  * Retrieve all credentials ordered by issued date (newest first) and ID.
@@ -52,7 +57,9 @@ export const getCredentialsCount = cache(async (): Promise<number> => {
     await ensureDatabaseReady();
     const db = getDb();
 
-    const result = await db.select({ count: sql<number>`count(*)::int` }).from(credentials);
+    const result = await db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(credentials);
 
     return Number(result[0]?.count ?? 0);
   } catch (error) {
@@ -66,69 +73,78 @@ export const getCredentialsCount = cache(async (): Promise<number> => {
 /**
  * Retrieve a single credential by its primary key ID.
  */
-export const getCredentialById = cache(async (id: number): Promise<Credential | null> => {
-  if (SKIP_DB_BUILD || !Number.isInteger(id) || id <= 0) return null;
+export const getCredentialById = cache(
+  async (id: number): Promise<Credential | null> => {
+    if (SKIP_DB_BUILD || !Number.isInteger(id) || id <= 0) return null;
 
-  try {
-    await ensureDatabaseReady();
-    const db = getDb();
+    try {
+      await ensureDatabaseReady();
+      const db = getDb();
 
-    const rows = await db.select().from(credentials).where(eq(credentials.id, id)).limit(1);
+      const rows = await db
+        .select()
+        .from(credentials)
+        .where(eq(credentials.id, id))
+        .limit(1);
 
-    return rows[0] ?? null;
-  } catch (error) {
-    logger.warn("Failed to query credential by ID from DB", {
-      id,
-      error: error instanceof Error ? error.message : String(error),
-    });
-    return null;
-  }
-});
+      return rows[0] ?? null;
+    } catch (error) {
+      logger.warn("Failed to query credential by ID from DB", {
+        id,
+        error: error instanceof Error ? error.message : String(error),
+      });
+      return null;
+    }
+  },
+);
 
 /**
  * Retrieve a single credential by its URL slug or title slug.
  */
-export const getCredentialBySlug = cache(async (slug: string): Promise<Credential | null> => {
-  if (SKIP_DB_BUILD || !slug?.trim()) return null;
+export const getCredentialBySlug = cache(
+  async (slug: string): Promise<Credential | null> => {
+    if (SKIP_DB_BUILD || !slug?.trim()) return null;
 
-  const normalized = slug.trim().toLowerCase();
+    const normalized = slug.trim().toLowerCase();
 
-  try {
-    await ensureDatabaseReady();
-    const db = getDb();
+    try {
+      await ensureDatabaseReady();
+      const db = getDb();
 
-    // 1. Direct match on slug column
-    const rows = await db
-      .select()
-      .from(credentials)
-      .where(eq(credentials.slug, normalized))
-      .limit(1);
+      // 1. Direct match on slug column
+      const rows = await db
+        .select()
+        .from(credentials)
+        .where(eq(credentials.slug, normalized))
+        .limit(1);
 
-    if (rows.length > 0) return rows[0];
+      if (rows.length > 0) return rows[0];
 
-    // 2. Fallback: try matching lowercase title directly
-    const fallbackRows = await db
-      .select()
-      .from(credentials)
-      .where(sql`lower(${credentials.title}) = ${normalized}`)
-      .limit(1);
+      // 2. Fallback: try matching lowercase title directly
+      const fallbackRows = await db
+        .select()
+        .from(credentials)
+        .where(sql`lower(${credentials.title}) = ${normalized}`)
+        .limit(1);
 
-    return fallbackRows[0] ?? null;
-  } catch (error) {
-    logger.warn("Failed to query credential by slug from DB", {
-      slug,
-      error: error instanceof Error ? error.message : String(error),
-    });
-    return null;
-  }
-});
+      return fallbackRows[0] ?? null;
+    } catch (error) {
+      logger.warn("Failed to query credential by slug from DB", {
+        slug,
+        error: error instanceof Error ? error.message : String(error),
+      });
+      return null;
+    }
+  },
+);
 
 /**
  * Retrieve a credential by either slug or numeric ID (handles backward compatibility).
  */
 export const getCredentialBySlugOrId = cache(
   async (slugOrId: string | number): Promise<Credential | null> => {
-    if (SKIP_DB_BUILD || slugOrId === undefined || slugOrId === null) return null;
+    if (SKIP_DB_BUILD || slugOrId === undefined || slugOrId === null)
+      return null;
 
     const stringVal = String(slugOrId).trim();
     if (!stringVal) return null;
@@ -142,7 +158,7 @@ export const getCredentialBySlugOrId = cache(
 
     // Otherwise, lookup by slug
     return await getCredentialBySlug(stringVal);
-  }
+  },
 );
 
 /**
@@ -170,7 +186,9 @@ export async function getAllCredentialSlugs(): Promise<string[]> {
 /**
  * Insert a new credential record into the database.
  */
-export async function createCredential(data: NewCredential): Promise<Credential> {
+export async function createCredential(
+  data: NewCredential,
+): Promise<Credential> {
   try {
     await ensureDatabaseReady();
     const db = getDb();
@@ -196,7 +214,7 @@ export async function createCredential(data: NewCredential): Promise<Credential>
     if (error instanceof Error && error.message.includes("unique constraint")) {
       throw new Error(
         `Credential with slug "${data.slug || slugifyTitle(data.title)}" already exists`,
-        { cause: error }
+        { cause: error },
       );
     }
     logger.error("Failed to create credential", { error });
@@ -209,7 +227,7 @@ export async function createCredential(data: NewCredential): Promise<Credential>
  */
 export async function updateCredential(
   id: number,
-  data: Partial<NewCredential>
+  data: Partial<NewCredential>,
 ): Promise<Credential | null> {
   try {
     await ensureDatabaseReady();
@@ -222,7 +240,8 @@ export async function updateCredential(
 
     if (data.title && !data.slug) {
       updatePayload.slug = slugifyTitle(data.title);
-      if (!updatePayload.slug) throw new Error("A URL-safe slug is required for this title");
+      if (!updatePayload.slug)
+        throw new Error("A URL-safe slug is required for this title");
     }
 
     const [updated] = await db
@@ -249,7 +268,10 @@ export async function deleteCredential(id: number): Promise<Credential | null> {
     await ensureDatabaseReady();
     const db = getDb();
 
-    const [deleted] = await db.delete(credentials).where(eq(credentials.id, id)).returning();
+    const [deleted] = await db
+      .delete(credentials)
+      .where(eq(credentials.id, id))
+      .returning();
 
     return deleted ?? null;
   } catch (error) {

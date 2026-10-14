@@ -133,7 +133,8 @@ export const CommandPalette = () => {
               if (el) {
                 const navOffset = 80;
                 const elementPosition = el.getBoundingClientRect().top;
-                const offsetPosition = elementPosition + window.scrollY - navOffset;
+                const offsetPosition =
+                  elementPosition + window.scrollY - navOffset;
                 window.scrollTo({
                   top: Math.max(0, offsetPosition),
                   behavior: "smooth",
@@ -158,7 +159,7 @@ export const CommandPalette = () => {
 
       router.push(path);
     },
-    [closePalette, router]
+    [closePalette, router],
   );
 
   const commands: CommandItem[] = useMemo(
@@ -198,7 +199,15 @@ export const CommandPalette = () => {
         description: "CI/CD pipelines, Docker, Kubernetes & cloud automation",
         icon: LuTerminal,
         action: () => navigateTo("/#devops"),
-        keywords: ["devops", "cloud", "docker", "ci/cd", "kubernetes", "infrastructure", "deploy"],
+        keywords: [
+          "devops",
+          "cloud",
+          "docker",
+          "ci/cd",
+          "kubernetes",
+          "infrastructure",
+          "deploy",
+        ],
       },
       {
         id: "nav-stack",
@@ -207,7 +216,15 @@ export const CommandPalette = () => {
         description: "Purpose-organized languages, backend, infra & tooling",
         icon: LuCpu,
         action: () => navigateTo("/#tech"),
-        keywords: ["stack", "technology", "tech", "matrix", "skills", "languages", "tools"],
+        keywords: [
+          "stack",
+          "technology",
+          "tech",
+          "matrix",
+          "skills",
+          "languages",
+          "tools",
+        ],
       },
       {
         id: "nav-experience",
@@ -216,7 +233,14 @@ export const CommandPalette = () => {
         description: "Full-time roles, platform leadership & impact",
         icon: LuFileText,
         action: () => navigateTo("/#experience"),
-        keywords: ["experience", "roles", "jobs", "azmth", "cycoders", "namespace"],
+        keywords: [
+          "experience",
+          "roles",
+          "jobs",
+          "azmth",
+          "cycoders",
+          "namespace",
+        ],
       },
       {
         id: "nav-contact",
@@ -231,7 +255,8 @@ export const CommandPalette = () => {
         id: "nav-credentials",
         label: "Credentials",
         category: "Navigation",
-        description: "Verified academic qualifications & technical certifications",
+        description:
+          "Verified academic qualifications & technical certifications",
         icon: LuAward,
         action: () => navigateTo("/credentials"),
         keywords: [
@@ -270,7 +295,14 @@ export const CommandPalette = () => {
         description: "Distributed deployment and job orchestration in Go",
         icon: LuCpu,
         action: () => navigateTo("/work/runstack"),
-        keywords: ["runstack", "orchestrator", "kafka", "redis", "docker", "go"],
+        keywords: [
+          "runstack",
+          "orchestrator",
+          "kafka",
+          "redis",
+          "docker",
+          "go",
+        ],
       },
       {
         id: "cs-aegis",
@@ -295,7 +327,8 @@ export const CommandPalette = () => {
         id: "cs-carepulse",
         label: "Case Study: CarePulse",
         category: "Case Studies",
-        description: "Full-stack healthcare appointment & patient onboarding engine",
+        description:
+          "Full-stack healthcare appointment & patient onboarding engine",
         icon: LuFileText,
         action: () => navigateTo("/work/carepulse"),
         keywords: [
@@ -317,13 +350,22 @@ export const CommandPalette = () => {
         description: "Real-time meeting platform with Stream Video SDK & Clerk",
         icon: LuLayers,
         action: () => navigateTo("/work/fenix"),
-        keywords: ["fenix", "stream", "video", "clerk", "meetings", "realtime", "nextjs"],
+        keywords: [
+          "fenix",
+          "stream",
+          "video",
+          "clerk",
+          "meetings",
+          "realtime",
+          "nextjs",
+        ],
       },
       {
         id: "cs-signifiya",
         label: "Case Study: Signifiya",
         category: "Case Studies",
-        description: "Mobile event infrastructure, native payments & 120Hz engine",
+        description:
+          "Mobile event infrastructure, native payments & 120Hz engine",
         icon: LuSmartphone,
         action: () => navigateTo("/work/signifiya"),
         keywords: [
@@ -340,16 +382,26 @@ export const CommandPalette = () => {
         id: "cs-webscope",
         label: "Case Study: WebScope Pro",
         category: "Case Studies",
-        description: "Website intelligence platform with Axios, Cheerio & Prisma",
+        description:
+          "Website intelligence platform with Axios, Cheerio & Prisma",
         icon: LuGlobe,
         action: () => navigateTo("/work/webscope"),
-        keywords: ["webscope", "seo", "cheerio", "axios", "prisma", "scraper", "monitoring"],
+        keywords: [
+          "webscope",
+          "seo",
+          "cheerio",
+          "axios",
+          "prisma",
+          "scraper",
+          "monitoring",
+        ],
       },
       {
         id: "cs-subscription-tracker",
         label: "Case Study: Subscription Tracker",
         category: "Case Studies",
-        description: "API architecture, Upstash Workflow scheduling & Arcjet security",
+        description:
+          "API architecture, Upstash Workflow scheduling & Arcjet security",
         icon: LuWorkflow,
         action: () => navigateTo("/work/subscription-tracker"),
         keywords: [
@@ -384,7 +436,11 @@ export const CommandPalette = () => {
         shortcut: "↗",
         icon: LuFolderGit2,
         action: () => {
-          window.open(siteConfig.social.github, "_blank", "noopener,noreferrer");
+          window.open(
+            siteConfig.social.github,
+            "_blank",
+            "noopener,noreferrer",
+          );
           closePalette();
         },
         keywords: ["github", "profile", "open", "source"],
@@ -397,13 +453,17 @@ export const CommandPalette = () => {
         shortcut: "↗",
         icon: LuArrowUpRight,
         action: () => {
-          window.open(siteConfig.social.linkedin, "_blank", "noopener,noreferrer");
+          window.open(
+            siteConfig.social.linkedin,
+            "_blank",
+            "noopener,noreferrer",
+          );
           closePalette();
         },
         keywords: ["linkedin", "profile", "connect", "network"],
       },
     ],
-    [navigateTo, copyEmail]
+    [navigateTo, copyEmail],
   );
 
   const filteredCommands = useMemo(() => {
@@ -428,7 +488,7 @@ export const CommandPalette = () => {
       e.preventDefault();
       isKeyboardNavRef.current = true;
       setSelectedIndex((prev) =>
-        prev === 0 ? Math.max(0, filteredCommands.length - 1) : prev - 1
+        prev === 0 ? Math.max(0, filteredCommands.length - 1) : prev - 1,
       );
     } else if (e.key === "Enter") {
       e.preventDefault();
@@ -475,7 +535,10 @@ export const CommandPalette = () => {
 
   // Clamp selectedIndex if filtered list shrinks
   useEffect(() => {
-    if (filteredCommands.length > 0 && selectedIndex >= filteredCommands.length) {
+    if (
+      filteredCommands.length > 0 &&
+      selectedIndex >= filteredCommands.length
+    ) {
       setSelectedIndex(filteredCommands.length - 1);
     }
   }, [filteredCommands.length, selectedIndex]);
@@ -489,7 +552,9 @@ export const CommandPalette = () => {
         className="hidden sm:inline-flex items-center gap-2.5 px-3 py-1.5 rounded-xl border border-white/20 hover:border-white/45 bg-transparent hover:bg-white/5 text-neutral-300 hover:text-white font-mono text-xs transition-colors duration-200"
       >
         <LuSearch className="w-3.5 h-3.5 text-neutral-400" />
-        <span className="text-[11px] font-medium tracking-wider text-neutral-300">SEARCH</span>
+        <span className="text-[11px] font-medium tracking-wider text-neutral-300">
+          SEARCH
+        </span>
         <kbd className="px-1.5 py-0.5 rounded bg-black/40 border border-white/15 text-[10px] text-neutral-400 font-mono">
           ⌘K
         </kbd>
@@ -567,7 +632,9 @@ export const CommandPalette = () => {
               {copiedNotification && (
                 <div className="px-4 py-2 bg-emerald-950/40 border-b border-emerald-900/50 flex items-center gap-2 font-mono text-xs text-emerald-400">
                   <LuCheck className="w-3.5 h-3.5" />
-                  <span>Email copied to clipboard (thetushardev0@gmail.com)</span>
+                  <span>
+                    Email copied to clipboard (thetushardev0@gmail.com)
+                  </span>
                 </div>
               )}
 
@@ -633,7 +700,9 @@ export const CommandPalette = () => {
                           <div className="truncate">
                             <span
                               className={`block truncate transition-colors duration-150 ${
-                                isSelected ? "text-white font-medium" : "text-neutral-200"
+                                isSelected
+                                  ? "text-white font-medium"
+                                  : "text-neutral-200"
                               }`}
                             >
                               {cmd.label}
@@ -641,7 +710,9 @@ export const CommandPalette = () => {
                             {cmd.description && (
                               <span
                                 className={`text-[11px] block truncate transition-colors duration-150 ${
-                                  isSelected ? "text-neutral-300" : "text-neutral-500"
+                                  isSelected
+                                    ? "text-neutral-300"
+                                    : "text-neutral-500"
                                 }`}
                               >
                                 {cmd.description}
@@ -696,7 +767,9 @@ export const CommandPalette = () => {
                       {selectedIndex + 1} / {filteredCommands.length}
                     </span>
                   )}
-                  <span className="hidden sm:inline text-neutral-600">· ENGINEERING PALETTE</span>
+                  <span className="hidden sm:inline text-neutral-600">
+                    · ENGINEERING PALETTE
+                  </span>
                 </div>
               </div>
             </motion.div>

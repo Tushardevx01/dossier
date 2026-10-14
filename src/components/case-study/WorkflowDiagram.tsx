@@ -6,7 +6,10 @@ export interface WorkflowDiagramProps extends AsciiDiagramProps {
   states?: string[];
 }
 
-export const WorkflowDiagram: React.FC<WorkflowDiagramProps> = ({ states, ...diagramProps }) => {
+export const WorkflowDiagram: React.FC<WorkflowDiagramProps> = ({
+  states,
+  ...diagramProps
+}) => {
   return (
     <div className="space-y-4 w-full">
       {states && states.length > 0 && (

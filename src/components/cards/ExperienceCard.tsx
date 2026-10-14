@@ -56,7 +56,10 @@ export const ExperienceCard: FC<ExperienceCardProps> = ({
                 >
                   {role}
                 </h3>
-                <p className="font-medium" style={{ color: "hsl(var(--secondary))" }}>
+                <p
+                  className="font-medium"
+                  style={{ color: "hsl(var(--secondary))" }}
+                >
                   {url ? (
                     <a
                       href={url}

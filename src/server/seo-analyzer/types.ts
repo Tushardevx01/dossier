@@ -113,7 +113,8 @@ export interface FetchResult {
 
 export interface AnalyzerError {
   /** Error code */
-  code: "INVALID_URL" | "FETCH_FAILED" | "TIMEOUT" | "PARSE_ERROR" | "BLOCKED_URL";
+  code:
+    "INVALID_URL" | "FETCH_FAILED" | "TIMEOUT" | "PARSE_ERROR" | "BLOCKED_URL";
   /** Human-readable message */
   message: string;
   /** Technical details */

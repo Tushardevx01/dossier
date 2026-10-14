@@ -18,7 +18,10 @@ export const useScrollAnimation = (options?: ScrollAnimationOptions) => {
   const margin = options?.margin ?? DEFAULT_OPTIONS.margin;
   const amount = options?.amount ?? DEFAULT_OPTIONS.amount;
 
-  const inViewOptions = useMemo(() => ({ once, margin, amount }), [once, margin, amount]);
+  const inViewOptions = useMemo(
+    () => ({ once, margin, amount }),
+    [once, margin, amount],
+  );
 
   const isInView = useInView(ref, inViewOptions);
 

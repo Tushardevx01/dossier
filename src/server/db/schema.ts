@@ -43,8 +43,12 @@ export const engineeringNotes = pgTable("engineering_notes", {
   content: text("content").notNull(),
 
   // Metadata
-  category: varchar("category", { length: 50 }).notNull().$type<ArticleCategory>(),
-  level: varchar("difficulty", { length: 20 }).notNull().$type<ArticleDifficulty>(),
+  category: varchar("category", { length: 50 })
+    .notNull()
+    .$type<ArticleCategory>(),
+  level: varchar("difficulty", { length: 20 })
+    .notNull()
+    .$type<ArticleDifficulty>(),
 
   // Reading time in minutes
   readTime: integer("read_time").notNull(),
@@ -71,7 +75,9 @@ export const engineeringNotes = pgTable("engineering_notes", {
     .default(sql`'[]'::jsonb`),
   relatedNoteSlugs: jsonb("related_note_slugs").$type<string[]>(),
   relatedProjectSlug: varchar("related_project_slug", { length: 255 }),
-  relatedSystemDesignSlug: varchar("related_system_design_slug", { length: 255 }),
+  relatedSystemDesignSlug: varchar("related_system_design_slug", {
+    length: 255,
+  }),
 
   // Timestamps
   createdAt: timestamp("created_at", { withTimezone: true })
@@ -136,7 +142,9 @@ export const caseStudies = pgTable("case_studies", {
     .notNull()
     .default(sql`'[]'::jsonb`),
   relatedProjectSlug: varchar("related_project_slug", { length: 255 }),
-  relatedSystemDesignSlug: varchar("related_system_design_slug", { length: 255 }),
+  relatedSystemDesignSlug: varchar("related_system_design_slug", {
+    length: 255,
+  }),
 
   // Timestamps
   createdAt: timestamp("created_at", { withTimezone: true })

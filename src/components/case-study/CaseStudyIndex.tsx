@@ -29,11 +29,15 @@ export const CaseStudyIndex: React.FC<CaseStudyIndexProps> = ({
   // Auto-scroll active section into view on mobile
   useEffect(() => {
     if (!mobileNavRef.current) return;
-    const activeBtn = mobileNavRef.current.querySelector<HTMLElement>("[data-active='true']");
+    const activeBtn = mobileNavRef.current.querySelector<HTMLElement>(
+      "[data-active='true']",
+    );
     if (activeBtn) {
       const container = mobileNavRef.current;
       const scrollLeft =
-        activeBtn.offsetLeft - container.offsetWidth / 2 + activeBtn.offsetWidth / 2;
+        activeBtn.offsetLeft -
+        container.offsetWidth / 2 +
+        activeBtn.offsetWidth / 2;
       container.scrollTo({ left: Math.max(0, scrollLeft), behavior: "smooth" });
     }
   }, [activeSection]);
@@ -63,7 +67,11 @@ export const CaseStudyIndex: React.FC<CaseStudyIndexProps> = ({
                     : "text-neutral-500 hover:text-neutral-300 hover:bg-neutral-900/60"
                 }`}
               >
-                <span className={isActive ? "text-emerald-400 font-bold" : "text-neutral-600"}>
+                <span
+                  className={
+                    isActive ? "text-emerald-400 font-bold" : "text-neutral-600"
+                  }
+                >
                   {sec.number}
                 </span>
                 <span>{sec.label}</span>

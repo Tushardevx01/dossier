@@ -34,10 +34,14 @@ export function ArticleToc({
     const container = document.querySelector(containerSelector);
     if (!container) return;
 
-    const levels = levelsKey ? levelsKey.split(",").map(Number) : DEFAULT_HEADING_LEVELS;
+    const levels = levelsKey
+      ? levelsKey.split(",").map(Number)
+      : DEFAULT_HEADING_LEVELS;
     const headingElements = Array.from(
-      container.querySelectorAll(levels.map((level) => `h${level}`).join(","))
-    ).filter((el): el is HTMLHeadingElement => el instanceof HTMLHeadingElement);
+      container.querySelectorAll(levels.map((level) => `h${level}`).join(",")),
+    ).filter(
+      (el): el is HTMLHeadingElement => el instanceof HTMLHeadingElement,
+    );
 
     const extracted: Heading[] = headingElements.map((el) => {
       const id = el.id || toHeadingId(el.textContent || "");
@@ -71,7 +75,9 @@ export function ArticleToc({
                     marginLeft: heading.level === 3 ? "1rem" : "0",
                   }}
                 >
-                  {heading.text.length > 30 ? heading.text.substring(0, 30) + "…" : heading.text}
+                  {heading.text.length > 30
+                    ? heading.text.substring(0, 30) + "…"
+                    : heading.text}
                 </div>
               </li>
             ))}

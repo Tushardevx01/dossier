@@ -52,7 +52,9 @@ export const DecisionRecord: React.FC<DecisionRecordProps> = ({
             >
               TRADE-OFF ACCEPTED
             </span>
-            <p className="text-neutral-400 leading-relaxed font-light">{tradeoff}</p>
+            <p className="text-neutral-400 leading-relaxed font-light">
+              {tradeoff}
+            </p>
           </div>
         )}
 
@@ -63,7 +65,9 @@ export const DecisionRecord: React.FC<DecisionRecordProps> = ({
             >
               OUTCOME / IMPACT
             </span>
-            <p className="text-neutral-300 leading-relaxed font-light">{outcome}</p>
+            <p className="text-neutral-300 leading-relaxed font-light">
+              {outcome}
+            </p>
           </div>
         )}
       </div>

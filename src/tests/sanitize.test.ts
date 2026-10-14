@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { sanitizeHtml, sanitizeText, containsSuspiciousPatterns } from "@/lib/sanitize";
+import {
+  sanitizeHtml,
+  sanitizeText,
+  containsSuspiciousPatterns,
+} from "@/lib/sanitize";
 
 describe("sanitizeHtml", () => {
   it("returns empty string for non-string or empty input", () => {
@@ -23,7 +27,9 @@ describe("sanitizeHtml", () => {
   });
 
   it("strips event-handler attributes", () => {
-    const output = sanitizeHtml('<p onclick="alert(1)" onmouseover="alert(1)">x</p>');
+    const output = sanitizeHtml(
+      '<p onclick="alert(1)" onmouseover="alert(1)">x</p>',
+    );
     expect(output).not.toContain("onclick");
     expect(output).not.toContain("onmouseover");
     expect(output).not.toContain("alert(1)");
@@ -37,7 +43,7 @@ describe("sanitizeHtml", () => {
 
   it("removes data: URLs from anchors", () => {
     const output = sanitizeHtml(
-      '<a href="data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==">click</a>'
+      '<a href="data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==">click</a>',
     );
     expect(output).not.toContain("data:");
     expect(output).toBe("<a>click</a>");
@@ -50,14 +56,18 @@ describe("sanitizeHtml", () => {
   });
 
   it("keeps safe https URLs on anchors", () => {
-    const output = sanitizeHtml('<a href="https://example.com/post" rel="noopener">link</a>');
+    const output = sanitizeHtml(
+      '<a href="https://example.com/post" rel="noopener">link</a>',
+    );
     expect(output).toContain('href="https://example.com/post"');
   });
 
   it("keeps relative and fragment URLs on anchors (TOC links)", () => {
-    expect(sanitizeHtml('<a href="#problem">Jump</a>')).toBe('<a href="#problem">Jump</a>');
+    expect(sanitizeHtml('<a href="#problem">Jump</a>')).toBe(
+      '<a href="#problem">Jump</a>',
+    );
     expect(sanitizeHtml('<a href="/work/aegis">Internal</a>')).toBe(
-      '<a href="/work/aegis">Internal</a>'
+      '<a href="/work/aegis">Internal</a>',
     );
   });
 
@@ -90,10 +100,14 @@ describe("sanitizeHtml", () => {
 
   describe("allowed schemes", () => {
     it("strips data: URIs from img to prevent DoS", () => {
-      const img = sanitizeHtml('<img src="data:image/png;base64,iVBORw0KGgo=" alt="chart">');
+      const img = sanitizeHtml(
+        '<img src="data:image/png;base64,iVBORw0KGgo=" alt="chart">',
+      );
       expect(img).toBe('<img alt="chart" />'); // src removed
 
-      const anchor = sanitizeHtml('<a href="data:image/png;base64,iVBORw0KGgo=">x</a>');
+      const anchor = sanitizeHtml(
+        '<a href="data:image/png;base64,iVBORw0KGgo=">x</a>',
+      );
       expect(anchor).toBe("<a>x</a>");
     });
   });
@@ -102,7 +116,9 @@ describe("sanitizeHtml", () => {
 describe("sanitizeText", () => {
   it("strips all markup to plain text", () => {
     expect(sanitizeText("<p>Hello <b>world</b></p>")).toBe("Hello world");
-    expect(sanitizeText('<img src=x onerror="alert(1)">')).not.toContain("onerror");
+    expect(sanitizeText('<img src=x onerror="alert(1)">')).not.toContain(
+      "onerror",
+    );
   });
 
   it("returns empty string for empty input", () => {
@@ -114,13 +130,19 @@ describe("containsSuspiciousPatterns", () => {
   it("flags script tags, event handlers, and dangerous URL schemes", () => {
     expect(containsSuspiciousPatterns("<script>alert(1)</script>")).toBe(true);
     expect(containsSuspiciousPatterns('<p onclick="x()">x</p>')).toBe(true);
-    expect(containsSuspiciousPatterns('<a href="javascript:alert(1)">x</a>')).toBe(true);
-    expect(containsSuspiciousPatterns('<a href="data:text/html,x">x</a>')).toBe(true);
+    expect(
+      containsSuspiciousPatterns('<a href="javascript:alert(1)">x</a>'),
+    ).toBe(true);
+    expect(containsSuspiciousPatterns('<a href="data:text/html,x">x</a>')).toBe(
+      true,
+    );
   });
 
   it("does not flag clean case-study HTML", () => {
     expect(
-      containsSuspiciousPatterns('<section id="approach"><h2>Approach</h2><p>text</p></section>')
+      containsSuspiciousPatterns(
+        '<section id="approach"><h2>Approach</h2><p>text</p></section>',
+      ),
     ).toBe(false);
   });
 

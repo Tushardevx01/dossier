@@ -26,16 +26,22 @@ export async function GET(_request: NextRequest, context: RouteContext) {
 
   if (numId === null) {
     return NextResponse.json(
-      { success: false, error: { code: "INVALID_ID", message: "Invalid credential ID" } },
-      { status: 400 }
+      {
+        success: false,
+        error: { code: "INVALID_ID", message: "Invalid credential ID" },
+      },
+      { status: 400 },
     );
   }
 
   const credential = await getCredentialById(numId);
   if (!credential || !credential.objectLink) {
     return NextResponse.json(
-      { success: false, error: { code: "NOT_FOUND", message: "Certificate asset not found" } },
-      { status: 404 }
+      {
+        success: false,
+        error: { code: "NOT_FOUND", message: "Certificate asset not found" },
+      },
+      { status: 404 },
     );
   }
 
@@ -74,15 +80,26 @@ export async function GET(_request: NextRequest, context: RouteContext) {
       const isInline = _request.nextUrl.searchParams.get("inline") === "true";
       const disposition = isInline ? "inline" : "attachment";
       const headers = new Headers();
-      const allowedTypes = ["application/pdf", "image/png", "image/jpeg", "image/webp"];
-      headers.set("Content-Type", allowedTypes.includes(ct) ? ct : "application/octet-stream");
+      const allowedTypes = [
+        "application/pdf",
+        "image/png",
+        "image/jpeg",
+        "image/webp",
+      ];
+      headers.set(
+        "Content-Type",
+        allowedTypes.includes(ct) ? ct : "application/octet-stream",
+      );
       headers.set("X-Content-Type-Options", "nosniff");
       headers.set("Content-Security-Policy", "sandbox; default-src 'none'");
       headers.set(
         "Content-Disposition",
-        `${disposition}; filename="${safeFilename}"; filename*=UTF-8''${encodeURIComponent(safeFilename)}`
+        `${disposition}; filename="${safeFilename}"; filename*=UTF-8''${encodeURIComponent(safeFilename)}`,
       );
-      headers.set("Cache-Control", "public, max-age=86400, stale-while-revalidate=604800");
+      headers.set(
+        "Cache-Control",
+        "public, max-age=86400, stale-while-revalidate=604800",
+      );
       if (r2Obj.contentLength) {
         headers.set("Content-Length", String(r2Obj.contentLength));
       }
@@ -98,34 +115,46 @@ export async function GET(_request: NextRequest, context: RouteContext) {
         return new NextResponse(stream, { headers, status: 200 });
       }
 
-      return new NextResponse(r2Obj.body as unknown as BodyInit, { headers, status: 200 });
+      return new NextResponse(r2Obj.body as unknown as BodyInit, {
+        headers,
+        status: 200,
+      });
     }
 
     if (!safeRedirectUrl) {
       return NextResponse.json(
         {
           success: false,
-          error: { code: "INVALID_ASSET_URL", message: "Certificate asset URL is invalid" },
+          error: {
+            code: "INVALID_ASSET_URL",
+            message: "Certificate asset URL is invalid",
+          },
         },
-        { status: 502 }
+        { status: 502 },
       );
     }
 
     // Fallback: Redirect directly to public R2 URL
     return NextResponse.redirect(safeRedirectUrl.toString(), 302);
   } catch (error) {
-    logger.error("Failed to stream certificate from R2, redirecting to public URL", {
-      key,
-      error: error instanceof Error ? error.message : String(error),
-    });
+    logger.error(
+      "Failed to stream certificate from R2, redirecting to public URL",
+      {
+        key,
+        error: error instanceof Error ? error.message : String(error),
+      },
+    );
 
     if (!safeRedirectUrl) {
       return NextResponse.json(
         {
           success: false,
-          error: { code: "FETCH_FAILED", message: "Failed to retrieve certificate asset" },
+          error: {
+            code: "FETCH_FAILED",
+            message: "Failed to retrieve certificate asset",
+          },
         },
-        { status: 502 }
+        { status: 502 },
       );
     }
 

@@ -27,7 +27,9 @@ export function formatEditorialDate(dateInput: Date | string): string {
     const d = new Date(dateInput);
     if (isNaN(d.getTime())) return String(dateInput);
     const day = String(d.getUTCDate()).padStart(2, "0");
-    const month = d.toLocaleString("en-US", { month: "short", timeZone: "UTC" }).toUpperCase();
+    const month = d
+      .toLocaleString("en-US", { month: "short", timeZone: "UTC" })
+      .toUpperCase();
     const year = d.getUTCFullYear();
     return `${day} ${month} ${year}`;
   } catch {

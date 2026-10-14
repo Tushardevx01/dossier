@@ -12,7 +12,10 @@ export interface MetricGridProps {
   className?: string;
 }
 
-export const MetricGrid: React.FC<MetricGridProps> = ({ metrics, className = "" }) => {
+export const MetricGrid: React.FC<MetricGridProps> = ({
+  metrics,
+  className = "",
+}) => {
   if (!metrics || metrics.length === 0) return null;
 
   // Choose responsive column layout based on number of metrics
@@ -29,7 +32,9 @@ export const MetricGrid: React.FC<MetricGridProps> = ({ metrics, className = "" 
     <div
       className={`rounded-lg border border-neutral-800/80 bg-[#07070a] overflow-hidden ${className}`}
     >
-      <div className={`grid ${gridCols} divide-y sm:divide-y-0 divide-neutral-800/80 sm:divide-x`}>
+      <div
+        className={`grid ${gridCols} divide-y sm:divide-y-0 divide-neutral-800/80 sm:divide-x`}
+      >
         {metrics.map((m, idx) => (
           <div
             key={idx}

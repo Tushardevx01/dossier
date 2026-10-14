@@ -9,7 +9,9 @@ export const resolveTechStackItem = (skill: Skill): TechVisual => {
 
   return {
     name: definition?.name ?? skill.techKey,
-    description: definition?.description ?? `${skill.techKey} for modern engineering workflows`,
+    description:
+      definition?.description ??
+      `${skill.techKey} for modern engineering workflows`,
     color: definition?.color,
     icon: icon ?? techIcons.TypeScript,
   };

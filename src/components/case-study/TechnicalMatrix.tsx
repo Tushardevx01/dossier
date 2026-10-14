@@ -27,7 +27,9 @@ export const TechnicalMatrix: React.FC<TechnicalMatrixProps> = ({
           >
             {title}
           </span>
-          <span className="font-mono text-[10px] text-neutral-500">{rows.length} ENTRIES</span>
+          <span className="font-mono text-[10px] text-neutral-500">
+            {rows.length} ENTRIES
+          </span>
         </div>
       )}
 
@@ -47,7 +49,10 @@ export const TechnicalMatrix: React.FC<TechnicalMatrixProps> = ({
           </thead>
           <tbody className="divide-y divide-neutral-900/80">
             {rows.map((row, rIdx) => (
-              <tr key={rIdx} className="hover:bg-neutral-900/30 transition-colors">
+              <tr
+                key={rIdx}
+                className="hover:bg-neutral-900/30 transition-colors"
+              >
                 {row.map((cell, cIdx) => (
                   <td
                     key={cIdx}

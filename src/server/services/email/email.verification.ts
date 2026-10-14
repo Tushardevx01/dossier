@@ -26,10 +26,13 @@ export interface VerificationResult {
 export async function verifyEmailAddress(
   email: string,
   apiKey: string,
-  requestId?: string
+  requestId?: string,
 ): Promise<VerificationResult> {
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), VERIFICATION_TIMEOUT_MS);
+  const timeoutId = setTimeout(
+    () => controller.abort(),
+    VERIFICATION_TIMEOUT_MS,
+  );
 
   try {
     const url = new URL("https://api.quickemailverification.com/v1/verify");
@@ -53,7 +56,9 @@ export async function verifyEmailAddress(
       });
       return {
         valid: false,
-        error: Errors.externalService("Email validation service", { requestId }),
+        error: Errors.externalService("Email validation service", {
+          requestId,
+        }),
       };
     }
 
@@ -62,14 +67,21 @@ export async function verifyEmailAddress(
     if (data.result !== "valid") {
       return {
         valid: false,
-        error: Errors.validation("Email address is not valid", { requestId, field: "senderEmail" }),
+        error: Errors.validation("Email address is not valid", {
+          requestId,
+          field: "senderEmail",
+        }),
       };
     }
 
     return { valid: true };
   } catch (error) {
     const isAbort = error instanceof Error && error.name === "AbortError";
-    const errorMessage = isAbort ? "timeout" : error instanceof Error ? error.message : "unknown";
+    const errorMessage = isAbort
+      ? "timeout"
+      : error instanceof Error
+        ? error.message
+        : "unknown";
 
     logger.warn("Email verification failed", {
       error: errorMessage,

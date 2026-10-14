@@ -47,7 +47,8 @@ export default async function CredentialsPage() {
         </h1>
 
         <p className="text-base sm:text-lg text-neutral-400 max-w-2xl leading-relaxed">
-          A structured archive of verified technical certifications and engineering credentials.
+          A structured archive of verified technical certifications and
+          engineering credentials.
         </p>
       </section>
 

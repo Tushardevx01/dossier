@@ -35,25 +35,32 @@ function uploadRequest() {
   form.set("issueDate", "2026-01-01");
   form.set(
     "certificate",
-    new File(["%PDF-1.7 test certificate"], "certificate.pdf", { type: "application/pdf" })
+    new File(["%PDF-1.7 test certificate"], "certificate.pdf", {
+      type: "application/pdf",
+    }),
   );
-  return new NextRequest("https://example.com/api/credentials", { method: "POST", body: form });
+  return new NextRequest("https://example.com/api/credentials", {
+    method: "POST",
+    body: form,
+  });
 }
 
 describe("credential upload compensation", () => {
   beforeEach(() => vi.resetAllMocks());
 
   it("removes the uploaded asset when the database insert fails", async () => {
-    vi.mocked(createCredential).mockRejectedValue(new Error("Database unavailable"));
+    vi.mocked(createCredential).mockRejectedValue(
+      new Error("Database unavailable"),
+    );
     const response = await POST(uploadRequest());
     expect(response.status).toBe(500);
     expect(deleteFromR2).toHaveBeenCalledWith("credentials/test/cert.pdf");
   });
 
   it("preserves a committed asset when cache invalidation fails", async () => {
-    vi.mocked(createCredential).mockResolvedValue({ slug: "test-certificate" } as Awaited<
-      ReturnType<typeof createCredential>
-    >);
+    vi.mocked(createCredential).mockResolvedValue({
+      slug: "test-certificate",
+    } as Awaited<ReturnType<typeof createCredential>>);
     vi.mocked(revalidatePath).mockImplementation(() => {
       throw new Error("Cache unavailable");
     });

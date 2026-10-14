@@ -2,9 +2,15 @@ import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site";
 import { getAllCaseStudies } from "@/server/repositories/case-studies";
 import { getAllArticles } from "@/server/repositories/articleLoader";
-import { getAllCredentials, slugifyTitle } from "@/server/repositories/credentials";
+import {
+  getAllCredentials,
+  slugifyTitle,
+} from "@/server/repositories/credentials";
 
-function safeDate(value: string | Date | null | undefined, fallback = new Date()): Date {
+function safeDate(
+  value: string | Date | null | undefined,
+  fallback = new Date(),
+): Date {
   if (!value) return fallback;
   const parsed = new Date(value);
   return Number.isNaN(parsed.getTime()) ? fallback : parsed;

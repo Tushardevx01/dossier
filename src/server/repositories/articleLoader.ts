@@ -17,7 +17,11 @@ import {
   getCategories,
   getAllNoteSlugs,
 } from "@/server/repositories/blogs";
-import type { ArticleMetadata, ArticlePost, CategoryFilter } from "@/types/article";
+import type {
+  ArticleMetadata,
+  ArticlePost,
+  CategoryFilter,
+} from "@/types/article";
 
 // Re-export types so consumers import from one place
 export type { ArticleMetadata, ArticlePost, CategoryFilter };
@@ -40,9 +44,11 @@ export const getAllArticles = cache(async (): Promise<ArticleMetadata[]> => {
  * ASYNC - Must be called with await
  * @example const post = await getArticle('my-article-slug');
  */
-export const getArticle = cache(async (slug: string): Promise<ArticlePost | null> => {
-  return getNoteBySlug(slug);
-});
+export const getArticle = cache(
+  async (slug: string): Promise<ArticlePost | null> => {
+    return getNoteBySlug(slug);
+  },
+);
 
 /**
  * Get all available categories
@@ -61,6 +67,8 @@ export async function getArticleCategories(): Promise<CategoryFilter[]> {
  * ASYNC - Must be called with await
  * @example export const generateStaticParams = generateArticleStaticParams;
  */
-export async function generateArticleStaticParams(): Promise<{ slug: string }[]> {
+export async function generateArticleStaticParams(): Promise<
+  { slug: string }[]
+> {
   return getAllNoteSlugs();
 }

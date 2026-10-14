@@ -29,13 +29,23 @@ export const ContactSocials = () => {
   return (
     <ul className="flex flex-wrap gap-5">
       {socialLinks.map((social) => (
-        <ContactSocialItem key={social.key} Icon={SOCIAL_ICONS[social.key]} link={social} />
+        <ContactSocialItem
+          key={social.key}
+          Icon={SOCIAL_ICONS[social.key]}
+          link={social}
+        />
       ))}
     </ul>
   );
 };
 
-const ContactSocialItem = ({ Icon, link }: { Icon: IconType; link: ContactSocialLink }) => {
+const ContactSocialItem = ({
+  Icon,
+  link,
+}: {
+  Icon: IconType;
+  link: ContactSocialLink;
+}) => {
   const iconClassName =
     "h-5 w-5 text-slate-400 transition-colors duration-300 group-hover:[color:var(--social-hover)]";
 

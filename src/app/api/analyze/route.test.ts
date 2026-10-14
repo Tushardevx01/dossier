@@ -58,8 +58,15 @@ vi.mock("@/server/security/request", () => ({
   extractClientIdentifier: vi.fn(),
 }));
 
-import { analyzeSEO, isAnalysisError, validateUrl } from "@/server/seo-analyzer";
-import { checkRateLimit, createRateLimitKey } from "@/server/security/rateLimit";
+import {
+  analyzeSEO,
+  isAnalysisError,
+  validateUrl,
+} from "@/server/seo-analyzer";
+import {
+  checkRateLimit,
+  createRateLimitKey,
+} from "@/server/security/rateLimit";
 import { extractClientIdentifier } from "@/server/security/request";
 import { validateApiKey, extractApiKey } from "@/server/security/auth";
 
@@ -92,20 +99,31 @@ describe("/api/analyze POST", () => {
     });
     mockedExtractClientIdentifier.mockReturnValue("127.0.0.1");
     mockedCreateRateLimitKey.mockReturnValue("analyze:127.0.0.1");
-    mockedCheckRateLimit.mockResolvedValue({ allowed: true, remaining: 9, retryAfterSeconds: 60 });
+    mockedCheckRateLimit.mockResolvedValue({
+      allowed: true,
+      remaining: 9,
+      retryAfterSeconds: 60,
+    });
   });
 
   it("should return 401 for missing API key", async () => {
     mockedExtractApiKey.mockReturnValue(null);
 
-    const response = await POST(createRequest(JSON.stringify({ url: "https://example.com" })));
+    const response = await POST(
+      createRequest(JSON.stringify({ url: "https://example.com" })),
+    );
     expect(response.status).toBe(401);
   });
 
   it("should return 401 for invalid API key", async () => {
-    mockedValidateApiKey.mockResolvedValue({ valid: false, error: "Invalid key" });
+    mockedValidateApiKey.mockResolvedValue({
+      valid: false,
+      error: "Invalid key",
+    });
 
-    const response = await POST(createRequest(JSON.stringify({ url: "https://example.com" })));
+    const response = await POST(
+      createRequest(JSON.stringify({ url: "https://example.com" })),
+    );
     expect(response.status).toBe(401);
   });
 
@@ -115,7 +133,9 @@ describe("/api/analyze POST", () => {
       permissions: { analyze: false, rateLimit: 10 },
     });
 
-    const response = await POST(createRequest(JSON.stringify({ url: "https://example.com" })));
+    const response = await POST(
+      createRequest(JSON.stringify({ url: "https://example.com" })),
+    );
     expect(response.status).toBe(403);
   });
 
@@ -132,17 +152,30 @@ describe("/api/analyze POST", () => {
   it("should return 429 when rate limited", async () => {
     mockedExtractClientIdentifier.mockReturnValue("127.0.0.1");
     mockedCreateRateLimitKey.mockReturnValue("analyze:127.0.0.1");
-    mockedCheckRateLimit.mockResolvedValue({ allowed: false, remaining: 0, retryAfterSeconds: 60 });
+    mockedCheckRateLimit.mockResolvedValue({
+      allowed: false,
+      remaining: 0,
+      retryAfterSeconds: 60,
+    });
 
-    const response = await POST(createRequest(JSON.stringify({ url: "https://example.com" })));
+    const response = await POST(
+      createRequest(JSON.stringify({ url: "https://example.com" })),
+    );
     expect(response.status).toBe(429);
   });
 
   it("should return 200 for successful analysis", async () => {
     mockedExtractClientIdentifier.mockReturnValue("127.0.0.1");
     mockedCreateRateLimitKey.mockReturnValue("analyze:127.0.0.1");
-    mockedCheckRateLimit.mockResolvedValue({ allowed: true, remaining: 9, retryAfterSeconds: 60 });
-    mockedValidateUrl.mockResolvedValue({ valid: true, url: new URL("https://example.com") });
+    mockedCheckRateLimit.mockResolvedValue({
+      allowed: true,
+      remaining: 9,
+      retryAfterSeconds: 60,
+    });
+    mockedValidateUrl.mockResolvedValue({
+      valid: true,
+      url: new URL("https://example.com"),
+    });
     mockedAnalyzeSEO.mockResolvedValue({
       score: 85,
       checks: [],
@@ -170,7 +203,9 @@ describe("/api/analyze POST", () => {
     });
     mockedIsAnalysisError.mockReturnValue(false);
 
-    const response = await POST(createRequest(JSON.stringify({ url: "https://example.com" })));
+    const response = await POST(
+      createRequest(JSON.stringify({ url: "https://example.com" })),
+    );
     expect(response.status).toBe(200);
 
     const data = await response.json();

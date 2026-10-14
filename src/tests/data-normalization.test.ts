@@ -24,12 +24,17 @@ describe("data-normalization", () => {
     });
 
     it("parses double JSON-stringified arrays", () => {
-      expect(normalizeArray(JSON.stringify('["item1", "item2"]'))).toEqual(["item1", "item2"]);
-      expect(normalizeArray(JSON.stringify(JSON.stringify(["alpha", "beta"])))).toEqual([
-        "alpha",
-        "beta",
+      expect(normalizeArray(JSON.stringify('["item1", "item2"]'))).toEqual([
+        "item1",
+        "item2",
       ]);
-      expect(normalizeArray('\'["item1", "item2"]\'')).toEqual(["item1", "item2"]);
+      expect(
+        normalizeArray(JSON.stringify(JSON.stringify(["alpha", "beta"]))),
+      ).toEqual(["alpha", "beta"]);
+      expect(normalizeArray('\'["item1", "item2"]\'')).toEqual([
+        "item1",
+        "item2",
+      ]);
     });
 
     it("safely handles invalid strings and non-arrays", () => {

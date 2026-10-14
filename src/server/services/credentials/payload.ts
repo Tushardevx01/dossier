@@ -4,7 +4,8 @@ import { readBodyText, readFormData } from "@/server/http/body";
 import { DEFAULT_MAX_CERT_SIZE } from "@/server/storage/validation";
 
 export const MAX_CREDENTIAL_JSON_BYTES = 256 * 1024;
-export const MAX_CREDENTIAL_FORM_BYTES = DEFAULT_MAX_CERT_SIZE + MAX_CREDENTIAL_JSON_BYTES;
+export const MAX_CREDENTIAL_FORM_BYTES =
+  DEFAULT_MAX_CERT_SIZE + MAX_CREDENTIAL_JSON_BYTES;
 
 export async function readCredentialJson(request: Request): Promise<unknown> {
   return JSON.parse(await readBodyText(request, MAX_CREDENTIAL_JSON_BYTES));

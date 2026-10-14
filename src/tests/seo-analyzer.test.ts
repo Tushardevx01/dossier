@@ -14,21 +14,27 @@ import { fetchHTML, isFetchError } from "@/server/seo-analyzer/fetchHTML";
 describe("SEO Analyzer", () => {
   describe("validateUrl", () => {
     it("should reject non-HTTPS URLs", async () => {
-      (validateUrl as unknown as ReturnType<typeof vi.fn>).mockResolvedValue({ valid: false });
+      (validateUrl as unknown as ReturnType<typeof vi.fn>).mockResolvedValue({
+        valid: false,
+      });
 
       const result = await validateUrl("http://example.com");
       expect(result.valid).toBe(false);
     });
 
     it("should accept HTTPS URLs", async () => {
-      (validateUrl as unknown as ReturnType<typeof vi.fn>).mockResolvedValue({ valid: true });
+      (validateUrl as unknown as ReturnType<typeof vi.fn>).mockResolvedValue({
+        valid: true,
+      });
 
       const result = await validateUrl("https://example.com");
       expect(result.valid).toBe(true);
     });
 
     it("should reject private IPs", async () => {
-      (validateUrl as unknown as ReturnType<typeof vi.fn>).mockResolvedValue({ valid: false });
+      (validateUrl as unknown as ReturnType<typeof vi.fn>).mockResolvedValue({
+        valid: false,
+      });
 
       const result = await validateUrl("https://private.example.com");
       expect(result.valid).toBe(false);
@@ -41,7 +47,9 @@ describe("SEO Analyzer", () => {
         html: "<html><head><title>Test</title></head><body></body></html>",
         finalUrl: "https://example.com",
       });
-      (isFetchError as unknown as ReturnType<typeof vi.fn>).mockReturnValue(false);
+      (isFetchError as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
+        false,
+      );
 
       const result = await analyzeSEO("https://example.com");
       expect(result).toHaveProperty("score");
@@ -54,7 +62,9 @@ describe("SEO Analyzer", () => {
         code: "FETCH_FAILED",
         message: "Network error",
       });
-      (isFetchError as unknown as ReturnType<typeof vi.fn>).mockReturnValue(true);
+      (isFetchError as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
+        true,
+      );
 
       const result = await analyzeSEO("https://example.com");
       expect(result).toHaveProperty("code");

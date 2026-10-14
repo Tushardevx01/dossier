@@ -9,7 +9,11 @@ import { SkillTierBlock } from "@/components/sections/skills/SkillTierBlock";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 export const Skills = () => {
-  const { ref, isInView } = useScrollAnimation({ once: true, margin: "-80px", amount: 0.1 });
+  const { ref, isInView } = useScrollAnimation({
+    once: true,
+    margin: "-80px",
+    amount: 0.1,
+  });
   const [showAdditional, setShowAdditional] = useState(false);
 
   return (
@@ -29,14 +33,15 @@ export const Skills = () => {
             className={`${nasalization.className} text-4xl md:text-5xl lg:text-6xl font-bold`}
             style={{ color: "hsl(var(--foreground))" }}
           >
-            Technology <span style={{ color: "hsl(var(--primary) / 0.85)" }}>Matrix.</span>
+            Technology{" "}
+            <span style={{ color: "hsl(var(--primary) / 0.85)" }}>Matrix.</span>
           </h2>
           <p
             className="text-base text-muted-foreground max-w-2xl"
             style={{ color: "hsl(var(--foreground) / 0.6)" }}
           >
-            Technologies grouped by architecture layer, with each tool tied to an operational use
-            case.
+            Technologies grouped by architecture layer, with each tool tied to
+            an operational use case.
           </p>
         </motion.div>
 

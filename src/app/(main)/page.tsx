@@ -24,7 +24,9 @@ import { getCredentialsCount } from "@/server/repositories/credentials";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: { absolute: "Tushar Kanti Dey | Full-Stack Developer & DevOps Engineer" },
+  title: {
+    absolute: "Tushar Kanti Dey | Full-Stack Developer & DevOps Engineer",
+  },
   description:
     "Tushar Kanti Dey — Full-Stack Developer and DevOps Engineer based in Kolkata, India. I build production-grade Next.js and Node.js applications, CI/CD pipelines, and scalable real-time systems focused on reliability and product outcomes.",
 };

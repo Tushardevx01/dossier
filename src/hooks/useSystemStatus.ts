@@ -22,7 +22,9 @@ const INITIAL_LOG_TIME = "12:00:00";
 export const useSystemStatus = () => {
   const [telemetryIndex, setTelemetryIndex] = useState(0);
   const [logs, setLogs] = useState<RuntimeLogLine[]>(() =>
-    runtimeLogSeed.slice(0, 4).map((line) => ({ ...line, time: INITIAL_LOG_TIME }))
+    runtimeLogSeed
+      .slice(0, 4)
+      .map((line) => ({ ...line, time: INITIAL_LOG_TIME })),
   );
 
   useEffect(() => {
@@ -35,14 +37,21 @@ export const useSystemStatus = () => {
 
   useEffect(() => {
     const logTimer = setInterval(() => {
-      const next = runtimeLogSeed[Math.floor(Math.random() * runtimeLogSeed.length)];
-      setLogs((prev) => [...prev.slice(-(MAX_LOG_LINES - 1)), { ...next, time: formatTime() }]);
+      const next =
+        runtimeLogSeed[Math.floor(Math.random() * runtimeLogSeed.length)];
+      setLogs((prev) => [
+        ...prev.slice(-(MAX_LOG_LINES - 1)),
+        { ...next, time: formatTime() },
+      ]);
     }, LOG_UPDATE_MS);
 
     return () => clearInterval(logTimer);
   }, []);
 
-  const telemetry = useMemo(() => telemetrySeed[telemetryIndex], [telemetryIndex]);
+  const telemetry = useMemo(
+    () => telemetrySeed[telemetryIndex],
+    [telemetryIndex],
+  );
 
   return {
     telemetry,

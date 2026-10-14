@@ -43,7 +43,9 @@ export function ArticleHero({ post }: ArticleHeroProps) {
               </time>
             </span>
             <div className="w-1 h-1 rounded-full bg-zinc-700" />
-            <span className="text-sm text-zinc-400">{post.readTime} min read</span>
+            <span className="text-sm text-zinc-400">
+              {post.readTime} min read
+            </span>
           </div>
         </div>
 

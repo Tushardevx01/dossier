@@ -16,7 +16,10 @@ export function generateCsrfToken(): string {
   return randomBytes(CSRF_TOKEN_LENGTH).toString("base64url");
 }
 
-export function validateCsrfToken(cookieToken: unknown, bodyToken: unknown): boolean {
+export function validateCsrfToken(
+  cookieToken: unknown,
+  bodyToken: unknown,
+): boolean {
   if (
     typeof cookieToken !== "string" ||
     typeof bodyToken !== "string" ||

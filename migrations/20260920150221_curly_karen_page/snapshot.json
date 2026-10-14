@@ -2,9 +2,7 @@
   "version": "8",
   "dialect": "postgres",
   "id": "77a65fbb-a725-4580-a4f9-9752be666ae1",
-  "prevIds": [
-    "00000000-0000-0000-0000-000000000000"
-  ],
+  "prevIds": ["00000000-0000-0000-0000-000000000000"],
   "ddl": [
     {
       "isRlsEnabled": false,
@@ -811,9 +809,7 @@
       "table": "engineering_notes"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "api_keys_pkey",
       "schema": "public",
@@ -821,9 +817,7 @@
       "entityType": "pks"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "case_studies_pkey",
       "schema": "public",
@@ -831,9 +825,7 @@
       "entityType": "pks"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "credentials_pkey",
       "schema": "public",
@@ -841,9 +833,7 @@
       "entityType": "pks"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "engineering_notes_pkey",
       "schema": "public",
@@ -852,9 +842,7 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "key_hash"
-      ],
+      "columns": ["key_hash"],
       "nullsNotDistinct": false,
       "name": "api_keys_key_hash_key",
       "schema": "public",
@@ -863,9 +851,7 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "slug"
-      ],
+      "columns": ["slug"],
       "nullsNotDistinct": false,
       "name": "case_studies_slug_key",
       "schema": "public",
@@ -874,9 +860,7 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "slug"
-      ],
+      "columns": ["slug"],
       "nullsNotDistinct": false,
       "name": "engineering_notes_slug_key",
       "schema": "public",

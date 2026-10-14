@@ -21,7 +21,9 @@ interface UseHideOnScrollReturn {
   isScrolled: boolean;
 }
 
-export function useHideOnScroll(options: UseHideOnScrollOptions = {}): UseHideOnScrollReturn {
+export function useHideOnScroll(
+  options: UseHideOnScrollOptions = {},
+): UseHideOnScrollReturn {
   const { threshold = 100 } = options;
   const [isVisible, setIsVisible] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);

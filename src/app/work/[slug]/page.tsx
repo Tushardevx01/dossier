@@ -21,7 +21,9 @@ interface WorkDetailPageProps {
 
 export const revalidate = 60;
 
-export async function generateMetadata({ params }: WorkDetailPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: WorkDetailPageProps): Promise<Metadata> {
   const { slug } = await params;
   const caseStudy = await getCaseStudyBySlug(slug);
 
@@ -62,7 +64,9 @@ export default async function WorkDetailPage({ params }: WorkDetailPageProps) {
   }
 
   const allCaseStudies = await getAllCaseStudies();
-  const currentIndex = allCaseStudies.findIndex((cs) => cs.slug === caseStudy.slug);
+  const currentIndex = allCaseStudies.findIndex(
+    (cs) => cs.slug === caseStudy.slug,
+  );
   const nextCaseStudy =
     allCaseStudies.length > 1 && currentIndex !== -1
       ? allCaseStudies[(currentIndex + 1) % allCaseStudies.length]
@@ -72,7 +76,9 @@ export default async function WorkDetailPage({ params }: WorkDetailPageProps) {
   // We parse it directly into structured AST to avoid sending the entire raw HTML payload to the client.
   const parsed = parseCaseStudyContent(caseStudy.content);
   const matchingProject =
-    projectsData.find((p) => p.slug.toLowerCase() === caseStudy.slug.toLowerCase()) || null;
+    projectsData.find(
+      (p) => p.slug.toLowerCase() === caseStudy.slug.toLowerCase(),
+    ) || null;
 
   const projectSchema = generateCaseStudyStructuredData({
     title: caseStudy.title,

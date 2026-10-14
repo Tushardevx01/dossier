@@ -22,7 +22,9 @@ describe("analyzer network boundary", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     agents.length = 0;
-    vi.mocked(lookup).mockResolvedValue([{ address: "93.184.216.34", family: 4 }] as never);
+    vi.mocked(lookup).mockResolvedValue([
+      { address: "93.184.216.34", family: 4 },
+    ] as never);
   });
   afterEach(() => vi.useRealTimers());
 
@@ -44,9 +46,12 @@ describe("analyzer network boundary", () => {
     expect(isPublicAddress(address)).toBe(false);
   });
 
-  it.each(["93.184.216.34", "2606:4700:4700::1111"])("accepts global address %s", (address) => {
-    expect(isPublicAddress(address)).toBe(true);
-  });
+  it.each(["93.184.216.34", "2606:4700:4700::1111"])(
+    "accepts global address %s",
+    (address) => {
+      expect(isPublicAddress(address)).toBe(true);
+    },
+  );
 
   it.each([
     "https://127.1",
@@ -70,7 +75,9 @@ describe("analyzer network boundary", () => {
 
   it("pins the connection lookup to the validated address", async () => {
     vi.mocked(fetch).mockResolvedValue(
-      new Response("<html>ok</html>", { headers: { "content-type": "text/html" } }) as never
+      new Response("<html>ok</html>", {
+        headers: { "content-type": "text/html" },
+      }) as never,
     );
     const result = await fetchHTML("https://example.com");
     expect(result).toMatchObject({ html: "<html>ok</html>" });
@@ -82,9 +89,14 @@ describe("analyzer network boundary", () => {
 
   it("blocks redirects into the internal network", async () => {
     vi.mocked(fetch).mockResolvedValue(
-      new Response(null, { status: 302, headers: { location: "https://127.0.0.2" } }) as never
+      new Response(null, {
+        status: 302,
+        headers: { location: "https://127.0.0.2" },
+      }) as never,
     );
-    expect(await fetchHTML("https://example.com")).toMatchObject({ code: "BLOCKED_URL" });
+    expect(await fetchHTML("https://example.com")).toMatchObject({
+      code: "BLOCKED_URL",
+    });
     expect(fetch).toHaveBeenCalledTimes(1);
   });
 
@@ -97,7 +109,7 @@ describe("analyzer network boundary", () => {
       cancel,
     });
     vi.mocked(fetch).mockResolvedValue(
-      new Response(body, { headers: { "content-type": "text/html" } }) as never
+      new Response(body, { headers: { "content-type": "text/html" } }) as never,
     );
     expect(await fetchHTML("https://example.com")).toMatchObject({
       message: "Response is too large",
@@ -110,10 +122,14 @@ describe("analyzer network boundary", () => {
     vi.mocked(fetch).mockImplementation(async (_url, options) => {
       const body = new ReadableStream({
         start(c) {
-          options!.signal!.addEventListener("abort", () => c.error(new Error("aborted")));
+          options!.signal!.addEventListener("abort", () =>
+            c.error(new Error("aborted")),
+          );
         },
       });
-      return new Response(body, { headers: { "content-type": "text/html" } }) as never;
+      return new Response(body, {
+        headers: { "content-type": "text/html" },
+      }) as never;
     });
     const result = fetchHTML("https://example.com");
     await vi.advanceTimersByTimeAsync(10_001);

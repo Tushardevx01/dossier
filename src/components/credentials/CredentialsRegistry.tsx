@@ -57,8 +57,8 @@ export function CredentialsRegistry({ credentials }: CredentialsRegistryProps) {
               No credentials recorded yet.
             </h2>
             <p className="text-sm text-neutral-400 max-w-md mx-auto leading-relaxed">
-              Verified certifications and credential documents will appear here once added to the
-              database.
+              Verified certifications and credential documents will appear here
+              once added to the database.
             </p>
           </div>
         ) : filteredCredentials.length === 0 ? (
@@ -68,7 +68,11 @@ export function CredentialsRegistry({ credentials }: CredentialsRegistryProps) {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-7">
             {filteredCredentials.map((cred, index) => (
-              <CredentialRecordCard key={cred.id} credential={cred} index={index} />
+              <CredentialRecordCard
+                key={cred.id}
+                credential={cred}
+                index={index}
+              />
             ))}
           </div>
         )}

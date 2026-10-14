@@ -51,41 +51,64 @@ type ValidatedUrl = {
   address?: { address: string; family: number };
 };
 
-async function withAbort<T>(operation: Promise<T>, signal: AbortSignal): Promise<T> {
+async function withAbort<T>(
+  operation: Promise<T>,
+  signal: AbortSignal,
+): Promise<T> {
   signal.throwIfAborted();
   return new Promise((resolve, reject) => {
     const abort = () => reject(signal.reason);
     signal.addEventListener("abort", abort, { once: true });
-    operation.then(resolve, reject).finally(() => signal.removeEventListener("abort", abort));
+    operation
+      .then(resolve, reject)
+      .finally(() => signal.removeEventListener("abort", abort));
   });
 }
 
-export async function validateUrl(urlString: string, signal?: AbortSignal): Promise<ValidatedUrl> {
+export async function validateUrl(
+  urlString: string,
+  signal?: AbortSignal,
+): Promise<ValidatedUrl> {
   let url: URL;
   try {
     url = new URL(urlString);
   } catch {
-    return { valid: false, error: { code: "INVALID_URL", message: "Invalid URL format" } };
+    return {
+      valid: false,
+      error: { code: "INVALID_URL", message: "Invalid URL format" },
+    };
   }
   if (url.protocol !== "https:" || url.username || url.password) {
     return {
       valid: false,
-      error: { code: "INVALID_URL", message: "Only HTTPS URLs without credentials are supported" },
+      error: {
+        code: "INVALID_URL",
+        message: "Only HTTPS URLs without credentials are supported",
+      },
     };
   }
   const hostname = url.hostname.replace(/^\[|\]$/g, "").toLowerCase();
   if (url.port || /(^|\.)(localhost|local|internal)\.?$/.test(hostname)) {
     return {
       valid: false,
-      error: { code: "BLOCKED_URL", message: "This URL is not allowed for analysis" },
+      error: {
+        code: "BLOCKED_URL",
+        message: "This URL is not allowed for analysis",
+      },
     };
   }
   try {
     const resolution = isIP(hostname)
       ? Promise.resolve([{ address: hostname, family: isIP(hostname) }])
       : lookup(hostname, { all: true });
-    const addresses = await withAbort(resolution, signal ?? AbortSignal.timeout(FETCH_TIMEOUT_MS));
-    if (!addresses.length || addresses.some(({ address }) => !isPublicAddress(address))) {
+    const addresses = await withAbort(
+      resolution,
+      signal ?? AbortSignal.timeout(FETCH_TIMEOUT_MS),
+    );
+    if (
+      !addresses.length ||
+      addresses.some(({ address }) => !isPublicAddress(address))
+    ) {
       return {
         valid: false,
         error: {
@@ -97,12 +120,17 @@ export async function validateUrl(urlString: string, signal?: AbortSignal): Prom
     return { valid: true, url, address: addresses[0] };
   } catch {
     if (signal?.aborted) throw signal.reason;
-    return { valid: false, error: { code: "INVALID_URL", message: "Could not resolve hostname" } };
+    return {
+      valid: false,
+      error: { code: "INVALID_URL", message: "Could not resolve hostname" },
+    };
   }
 }
 
 /** Resolve once per hop and pin the socket lookup to the checked address. */
-export async function fetchHTML(urlString: string): Promise<FetchResult | AnalyzerError> {
+export async function fetchHTML(
+  urlString: string,
+): Promise<FetchResult | AnalyzerError> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
   const visited = new Set<string>();
@@ -110,10 +138,12 @@ export async function fetchHTML(urlString: string): Promise<FetchResult | Analyz
   try {
     for (let hop = 0; hop <= MAX_REDIRECTS; hop++) {
       const checked = await validateUrl(target, controller.signal);
-      if (!checked.valid || !checked.url || !checked.address) return checked.error!;
+      if (!checked.valid || !checked.url || !checked.address)
+        return checked.error!;
       const { url, address } = checked;
       url.hash = "";
-      if (visited.has(url.href)) return { code: "FETCH_FAILED", message: "Redirect loop detected" };
+      if (visited.has(url.href))
+        return { code: "FETCH_FAILED", message: "Redirect loop detected" };
       visited.add(url.href);
       const dispatcher = new Agent({
         connect: {
@@ -138,19 +168,31 @@ export async function fetchHTML(urlString: string): Promise<FetchResult | Analyz
           await response.body?.cancel();
           const location = response.headers.get("location");
           if (!location)
-            return { code: "FETCH_FAILED", message: "Redirect response missing location header" };
+            return {
+              code: "FETCH_FAILED",
+              message: "Redirect response missing location header",
+            };
           target = new URL(location, url).href;
           continue;
         }
-        const contentType = (response.headers.get("content-type") ?? "").toLowerCase();
-        if (!response.ok || !/^(text\/html|application\/xhtml\+xml)(;|$)/.test(contentType)) {
+        const contentType = (
+          response.headers.get("content-type") ?? ""
+        ).toLowerCase();
+        if (
+          !response.ok ||
+          !/^(text\/html|application\/xhtml\+xml)(;|$)/.test(contentType)
+        ) {
           await response.body?.cancel();
           return {
             code: "FETCH_FAILED",
-            message: response.ok ? "Response is not HTML" : `Server returned ${response.status}`,
+            message: response.ok
+              ? "Response is not HTML"
+              : `Server returned ${response.status}`,
           };
         }
-        if (Number(response.headers.get("content-length")) > MAX_RESPONSE_BYTES) {
+        if (
+          Number(response.headers.get("content-length")) > MAX_RESPONSE_BYTES
+        ) {
           await response.body?.cancel();
           return { code: "FETCH_FAILED", message: "Response is too large" };
         }
@@ -185,6 +227,8 @@ export async function fetchHTML(urlString: string): Promise<FetchResult | Analyz
   }
 }
 
-export function isFetchError(result: FetchResult | AnalyzerError): result is AnalyzerError {
+export function isFetchError(
+  result: FetchResult | AnalyzerError,
+): result is AnalyzerError {
   return "code" in result && "message" in result && !("html" in result);
 }

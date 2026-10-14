@@ -29,7 +29,10 @@ import {
   DEFAULT_MAX_CERT_SIZE,
 } from "@/server/storage/validation";
 import { logger } from "@/lib/logger";
-import { checkRateLimit, createRateLimitKey } from "@/server/security/rateLimit";
+import {
+  checkRateLimit,
+  createRateLimitKey,
+} from "@/server/security/rateLimit";
 import { extractClientIdentifier } from "@/server/security/request";
 
 export const runtime = "nodejs";
@@ -48,8 +51,11 @@ export async function GET(_request: NextRequest, context: RouteContext) {
 
   if (numId === null) {
     return NextResponse.json(
-      { success: false, error: { code: "INVALID_ID", message: "Invalid credential ID" } },
-      { status: 400 }
+      {
+        success: false,
+        error: { code: "INVALID_ID", message: "Invalid credential ID" },
+      },
+      { status: 400 },
     );
   }
 
@@ -57,8 +63,11 @@ export async function GET(_request: NextRequest, context: RouteContext) {
     const credential = await getCredentialById(numId);
     if (!credential) {
       return NextResponse.json(
-        { success: false, error: { code: "NOT_FOUND", message: "Credential not found" } },
-        { status: 404 }
+        {
+          success: false,
+          error: { code: "NOT_FOUND", message: "Credential not found" },
+        },
+        { status: 404 },
       );
     }
 
@@ -73,8 +82,11 @@ export async function GET(_request: NextRequest, context: RouteContext) {
     });
 
     return NextResponse.json(
-      { success: false, error: { code: "DATABASE_ERROR", message: "Database query failed" } },
-      { status: 500 }
+      {
+        success: false,
+        error: { code: "DATABASE_ERROR", message: "Database query failed" },
+      },
+      { status: 500 },
     );
   }
 }
@@ -89,8 +101,11 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
   const rl = await checkRateLimit(rlKey, 30, 60000);
   if (!rl.allowed) {
     return NextResponse.json(
-      { success: false, error: { code: "RATE_LIMITED", message: "Too many requests" } },
-      { status: 429, headers: { "Retry-After": String(rl.retryAfterSeconds) } }
+      {
+        success: false,
+        error: { code: "RATE_LIMITED", message: "Too many requests" },
+      },
+      { status: 429, headers: { "Retry-After": String(rl.retryAfterSeconds) } },
     );
   }
 
@@ -99,9 +114,12 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
     return NextResponse.json(
       {
         success: false,
-        error: { code: "UNAUTHORIZED", message: auth.error || "Admin access required" },
+        error: {
+          code: "UNAUTHORIZED",
+          message: auth.error || "Admin access required",
+        },
       },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
@@ -109,16 +127,22 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
   const numId = parseCredentialId(id);
   if (numId === null) {
     return NextResponse.json(
-      { success: false, error: { code: "INVALID_ID", message: "Invalid credential ID" } },
-      { status: 400 }
+      {
+        success: false,
+        error: { code: "INVALID_ID", message: "Invalid credential ID" },
+      },
+      { status: 400 },
     );
   }
 
   const existing = await getCredentialById(numId);
   if (!existing) {
     return NextResponse.json(
-      { success: false, error: { code: "NOT_FOUND", message: "Credential not found" } },
-      { status: 404 }
+      {
+        success: false,
+        error: { code: "NOT_FOUND", message: "Credential not found" },
+      },
+      { status: 404 },
     );
   }
 
@@ -134,35 +158,48 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
 
       const updateData: Record<string, unknown> = {};
 
-      if (formData.has("title")) updateData.title = formData.get("title")?.toString().trim();
-      if (formData.has("slug")) updateData.slug = formData.get("slug")?.toString().trim();
-      if (formData.has("issuer")) updateData.issuer = formData.get("issuer")?.toString().trim();
+      if (formData.has("title"))
+        updateData.title = formData.get("title")?.toString().trim();
+      if (formData.has("slug"))
+        updateData.slug = formData.get("slug")?.toString().trim();
+      if (formData.has("issuer"))
+        updateData.issuer = formData.get("issuer")?.toString().trim();
       if (formData.has("objectLink"))
         updateData.objectLink = formData.get("objectLink")?.toString().trim();
       if (formData.has("description"))
-        updateData.description = formData.get("description")?.toString().trim() || null;
+        updateData.description =
+          formData.get("description")?.toString().trim() || null;
       if (formData.has("credentialLink"))
-        updateData.credentialLink = formData.get("credentialLink")?.toString().trim() || null;
+        updateData.credentialLink =
+          formData.get("credentialLink")?.toString().trim() || null;
       if (formData.has("verificationUrl"))
-        updateData.credentialLink = formData.get("verificationUrl")?.toString().trim() || null;
+        updateData.credentialLink =
+          formData.get("verificationUrl")?.toString().trim() || null;
 
       if (formData.has("issueDate") || formData.has("issuedAt")) {
         const dateStr =
-          (formData.get("issueDate") || formData.get("issuedAt"))?.toString().trim() || "";
+          (formData.get("issueDate") || formData.get("issuedAt"))
+            ?.toString()
+            .trim() || "";
         updateData.issueDate = dateStr;
       }
 
       // Check for replacement certificate file
       const certFile =
-        formData.get("certificateFile") || formData.get("certificate") || formData.get("file");
+        formData.get("certificateFile") ||
+        formData.get("certificate") ||
+        formData.get("file");
       if (certFile && certFile instanceof File && certFile.size > 0) {
         if (!isR2Configured()) {
           return NextResponse.json(
             {
               success: false,
-              error: { code: "R2_NOT_CONFIGURED", message: "R2 is not configured" },
+              error: {
+                code: "R2_NOT_CONFIGURED",
+                message: "R2 is not configured",
+              },
             },
-            { status: 503 }
+            { status: 503 },
           );
         }
 
@@ -171,7 +208,11 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
           allowedTypes: ["pdf", "png", "jpg", "jpeg", "webp"],
         });
 
-        const key = generateSafeStorageKey(numId, "certificate", validatedCert.extension);
+        const key = generateSafeStorageKey(
+          numId,
+          "certificate",
+          validatedCert.extension,
+        );
         const uploadResult = await uploadToR2({
           file: validatedCert.buffer,
           key,
@@ -216,7 +257,10 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
       } catch (dbErr) {
         // Rollback: delete new files if DB update failed
         await Promise.allSettled(newlyUploadedKeys.map((k) => deleteFromR2(k)));
-        logger.error("Database error updating credential", { id: numId, error: dbErr });
+        logger.error("Database error updating credential", {
+          id: numId,
+          error: dbErr,
+        });
         return NextResponse.json(
           {
             success: false,
@@ -225,7 +269,7 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
               message: "Failed to persist credential updates",
             },
           },
-          { status: 500 }
+          { status: 500 },
         );
       }
     } catch (uploadErr) {
@@ -242,7 +286,7 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
             message: "Invalid file or payload",
           },
         },
-        { status: uploadErr instanceof PayloadTooLargeError ? 413 : 400 }
+        { status: uploadErr instanceof PayloadTooLargeError ? 413 : 400 },
       );
     }
   }
@@ -257,17 +301,23 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
       if (parsed.slug) updateData.slug = parsed.slug;
       if (parsed.title !== undefined) updateData.title = parsed.title;
       if (parsed.issuer !== undefined) updateData.issuer = parsed.issuer;
-      if (parsed.description !== undefined) updateData.description = parsed.description;
-      if (parsed.issueDate !== undefined) updateData.issueDate = new Date(parsed.issueDate);
-      if (parsed.objectLink !== undefined) updateData.objectLink = parsed.objectLink;
+      if (parsed.description !== undefined)
+        updateData.description = parsed.description;
+      if (parsed.issueDate !== undefined)
+        updateData.issueDate = new Date(parsed.issueDate);
+      if (parsed.objectLink !== undefined)
+        updateData.objectLink = parsed.objectLink;
       if (parsed.credentialLink !== undefined)
         updateData.credentialLink = parsed.credentialLink || null;
 
       const updated = await updateCredential(numId, updateData);
       if (!updated)
         return NextResponse.json(
-          { success: false, error: { code: "NOT_FOUND", message: "Credential not found" } },
-          { status: 404 }
+          {
+            success: false,
+            error: { code: "NOT_FOUND", message: "Credential not found" },
+          },
+          { status: 404 },
         );
 
       revalidatePath("/credentials");
@@ -286,9 +336,12 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
         return NextResponse.json(
           {
             success: false,
-            error: { code: "INVALID_PAYLOAD", message: "Invalid request payload" },
+            error: {
+              code: "INVALID_PAYLOAD",
+              message: "Invalid request payload",
+            },
           },
-          { status: err instanceof PayloadTooLargeError ? 413 : 400 }
+          { status: err instanceof PayloadTooLargeError ? 413 : 400 },
         );
       }
       if (err instanceof z.ZodError) {
@@ -300,11 +353,14 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
               issues: err.issues,
             },
           },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
-      logger.error("Failed to update credential via JSON", { id: numId, error: err });
+      logger.error("Failed to update credential via JSON", {
+        id: numId,
+        error: err,
+      });
       return NextResponse.json(
         {
           success: false,
@@ -313,7 +369,7 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
             message: "Failed to update credential",
           },
         },
-        { status: 500 }
+        { status: 500 },
       );
     }
   }
@@ -321,9 +377,12 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
   return NextResponse.json(
     {
       success: false,
-      error: { code: "UNSUPPORTED_MEDIA_TYPE", message: "Unsupported content type" },
+      error: {
+        code: "UNSUPPORTED_MEDIA_TYPE",
+        message: "Unsupported content type",
+      },
     },
-    { status: 415 }
+    { status: 415 },
   );
 }
 
@@ -337,8 +396,11 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
   const rl = await checkRateLimit(rlKey, 30, 60000);
   if (!rl.allowed) {
     return NextResponse.json(
-      { success: false, error: { code: "RATE_LIMITED", message: "Too many requests" } },
-      { status: 429, headers: { "Retry-After": String(rl.retryAfterSeconds) } }
+      {
+        success: false,
+        error: { code: "RATE_LIMITED", message: "Too many requests" },
+      },
+      { status: 429, headers: { "Retry-After": String(rl.retryAfterSeconds) } },
     );
   }
 
@@ -347,9 +409,12 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
     return NextResponse.json(
       {
         success: false,
-        error: { code: "UNAUTHORIZED", message: auth.error || "Admin access required" },
+        error: {
+          code: "UNAUTHORIZED",
+          message: auth.error || "Admin access required",
+        },
       },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
@@ -357,16 +422,22 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
   const numId = parseCredentialId(id);
   if (numId === null) {
     return NextResponse.json(
-      { success: false, error: { code: "INVALID_ID", message: "Invalid credential ID" } },
-      { status: 400 }
+      {
+        success: false,
+        error: { code: "INVALID_ID", message: "Invalid credential ID" },
+      },
+      { status: 400 },
     );
   }
 
   const existing = await getCredentialById(numId);
   if (!existing) {
     return NextResponse.json(
-      { success: false, error: { code: "NOT_FOUND", message: "Credential not found" } },
-      { status: 404 }
+      {
+        success: false,
+        error: { code: "NOT_FOUND", message: "Credential not found" },
+      },
+      { status: 404 },
     );
   }
 
@@ -387,7 +458,7 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
           message: "Failed to delete credential record",
         },
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 

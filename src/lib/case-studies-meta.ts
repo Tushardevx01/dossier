@@ -210,7 +210,10 @@ export const caseStudiesMeta: CaseStudyRecord[] = [
       "Android 60Hz Display Throttling on 120Hz Hardware: Authored custom Expo config plugin injecting Kotlin display mode logic into MainActivity.kt to lock maximum refresh rate (90/120/144Hz).",
       "Client-Side Array Crashes from Schema Deviations: Implemented defensive data parser (defensiveHandler.ts) with safeArrayParse, runtime type guards, and atomic state fallbacks.",
     ],
-    improvements: ["Custom Kotlin Config Plugin", "Supabase PostgreSQL RLS Policies"],
+    improvements: [
+      "Custom Kotlin Config Plugin",
+      "Supabase PostgreSQL RLS Policies",
+    ],
     relatedNoteSlugs: [],
     relatedProjectSlug: "webscope",
     relatedSystemDesignSlug: null,

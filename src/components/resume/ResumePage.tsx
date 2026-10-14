@@ -3,13 +3,19 @@
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
-import { HiDownload, HiOutlineArrowsExpand, HiExternalLink } from "react-icons/hi";
+import {
+  HiDownload,
+  HiOutlineArrowsExpand,
+  HiExternalLink,
+} from "react-icons/hi";
 import { Navbar, Footer, Background } from "@/components/common";
 import { nasalization } from "@/app/fonts";
 
 const PDFViewer = dynamic(() => import("./PDFViewer"), { ssr: false });
 
-export function ResumePage({ credentialCount }: { credentialCount?: number } = {}) {
+export function ResumePage({
+  credentialCount,
+}: { credentialCount?: number } = {}) {
   const previewRef = useRef<HTMLDivElement | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -23,7 +29,10 @@ export function ResumePage({ credentialCount }: { credentialCount?: number } = {
 
     return () => {
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
-      document.removeEventListener("webkitfullscreenchange", handleFullscreenChange);
+      document.removeEventListener(
+        "webkitfullscreenchange",
+        handleFullscreenChange,
+      );
     };
   }, []);
 
@@ -60,7 +69,9 @@ export function ResumePage({ credentialCount }: { credentialCount?: number } = {
   const PDF_URL = "/docs/Resume.pdf";
 
   return (
-    <div className={`min-h-screen selection:bg-primary/20 ${nasalization.className}`}>
+    <div
+      className={`min-h-screen selection:bg-primary/20 ${nasalization.className}`}
+    >
       <Background />
       <Navbar credentialCount={credentialCount} />
 
@@ -76,7 +87,8 @@ export function ResumePage({ credentialCount }: { credentialCount?: number } = {
               Resume
             </h1>
             <p className="text-muted-foreground">
-              A concise view of my experience, stack, and the product work I ship
+              A concise view of my experience, stack, and the product work I
+              ship
             </p>
           </div>
 
@@ -141,7 +153,9 @@ export function ResumePage({ credentialCount }: { credentialCount?: number } = {
             >
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 pointer-events-none" />
               <HiDownload className="w-4 h-4 relative z-10 pointer-events-none" />
-              <span className="relative z-10 pointer-events-none">Download PDF</span>
+              <span className="relative z-10 pointer-events-none">
+                Download PDF
+              </span>
             </motion.a>
           </div>
         </motion.div>

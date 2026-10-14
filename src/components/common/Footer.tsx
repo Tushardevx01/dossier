@@ -28,14 +28,20 @@ export const Footer = () => {
         <div className="text-xs text-center text-muted-foreground space-y-2">
           <p className="flex items-center justify-center gap-2">
             Designed & built by
-            <button onClick={toggleHeart} className="text-primary" aria-label="Toggle heart">
+            <button
+              onClick={toggleHeart}
+              className="text-primary"
+              aria-label="Toggle heart"
+            >
               {isHeartFilled ? <TbHeartFilled /> : <TbHeart />}
             </button>
             <a href="/" className="text-primary/80 hover:text-primary">
               Tushar Kanti Dey
             </a>
           </p>
-          <p className="text-muted-foreground/60">© {currentYear} All rights reserved</p>
+          <p className="text-muted-foreground/60">
+            © {currentYear} All rights reserved
+          </p>
         </div>
       </div>
 

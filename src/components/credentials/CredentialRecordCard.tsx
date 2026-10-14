@@ -12,13 +12,19 @@ interface CredentialRecordCardProps {
   index?: number;
 }
 
-export function CredentialRecordCard({ credential }: CredentialRecordCardProps) {
+export function CredentialRecordCard({
+  credential,
+}: CredentialRecordCardProps) {
   const credSlug = credential.slug || slugifyTitle(credential.title);
   const formattedDate = formatCardDate(credential.issueDate);
 
   // Clean description for card display: remove Markdown formatting and leading headers
-  const rawDescription = credential.description ? stripMarkdown(credential.description) : "";
-  const cleanDescription = rawDescription.replace(/^(Overview|About|Summary)\s+/i, "").trim();
+  const rawDescription = credential.description
+    ? stripMarkdown(credential.description)
+    : "";
+  const cleanDescription = rawDescription
+    .replace(/^(Overview|About|Summary)\s+/i, "")
+    .trim();
 
   return (
     <Link

@@ -22,7 +22,8 @@ export default async function Image() {
         backgroundColor: "#000000",
         backgroundImage:
           "radial-gradient(circle at 50% 18%, rgba(59, 130, 246, 0.16) 0%, transparent 60%), radial-gradient(circle at 85% 85%, rgba(99, 102, 241, 0.08) 0%, transparent 45%)",
-        fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+        fontFamily:
+          "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
         position: "relative",
       }}
     >
@@ -74,7 +75,8 @@ export default async function Image() {
             background:
               "linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)",
             border: "1px solid rgba(255, 255, 255, 0.14)",
-            boxShadow: "0 10px 30px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.15)",
+            boxShadow:
+              "0 10px 30px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.15)",
           }}
         >
           <span
@@ -129,7 +131,8 @@ export default async function Image() {
             lineHeight: 1.5,
           }}
         >
-          Systems Architecture • DevOps • Full-Stack Development • Production Engineering
+          Systems Architecture • DevOps • Full-Stack Development • Production
+          Engineering
         </p>
 
         {/* Website */}
@@ -159,6 +162,6 @@ export default async function Image() {
     </div>,
     {
       ...size,
-    }
+    },
   );
 }

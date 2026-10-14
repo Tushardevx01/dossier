@@ -5,7 +5,11 @@ import {
   validateCredentialFile,
   generateSafeStorageKey,
 } from "@/server/storage/validation";
-import { extractR2Key, getPublicUrl, isR2Configured } from "@/server/storage/r2";
+import {
+  extractR2Key,
+  getPublicUrl,
+  isR2Configured,
+} from "@/server/storage/r2";
 import { validateAdminRequest } from "@/server/security/auth";
 
 describe("Credential Storage Validation", () => {
@@ -52,45 +56,56 @@ describe("Credential Storage Validation", () => {
 
   it("rejects invalid or corrupted magic bytes even with valid extension", async () => {
     const fakePdf = Buffer.from("NOT_A_REAL_PDF_HEADER_CONTENT");
-    await expect(validateCredentialFile(fakePdf, { allowedTypes: ["pdf"] })).rejects.toThrow(
-      /File content does not match any accepted format/
-    );
+    await expect(
+      validateCredentialFile(fakePdf, { allowedTypes: ["pdf"] }),
+    ).rejects.toThrow(/File content does not match any accepted format/);
   });
 
   it("rejects files exceeding size limit", async () => {
     const bigBuffer = Buffer.alloc(200);
-    await expect(validateCredentialFile(bigBuffer, { maxSizeBytes: 100 })).rejects.toThrow(
-      /File size exceeds/
-    );
+    await expect(
+      validateCredentialFile(bigBuffer, { maxSizeBytes: 100 }),
+    ).rejects.toThrow(/File size exceeds/);
   });
 
   it("generates safe, normalized R2 storage keys", () => {
     const key = generateSafeStorageKey("cert-123", "certificate", "pdf");
-    expect(key).toMatch(/^credentials\/cert-123\/certificate-[a-f0-9-]{36}\.pdf$/);
+    expect(key).toMatch(
+      /^credentials\/cert-123\/certificate-[a-f0-9-]{36}\.pdf$/,
+    );
 
     // Sanitizes traversal and weird characters
-    const dirtyKey = generateSafeStorageKey("../../../etc/passwd", "thumbnail", ".png");
+    const dirtyKey = generateSafeStorageKey(
+      "../../../etc/passwd",
+      "thumbnail",
+      ".png",
+    );
     expect(dirtyKey).not.toContain("..");
-    expect(dirtyKey).toMatch(/^credentials\/etcpasswd\/thumbnail-[a-f0-9-]{36}\.png$/);
+    expect(dirtyKey).toMatch(
+      /^credentials\/etcpasswd\/thumbnail-[a-f0-9-]{36}\.png$/,
+    );
   });
 });
 
 describe("Cloudflare R2 Abstraction", () => {
   it("does not treat external URLs as objects owned by this bucket", () => {
     vi.stubEnv("R2_PUBLIC_URL", "https://assets.example.com");
-    expect(extractR2Key("https://evil.example/credentials/42/certificate.pdf")).toBe("");
+    expect(
+      extractR2Key("https://evil.example/credentials/42/certificate.pdf"),
+    ).toBe("");
     expect(extractR2Key("credentials/42/../certificate.pdf")).toBe("");
     expect(extractR2Key("credentials/42/%2e%2e/certificate.pdf")).toBe("");
   });
 
   it("generates distinct keys for uploads in the same millisecond", () => {
     expect(generateSafeStorageKey(42, "certificate", "pdf")).not.toBe(
-      generateSafeStorageKey(42, "certificate", "pdf")
+      generateSafeStorageKey(42, "certificate", "pdf"),
     );
   });
   it("extracts R2 key from full public URL", () => {
     vi.stubEnv("R2_PUBLIC_URL", "https://pub-12345.r2.dev");
-    const url = "https://pub-12345.r2.dev/credentials/42/certificate-1718000.pdf";
+    const url =
+      "https://pub-12345.r2.dev/credentials/42/certificate-1718000.pdf";
     expect(extractR2Key(url)).toBe("credentials/42/certificate-1718000.pdf");
   });
 
@@ -109,7 +124,7 @@ describe("Cloudflare R2 Abstraction", () => {
     process.env.R2_PUBLIC_URL = "https://assets.example.com";
 
     expect(getPublicUrl("credentials/99/cert.pdf")).toBe(
-      "https://assets.example.com/credentials/99/cert.pdf"
+      "https://assets.example.com/credentials/99/cert.pdf",
     );
 
     process.env.R2_PUBLIC_URL = original;
@@ -182,8 +197,14 @@ describe("Admin Authorization for Credentials", () => {
   });
 
   it("handles alphanumeric credential IDs safely", () => {
-    const key = generateSafeStorageKey("330877722AAI26OFA", "certificate", "pdf");
-    expect(key).toMatch(/^credentials\/330877722AAI26OFA\/certificate-[a-f0-9-]{36}\.pdf$/);
+    const key = generateSafeStorageKey(
+      "330877722AAI26OFA",
+      "certificate",
+      "pdf",
+    );
+    expect(key).toMatch(
+      /^credentials\/330877722AAI26OFA\/certificate-[a-f0-9-]{36}\.pdf$/,
+    );
   });
 });
 
@@ -192,16 +213,20 @@ describe("Credential Download Endpoint", () => {
     "rejects malformed ID %s",
     async (id) => {
       const { GET } = await import("@/app/api/credentials/[id]/download/route");
-      const req = new Request("http://localhost:3000/api/credentials/invalid/download");
+      const req = new Request(
+        "http://localhost:3000/api/credentials/invalid/download",
+      );
       const res = await GET(req as import("next/server").NextRequest, {
         params: Promise.resolve({ id }),
       });
       expect(res.status).toBe(400);
-    }
+    },
   );
   it("rejects invalid non-numeric ID parameter", async () => {
     const { GET } = await import("@/app/api/credentials/[id]/download/route");
-    const req = new Request("http://localhost:3000/api/credentials/invalid/download");
+    const req = new Request(
+      "http://localhost:3000/api/credentials/invalid/download",
+    );
     const res = await GET(req as unknown as import("next/server").NextRequest, {
       params: Promise.resolve({ id: "invalid" }),
     });
@@ -218,14 +243,14 @@ describe("Credential Slug Utilities", () => {
     const { slugifyTitle } = await import("@/lib/credential-utils");
 
     expect(slugifyTitle("Agentic AI Certified Foundations Associate")).toBe(
-      "agentic-ai-certified-foundations-associate"
+      "agentic-ai-certified-foundations-associate",
     );
-    expect(slugifyTitle("Google Cloud Certified: Professional Cloud Architect")).toBe(
-      "google-cloud-certified-professional-cloud-architect"
-    );
-    expect(slugifyTitle("AWS Solutions Architect -- Associate (SAA-C03)!")).toBe(
-      "aws-solutions-architect-associate-saa-c03"
-    );
+    expect(
+      slugifyTitle("Google Cloud Certified: Professional Cloud Architect"),
+    ).toBe("google-cloud-certified-professional-cloud-architect");
+    expect(
+      slugifyTitle("AWS Solutions Architect -- Associate (SAA-C03)!"),
+    ).toBe("aws-solutions-architect-associate-saa-c03");
     expect(slugifyTitle("")).toBe("");
   });
 });
@@ -240,7 +265,8 @@ describe("Credential Schema Validation", () => {
       issuer: "Oracle University",
       issueDate: "2026-08-23T00:00:00.000Z",
       objectLink: "https://pub-r2.example.com/credentials/agentic-ai.pdf",
-      credentialLink: "https://catalog-education.oracle.com/pls/certview/sharebadge?id=TEST",
+      credentialLink:
+        "https://catalog-education.oracle.com/pls/certview/sharebadge?id=TEST",
       description: "Foundations of agentic systems and tool use.",
     };
 
@@ -299,7 +325,8 @@ describe("Credential Schema Validation", () => {
     const { CredentialJsonSchema } = await import("@/schemas");
 
     const largeMarkdown =
-      "# Large Document\n\n" + "This is a detailed technical write-up. ".repeat(500);
+      "# Large Document\n\n" +
+      "This is a detailed technical write-up. ".repeat(500);
     const payload = {
       title: "Agentic AI Certified Foundations Associate",
       issuer: "Oracle University",
@@ -362,7 +389,7 @@ This is an **agentic certification** article with *italic* text and \`inline_cod
     expect(html).toContain("<pre");
     expect(html).toContain("<hr");
     expect(html).toContain(
-      '<a href="https://example.com" target="_blank" rel="noopener noreferrer"'
+      '<a href="https://example.com" target="_blank" rel="noopener noreferrer"',
     );
   });
 
@@ -391,7 +418,9 @@ This is an **agentic certification** article with *italic* text and \`inline_cod
     const markdown = `## Overview\n\nThis is **bold** and has [a link](https://example.com) and \`code\`.\n\n- Bullet item`;
     const clean = stripMarkdown(markdown);
 
-    expect(clean).toBe("Overview This is bold and has a link and code. Bullet item");
+    expect(clean).toBe(
+      "Overview This is bold and has a link and code. Bullet item",
+    );
     expect(clean).not.toContain("##");
     expect(clean).not.toContain("**");
     expect(clean).not.toContain("`");

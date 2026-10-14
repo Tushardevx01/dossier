@@ -30,7 +30,7 @@ export async function GET() {
 
   // Remove undefined values
   const cleanInfo = Object.fromEntries(
-    Object.entries(versionInfo).filter(([, v]) => v !== undefined)
+    Object.entries(versionInfo).filter(([, v]) => v !== undefined),
   );
 
   return NextResponse.json(cleanInfo, {

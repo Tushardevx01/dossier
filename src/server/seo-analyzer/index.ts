@@ -15,7 +15,13 @@ import { runChecks, calculateScore, extractMetrics } from "./calculateScore";
 import type { SEOAnalysisResult, AnalyzerError } from "./types";
 
 // Re-export types for consumers
-export type { SEOAnalysisResult, SEOCheck, SEOMetrics, MetaTags, AnalyzerError } from "./types";
+export type {
+  SEOAnalysisResult,
+  SEOCheck,
+  SEOMetrics,
+  MetaTags,
+  AnalyzerError,
+} from "./types";
 
 // Re-export utilities
 export { validateUrl } from "./fetchHTML";
@@ -36,7 +42,9 @@ export { validateUrl } from "./fetchHTML";
  * }
  * ```
  */
-export async function analyzeSEO(url: string): Promise<SEOAnalysisResult | AnalyzerError> {
+export async function analyzeSEO(
+  url: string,
+): Promise<SEOAnalysisResult | AnalyzerError> {
   const startTime = Date.now();
 
   // Step 1: Fetch HTML
@@ -78,7 +86,7 @@ export async function analyzeSEO(url: string): Promise<SEOAnalysisResult | Analy
  * Type guard to check if result is an error
  */
 export function isAnalysisError(
-  result: SEOAnalysisResult | AnalyzerError
+  result: SEOAnalysisResult | AnalyzerError,
 ): result is AnalyzerError {
   return "code" in result && "message" in result && !("score" in result);
 }

@@ -64,7 +64,8 @@ const verifiedStaticActivity = [
   {
     id: "act-3",
     repo: "dossier",
-    message: "refactor: structured case study data architecture & command palette",
+    message:
+      "refactor: structured case study data architecture & command palette",
     date: "Sep 2026",
     url: "https://github.com/tushardevx01/dossier",
   },
@@ -87,14 +88,20 @@ export async function GET() {
         headers,
         next: { revalidate: 300 },
       }),
-      fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=6`, {
-        headers,
-        next: { revalidate: 300 },
-      }),
-      fetch(`https://api.github.com/users/${username}/events/public?per_page=10`, {
-        headers,
-        next: { revalidate: 300 },
-      }),
+      fetch(
+        `https://api.github.com/users/${username}/repos?sort=updated&per_page=6`,
+        {
+          headers,
+          next: { revalidate: 300 },
+        },
+      ),
+      fetch(
+        `https://api.github.com/users/${username}/events/public?per_page=10`,
+        {
+          headers,
+          next: { revalidate: 300 },
+        },
+      ),
     ]);
 
     let publicReposCount = 18;
@@ -130,11 +137,15 @@ export async function GET() {
 
     // Process events if OK
     if (eventsRes.status === "fulfilled" && eventsRes.value.ok) {
-      const eventsData = (await eventsRes.value.json()) as GitHubEventResponse[];
+      const eventsData =
+        (await eventsRes.value.json()) as GitHubEventResponse[];
       if (Array.isArray(eventsData) && eventsData.length > 0) {
         const pushEvents = eventsData
           .filter(
-            (e) => e.type === "PushEvent" && e.payload?.commits && e.payload.commits.length > 0
+            (e) =>
+              e.type === "PushEvent" &&
+              e.payload?.commits &&
+              e.payload.commits.length > 0,
           )
           .slice(0, 4)
           .map((e) => {
@@ -176,7 +187,7 @@ export async function GET() {
         headers: {
           "Cache-Control": "public, s-maxage=300, stale-while-revalidate=600",
         },
-      }
+      },
     );
   } catch {
     // Graceful fallback: return verified static data
@@ -192,7 +203,7 @@ export async function GET() {
         repos: verifiedStaticRepos,
         recentActivity: verifiedStaticActivity,
       },
-      { status: 200 }
+      { status: 200 },
     );
   }
 }

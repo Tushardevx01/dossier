@@ -21,7 +21,10 @@ export const DevopsRuntimePanel = ({ logs }: DevopsRuntimePanelProps) => {
 
   useEffect(() => {
     if (!logsRef.current) return;
-    logsRef.current.scrollTo({ top: logsRef.current.scrollHeight, behavior: "smooth" });
+    logsRef.current.scrollTo({
+      top: logsRef.current.scrollHeight,
+      behavior: "smooth",
+    });
   }, [logs]);
 
   return (
@@ -29,28 +32,41 @@ export const DevopsRuntimePanel = ({ logs }: DevopsRuntimePanelProps) => {
       <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-white/10">
         <div className="flex items-center gap-2">
           <span className="status-dot bg-emerald-400 animate-pulse" />
-          <p className={`${mono.className} text-[11px] uppercase tracking-wider text-white/80`}>
+          <p
+            className={`${mono.className} text-[11px] uppercase tracking-wider text-white/80`}
+          >
             Live Runtime Logs
           </p>
         </div>
-        <p className={`${mono.className} text-[11px] text-white/45`}>prod-eu-west-1</p>
+        <p className={`${mono.className} text-[11px] text-white/45`}>
+          prod-eu-west-1
+        </p>
       </div>
 
       <div className="px-4 py-4 border-b border-white/10">
         <p className="system-label mb-3">Service Indicators</p>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
           {serviceHealthTiles.map((tile) => (
-            <div key={tile.label} className="rounded-lg border border-white/10 bg-black/30 p-2.5">
+            <div
+              key={tile.label}
+              className="rounded-lg border border-white/10 bg-black/30 p-2.5"
+            >
               <div className="flex items-center gap-2">
-                <span className={`status-dot ${dotClassByState[tile.status]} h-2.5 w-2.5`} />
-                <span className={`${mono.className} text-xs text-white/80`}>{tile.label}</span>
+                <span
+                  className={`status-dot ${dotClassByState[tile.status]} h-2.5 w-2.5`}
+                />
+                <span className={`${mono.className} text-xs text-white/80`}>
+                  {tile.label}
+                </span>
               </div>
               <p
                 className={`${mono.className} text-[10px] mt-1.5 ${statusClassByState[tile.status]}`}
               >
                 {tile.status}
               </p>
-              <p className={`${mono.className} text-[10px] text-white/45 mt-1`}>{tile.note}</p>
+              <p className={`${mono.className} text-[10px] text-white/45 mt-1`}>
+                {tile.note}
+              </p>
             </div>
           ))}
         </div>

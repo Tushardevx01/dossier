@@ -33,7 +33,11 @@ function getStatusConfig(status?: string, liveUrl?: string): StatusConfig {
     };
   }
 
-  if (norm === "IN DEVELOPMENT" || norm === "DEVELOPMENT" || norm === "IN DEV") {
+  if (
+    norm === "IN DEVELOPMENT" ||
+    norm === "DEVELOPMENT" ||
+    norm === "IN DEV"
+  ) {
     return {
       label: "IN DEVELOPMENT",
       dotClass: "bg-amber-400",
@@ -99,7 +103,8 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
   const hasGithubUrl = Boolean(githubUrl);
 
   const statusConfig = getStatusConfig(project.status, liveUrl);
-  const displayTech = (project.tech?.length ? project.tech : project.technologies) || [];
+  const displayTech =
+    (project.tech?.length ? project.tech : project.technologies) || [];
   const tags = displayTech.slice(0, 4);
 
   const cardVariants: Variants = {
@@ -165,7 +170,10 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
       {/* Top Section */}
       <div className="relative z-10">
         {/* Status badge */}
-        <motion.div variants={childVariants} className="flex items-center justify-end mb-4">
+        <motion.div
+          variants={childVariants}
+          className="flex items-center justify-end mb-4"
+        >
           {/* Status badge */}
           <div
             className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border ${statusConfig.containerClass} shrink-0 transition-colors`}
@@ -216,7 +224,10 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
         </motion.p>
 
         {/* Technology Tags */}
-        <motion.div variants={childVariants} className="flex flex-wrap gap-2 mb-8">
+        <motion.div
+          variants={childVariants}
+          className="flex flex-wrap gap-2 mb-8"
+        >
           {tags.map((techItem) => {
             const Icon = getTechIcon(techItem);
             const iconColor = getTechColor(techItem);
@@ -240,7 +251,10 @@ export const ProjectCard = ({ project, index }: ProjectCardProps) => {
       </div>
 
       {/* Bottom Section (Role and Footer Action Bar) */}
-      <motion.div variants={childVariants} className="relative z-10 space-y-4 mt-auto">
+      <motion.div
+        variants={childVariants}
+        className="relative z-10 space-y-4 mt-auto"
+      >
         <p
           className={`${mono.className} text-[10px] sm:text-[11px] uppercase tracking-wider text-neutral-500 font-medium`}
         >

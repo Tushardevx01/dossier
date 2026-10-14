@@ -97,7 +97,7 @@ export function generateOrganizationStructuredData() {
 }
 
 export function generateEngineeringNotesItemListStructuredData(
-  notes: Array<{ slug: string; title: string; description: string }>
+  notes: Array<{ slug: string; title: string; description: string }>,
 ) {
   return {
     "@context": "https://schema.org",
@@ -134,7 +134,9 @@ export function generateSoftwareApplicationStructuredData(project: Project) {
   };
 }
 
-export function generateBreadcrumbListStructuredData(items: Array<{ name: string; url: string }>) {
+export function generateBreadcrumbListStructuredData(
+  items: Array<{ name: string; url: string }>,
+) {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",

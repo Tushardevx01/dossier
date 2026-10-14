@@ -18,7 +18,9 @@ export const CaseStudyShell: React.FC<CaseStudyShellProps> = ({
   children,
   footer,
 }) => {
-  const [activeSection, setActiveSection] = useState<string>(sections[0]?.id || "");
+  const [activeSection, setActiveSection] = useState<string>(
+    sections[0]?.id || "",
+  );
 
   // Set up scroll-spy observer
   useEffect(() => {
@@ -35,7 +37,9 @@ export const CaseStudyShell: React.FC<CaseStudyShellProps> = ({
         const visibleEntries = entries.filter((e) => e.isIntersecting);
         if (visibleEntries.length > 0) {
           visibleEntries.sort(
-            (a, b) => Math.abs(a.boundingClientRect.top) - Math.abs(b.boundingClientRect.top)
+            (a, b) =>
+              Math.abs(a.boundingClientRect.top) -
+              Math.abs(b.boundingClientRect.top),
           );
           setActiveSection(visibleEntries[0].target.id);
         }
@@ -43,7 +47,7 @@ export const CaseStudyShell: React.FC<CaseStudyShellProps> = ({
       {
         rootMargin: "-15% 0px -60% 0px",
         threshold: [0, 0.2, 0.5],
-      }
+      },
     );
 
     sectionElements.forEach((el) => observer.observe(el));
@@ -58,7 +62,9 @@ export const CaseStudyShell: React.FC<CaseStudyShellProps> = ({
     const elementRect = el.getBoundingClientRect().top;
     const offsetPosition = elementRect - bodyRect - offset;
 
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
 
     window.scrollTo({
       top: Math.max(0, offsetPosition),
@@ -82,7 +88,9 @@ export const CaseStudyShell: React.FC<CaseStudyShellProps> = ({
 
         {/* Main Editorial Case Study Flow */}
         <main className="flex-1 min-w-0 w-full">
-          <div className="space-y-20 sm:space-y-28 lg:space-y-32">{children}</div>
+          <div className="space-y-20 sm:space-y-28 lg:space-y-32">
+            {children}
+          </div>
           {footer}
         </main>
       </div>

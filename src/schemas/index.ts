@@ -8,14 +8,21 @@ const webUrl = z
   .refine((value) => {
     try {
       const url = new URL(value);
-      return ["https:", "http:"].includes(url.protocol) && !url.username && !url.password;
+      return (
+        ["https:", "http:"].includes(url.protocol) &&
+        !url.username &&
+        !url.password
+      );
     } catch {
       return false;
     }
   }, "Expected an HTTP(S) URL without credentials");
 const storageKey = z
   .string()
-  .regex(/^credentials\/[A-Za-z0-9_-]+\/[A-Za-z0-9_.-]+$/, "Invalid storage key");
+  .regex(
+    /^credentials\/[A-Za-z0-9_-]+\/[A-Za-z0-9_.-]+$/,
+    "Invalid storage key",
+  );
 const slug = z
   .string()
   .trim()
@@ -49,11 +56,13 @@ export type CredentialJsonInput = z.infer<typeof CredentialJsonSchema>;
  */
 export const UpdateCredentialJsonSchema = CredentialJsonSchema.partial().refine(
   (value) => Object.keys(value).length > 0,
-  "At least one field is required"
+  "At least one field is required",
 );
 
 export const UpdateJsonSchema = UpdateCredentialJsonSchema;
-export type UpdateCredentialJsonInput = z.infer<typeof UpdateCredentialJsonSchema>;
+export type UpdateCredentialJsonInput = z.infer<
+  typeof UpdateCredentialJsonSchema
+>;
 
 /**
  * Contact Form Validation Schema
@@ -71,7 +80,12 @@ export const ContactFormSchema = z.object({
   senderName: z
     .string()
     .transform((val) => val.replace(/[\r\n\t]+/g, " ").trim())
-    .pipe(z.string().min(1, "Name is required").max(80, "Name must be 80 characters or less")),
+    .pipe(
+      z
+        .string()
+        .min(1, "Name is required")
+        .max(80, "Name must be 80 characters or less"),
+    ),
 
   senderEmail: z
     .string()
@@ -102,11 +116,12 @@ export type ContactFormInput = z.infer<typeof ContactFormSchema>;
  * Validate contact form input
  * Returns either validated data or structured error
  */
-export function validateContactForm(
-  input: unknown
-):
+export function validateContactForm(input: unknown):
   | { success: true; data: ContactFormInput }
-  | { success: false; error: { code: string; message: string; field?: string } } {
+  | {
+      success: false;
+      error: { code: string; message: string; field?: string };
+    } {
   const result = ContactFormSchema.safeParse(input);
 
   if (result.success) {

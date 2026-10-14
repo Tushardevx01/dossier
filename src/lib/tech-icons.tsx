@@ -244,17 +244,28 @@ export interface TechBadgeProps {
   className?: string;
 }
 
-export const TechBadge: React.FC<TechBadgeProps> = ({ name, size = "sm", className = "" }) => {
+export const TechBadge: React.FC<TechBadgeProps> = ({
+  name,
+  size = "sm",
+  className = "",
+}) => {
   const Icon = getTechIcon(name);
   const color = getTechColor(name);
 
-  const sizeClasses = size === "md" ? "px-3.5 py-2 text-xs gap-2" : "px-3 py-1.5 text-xs gap-2";
+  const sizeClasses =
+    size === "md" ? "px-3.5 py-2 text-xs gap-2" : "px-3 py-1.5 text-xs gap-2";
 
   return (
     <span
       className={`inline-flex items-center rounded-lg font-mono text-neutral-300 bg-[#0c0c0e] border border-neutral-800 hover:border-neutral-700 transition-colors select-none ${sizeClasses} ${className}`}
     >
-      {Icon && <Icon className="w-3.5 h-3.5 shrink-0" style={{ color }} aria-hidden="true" />}
+      {Icon && (
+        <Icon
+          className="w-3.5 h-3.5 shrink-0"
+          style={{ color }}
+          aria-hidden="true"
+        />
+      )}
       <span>{name}</span>
     </span>
   );

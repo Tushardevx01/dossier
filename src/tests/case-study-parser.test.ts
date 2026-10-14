@@ -19,7 +19,9 @@ describe.skipIf(SKIP_DB)("Case Study Content Parser", () => {
   let caseStudiesData: CaseStudyRecord[];
 
   beforeAll(async () => {
-    const results = await Promise.all(slugs.map((slug) => getCaseStudyBySlug(slug)));
+    const results = await Promise.all(
+      slugs.map((slug) => getCaseStudyBySlug(slug)),
+    );
     caseStudiesData = results.filter(Boolean) as CaseStudyRecord[];
   });
 
@@ -70,7 +72,9 @@ describe.skipIf(SKIP_DB)("Case Study Content Parser", () => {
     const solutionsSec = parsed.sections.find((s) => s.id === "solutions");
     expect(solutionsSec).toBeDefined();
     expect(solutionsSec?.solutions.length).toBe(4);
-    expect(solutionsSec?.solutions[0].title).toContain("NODE FAILURE & RECOVERY");
+    expect(solutionsSec?.solutions[0].title).toContain(
+      "NODE FAILURE & RECOVERY",
+    );
   });
 
   it("extracts Technical Decisions and Measurable Outcomes", async () => {
@@ -134,7 +138,9 @@ describe.skipIf(SKIP_DB)("Case Study Content Parser", () => {
     expect(apiSec).toBeDefined();
     expect(apiSec?.tables.length).toBe(2);
     expect(apiSec?.tables[0].title).toBe("Implemented Production Endpoints");
-    expect(apiSec?.tables[1].title).toBe("Scaffolded Router Definitions in Repo");
+    expect(apiSec?.tables[1].title).toBe(
+      "Scaffolded Router Definitions in Repo",
+    );
     expect(apiSec?.tables[0].rows.length).toBe(6);
     expect(apiSec?.tables[1].rows.length).toBe(7);
   });

@@ -4,8 +4,13 @@ import { readBodyText, PayloadTooLargeError } from "./body";
 
 describe("bounded request bodies", () => {
   it("counts UTF-8 bytes rather than JavaScript characters", async () => {
-    const request = new Request("https://example.com", { method: "POST", body: "ééé" });
-    await expect(readBodyText(request, 5)).rejects.toBeInstanceOf(PayloadTooLargeError);
+    const request = new Request("https://example.com", {
+      method: "POST",
+      body: "ééé",
+    });
+    await expect(readBodyText(request, 5)).rejects.toBeInstanceOf(
+      PayloadTooLargeError,
+    );
   });
 
   it("cancels an oversized stream without trusting Content-Length", async () => {
@@ -19,12 +24,17 @@ describe("bounded request bodies", () => {
         cancel,
       }),
     } as Request;
-    await expect(readBodyText(request, 10)).rejects.toBeInstanceOf(PayloadTooLargeError);
+    await expect(readBodyText(request, 10)).rejects.toBeInstanceOf(
+      PayloadTooLargeError,
+    );
     expect(cancel).toHaveBeenCalledOnce();
   });
 
   it("reads a valid body intact", async () => {
-    const request = new Request("https://example.com", { method: "POST", body: "hello" });
+    const request = new Request("https://example.com", {
+      method: "POST",
+      body: "hello",
+    });
     await expect(readBodyText(request, 5)).resolves.toBe("hello");
   });
 });

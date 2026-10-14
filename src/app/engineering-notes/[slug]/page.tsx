@@ -3,7 +3,10 @@ import { notFound } from "next/navigation";
 
 import { ArticlePage } from "@/components/ArticlePage";
 import { JsonLd } from "@/components/shared/JsonLd";
-import { generateArticleStaticParams, getArticle } from "@/server/repositories/articleLoader";
+import {
+  generateArticleStaticParams,
+  getArticle,
+} from "@/server/repositories/articleLoader";
 import { buildPageMetadata, absoluteUrl } from "@/lib/seo";
 import {
   generateArticleStructuredData,
@@ -17,7 +20,9 @@ interface GenerateMetadataParams {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateMetadata({ params }: GenerateMetadataParams): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: GenerateMetadataParams): Promise<Metadata> {
   try {
     const { slug } = await params;
     const normalizedSlug = slug.trim().toLowerCase();
@@ -36,8 +41,15 @@ export async function generateMetadata({ params }: GenerateMetadataParams): Prom
       description: article.description,
       path: `/engineering-notes/${normalizedSlug}`,
       type: "article",
-      keywords: [article.category, "engineering", "software development", "Tushar Kanti Dey"],
-      image: absoluteUrl(`/engineering-notes/${normalizedSlug}/opengraph-image`),
+      keywords: [
+        article.category,
+        "engineering",
+        "software development",
+        "Tushar Kanti Dey",
+      ],
+      image: absoluteUrl(
+        `/engineering-notes/${normalizedSlug}/opengraph-image`,
+      ),
     });
   } catch {
     return {
@@ -51,10 +63,15 @@ export async function generateStaticParams() {
   return await generateArticleStaticParams();
 }
 
-function toSafeIsoDate(value: string | null | undefined, fallback = new Date()): string {
+function toSafeIsoDate(
+  value: string | null | undefined,
+  fallback = new Date(),
+): string {
   if (!value) return fallback.toISOString();
   const parsed = new Date(value);
-  return Number.isNaN(parsed.getTime()) ? fallback.toISOString() : parsed.toISOString();
+  return Number.isNaN(parsed.getTime())
+    ? fallback.toISOString()
+    : parsed.toISOString();
 }
 
 export default async function EngineeringNotesArticlePage({
@@ -81,7 +98,10 @@ export default async function EngineeringNotesArticlePage({
   const breadcrumbStructuredData = generateBreadcrumbListStructuredData([
     { name: "Tushar Kanti Dey", url: absoluteUrl("/") },
     { name: "Engineering Notes", url: absoluteUrl("/engineering-notes") },
-    { name: article.title, url: absoluteUrl(`/engineering-notes/${normalizedSlug}`) },
+    {
+      name: article.title,
+      url: absoluteUrl(`/engineering-notes/${normalizedSlug}`),
+    },
   ]);
 
   return (

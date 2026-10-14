@@ -10,12 +10,18 @@ import { DecisionRecord } from "./DecisionRecord";
 import { MetricGrid } from "./MetricGrid";
 import { TechnicalMatrix } from "./TechnicalMatrix";
 import { RelatedProjects } from "./RelatedProjects";
-import type { ParsedCaseStudy, ParsedSection, ParsedSupportingItem } from "@/lib/case-study-parser";
+import type {
+  ParsedCaseStudy,
+  ParsedSection,
+  ParsedSupportingItem,
+} from "@/lib/case-study-parser";
 import type { Project } from "@/types/project";
 import { mono } from "@/app/fonts";
 import { sanitizeHtml } from "@/lib/sanitize";
 
-const SupportingItemsGrid: React.FC<{ items: ParsedSupportingItem[] }> = ({ items }) => {
+const SupportingItemsGrid: React.FC<{ items: ParsedSupportingItem[] }> = ({
+  items,
+}) => {
   if (!items || items.length === 0) return null;
 
   return (
@@ -39,9 +45,13 @@ const SupportingItemsGrid: React.FC<{ items: ParsedSupportingItem[] }> = ({ item
 
           // If title was actually a key list (when num was an identifier), promote it to tag
           const showTag =
-            item.tag || (isNumCodeOrName && item.title !== item.num ? item.title : undefined);
+            item.tag ||
+            (isNumCodeOrName && item.title !== item.num
+              ? item.title
+              : undefined);
 
-          const showBadge = item.badge && item.badge !== showTitle ? item.badge : undefined;
+          const showBadge =
+            item.badge && item.badge !== showTitle ? item.badge : undefined;
 
           return (
             <div
@@ -142,9 +152,10 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
       sections.map((sec) => ({
         id: sec.id,
         number: sec.number,
-        label: sec.title.length > 25 ? sec.title.slice(0, 23) + "..." : sec.title,
+        label:
+          sec.title.length > 25 ? sec.title.slice(0, 23) + "..." : sec.title,
       })),
-    [sections]
+    [sections],
   );
 
   // Render individual sections based on type and pattern
@@ -172,7 +183,10 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
                   <p key={i}>{p}</p>
                 ))}
                 {sec.readingText.map((p, i) => (
-                  <p key={i} className="text-neutral-400 text-xs sm:text-sm font-light">
+                  <p
+                    key={i}
+                    className="text-neutral-400 text-xs sm:text-sm font-light"
+                  >
                     {p}
                   </p>
                 ))}
@@ -197,8 +211,12 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
                         key={i}
                         className="flex items-start gap-2.5 py-1.5 border-b border-neutral-900/60 last:border-0"
                       >
-                        <span className="text-emerald-400 font-bold shrink-0 select-none">▸</span>
-                        <span className="leading-snug text-neutral-300 font-sans text-xs">{c}</span>
+                        <span className="text-emerald-400 font-bold shrink-0 select-none">
+                          ▸
+                        </span>
+                        <span className="leading-snug text-neutral-300 font-sans text-xs">
+                          {c}
+                        </span>
                       </li>
                     ))}
                   </ul>
@@ -226,12 +244,18 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
           <div className="space-y-8">
             <div className="max-w-[760px] text-sm sm:text-base text-neutral-300 font-sans leading-relaxed space-y-4">
               {sec.intro.map((p, i) => (
-                <p key={i} className="text-base sm:text-lg text-neutral-200 font-light">
+                <p
+                  key={i}
+                  className="text-base sm:text-lg text-neutral-200 font-light"
+                >
                   {p}
                 </p>
               ))}
               {sec.readingText.map((p, i) => (
-                <p key={i} className="text-neutral-400 text-xs sm:text-sm font-light">
+                <p
+                  key={i}
+                  className="text-neutral-400 text-xs sm:text-sm font-light"
+                >
                   {p}
                 </p>
               ))}
@@ -256,11 +280,13 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
                   {sec.supportingItems.map((item, i) => (
                     <div key={i} className="space-y-2 min-w-0">
                       <div className="flex items-center gap-2 min-w-0">
-                        {item.num && item.num.toLowerCase() !== item.title.toLowerCase() && (
-                          <span className="font-mono text-xs text-emerald-400 font-bold select-none shrink-0">
-                            {item.num}
-                          </span>
-                        )}
+                        {item.num &&
+                          item.num.toLowerCase() !==
+                            item.title.toLowerCase() && (
+                            <span className="font-mono text-xs text-emerald-400 font-bold select-none shrink-0">
+                              {item.num}
+                            </span>
+                          )}
                         <h4 className="font-mono text-xs font-bold text-white uppercase tracking-wider break-words min-w-0">
                           {item.title}
                         </h4>
@@ -285,7 +311,10 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
                 <p key={i}>{p}</p>
               ))}
               {sec.readingText.map((p, i) => (
-                <p key={i} className="text-neutral-400 text-xs sm:text-sm font-light">
+                <p
+                  key={i}
+                  className="text-neutral-400 text-xs sm:text-sm font-light"
+                >
                   {p}
                 </p>
               ))}
@@ -306,7 +335,12 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
 
             {/* Tables if any (e.g. API endpoints, routing specifications) */}
             {sec.tables.map((tbl, i) => (
-              <TechnicalMatrix key={i} title={tbl.title} headers={tbl.headers} rows={tbl.rows} />
+              <TechnicalMatrix
+                key={i}
+                title={tbl.title}
+                headers={tbl.headers}
+                rows={tbl.rows}
+              />
             ))}
           </div>
         );
@@ -385,7 +419,10 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
                 <p key={i}>{p}</p>
               ))}
               {sec.readingText.map((p, i) => (
-                <p key={i} className="text-neutral-400 text-xs sm:text-sm font-light">
+                <p
+                  key={i}
+                  className="text-neutral-400 text-xs sm:text-sm font-light"
+                >
                   {p}
                 </p>
               ))}
@@ -439,7 +476,10 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
                 <p key={i}>{p}</p>
               ))}
               {sec.readingText.map((p, i) => (
-                <p key={i} className="text-neutral-400 text-xs sm:text-sm font-light">
+                <p
+                  key={i}
+                  className="text-neutral-400 text-xs sm:text-sm font-light"
+                >
                   {p}
                 </p>
               ))}
@@ -474,7 +514,12 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
 
             {/* Tables if any */}
             {sec.tables.map((tbl, i) => (
-              <TechnicalMatrix key={i} title={tbl.title} headers={tbl.headers} rows={tbl.rows} />
+              <TechnicalMatrix
+                key={i}
+                title={tbl.title}
+                headers={tbl.headers}
+                rows={tbl.rows}
+              />
             ))}
 
             {/* Supporting Items / Specifications */}
@@ -491,7 +536,10 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
                 <p key={i}>{p}</p>
               ))}
               {sec.readingText.map((p, i) => (
-                <p key={i} className="text-neutral-400 text-xs sm:text-sm font-light">
+                <p
+                  key={i}
+                  className="text-neutral-400 text-xs sm:text-sm font-light"
+                >
                   {p}
                 </p>
               ))}
@@ -499,7 +547,12 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
 
             {/* Tables if any */}
             {sec.tables.map((tbl, i) => (
-              <TechnicalMatrix key={i} title={tbl.title} headers={tbl.headers} rows={tbl.rows} />
+              <TechnicalMatrix
+                key={i}
+                title={tbl.title}
+                headers={tbl.headers}
+                rows={tbl.rows}
+              />
             ))}
 
             {/* Diagrams if any */}
@@ -528,7 +581,10 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
                 <p key={i}>{p}</p>
               ))}
               {sec.readingText.map((p, i) => (
-                <p key={i} className="text-neutral-400 text-xs sm:text-sm font-light">
+                <p
+                  key={i}
+                  className="text-neutral-400 text-xs sm:text-sm font-light"
+                >
                   {p}
                 </p>
               ))}
@@ -548,7 +604,12 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
 
             {/* Tables if any */}
             {sec.tables.map((tbl, i) => (
-              <TechnicalMatrix key={i} title={tbl.title} headers={tbl.headers} rows={tbl.rows} />
+              <TechnicalMatrix
+                key={i}
+                title={tbl.title}
+                headers={tbl.headers}
+                rows={tbl.rows}
+              />
             ))}
 
             {/* Supporting Items / Specifications */}
@@ -580,7 +641,10 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
                   <p key={i}>{p}</p>
                 ))}
                 {sec.readingText.map((p, i) => (
-                  <p key={i} className="text-neutral-400 text-xs sm:text-sm font-light">
+                  <p
+                    key={i}
+                    className="text-neutral-400 text-xs sm:text-sm font-light"
+                  >
                     {p}
                   </p>
                 ))}
@@ -589,7 +653,12 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
 
             {/* Tables if any */}
             {sec.tables.map((tbl, i) => (
-              <TechnicalMatrix key={i} title={tbl.title} headers={tbl.headers} rows={tbl.rows} />
+              <TechnicalMatrix
+                key={i}
+                title={tbl.title}
+                headers={tbl.headers}
+                rows={tbl.rows}
+              />
             ))}
 
             {/* Diagrams if any */}
@@ -631,7 +700,9 @@ export const CaseStudyRenderer: React.FC<CaseStudyRendererProps> = ({
               sec.rawContentHtml && (
                 <div
                   className="case-study-content text-neutral-300 max-w-[760px] leading-relaxed text-sm sm:text-base space-y-4"
-                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(sec.rawContentHtml) }}
+                  dangerouslySetInnerHTML={{
+                    __html: sanitizeHtml(sec.rawContentHtml),
+                  }}
                 />
               )}
           </div>

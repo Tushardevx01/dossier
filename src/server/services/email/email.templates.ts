@@ -7,7 +7,10 @@ import "server-only";
  * Separated from transport for easy testing and modification.
  */
 
-import { generateContactConfirmationEmail, generateContactNotificationEmail } from "./templates";
+import {
+  generateContactConfirmationEmail,
+  generateContactNotificationEmail,
+} from "./templates";
 
 export interface ContactEmailData {
   userName: string;
@@ -39,7 +42,9 @@ export function renderContactEmail(data: ContactEmailData): string {
 /**
  * Render contact notification email to HTML (sent to owner)
  */
-export function renderContactNotificationEmail(data: ContactNotificationData): string {
+export function renderContactNotificationEmail(
+  data: ContactNotificationData,
+): string {
   return generateContactNotificationEmail({
     name: data.userName,
     email: data.userEmail,

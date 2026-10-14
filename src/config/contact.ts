@@ -22,7 +22,9 @@ function sanitizeWhatsAppNumber(value: string): string {
   return value.replace(/[^\d]/g, "");
 }
 
-export function buildContactSocialLinks(usernames: ContactSocialUsernames): ContactSocialLink[] {
+export function buildContactSocialLinks(
+  usernames: ContactSocialUsernames,
+): ContactSocialLink[] {
   return [
     {
       key: "github",

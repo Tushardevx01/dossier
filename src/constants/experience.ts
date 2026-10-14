@@ -38,7 +38,15 @@ export const experienceData = [
       "Converted design assets into production-grade TypeScript implementations with minimal drift.",
       "Improved collaboration quality between design and engineering by using explicit implementation specs.",
     ],
-    technologies: ["Figma", "GIMP", "Inkscape", "TypeScript", "Supabase", "Docker", "Google Cloud"],
+    technologies: [
+      "Figma",
+      "GIMP",
+      "Inkscape",
+      "TypeScript",
+      "Supabase",
+      "Docker",
+      "Google Cloud",
+    ],
     url: "https://www.namespace.world/",
   },
 ];

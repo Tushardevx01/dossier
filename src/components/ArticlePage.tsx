@@ -48,12 +48,13 @@ export function ArticlePage({ post, slug }: ArticlePageProps) {
             <TakeawaysSection takeaways={post.whatILearned} />
 
             {/* Improvements Section */}
-            {Array.isArray(post.improvements) && post.improvements.length > 0 && (
-              <>
-                <div className="h-16 md:h-20" />
-                <ImprovementsSection improvements={post.improvements} />
-              </>
-            )}
+            {Array.isArray(post.improvements) &&
+              post.improvements.length > 0 && (
+                <>
+                  <div className="h-16 md:h-20" />
+                  <ImprovementsSection improvements={post.improvements} />
+                </>
+              )}
           </div>
         </div>
       </PrismHighlighter>
@@ -79,7 +80,10 @@ function TakeawaysSection({ takeaways }: { takeaways: string[] }) {
             key={i}
             className="flex gap-4 p-4 rounded-lg border border-zinc-800/50 bg-zinc-900/20 hover:bg-zinc-900/40 transition-colors"
           >
-            <span className="text-cyan-400 font-bold mt-1 flex-shrink-0" aria-hidden="true">
+            <span
+              className="text-cyan-400 font-bold mt-1 flex-shrink-0"
+              aria-hidden="true"
+            >
               •
             </span>
             <p className="text-base text-zinc-300 leading-relaxed">{point}</p>
@@ -121,7 +125,10 @@ function ImprovementsSection({
             key={i}
             className="flex gap-4 p-4 rounded-lg border border-zinc-800/50 bg-zinc-900/20 hover:bg-zinc-900/40 transition-colors"
           >
-            <span className="text-amber-400 font-bold mt-1 flex-shrink-0" aria-hidden="true">
+            <span
+              className="text-amber-400 font-bold mt-1 flex-shrink-0"
+              aria-hidden="true"
+            >
               →
             </span>
             <p className="text-base text-zinc-300 leading-relaxed">{point}</p>
@@ -140,7 +147,9 @@ function ImprovementsSection({
  * - JSON stringified: '["item1", "item2"]'
  * - Invalid/null/empty cases
  */
-function normalizeStringArray(value: string[] | string | null | undefined): string[] {
+function normalizeStringArray(
+  value: string[] | string | null | undefined,
+): string[] {
   if (!value) return [];
 
   // Already an array
@@ -158,7 +167,9 @@ function normalizeStringArray(value: string[] | string | null | undefined): stri
     try {
       const parsed = JSON.parse(value);
       if (Array.isArray(parsed)) {
-        return parsed.filter((item): item is string => typeof item === "string");
+        return parsed.filter(
+          (item): item is string => typeof item === "string",
+        );
       }
     } catch {
       // Invalid JSON, return empty array
@@ -182,7 +193,10 @@ function ArticleFooter() {
             replace
             className="inline-flex items-center gap-2 text-sm uppercase tracking-widest font-medium text-zinc-400 hover:text-white transition-colors group"
           >
-            <span className="group-hover:-translate-x-1 transition-transform" aria-hidden="true">
+            <span
+              className="group-hover:-translate-x-1 transition-transform"
+              aria-hidden="true"
+            >
               ←
             </span>
             Back to Notes
@@ -190,7 +204,10 @@ function ArticleFooter() {
 
           <div className="text-xs text-zinc-600">
             Engineering insights by{" "}
-            <Link href="/" className="text-zinc-400 hover:text-white transition-colors">
+            <Link
+              href="/"
+              className="text-zinc-400 hover:text-white transition-colors"
+            >
               Tushar Kanti Dey
             </Link>
           </div>

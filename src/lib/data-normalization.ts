@@ -56,7 +56,9 @@ export function normalizeArray(value: unknown): string[] {
         try {
           const parsedUnwrapped = JSON.parse(unwrapped);
           if (Array.isArray(parsedUnwrapped)) {
-            return parsedUnwrapped.filter((item): item is string => typeof item === "string");
+            return parsedUnwrapped.filter(
+              (item): item is string => typeof item === "string",
+            );
           }
         } catch {
           // continue to standard parse
@@ -74,7 +76,9 @@ export function normalizeArray(value: unknown): string[] {
 
       // Check if parse result is an array
       if (Array.isArray(parsed)) {
-        return parsed.filter((item): item is string => typeof item === "string");
+        return parsed.filter(
+          (item): item is string => typeof item === "string",
+        );
       }
     } catch {
       // Silent fail - return empty array
@@ -94,7 +98,9 @@ export function normalizeArray(value: unknown): string[] {
  * normalizeObject('{"key":"value"}') → { key: 'value' }
  * normalizeObject({key: 'value'}) → { key: 'value' }
  */
-export function normalizeObject<T extends Record<string, unknown>>(value: unknown): T {
+export function normalizeObject<T extends Record<string, unknown>>(
+  value: unknown,
+): T {
   if (!value) return {} as T;
 
   if (typeof value === "object" && value !== null) {
@@ -129,5 +135,7 @@ export function isArrayLike(value: unknown): value is string[] {
  * Type guard: Check if array contains only strings
  */
 export function isStringArray(value: unknown): value is string[] {
-  return Array.isArray(value) && value.every((item) => typeof item === "string");
+  return (
+    Array.isArray(value) && value.every((item) => typeof item === "string")
+  );
 }

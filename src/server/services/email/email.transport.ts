@@ -39,7 +39,10 @@ export interface SendEmailResult {
  * Prevents issues when environment variables are copied into cloud providers (like Vercel)
  * with quotation marks or formatted with spaces.
  */
-function sanitizeConfig(config: EmailConfig): { from: string; password: string } {
+function sanitizeConfig(config: EmailConfig): {
+  from: string;
+  password: string;
+} {
   return {
     from: config.from.replace(/^["']|["']$/g, "").trim(),
     password: config.password.replace(/^["']|["']$/g, "").replace(/\s+/g, ""),
@@ -80,7 +83,7 @@ function createTransporter(
   port: number,
   user: string,
   pass: string,
-  servername: string
+  servername: string,
 ): Transporter {
   const isSecure = port === 465;
 
@@ -130,7 +133,7 @@ function isNetworkError(error: unknown): boolean {
 async function sendViaResend(
   message: EmailMessage,
   apiKey: string,
-  fromEmail: string
+  fromEmail: string,
 ): Promise<SendEmailResult> {
   try {
     const sender = process.env.RESEND_FROM || `Tushar Kanti Dey <${fromEmail}>`;
@@ -152,7 +155,8 @@ async function sendViaResend(
 
     const data = await response.json();
     if (!response.ok) {
-      const errorMsg = data?.message || data?.error || `Resend error (${response.status})`;
+      const errorMsg =
+        data?.message || data?.error || `Resend error (${response.status})`;
       logger.error("Failed to send email via Resend", { error: errorMsg });
       return { success: false, error: String(errorMsg) };
     }
@@ -160,7 +164,8 @@ async function sendViaResend(
     logger.info("Email sent successfully via Resend", { messageId: data.id });
     return { success: true, messageId: data.id };
   } catch (err) {
-    const errorMsg = err instanceof Error ? err.message : "Unknown Resend error";
+    const errorMsg =
+      err instanceof Error ? err.message : "Unknown Resend error";
     logger.error("Failed to send email via Resend", { error: errorMsg });
     return { success: false, error: errorMsg };
   }
@@ -171,7 +176,7 @@ async function sendViaResend(
  */
 export async function sendEmail(
   message: EmailMessage,
-  config: EmailConfig
+  config: EmailConfig,
 ): Promise<SendEmailResult> {
   const { from: cleanFrom, password: cleanPass } = sanitizeConfig(config);
 
@@ -182,10 +187,18 @@ export async function sendEmail(
   const smtpHost = process.env.SMTP_HOST || "smtp.gmail.com";
   const resolvedHost = await resolveIpv4Host(smtpHost);
 
-  const defaultPort = process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : 465;
+  const defaultPort = process.env.SMTP_PORT
+    ? Number(process.env.SMTP_PORT)
+    : 465;
   const fallbackPort = defaultPort === 465 ? 587 : 465;
 
-  let transport = createTransporter(resolvedHost, defaultPort, cleanFrom, cleanPass, smtpHost);
+  let transport = createTransporter(
+    resolvedHost,
+    defaultPort,
+    cleanFrom,
+    cleanPass,
+    smtpHost,
+  );
 
   try {
     const info = await transport.sendMail({
@@ -199,7 +212,10 @@ export async function sendEmail(
       },
     });
 
-    logger.info("Email sent successfully", { messageId: info.messageId, port: defaultPort });
+    logger.info("Email sent successfully", {
+      messageId: info.messageId,
+      port: defaultPort,
+    });
     return { success: true, messageId: info.messageId };
   } catch (primaryError) {
     const errObj = primaryError as Record<string, unknown> & Error;
@@ -222,7 +238,13 @@ export async function sendEmail(
       });
 
       try {
-        transport = createTransporter(resolvedHost, fallbackPort, cleanFrom, cleanPass, smtpHost);
+        transport = createTransporter(
+          resolvedHost,
+          fallbackPort,
+          cleanFrom,
+          cleanPass,
+          smtpHost,
+        );
         const info = await transport.sendMail({
           from: `"Tushar Kanti Dey - Contact Team" <${cleanFrom}>`,
           to: message.to,

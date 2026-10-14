@@ -50,13 +50,16 @@ async function runEmailVerificationBestEffort(
   email: string,
   apiKey: string,
   requestId: string,
-  clientIdentifier: string
+  clientIdentifier: string,
 ): Promise<void> {
   try {
     const verification = await verifyEmailAddress(email, apiKey, requestId);
 
     if (verification.valid) {
-      logger.info("Email verification completed", { requestId, clientIdentifier });
+      logger.info("Email verification completed", {
+        requestId,
+        clientIdentifier,
+      });
     }
   } catch (error) {
     logger.warn("Email verification raised an unexpected error", {
@@ -74,19 +77,22 @@ async function runEmailVerificationBestEffort(
  */
 export async function processContactSubmission(
   request: ContactRequest,
-  config: ContactServiceConfig
+  config: ContactServiceConfig,
 ): Promise<ContactResult> {
   const { body, clientIdentifier, requestId } = request;
 
   try {
-    logger.info("Processing contact submission", { requestId, clientIdentifier });
+    logger.info("Processing contact submission", {
+      requestId,
+      clientIdentifier,
+    });
 
     // 1. Rate limit check
     const rateLimitKey = createRateLimitKey("contact", clientIdentifier);
     const rateLimit = await checkRateLimit(
       rateLimitKey,
       CONTACT_RATE_LIMIT_MAX_REQUESTS,
-      CONTACT_RATE_LIMIT_WINDOW_MS
+      CONTACT_RATE_LIMIT_WINDOW_MS,
     );
 
     if (!rateLimit.allowed) {
@@ -97,7 +103,9 @@ export async function processContactSubmission(
       });
       return {
         success: false,
-        error: Errors.rateLimitExceeded(rateLimit.retryAfterSeconds, { requestId }),
+        error: Errors.rateLimitExceeded(rateLimit.retryAfterSeconds, {
+          requestId,
+        }),
       };
     }
 
@@ -130,7 +138,7 @@ export async function processContactSubmission(
         formData.senderEmail,
         config.emailApiKey,
         requestId,
-        clientIdentifier
+        clientIdentifier,
       );
     }
 
@@ -159,7 +167,7 @@ export async function processContactSubmission(
           subject: "Request Received - Tushar Kanti Dey",
           html: htmlContent,
         },
-        { from: config.emailFrom, password: config.emailPassword }
+        { from: config.emailFrom, password: config.emailPassword },
       ),
       sendEmail(
         {
@@ -168,7 +176,7 @@ export async function processContactSubmission(
           html: ownerHtmlContent,
           replyTo: formData.senderEmail,
         },
-        { from: config.emailFrom, password: config.emailPassword }
+        { from: config.emailFrom, password: config.emailPassword },
       ),
     ]);
 
@@ -185,20 +193,27 @@ export async function processContactSubmission(
       };
     }
 
-    logger.info("Contact submission processed successfully", { requestId, clientIdentifier });
+    logger.info("Contact submission processed successfully", {
+      requestId,
+      clientIdentifier,
+    });
     return { success: true, message: "Message has been sent successfully" };
   } catch (error) {
     logger.exception(
-      error instanceof Error ? error : new Error("Unexpected contact submission failure"),
+      error instanceof Error
+        ? error
+        : new Error("Unexpected contact submission failure"),
       {
         requestId,
         clientIdentifier,
-      }
+      },
     );
 
     return {
       success: false,
-      error: Errors.internal("Failed to process contact submission", { requestId }),
+      error: Errors.internal("Failed to process contact submission", {
+        requestId,
+      }),
     };
   }
 }
@@ -207,7 +222,9 @@ export async function processContactSubmission(
  * Validate request body size
  */
 export function isValidBodySize(body: string): boolean {
-  return body.length > 0 && Buffer.byteLength(body, "utf8") <= CONTACT_MAX_BODY_BYTES;
+  return (
+    body.length > 0 && Buffer.byteLength(body, "utf8") <= CONTACT_MAX_BODY_BYTES
+  );
 }
 
 /**

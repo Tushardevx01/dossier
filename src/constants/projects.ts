@@ -134,7 +134,8 @@ export const projectsData: Project[] = [
           "Ensures predictable, reproducible work distribution across all healthy ONLINE nodes via sorted IDs and persistent cursor.",
         tradeoff:
           "V1 does not factor in dynamic CPU/RAM utilization when choosing the target worker node.",
-        outcome: "Deterministic testability and zero starvation across heterogeneous worker nodes.",
+        outcome:
+          "Deterministic testability and zero starvation across heterogeneous worker nodes.",
       },
       {
         technology: "PostgreSQL V2 Foundation",
@@ -217,7 +218,14 @@ export const projectsData: Project[] = [
     year: "2026",
     timeline: "Feb 2026 — Present",
     status: "Active",
-    technologies: ["TypeScript", "Python", "NestJS", "Kafka", "Docker", "MongoDB"],
+    technologies: [
+      "TypeScript",
+      "Python",
+      "NestJS",
+      "Kafka",
+      "Docker",
+      "MongoDB",
+    ],
     tech: ["TypeScript", "Python", "NestJS", "Kafka", "Docker"],
     problem:
       "Modern containerized systems fail through OOM conditions, timeouts, crash loops, port collisions, memory leaks, and permission errors. SRE teams require a closed-loop platform that detects, diagnoses, evaluates safety, remediates, and audits without external cloud dependencies.",
@@ -319,7 +327,8 @@ export const projectsData: Project[] = [
         technology: "SentenceTransformers + FAISS",
         reason:
           "Generates compact 384-dimensional vector embeddings locally and executes sub-millisecond similarity search over historical incidents.",
-        tradeoff: "Requires local model weight storage and Python runtime sidecar.",
+        tradeoff:
+          "Requires local model weight storage and Python runtime sidecar.",
         outcome:
           "Completely air-gapped, zero-cloud semantic matching against known infrastructure incident patterns.",
       },
@@ -338,7 +347,8 @@ export const projectsData: Project[] = [
           "Provides enterprise-grade TypeScript modularity, dependency injection, and clean separation between watchers, orchestrators, and actuators.",
         tradeoff:
           "Framework boilerplate and lifecycle structure compared to minimalist Express scripts.",
-        outcome: "Highly testable, maintainable SRE control plane with clear domain boundaries.",
+        outcome:
+          "Highly testable, maintainable SRE control plane with clear domain boundaries.",
       },
     ],
     results: [
@@ -358,12 +368,14 @@ export const projectsData: Project[] = [
       {
         value: "02",
         label: "AIR-GAPPED",
-        description: "Services operate inside a private Docker bridge with zero external egress.",
+        description:
+          "Services operate inside a private Docker bridge with zero external egress.",
       },
       {
         value: "03",
         label: "POLICY-GATED",
-        description: "Automatic remediation gated by confidence >= 0.85 and LOW risk thresholds.",
+        description:
+          "Automatic remediation gated by confidence >= 0.85 and LOW risk thresholds.",
       },
       {
         value: "04",
@@ -494,7 +506,8 @@ export const projectsData: Project[] = [
           "Provides modern React component architecture with explicit server and client boundaries, native layout nesting, and file-based routing.",
         tradeoff:
           "Requires disciplined demarcation between server-side data loaders and interactive client components.",
-        outcome: "Streamlined full-stack architecture with zero REST API boilerplate.",
+        outcome:
+          "Streamlined full-stack architecture with zero REST API boilerplate.",
       },
       {
         technology: "Server Actions",
@@ -509,7 +522,8 @@ export const projectsData: Project[] = [
         technology: "Appwrite BaaS",
         reason:
           "Delivers managed user authentication, document collections, encrypted document file storage, and SMS messaging without custom database operations.",
-        tradeoff: "Coupled to Appwrite's document modeling conventions and SDK interfaces.",
+        tradeoff:
+          "Coupled to Appwrite's document modeling conventions and SDK interfaces.",
         outcome:
           "Rapid, reliable full-stack execution covering authentication, database, storage, and notifications.",
       },
@@ -517,7 +531,8 @@ export const projectsData: Project[] = [
         technology: "Zod",
         reason:
           "Single source of truth for runtime input validation and automatic TypeScript type inference across client forms and server actions.",
-        tradeoff: "Schemas must be maintained alongside changing product requirements.",
+        tradeoff:
+          "Schemas must be maintained alongside changing product requirements.",
         outcome:
           "Zero runtime type coercion vulnerabilities and instantaneous inline form validation feedback.",
       },
@@ -616,7 +631,8 @@ export const projectsData: Project[] = [
       },
       {
         title: "Real-Time Call State Synchronization",
-        description: "The client cannot assume a meeting room is immediately ready or accessible.",
+        description:
+          "The client cannot assume a meeting room is immediately ready or accessible.",
         solution:
           "Inspected call state hooks to handle loading states, future scheduled meetings, already-ended calls, and unauthorized access gracefully.",
       },
@@ -642,7 +658,8 @@ export const projectsData: Project[] = [
         technology: "Stream Video SDK",
         reason:
           "Provides production-grade real-time video infrastructure without building custom WebRTC signaling and SFU servers.",
-        tradeoff: "Meeting models and call parameters conform to Stream Video SDK contracts.",
+        tradeoff:
+          "Meeting models and call parameters conform to Stream Video SDK contracts.",
         outcome:
           "Rapid delivery of high-reliability video calls, speaking indicators, and call diagnostics.",
       },
@@ -652,7 +669,8 @@ export const projectsData: Project[] = [
           "Consolidates application routes, dynamic meeting parameters, and server actions for token generation into a single framework.",
         tradeoff:
           "Requires strict separation between server-side token generation and client-side real-time media hooks.",
-        outcome: "Modular codebase with isolated secret keys and zero REST boilerplate.",
+        outcome:
+          "Modular codebase with isolated secret keys and zero REST boilerplate.",
       },
       {
         technology: "Componentized Call UI",

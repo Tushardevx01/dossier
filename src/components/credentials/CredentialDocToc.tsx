@@ -27,7 +27,7 @@ export function CredentialDocToc() {
           }
         }
       },
-      { rootMargin: "-15% 0px -65% 0px" }
+      { rootMargin: "-15% 0px -65% 0px" },
     );
 
     for (const item of SECTIONS) {

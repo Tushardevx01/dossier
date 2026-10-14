@@ -8,13 +8,26 @@ import "server-only";
  */
 
 import { load } from "cheerio";
-import type { ParsedContent, MetaTags, HeadingStructure, AnalyzerError } from "./types";
+import type {
+  ParsedContent,
+  MetaTags,
+  HeadingStructure,
+  AnalyzerError,
+} from "./types";
 
 /** Cheerio document type */
 type CheerioDocument = ReturnType<typeof load>;
 
 /** Tags to remove before content extraction */
-const REMOVE_TAGS = ["script", "style", "noscript", "svg", "iframe", "template", "canvas"];
+const REMOVE_TAGS = [
+  "script",
+  "style",
+  "noscript",
+  "svg",
+  "iframe",
+  "template",
+  "canvas",
+];
 
 /** Attributes that contain hidden content */
 const HIDDEN_SELECTORS = [
@@ -73,7 +86,11 @@ function extractHeadings($: CheerioDocument): HeadingStructure {
 /**
  * Analyzes images for alt attribute presence
  */
-function analyzeImages($: CheerioDocument): { total: number; withAlt: number; withoutAlt: number } {
+function analyzeImages($: CheerioDocument): {
+  total: number;
+  withAlt: number;
+  withoutAlt: number;
+} {
   const images = $("img");
   let withAlt = 0;
   let withoutAlt = 0;
@@ -175,6 +192,8 @@ export function parseContent(html: string): ParsedContent | AnalyzerError {
 /**
  * Type guard to check if result is an error
  */
-export function isParseError(result: ParsedContent | AnalyzerError): result is AnalyzerError {
+export function isParseError(
+  result: ParsedContent | AnalyzerError,
+): result is AnalyzerError {
   return "code" in result && "message" in result && !("text" in result);
 }

@@ -110,7 +110,9 @@ export interface ParsedCaseStudy {
  * Strips or cleans decorative terminal-style double slashes ("//") from titles,
  * numbers, badges, and category labels while preserving formatting.
  */
-export function cleanDecorativeSlashes(input: string | undefined | null): string {
+export function cleanDecorativeSlashes(
+  input: string | undefined | null,
+): string {
   if (!input) return "";
   let s = input.trim();
   // Strip leading //
@@ -118,7 +120,10 @@ export function cleanDecorativeSlashes(input: string | undefined | null): string
   // Strip trailing //
   s = s.replace(/\s*\/\/\s*$/, "");
   // Strip category suffixes like " // ARCHITECTURE", " // DESIGN", " // SPEC"
-  s = s.replace(/\s*(?<!:)\/\/\s*(ARCHITECTURE|DESIGN|SPEC|SYSTEM|PATTERN|DIAGRAM)$/i, "");
+  s = s.replace(
+    /\s*(?<!:)\/\/\s*(ARCHITECTURE|DESIGN|SPEC|SYSTEM|PATTERN|DIAGRAM)$/i,
+    "",
+  );
   // Replace internal " // " with " — " without corrupting URLs (e.g. https://)
   s = s.replace(/\s*(?<!:)\/\/\s*/g, " — ");
   return s.trim();
@@ -130,13 +135,13 @@ export function cleanDecorativeSlashes(input: string | undefined | null): string
 function extractDiagram(
   $: cheerio.CheerioAPI,
   $pre: ReturnType<cheerio.CheerioAPI>,
-  index: number
+  index: number,
 ): ParsedDiagram {
   const $container = $pre.closest(".rounded-xl, .border, .bg-\\[\\#070709\\]");
 
   let title = $container
     .find(
-      ".border-b span.text-neutral-400, .border-b span.font-semibold, span.text-\\[11px\\], span.font-semibold"
+      ".border-b span.text-neutral-400, .border-b span.font-semibold, span.text-\\[11px\\], span.font-semibold",
     )
     .first()
     .text()
@@ -242,17 +247,27 @@ function extractDiagram(
       const padding = " ".repeat(l1Indent);
       ascii = padding + ascii;
       rawHtml = rawHtml.replace(/(<span[^>]*>)([┌╭])/, `$1${padding}$2`);
-    } else if (l0Indent === 0 && l0.trim().length > 0 && l0.trim().length < 25) {
+    } else if (
+      l0Indent === 0 &&
+      l0.trim().length > 0 &&
+      l0.trim().length < 25
+    ) {
       const l0Trim = l0.trim();
       for (let i = 1; i <= Math.min(3, $divs.length - 1); i++) {
         const lineText = $divs.eq(i).text();
         const stemIdx = lineText.search(/[│↓▼|]/);
         if (stemIdx >= 4) {
-          const neededPadding = Math.max(0, Math.round(stemIdx - l0Trim.length / 2));
+          const neededPadding = Math.max(
+            0,
+            Math.round(stemIdx - l0Trim.length / 2),
+          );
           if (neededPadding > 2) {
             const padding = " ".repeat(neededPadding);
             ascii = padding + ascii;
-            rawHtml = rawHtml.replace(/(<span[^>]*>)([^<\s])/, `$1${padding}$2`);
+            rawHtml = rawHtml.replace(
+              /(<span[^>]*>)([^<\s])/,
+              `$1${padding}$2`,
+            );
           }
           break;
         }
@@ -287,7 +302,9 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
     const id = $sec.attr("id") || `section-${idx}`;
     const rawHeading = $sec.find("h2, h3").first().text().trim();
     const title =
-      cleanDecorativeSlashes(rawHeading.replace(/^\s*\d+[\s/.-]*/, "").trim()) || id.toUpperCase();
+      cleanDecorativeSlashes(
+        rawHeading.replace(/^\s*\d+[\s/.-]*/, "").trim(),
+      ) || id.toUpperCase();
     const number = String(idx + 1).padStart(2, "0");
 
     // Optional badge from section heading (scoped only to direct section header container, not inner cards)
@@ -295,7 +312,9 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
     const $headerDiv = $sec.children("div.border-b, div").first();
     if ($headerDiv.length > 0 && $headerDiv.find("h2, h3").length > 0) {
       const rawBadge = $headerDiv
-        .find("span.text-emerald-400, span.text-neutral-500, span.text-\\[10px\\]")
+        .find(
+          "span.text-emerald-400, span.text-neutral-500, span.text-\\[10px\\]",
+        )
         .first()
         .text()
         .trim();
@@ -329,9 +348,17 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
       lowerId === "deep-dives"
     ) {
       sectionType = "solutions";
-    } else if (lowerId === "decisions" || lowerId === "tradeoffs" || lowerId.includes("decision")) {
+    } else if (
+      lowerId === "decisions" ||
+      lowerId === "tradeoffs" ||
+      lowerId.includes("decision")
+    ) {
       sectionType = "decisions";
-    } else if (lowerId === "outcomes" || lowerId === "results" || lowerId === "metrics") {
+    } else if (
+      lowerId === "outcomes" ||
+      lowerId === "results" ||
+      lowerId === "metrics"
+    ) {
       sectionType = "outcomes";
     } else if (
       lowerId.includes("state") ||
@@ -358,9 +385,15 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
       sectionType = "problem";
     } else if (lowerTitle.includes("approach")) {
       sectionType = "approach";
-    } else if (lowerTitle.includes("architecture") || lowerTitle.includes("topology")) {
+    } else if (
+      lowerTitle.includes("architecture") ||
+      lowerTitle.includes("topology")
+    ) {
       sectionType = "architecture";
-    } else if (lowerTitle.includes("engineering challenges") || lowerTitle === "challenges") {
+    } else if (
+      lowerTitle.includes("engineering challenges") ||
+      lowerTitle === "challenges"
+    ) {
       sectionType = "challenges";
     } else if (
       lowerTitle.includes("solutions") ||
@@ -384,11 +417,20 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
       lowerTitle.includes("engineering verification")
     ) {
       sectionType = "outcomes";
-    } else if (lowerTitle.includes("state machine") || lowerTitle.includes("states")) {
+    } else if (
+      lowerTitle.includes("state machine") ||
+      lowerTitle.includes("states")
+    ) {
       sectionType = "states";
-    } else if (lowerTitle.includes("security") || lowerTitle.includes("defensive")) {
+    } else if (
+      lowerTitle.includes("security") ||
+      lowerTitle.includes("defensive")
+    ) {
       sectionType = "security";
-    } else if (lowerTitle.includes("rigor") || lowerTitle.includes("validation")) {
+    } else if (
+      lowerTitle.includes("rigor") ||
+      lowerTitle.includes("validation")
+    ) {
       sectionType = "validation";
     }
 
@@ -409,7 +451,11 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
     const $bq = $sec.find("blockquote");
     if ($bq.length > 0) {
       const qText = $bq.first().text().trim();
-      const qRole = $sec.find("span.text-neutral-500, span.text-emerald-400").first().text().trim();
+      const qRole = $sec
+        .find("span.text-neutral-500, span.text-emerald-400")
+        .first()
+        .text()
+        .trim();
       quote = { text: qText, role: qRole || undefined };
     }
 
@@ -430,13 +476,18 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
           sectionType === "solutions" ||
           sectionType === "decisions" ||
           sectionType === "outcomes") &&
-        $p.closest(".grid > div, div.space-y-6 > div, div.space-y-4 > div").length > 0
+        $p.closest(".grid > div, div.space-y-6 > div, div.space-y-4 > div")
+          .length > 0
       ) {
         return;
       }
 
       const text = $p.text().trim();
-      if (text && !text.includes("SCROLL HORIZONTALLY") && !text.includes("HORIZONTAL SCROLL")) {
+      if (
+        text &&
+        !text.includes("SCROLL HORIZONTALLY") &&
+        !text.includes("HORIZONTAL SCROLL")
+      ) {
         if (intro.length === 0) {
           intro.push(text);
         } else if (!intro.includes(text) && !readingText.includes(text)) {
@@ -448,7 +499,12 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
     // Extract constraints / question lists (especially in problem sections)
     const constraints: string[] = [];
     $sec.find("ul li, ol li").each((_, li) => {
-      const text = $(li).text().trim().replace(/^\?/, "").replace(/^•/, "").trim();
+      const text = $(li)
+        .text()
+        .trim()
+        .replace(/^\?/, "")
+        .replace(/^•/, "")
+        .trim();
       if (text && !constraints.includes(text)) {
         constraints.push(text);
       }
@@ -456,56 +512,73 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
 
     // Check flex bullet lists (common in problem sections like subscription-tracker)
     if (constraints.length === 0) {
-      $sec.find("div.flex.items-start, div.flex.items-center").each((_, itemEl) => {
-        const $it = $(itemEl);
-        if ($it.closest("pre, table").length > 0) return;
-        const bullet = $it
-          .find("span.text-emerald-400, span.text-neutral-500")
-          .first()
-          .text()
-          .trim();
-        if (
-          bullet === "•" ||
-          bullet === "-" ||
-          bullet === "→" ||
-          bullet === ">" ||
-          bullet === "▸"
-        ) {
-          const text = $it
+      $sec
+        .find("div.flex.items-start, div.flex.items-center")
+        .each((_, itemEl) => {
+          const $it = $(itemEl);
+          if ($it.closest("pre, table").length > 0) return;
+          const bullet = $it
+            .find("span.text-emerald-400, span.text-neutral-500")
+            .first()
             .text()
-            .replace(/^[•\->▸\s]+/, "")
             .trim();
-          if (text && text.length > 5 && !constraints.includes(text)) {
-            constraints.push(text);
+          if (
+            bullet === "•" ||
+            bullet === "-" ||
+            bullet === "→" ||
+            bullet === ">" ||
+            bullet === "▸"
+          ) {
+            const text = $it
+              .text()
+              .replace(/^[•\->▸\s]+/, "")
+              .trim();
+            if (text && text.length > 5 && !constraints.includes(text)) {
+              constraints.push(text);
+            }
           }
-        }
-      });
+        });
     }
 
     // Fallback for card-based constraints in problem sections
     if (constraints.length === 0 && sectionType === "problem") {
       $sec
         .find(
-          "div.grid > div, div.space-y-4 > div, div.p-4.rounded-xl, .rounded-xl.border, div.rounded-xl"
+          "div.grid > div, div.space-y-4 > div, div.p-4.rounded-xl, .rounded-xl.border, div.rounded-xl",
         )
         .each((_, el) => {
           const $el = $(el);
-          if ($el.closest("pre, table").length > 0 || $el.find("pre, table").length > 0) return;
+          if (
+            $el.closest("pre, table").length > 0 ||
+            $el.find("pre, table").length > 0
+          )
+            return;
           const cardTitle = $el
             .find(
-              "h3, h4, span.font-bold, span.font-semibold, div.font-bold, span.text-emerald-400, span.text-neutral-200"
+              "h3, h4, span.font-bold, span.font-semibold, div.font-bold, span.text-emerald-400, span.text-neutral-200",
             )
             .first()
             .text()
             .trim();
           const cardDesc = $el.find("p").first().text().trim();
-          const fullText = $el.text().trim().replace(/^•\s*/, "").replace(/\s+/g, " ");
+          const fullText = $el
+            .text()
+            .trim()
+            .replace(/^•\s*/, "")
+            .replace(/\s+/g, " ");
           if (cardTitle && cardDesc) {
-            const cleanDesc = cardDesc.replace(cardTitle, "").trim().replace(/^:\s*/, "");
+            const cleanDesc = cardDesc
+              .replace(cardTitle, "")
+              .trim()
+              .replace(/^:\s*/, "");
             const cleanTitle = cardTitle.replace(/:\s*$/, "").trim();
             const item = cleanDesc ? `${cleanTitle}: ${cleanDesc}` : cleanTitle;
             if (!constraints.includes(item)) constraints.push(item);
-          } else if (fullText && fullText.length > 10 && fullText.length < 500) {
+          } else if (
+            fullText &&
+            fullText.length > 10 &&
+            fullText.length < 500
+          ) {
             if (!constraints.includes(fullText)) constraints.push(fullText);
           }
         });
@@ -523,12 +596,15 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
     const challenges: ParsedChallenge[] = [];
     if (sectionType === "challenges") {
       const $cards = $sec.find(
-        "div.grid > div, div.space-y-4 > div.p-5, div.space-y-4 > div.rounded-xl, div.space-y-6 > div.rounded-xl, div.space-y-6 > div.p-5"
+        "div.grid > div, div.space-y-4 > div.p-5, div.space-y-4 > div.rounded-xl, div.space-y-6 > div.rounded-xl, div.space-y-6 > div.p-5",
       );
       $cards.each((cIdx, cardEl) => {
         const $c = $(cardEl);
         // Avoid inner sub-cards
-        if ($c.parent().hasClass("grid") && $c.closest(".p-5, .rounded-xl").not($c).length > 0)
+        if (
+          $c.parent().hasClass("grid") &&
+          $c.closest(".p-5, .rounded-xl").not($c).length > 0
+        )
           return;
 
         const rawTitle = $c.find("h3, h4").first().text().trim();
@@ -558,11 +634,13 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
 
         let tag = cleanDecorativeSlashes(
           $c
-            .find("span.text-neutral-500, span.text-emerald-400\\/90, span.text-\\[10px\\]")
+            .find(
+              "span.text-neutral-500, span.text-emerald-400\\/90, span.text-\\[10px\\]",
+            )
             .filter((_, el) => !$(el).text().toLowerCase().includes("impact"))
             .first()
             .text()
-            .trim()
+            .trim(),
         );
 
         if (!tag || tag.toLowerCase().includes("impact")) {
@@ -604,13 +682,19 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
         let impact = "";
         const $impactSpan = $c
           .find("span")
-          .filter((_, el) => $(el).text().trim().toLowerCase().startsWith("impact"));
+          .filter((_, el) =>
+            $(el).text().trim().toLowerCase().startsWith("impact"),
+          );
         if ($impactSpan.length > 0) {
           const $valSpan = $impactSpan.next("span");
           if ($valSpan.length > 0) {
             impact = $valSpan.text().trim();
           } else {
-            impact = $impactSpan.parent().text().replace($impactSpan.text(), "").trim();
+            impact = $impactSpan
+              .parent()
+              .text()
+              .replace($impactSpan.text(), "")
+              .trim();
           }
         }
 
@@ -630,7 +714,7 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
     const solutions: ParsedSolutionRecord[] = [];
     if (sectionType === "solutions") {
       const $recContainers = $sec.find(
-        "> div.space-y-6 > div, > div.space-y-4 > div, > div > div.p-5, > div > div.p-6, div.space-y-8 > div"
+        "> div.space-y-6 > div, > div.space-y-4 > div, > div > div.p-5, > div > div.p-6, div.space-y-8 > div",
       );
       $recContainers.each((sIdx, recEl) => {
         const $r = $(recEl);
@@ -640,42 +724,51 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
         if (!recTitle) {
           recTitle = $r
             .find(
-              "span.text-white.font-medium, span.text-white.font-semibold, span.font-semibold, div.text-emerald-400 span"
+              "span.text-white.font-medium, span.text-white.font-semibold, span.font-semibold, div.text-emerald-400 span",
             )
             .first()
             .text()
             .trim();
         }
 
-        let num = $r.find("span.font-mono, span.text-emerald-400").first().text().trim();
+        let num = $r
+          .find("span.font-mono, span.text-emerald-400")
+          .first()
+          .text()
+          .trim();
         const numMatch = num.match(/^(\d+)/);
-        num = numMatch ? numMatch[1].padStart(2, "0") : cleanDecorativeSlashes(num);
+        num = numMatch
+          ? numMatch[1].padStart(2, "0")
+          : cleanDecorativeSlashes(num);
         if (!num || num.length > 10) num = String(sIdx + 1).padStart(2, "0");
 
-        recTitle = cleanDecorativeSlashes(recTitle.replace(/^\d+\s*[/•:-]*\s*/, "")).trim();
+        recTitle = cleanDecorativeSlashes(
+          recTitle.replace(/^\d+\s*[/•:-]*\s*/, ""),
+        ).trim();
 
         let problemText = "";
         let constraintText = "";
         let solutionText = "";
         let resultText = "";
 
-        $r.find("div.grid > div, div.space-y-1, div.space-y-1\\.5, div.space-y-3 > div").each(
-          (_, blockEl) => {
-            const $b = $(blockEl);
-            const label = $b.find("span").text().trim().toUpperCase();
-            const pText = $b.find("p").text().trim();
-            if (label.includes("PROBLEM")) problemText = pText;
-            else if (label.includes("CONSTRAINT")) constraintText = pText;
-            else if (
-              label.includes("SOLUTION") ||
-              label.includes("RESPONSE") ||
-              label.includes("IMPLEMENTATION") ||
-              label.includes("ENGINEERED")
-            )
-              solutionText = pText;
-            else if (label.includes("RESULT") || label.includes("OUTCOME")) resultText = pText;
-          }
-        );
+        $r.find(
+          "div.grid > div, div.space-y-1, div.space-y-1\\.5, div.space-y-3 > div",
+        ).each((_, blockEl) => {
+          const $b = $(blockEl);
+          const label = $b.find("span").text().trim().toUpperCase();
+          const pText = $b.find("p").text().trim();
+          if (label.includes("PROBLEM")) problemText = pText;
+          else if (label.includes("CONSTRAINT")) constraintText = pText;
+          else if (
+            label.includes("SOLUTION") ||
+            label.includes("RESPONSE") ||
+            label.includes("IMPLEMENTATION") ||
+            label.includes("ENGINEERED")
+          )
+            solutionText = pText;
+          else if (label.includes("RESULT") || label.includes("OUTCOME"))
+            resultText = pText;
+        });
 
         // Fallback for code-first solution records (like in Signifiya)
         if (!solutionText && !problemText) {
@@ -708,7 +801,7 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
     const decisions: ParsedDecisionRecord[] = [];
     if (sectionType === "decisions") {
       const $decisionCards = $sec.find(
-        "div.space-y-4 > div.p-5, div.space-y-4 > div.rounded-xl, div.grid > div.p-5, div.grid > div.rounded-xl, div.space-y-6 > div.rounded-xl"
+        "div.space-y-4 > div.p-5, div.space-y-4 > div.rounded-xl, div.grid > div.p-5, div.grid > div.rounded-xl, div.space-y-6 > div.rounded-xl",
       );
       $decisionCards.each((dIdx, cardEl) => {
         const $c = $(cardEl);
@@ -716,32 +809,38 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
         if ($c.parents(".p-5, .rounded-xl").length > 0) return;
 
         // Number and Area from the header span (e.g. "01 // ARCHITECTURAL DECISION")
-        const $headerSpan = $c.find("span.text-emerald-400, span.font-mono").first();
+        const $headerSpan = $c
+          .find("span.text-emerald-400, span.font-mono")
+          .first();
         const rawHeader = $headerSpan.text().trim();
         const numMatch = rawHeader.match(/^(\d+)/);
-        const cardNum = numMatch ? numMatch[1].padStart(2, "0") : String(dIdx + 1).padStart(2, "0");
+        const cardNum = numMatch
+          ? numMatch[1].padStart(2, "0")
+          : String(dIdx + 1).padStart(2, "0");
 
         let area =
           cleanDecorativeSlashes(
             rawHeader
               .replace(/^\d+\s*(?:\/\/|—|–|-|\.|\/|•|:)*\s*/, "")
-              .replace(/^DECISION\s*\d*\s*[:•-]?\s*/i, "")
+              .replace(/^DECISION\s*\d*\s*[:•-]?\s*/i, ""),
           ).trim() || "ARCHITECTURAL DECISION";
 
         // Tech title: Look for white medium / bold text distinct from rawHeader
         let tech = $c
           .find(
-            "span.text-white.font-medium, h3, h4, span.text-neutral-200.font-bold, span.text-white, span.font-bold, div.font-semibold"
+            "span.text-white.font-medium, h3, h4, span.text-neutral-200.font-bold, span.text-white, span.font-bold, div.font-semibold",
           )
           .filter((_, el) => $(el).text().trim() !== rawHeader)
           .first()
           .text()
           .trim();
-        tech = cleanDecorativeSlashes(tech.replace(/^DECISION\s*\d*\s*[//•:]*/i, "")).trim();
+        tech = cleanDecorativeSlashes(
+          tech.replace(/^DECISION\s*\d*\s*[//•:]*/i, ""),
+        ).trim();
 
         const isFieldLabel = (t: string) =>
           /^(decision|rationale|trade-off|tradeoff|alternative|why|outcome|impact):?/i.test(
-            t.trim()
+            t.trim(),
           );
 
         let why = "";
@@ -799,7 +898,10 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
             techUpper.includes("EMAIL")
           ) {
             area = "TRANSACTIONAL MESSAGING";
-          } else if (techUpper.includes("NODE") || techUpper.includes("EXPRESS")) {
+          } else if (
+            techUpper.includes("NODE") ||
+            techUpper.includes("EXPRESS")
+          ) {
             area = "RUNTIME & API FRAMEWORK";
           } else if (
             techUpper.includes("MONGO") ||
@@ -841,18 +943,21 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
     const outcomes: ParsedOutcomeRecord[] = [];
     if (sectionType === "outcomes") {
       const $outCards = $sec.find(
-        "div.grid > div, div.space-y-4 > div.rounded-xl, div.space-y-4 > div.p-5"
+        "div.grid > div, div.space-y-4 > div.rounded-xl, div.space-y-4 > div.p-5",
       );
       $outCards.each((oIdx, cardEl) => {
         const $c = $(cardEl);
         // Exclude inner nested divs
-        if ($c.parent().hasClass("grid") && $c.closest(".rounded-xl, .p-5").not($c).length > 0)
+        if (
+          $c.parent().hasClass("grid") &&
+          $c.closest(".rounded-xl, .p-5").not($c).length > 0
+        )
           return;
 
         const num =
           $c
             .find(
-              "div.text-3xl, div.text-4xl, span.text-2xl, span.text-3xl, span.text-4xl, span.font-bold, div.font-bold"
+              "div.text-3xl, div.text-4xl, span.text-2xl, span.text-3xl, span.text-4xl, span.font-bold, div.font-bold",
             )
             .first()
             .text()
@@ -860,7 +965,7 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
         const cardTitle =
           $c
             .find(
-              "h3, h4, div.text-\\[11px\\], div.font-semibold, span.font-semibold, div.uppercase"
+              "h3, h4, div.text-\\[11px\\], div.font-semibold, span.font-semibold, div.uppercase",
             )
             .first()
             .text()
@@ -882,10 +987,17 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
       const $tbl = $(tblEl);
       const $wrap = $tbl.closest(".overflow-x-auto, .rounded-xl, .border");
       let tableTitle = cleanDecorativeSlashes(
-        $wrap.prev().find("h3, h4, span.font-semibold, div.font-semibold").first().text().trim()
+        $wrap
+          .prev()
+          .find("h3, h4, span.font-semibold, div.font-semibold")
+          .first()
+          .text()
+          .trim(),
       );
       if (!tableTitle) {
-        tableTitle = cleanDecorativeSlashes($wrap.parent().find("h3, h4").first().text().trim());
+        tableTitle = cleanDecorativeSlashes(
+          $wrap.parent().find("h3, h4").first().text().trim(),
+        );
       }
 
       const headers: string[] = [];
@@ -911,43 +1023,56 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
 
     // Also extract div-based tables (such as Technical Rigor matrices)
     if (tables.length === 0) {
-      $sec.find(".rounded-xl.border, .border.overflow-hidden, .rounded-xl").each((_, contEl) => {
-        const $cont = $(contEl);
-        if ($cont.find("table, pre").length > 0) return;
-        const headers = $cont
-          .find('> div:first-child[class*="border-b"] > div, .border-b.bg-neutral-950 > div')
-          .map((_, el) => cleanDecorativeSlashes($(el).text().trim()))
-          .get()
-          .filter((t) => t.length > 0);
-
-        const rows: string[][] = [];
-        $cont.find(".divide-y > div").each((_, rowEl) => {
-          const cells = $(rowEl)
-            .children("div")
-            .map((_, c) => cleanDecorativeSlashes($(c).text().trim()))
+      $sec
+        .find(".rounded-xl.border, .border.overflow-hidden, .rounded-xl")
+        .each((_, contEl) => {
+          const $cont = $(contEl);
+          if ($cont.find("table, pre").length > 0) return;
+          const headers = $cont
+            .find(
+              '> div:first-child[class*="border-b"] > div, .border-b.bg-neutral-950 > div',
+            )
+            .map((_, el) => cleanDecorativeSlashes($(el).text().trim()))
             .get()
             .filter((t) => t.length > 0);
-          if (cells.length > 1) rows.push(cells);
-        });
 
-        if (headers.length > 1 && rows.length > 0) {
-          const tableTitle = cleanDecorativeSlashes(
-            $cont.prev().find("h3, h4, span.font-semibold").first().text().trim()
-          );
-          tables.push({ title: tableTitle || undefined, headers, rows });
-        }
-      });
+          const rows: string[][] = [];
+          $cont.find(".divide-y > div").each((_, rowEl) => {
+            const cells = $(rowEl)
+              .children("div")
+              .map((_, c) => cleanDecorativeSlashes($(c).text().trim()))
+              .get()
+              .filter((t) => t.length > 0);
+            if (cells.length > 1) rows.push(cells);
+          });
+
+          if (headers.length > 1 && rows.length > 0) {
+            const tableTitle = cleanDecorativeSlashes(
+              $cont
+                .prev()
+                .find("h3, h4, span.font-semibold")
+                .first()
+                .text()
+                .trim(),
+            );
+            tables.push({ title: tableTitle || undefined, headers, rows });
+          }
+        });
     }
 
     // Supporting items (e.g. architecture layers, runtime components, subsystem specifications)
     const supportingItems: ParsedSupportingItem[] = [];
     $sec
       .find(
-        "div.grid > div.p-4, div.grid > div.p-5, div.grid > div.p-3\\.5, div.grid > div.p-3, div.grid > div.rounded-xl, div.grid > div.rounded-lg"
+        "div.grid > div.p-4, div.grid > div.p-5, div.grid > div.p-3\\.5, div.grid > div.p-3, div.grid > div.rounded-xl, div.grid > div.rounded-lg",
       )
       .each((sIdx, el) => {
         const $el = $(el);
-        if ($el.closest("pre, table").length > 0 || $el.find("pre, table").length > 0) return;
+        if (
+          $el.closest("pre, table").length > 0 ||
+          $el.find("pre, table").length > 0
+        )
+          return;
         // Don't duplicate if parent is also matched
         if ($el.closest(".rounded-xl, .p-5, .p-4").not($el).length > 0) return;
         // Skip if this section is already rendering these as challenges, decisions, or outcomes
@@ -960,15 +1085,19 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
           return;
         }
 
-        let sHeading = cleanDecorativeSlashes($el.find("h3, h4").first().text().trim());
+        let sHeading = cleanDecorativeSlashes(
+          $el.find("h3, h4").first().text().trim(),
+        );
         const $strong = $el.find("strong.text-white, strong").first();
         if (!sHeading && $strong.length > 0) {
-          sHeading = cleanDecorativeSlashes($strong.text().replace(/:$/, "").trim());
+          sHeading = cleanDecorativeSlashes(
+            $strong.text().replace(/:$/, "").trim(),
+          );
         }
         if (!sHeading) {
           const $boldTitle = $el
             .find(
-              ".border-b span.text-white.font-bold, .border-b span.font-bold, div.flex span.text-white.font-bold"
+              ".border-b span.text-white.font-bold, .border-b span.font-bold, div.flex span.text-white.font-bold",
             )
             .not(".text-\\[10px\\]")
             .first();
@@ -985,7 +1114,9 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
 
         let rawNum: string;
         let emeraldTitle = "";
-        const emeraldMatch = rawEmerald.match(/^(\d+)\s*(?:\/\/|—|–|-|\.)\s*(.*)$/);
+        const emeraldMatch = rawEmerald.match(
+          /^(\d+)\s*(?:\/\/|—|–|-|\.)\s*(.*)$/,
+        );
         if (emeraldMatch) {
           rawNum = emeraldMatch[1];
           emeraldTitle = cleanDecorativeSlashes(emeraldMatch[2]);
@@ -994,16 +1125,24 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
         }
 
         const cardSub = cleanDecorativeSlashes(
-          $el.find("div.text-white.font-medium, div.text-white").first().text().trim()
+          $el
+            .find("div.text-white.font-medium, div.text-white")
+            .first()
+            .text()
+            .trim(),
         );
         const badge = cleanDecorativeSlashes(
-          $el.find("span.text-\\[10px\\], span.text-neutral-500.font-mono").first().text().trim()
+          $el
+            .find("span.text-\\[10px\\], span.text-neutral-500.font-mono")
+            .first()
+            .text()
+            .trim(),
         );
 
         // Check for validated keys / secondary tags
         const $rightSpan = $el
           .find(
-            "div.text-right span.text-neutral-300, div.text-right span.text-xs, span.text-neutral-300.text-xs"
+            "div.text-right span.text-neutral-300, div.text-right span.text-xs, span.text-neutral-300.text-xs",
           )
           .last();
         let tag = cleanDecorativeSlashes($rightSpan.text().trim());
@@ -1022,14 +1161,15 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
         let sDesc = cleanDecorativeSlashes($el.find("p").first().text().trim());
         if ($strong.length > 0 && sDesc.startsWith($strong.text().trim())) {
           sDesc = cleanDecorativeSlashes(
-            sDesc.slice($strong.text().trim().length).replace(/^:\s*/, "")
+            sDesc.slice($strong.text().trim().length).replace(/^:\s*/, ""),
           );
         }
 
         const isNumericOrStep = (s: string) => {
           if (!s) return false;
           if (/^\d+([A-Z])?\.?$/i.test(s)) return true;
-          if (/^(step|stage|state|tier|takeaway|model)\s*\d+/i.test(s)) return true;
+          if (/^(step|stage|state|tier|takeaway|model)\s*\d+/i.test(s))
+            return true;
           if (/^\d+$/.test(s)) return true;
           return false;
         };
@@ -1055,20 +1195,28 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
           const fallbackTitle = cleanDecorativeSlashes(
             $el
               .find(
-                "div.text-emerald-400, span.text-neutral-200, div.font-semibold, span.font-bold"
+                "div.text-emerald-400, span.text-neutral-200, div.font-semibold, span.font-bold",
               )
               .not(".text-\\[10px\\]")
               .last()
               .text()
-              .trim()
+              .trim(),
           );
           title = fallbackTitle || rawNum || `Item ${sIdx + 1}`;
-          if (rawNum && rawNum.toLowerCase() !== title.toLowerCase() && isNumericOrStep(rawNum)) {
+          if (
+            rawNum &&
+            rawNum.toLowerCase() !== title.toLowerCase() &&
+            isNumericOrStep(rawNum)
+          ) {
             num = rawNum;
           }
         }
 
-        if (!num && isNumericOrStep(rawNum) && rawNum.toLowerCase() !== title.toLowerCase()) {
+        if (
+          !num &&
+          isNumericOrStep(rawNum) &&
+          rawNum.toLowerCase() !== title.toLowerCase()
+        ) {
           num = rawNum;
         }
 
@@ -1083,7 +1231,8 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
             num: num || undefined,
             title: title || rawNum || String(sIdx + 1).padStart(2, "0"),
             desc: sDesc,
-            badge: badge && badge !== title && badge !== tag ? badge : undefined,
+            badge:
+              badge && badge !== title && badge !== tag ? badge : undefined,
             tag: tag && tag !== title ? tag : undefined,
           });
         }
@@ -1094,7 +1243,11 @@ export function parseCaseStudyContent(html: string): ParsedCaseStudy {
     $clone.find("h2, h3").first().closest(".border-b").remove();
     // Clean residual HTML content: remove decorative // from text nodes outside pre/code
     $clone.find("*").each((_, el) => {
-      if ($(el).is("pre, code, script, style") || $(el).closest("pre, code").length > 0) return;
+      if (
+        $(el).is("pre, code, script, style") ||
+        $(el).closest("pre, code").length > 0
+      )
+        return;
       $(el)
         .contents()
         .each((_, node) => {

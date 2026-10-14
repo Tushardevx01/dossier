@@ -9,14 +9,16 @@ let database: Database | null = null;
 export function getDb(): Database {
   if (database) return database;
   const databaseUrl = process.env.DATABASE_URL;
-  if (!databaseUrl) throw new Error("DATABASE_URL is required for database access");
+  if (!databaseUrl)
+    throw new Error("DATABASE_URL is required for database access");
   database = drizzle({ client: neon(databaseUrl) });
   return database;
 }
 
 /** Kept as the repository initialization entry point; no request-time DDL. */
 export async function ensureDatabaseReady(): Promise<void> {
-  if (process.env.SKIP_DB_BUILD === "true" || process.env.SKIP_DB === "true") return;
+  if (process.env.SKIP_DB_BUILD === "true" || process.env.SKIP_DB === "true")
+    return;
   getDb();
 }
 

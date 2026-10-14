@@ -39,7 +39,10 @@ const mockedVerifyEmailAddress = vi.mocked(verifyEmailAddress);
 
 describe("contact service", () => {
   it("does not return transport diagnostics to API callers", async () => {
-    mockedSendEmail.mockResolvedValue({ success: false, error: "private SMTP diagnostic" });
+    mockedSendEmail.mockResolvedValue({
+      success: false,
+      error: "private SMTP diagnostic",
+    });
     const result = await processContactSubmission(
       {
         requestId: "failure",
@@ -52,15 +55,26 @@ describe("contact service", () => {
           website: "",
         },
       },
-      { emailApiKey: "", emailFrom: "owner@example.com", emailPassword: "secret" }
+      {
+        emailApiKey: "",
+        emailFrom: "owner@example.com",
+        emailPassword: "secret",
+      },
     );
     expect(result.success).toBe(false);
     expect(JSON.stringify(result)).not.toContain("private SMTP diagnostic");
   });
   beforeEach(() => {
     vi.clearAllMocks();
-    mockedCheckRateLimit.mockResolvedValue({ allowed: true, remaining: 4, retryAfterSeconds: 0 });
-    mockedSendEmail.mockResolvedValue({ success: true, messageId: "message-1" });
+    mockedCheckRateLimit.mockResolvedValue({
+      allowed: true,
+      remaining: 4,
+      retryAfterSeconds: 0,
+    });
+    mockedSendEmail.mockResolvedValue({
+      success: true,
+      messageId: "message-1",
+    });
   });
 
   it("continues sending when email verification fails", async () => {
@@ -82,16 +96,24 @@ describe("contact service", () => {
         emailApiKey: "api-key",
         emailFrom: "thetushardev0@gmail.com",
         emailPassword: "app-password",
-      }
+      },
     );
 
     expect(result.success).toBe(true);
-    expect(mockedVerifyEmailAddress).toHaveBeenCalledWith("sender@example.com", "api-key", "req-1");
+    expect(mockedVerifyEmailAddress).toHaveBeenCalledWith(
+      "sender@example.com",
+      "api-key",
+      "req-1",
+    );
     expect(mockedSendEmail).toHaveBeenCalledTimes(2);
   });
 
   it("returns 429 when rate limited", async () => {
-    mockedCheckRateLimit.mockResolvedValue({ allowed: false, remaining: 0, retryAfterSeconds: 30 });
+    mockedCheckRateLimit.mockResolvedValue({
+      allowed: false,
+      remaining: 0,
+      retryAfterSeconds: 30,
+    });
 
     const result = await processContactSubmission(
       {
@@ -109,7 +131,7 @@ describe("contact service", () => {
         emailApiKey: "api-key",
         emailFrom: "thetushardev0@gmail.com",
         emailPassword: "app-password",
-      }
+      },
     );
 
     expect(result.success).toBe(false);
@@ -137,7 +159,7 @@ describe("contact service", () => {
         emailApiKey: "api-key",
         emailFrom: "thetushardev0@gmail.com",
         emailPassword: "app-password",
-      }
+      },
     );
 
     expect(result.success).toBe(true);

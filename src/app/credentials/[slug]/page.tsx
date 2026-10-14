@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { LuArrowLeft, LuAward, LuCalendar, LuExternalLink } from "react-icons/lu";
+import {
+  LuArrowLeft,
+  LuAward,
+  LuCalendar,
+  LuExternalLink,
+} from "react-icons/lu";
 
 import { Navbar, Footer, Background } from "@/components/common";
 import { JsonLd } from "@/components/shared/JsonLd";
@@ -27,7 +32,9 @@ export async function generateStaticParams() {
   return slugs.map((slug) => ({ slug }));
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
   const { slug } = await params;
   if (!slug?.trim()) return { title: "Credential Not Found" };
 
@@ -46,9 +53,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
           .slice(0, 160)
       : `Certification credential record for ${cred.title} issued by ${cred.issuer}.`,
     path: `/credentials/${canonicalSlug}`,
-    keywords: [cred.title, cred.issuer, "Certification", "Credential", "Tushar Kanti Dey"].filter(
-      Boolean
-    ) as string[],
+    keywords: [
+      cred.title,
+      cred.issuer,
+      "Certification",
+      "Credential",
+      "Tushar Kanti Dey",
+    ].filter(Boolean) as string[],
   });
 }
 
@@ -68,7 +79,9 @@ export default async function CredentialDetailPage({ params }: PageProps) {
   }
 
   const credSlug = cred.slug || slugifyTitle(cred.title);
-  const isVerified = Boolean(cred.credentialLink && cred.credentialLink.trim().length > 0);
+  const isVerified = Boolean(
+    cred.credentialLink && cred.credentialLink.trim().length > 0,
+  );
 
   const breadcrumbsSchema = generateBreadcrumbListStructuredData([
     { name: "Home", url: absoluteUrl("/") },
@@ -166,7 +179,9 @@ export default async function CredentialDetailPage({ params }: PageProps) {
           <article className="article-content">
             <div
               className="prose prose-invert max-w-none text-neutral-300"
-              dangerouslySetInnerHTML={{ __html: renderMarkdownToHtml(cred.description) }}
+              dangerouslySetInnerHTML={{
+                __html: renderMarkdownToHtml(cred.description),
+              }}
             />
           </article>
         ) : null}

@@ -33,7 +33,9 @@ function escapeHtml(text: string): string {
 /**
  * Generate contact confirmation email HTML
  */
-export function generateContactConfirmationEmail(data: ContactConfirmationData): string {
+export function generateContactConfirmationEmail(
+  data: ContactConfirmationData,
+): string {
   const { name, inquiryType, message } = data;
 
   const safeName = escapeHtml(name || "");
@@ -46,7 +48,8 @@ export function generateContactConfirmationEmail(data: ContactConfirmationData):
   }
 
   function smallIntroFor(reason: string) {
-    if (!reason) return "I’ve received your message and will review it personally.";
+    if (!reason)
+      return "I’ve received your message and will review it personally.";
     const r = reason.toLowerCase();
     if (r.includes("project"))
       return "I’ve received your message — I’d be glad to learn more about your project.";
@@ -186,7 +189,7 @@ export function generateContactConfirmationEmail(data: ContactConfirmationData):
                             <a href="${social.url}" style="display:inline-block;width:36px;height:36px;border-radius:999px;background:#101014;border:1px solid rgba(255,255,255,0.08);text-decoration:none;line-height:36px;text-align:center;box-shadow:0 0 0 1px rgba(255,255,255,0.02);">
                               <img src="${social.icon}" alt="${social.name}" width="18" height="18" style="display:inline-block;vertical-align:middle;border:0;outline:none;text-decoration:none;filter:brightness(0) invert(1);" />
                             </a>
-                          </td>`
+                          </td>`,
                           )
                           .join("")}
                       </tr>
